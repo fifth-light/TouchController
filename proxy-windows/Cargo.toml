@@ -1,0 +1,15 @@
+[package]
+name = "proxy-windows"
+version = "0.0.1"
+edition = "2021"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]

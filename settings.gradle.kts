@@ -18,3 +18,4 @@ rootProject.name = "TouchController"
 include("mod")
 include("proxy-server")
 include("proxy-client")
+include("proxy-windows")
