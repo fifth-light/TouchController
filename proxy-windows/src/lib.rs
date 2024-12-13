@@ -36,6 +36,7 @@ pub extern "system" fn Java_top_fifthlight_touchcontroller_platform_win32_Interf
     drop(queue);
 
     if let Some(message) = message {
+        eprintln!("Message: {:?}", message);
         let buffer_length: usize = env
             .get_array_length(&buffer)
             .expect("Failed to get buffer length")
