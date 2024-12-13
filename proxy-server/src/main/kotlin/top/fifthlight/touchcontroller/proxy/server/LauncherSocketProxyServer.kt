@@ -16,7 +16,7 @@ import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import kotlin.coroutines.resume
 
-class LauncherSocketProxyServer internal constructor(private val socket: DatagramSocket): AutoCloseable {
+class LauncherSocketProxyServer internal constructor(private val socket: DatagramSocket) : AutoCloseable {
     private val receiveLock = Mutex()
     private val receiveQueue = mutableListOf<ProxyMessage>()
     private val _listening = MutableStateFlow(false)
@@ -35,13 +35,13 @@ class LauncherSocketProxyServer internal constructor(private val socket: Datagra
                         continuation.resume(Unit)
                     }.also { thread ->
                         continuation.invokeOnCancellation {
-                            println("interrupt")
                             thread.interrupt()
                         }
                         thread.start()
                     }
                 }
-                println("RECEIVE")
+                @Suppress("RedundantUnitExpression")
+                Unit
             } catch (_: InterruptedException) {
                 throw kotlin.coroutines.cancellation.CancellationException()
             } catch (ex: IOException) {
@@ -70,11 +70,8 @@ class LauncherSocketProxyServer internal constructor(private val socket: Datagra
         socket.close()
     }
 
-    suspend fun receive(block: (ProxyMessage) -> Unit) {
-        receiveLock.withLock {
-            receiveQueue.forEach(block)
-            receiveQueue.clear()
-        }
+    suspend fun receive(): ProxyMessage? = receiveLock.withLock {
+        receiveQueue.removeFirstOrNull()
     }
 }
 

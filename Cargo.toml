@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = [
+    "proxy-protocol",
+    "proxy-windows",
+]
+
+[workspace.dependencies]
+jni = "0.21"
+bytemuck = "1.20"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

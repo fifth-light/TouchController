@@ -43,3 +43,7 @@ replay_*.log
 # kotlin
 
 .kotlin
+
+# rust
+
+/target

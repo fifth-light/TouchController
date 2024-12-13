@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.di
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BeforeBlockOutline
@@ -9,7 +10,6 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import org.koin.dsl.binds
 import org.koin.dsl.module
-import top.fifthlight.touchcontroller.SocketProxyHolder
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.event.ClientHandleInputEvents
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
@@ -35,7 +35,6 @@ val appModule = module {
         }
     }
     single { TouchControllerConfigHolder() }
-    single { SocketProxyHolder() }
     single<FabricHudRenderCallback> { HudCallbackHandler() }
     single<KeyboardInputEvents.EndInputTick> { KeyboardInputHandler() }
     single { WorldRendererHandler() } binds arrayOf(
@@ -46,6 +45,7 @@ val appModule = module {
     single<ClientRenderEvents.StartRenderTick> { ClientRenderHandler() }
     single<ClientHandleInputEvents.HandleInput> { ClientInputHandler() }
     single<ClientPlayConnectionEvents.Join> { ClientPlayConnectionHandler() }
+    single<ClientLifecycleEvents.ClientStarted> { ClientStartHandler() }
     single { GlobalStateModel() }
     single { ControllerHudModel() }
     single { TouchStateModel() }

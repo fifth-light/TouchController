@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
+name = "proxy-protocol"
+version = "0.0.1"
+
+[[package]]
 name = "proxy-windows"
 version = "0.0.1"
+dependencies = [
+ "proxy-protocol",
+]

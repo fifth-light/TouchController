@@ -6,14 +6,14 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import top.fifthlight.touchcontroller.SocketProxyHolder
 import top.fifthlight.touchcontroller.asset.Texts
+import top.fifthlight.touchcontroller.platform.Platform
 
 class ClientPlayConnectionHandler : ClientPlayConnectionEvents.Join, KoinComponent {
-    private val proxyHandler: SocketProxyHolder by inject()
+    private val platform: Platform? by inject()
 
     override fun onPlayReady(handler: ClientPlayNetworkHandler, sender: PacketSender, client: MinecraftClient) {
-        if (proxyHandler.socketProxy == null) {
+        if (platform == null) {
             client.inGameHud.chatHud.addMessage(Texts.WARNING_PROXY_NOT_CONNECTED)
         }
     }

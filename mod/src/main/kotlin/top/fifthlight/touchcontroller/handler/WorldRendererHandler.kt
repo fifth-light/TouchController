@@ -14,13 +14,13 @@ import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import top.fifthlight.touchcontroller.SocketProxyHolder
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.event.HudRenderCallback
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.model.GlobalStateModel
 import top.fifthlight.touchcontroller.model.TouchStateModel
+import top.fifthlight.touchcontroller.platform.Platform
 import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
@@ -37,7 +37,7 @@ private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
 
 class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRenderCallback.CrosshairRender,
     KoinComponent {
-    private val handler: SocketProxyHolder by inject()
+    private val platform: Platform? by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val globalStateModel: GlobalStateModel by inject()
     private val controllerHudModel: ControllerHudModel by inject()
@@ -66,9 +66,10 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
     override fun onStart(context: WorldRenderContext) {
         globalStateModel.update(client)
 
-        handler.socketProxy?.let { proxy ->
+        platform?.let { platform ->
             runBlocking {
-                proxy.receive { message ->
+                while (true) {
+                    val message = platform.pollEvent() ?: break
                     when (message) {
                         is AddPointerMessage -> {
                             touchStateModel.addPointer(

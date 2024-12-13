@@ -10,8 +10,13 @@ val targets = mapOf(
 val compileRustTasks = targets.map { (arch, target) ->
     task<Exec>("compileRust${arch.capitalized()}") {
         commandLine("cargo", "build", "--target=$target", "--release")
-        inputs.dir("src")
-        outputs.file("target/$target/release/proxy_windows.dll")
+        inputs.apply {
+            files("Cargo.toml", "Cargo.lock")
+            dir("src")
+            files("../proxy-protocol/Cargo.toml", "../proxy-protocol/Cargo.lock")
+            dir("../proxy-protocol/src")
+        }
+        outputs.file("../target/$target/release/proxy_windows.dll")
     }
 }
 
@@ -23,10 +28,25 @@ val compileTask = task("compile") {
     dependsOn(compileRustTask)
 }
 
-val assembleTask = task("assemble") {
+val assembleTask = task<Jar>("assemble") {
+    archiveFileName = "TouchController-Proxy-Windows.jar"
+    destinationDirectory = layout.buildDirectory.dir("lib")
+    targets.values.forEach { target ->
+        from("../target/$target/release/proxy_windows.dll") {
+            into(target)
+        }
+    }
     dependsOn(compileTask)
 }
 
 task("build") {
     dependsOn(assembleTask)
+}
+
+configurations {
+    register("default")
+}
+
+artifacts {
+    add("default", assembleTask)
 }

@@ -6,13 +6,24 @@
 
 由于项目处在早期开发阶段，目前只支持 Minecraft 1.21.3。
 
-TouchController 的平台输入代码和实际的输入处理代码部分是相互隔离开的，也就是理论上可以支持多个平台，但是目前只支持在[我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher) 和[我修改后的 FoldCraftLauncher](https://github.com/fifth-light/FoldCraftLauncher) 上使用。在未来可能会添加对 Windows 和 Linux 上触屏的支持。
+TouchController 的平台输入代码和实际的输入处理代码部分是相互隔离开的，目前支持在 Windows 和[我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher) 和[我修改后的 FoldCraftLauncher](https://github.com/fifth-light/FoldCraftLauncher) 上使用。在未来可能会添加对 Linux 上触屏的支持。
 
 ## 目前支持的功能
 
 - Minecraft 基岩版风格的触屏输入（不支持分离控制）
 - 可自定义的控制器布局
 - 能够根据游泳、飞行等状态切换不同按键的显示
+
+## 编译
+
+首先你需要 Rust 编译器，可以使用 [rustup](https://rustup.rs/) 安装。
+
+然后你还需要 MinGW，不同操作系统有不同的安装方法：
+
+- Linux：一般来说你的发行版会打包 MinGW，直接安装即可，例如 Debian 系的 `mingw-w64` 包和 Redhat 系的 `mingw64-gcc` 和 `mingw32-gcc` 包。
+- Windows：在 [MinGW-W64-builds](https://github.com/niXman/mingw-builds-binaries/releases) 下载 mingw64 和 mingw32，然后将其中的 bin 文件夹加入 PATH 环境变量即可。
+
+接下来 Clone 这个仓库，然后运行 `./gradlew build` 就可以编译了，编译好的 mod 文件在 `mod/build/libs` 下。
 
 ## 添加新的启动器支持
 
