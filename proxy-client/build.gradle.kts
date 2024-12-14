@@ -9,8 +9,13 @@ plugins {
 
 version = "0.0.1"
 
+tasks.withType<Sign>().configureEach {
+    onlyIf("have publish task") {
+        gradle.taskGraph.hasTask("publish")
+    }
+}
+
 signing {
-    isRequired = gradle.taskGraph.hasTask("publish")
     useGpgCmd()
     sign(configurations.archives.get())
 }
