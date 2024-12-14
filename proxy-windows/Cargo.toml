@@ -16,5 +16,6 @@ version = "0.58"
 features = [
     "Win32_UI_Input_Touch",
     "Win32_UI_WindowsAndMessaging",
-    "Win32_System_Threading"
+    "Win32_System_Threading",
+    "Win32_Graphics_Gdi"
 ]
