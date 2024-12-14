@@ -5,7 +5,8 @@
 	"name": "${name}",
 	"description": "Bring controlling style of bedrock version to Java version!",
 	"authors": [
-		"fifth_light"
+		"fifth_light",
+		"bukeyu"
 	],
 	"contact": {
 		"homepage": "https://github.com/fifth-light/TouchController",
