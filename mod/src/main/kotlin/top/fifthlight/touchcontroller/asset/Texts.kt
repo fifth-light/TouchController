@@ -9,6 +9,8 @@ object Texts {
     private fun key(id: String) = "${TouchController.NAMESPACE}.$id"
     private fun translatable(id: String): MutableText = Text.translatable(key(id))
 
+    // TODO generate binding below from translation JSON file
+
     val WARNING_PROXY_NOT_CONNECTED = translatable("warning.proxy_not_connected")
 
     val OPTIONS_SCREEN = translatable("screen.options")
@@ -40,6 +42,7 @@ object Texts {
     val OPTIONS_UNDO_TOOLTIP = translatable("screen.options.undo.tooltip")
     val OPTIONS_CANCEL_TITLE = translatable("screen.options.cancel.title")
     val OPTIONS_CANCEL_TOOLTIP = translatable("screen.options.cancel.tooltip")
+    val OPTIONS_SAVE_BEFORE_CLOSING_TITLE = translatable("screen.options.save_before_closing.title")
     val OPTIONS_REMOVE_TITLE = translatable("screen.options.remove.title")
     val OPTIONS_REMOVE_TOOLTIP = translatable("screen.options.remove.tooltip")
 
