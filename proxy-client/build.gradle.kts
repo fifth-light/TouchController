@@ -10,6 +10,7 @@ plugins {
 version = "0.0.1"
 
 signing {
+    isRequired = gradle.taskGraph.hasTask("publish")
     useGpgCmd()
     sign(configurations.archives.get())
 }
