@@ -22,8 +22,14 @@ private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, classic: 
     }
 }
 
-fun Context.RawJumpButton(classic: Boolean = true, size: IntSize = this.size, swipe: Boolean = false) {
-    if (classic || state == HudState.NORMAL) {
+// TODO extract a dedicated JumpButton for embed in DPad
+fun Context.RawJumpButton(
+    classic: Boolean = true,
+    size: IntSize = this.size,
+    swipe: Boolean = false,
+    enabled: Boolean = true
+): Boolean {
+    return if (classic || state == HudState.NORMAL) {
         val (newPointer, clicked) = if (swipe) {
             SwipeButton(id = "jump") { clicked ->
                 JumpButtonTexture(size, clicked, classic)
@@ -37,9 +43,19 @@ fun Context.RawJumpButton(classic: Boolean = true, size: IntSize = this.size, sw
             if (newPointer && status.cancelFlying.click(timer.tick)) {
                 result.cancelFlying = true
             }
+            false
+        } else if (!enabled) {
+            if (swipe) {
+                clicked
+            } else {
+                false
+            }
         } else {
-            result.jump = result.jump || clicked
+            status.jumping = status.jumping || clicked
+            clicked
         }
+    } else {
+        false
     }
 }
 
