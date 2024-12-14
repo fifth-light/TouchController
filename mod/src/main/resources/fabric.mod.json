@@ -11,7 +11,7 @@
 		"homepage": "https://github.com/fifth-light/TouchController",
 		"sources": "https://github.com/fifth-light/TouchController"
 	},
-	"license": "GPL-3.0",
+	"license": "LGPL-3.0-or-later",
 	"icon": "assets/touchcontroller/icon.png",
 	"environment": "client",
 	"entrypoints": {
