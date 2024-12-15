@@ -20,7 +20,7 @@ import top.fifthlight.touchcontroller.event.HudRenderCallback
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.model.GlobalStateModel
 import top.fifthlight.touchcontroller.model.TouchStateModel
-import top.fifthlight.touchcontroller.platform.Platform
+import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
@@ -37,7 +37,7 @@ private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
 
 class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRenderCallback.CrosshairRender,
     KoinComponent {
-    private val platform: Platform? by inject()
+    private val platform: PlatformHolder by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val globalStateModel: GlobalStateModel by inject()
     private val controllerHudModel: ControllerHudModel by inject()
@@ -66,7 +66,7 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
     override fun onStart(context: WorldRenderContext) {
         globalStateModel.update(client)
 
-        platform?.let { platform ->
+        platform.platform?.let { platform ->
             runBlocking {
                 while (true) {
                     val message = platform.pollEvent() ?: break

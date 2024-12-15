@@ -17,6 +17,7 @@ import top.fifthlight.touchcontroller.di.appModule
 import top.fifthlight.touchcontroller.event.ClientHandleInputEvents
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.event.KeyboardInputEvents
+import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback as FabricHudRenderCallback
 import top.fifthlight.touchcontroller.event.HudRenderCallback as TouchControllerHudRenderCallback
@@ -35,7 +36,7 @@ object TouchController : ClientModInitializer {
             platform?.init(GlobalScope)
         }
         val platformModule = module {
-            single { platform }
+            single { PlatformHolder(platform) }
         }
 
         val app = startKoin {

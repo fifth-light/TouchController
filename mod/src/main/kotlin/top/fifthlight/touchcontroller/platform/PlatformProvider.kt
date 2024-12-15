@@ -33,7 +33,7 @@ object PlatformProvider {
             val loader = FabricLoader.getInstance()
 
             val nativeLibrary = if (!loader.isDevelopmentEnvironment) {
-                val container = loader.getModContainer("proxy-windows").getOrNull() ?: run {
+                val container = loader.getModContainer("top_fifthlight_touchcontroller_proxy-windows").getOrNull() ?: run {
                     logger.warn("Failed to get mod container")
                     return null
                 }
