@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.sound.SoundManager
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import top.fifthlight.touchcontroller.ext.ceilDiv
 import kotlin.math.abs
 
 class ItemStacksGrid(
@@ -36,7 +37,7 @@ class ItemStacksGrid(
         get() {
             val columns = width / ITEM_SIZE
             val rows = height / ITEM_SIZE
-            val totalRows = itemStacks.size / columns
+            val totalRows = itemStacks.size ceilDiv columns
             return totalRows - rows
         }
 
