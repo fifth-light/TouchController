@@ -72,65 +72,92 @@ fun openConfigScreen(parent: Screen): Screen {
             name(Texts.OPTIONS_CATEGORY_ITEMS_TITLE)
             tooltip(Texts.OPTIONS_CATEGORY_ITEMS_TOOLTIP)
 
-            val usableItems by rootOptions.registering<List<Item>> {
+            val usableItemsGroup by groups.registering("usable_items") {
                 name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_DESCRIPTION))
-                customController { ItemsListController(it) }
-                binding(
-                    defaultUsableItems,
-                    { config.usableItems.items },
-                    { config = config.copy(usableItems = ItemsList(it.toPersistentList())) }
-                )
+
+                val usableItems by options.registering<List<Item>> {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_DESCRIPTION))
+                    customController { ItemsListController(it) }
+                    binding(
+                        defaultUsableItems,
+                        { config.usableItems.items },
+                        { config = config.copy(usableItems = ItemsList(it.toPersistentList())) }
+                    )
+                }
+
+                val foodUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_FOOD_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_FOOD_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.foodUsable }, { config = config.copy(foodUsable = it) })
+                }
+
+                val projectileUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_PROJECTILE_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_PROJECTILE_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.projectileUsable }, { config = config.copy(projectileUsable = it) })
+                }
+
+                val rangedWeaponUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_RANGED_WEAPONS_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_RANGED_WEAPONS_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.rangedWeaponUsable }, { config = config.copy(rangedWeaponUsable = it) })
+                }
+
+                val equippableUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_EQUIPPABLE_ITEMS_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_EQUIPPABLE_ITEMS_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.equippableUsable }, { config = config.copy(equippableUsable = it) })
+                }
+
+                val bundleUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_BUNDLE_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_BUNDLE_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.bundleUsable }, { config = config.copy(bundleUsable = it) })
+                }
             }
 
-            val projectileShowCrosshair by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_PROJECTILE_SHOW_CROSSHAIR_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_PROJECTILE_SHOW_CROSSHAIR_DESCRIPTION))
-                controller(textSwitch())
-                binding(
-                    true,
-                    { config.projectileShowCrosshair },
-                    { config = config.copy(projectileShowCrosshair = it) }
-                )
-            }
 
-            val rangedWeaponShowCrosshair by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_RANGED_WEAPONS_SHOW_CROSSHAIR_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_RANGED_WEAPONS_SHOW_CROSSHAIR_DESCRIPTION))
-                controller(textSwitch())
-                binding(
-                    true,
-                    { config.rangedWeaponShowCrosshair },
-                    { config = config.copy(rangedWeaponShowCrosshair = it) }
-                )
-            }
+            val showCrosshairItemsGroup by groups.registering("show_crosshair_items") {
+                name(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE)
 
-            val foodUsable by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_FOOD_USABLE_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_FOOD_USABLE_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.foodUsable }, { config = config.copy(foodUsable = it) })
-            }
+                val showCrosshairItems by options.registering<List<Item>> {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_DESCRIPTION))
+                    customController { ItemsListController(it) }
+                    binding(
+                        defaultShowCrosshairItems,
+                        { config.showCrosshairItems.items },
+                        { config = config.copy(showCrosshairItems = ItemsList(it.toPersistentList())) }
+                    )
+                }
 
-            val projectileUsable by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_PROJECTILE_USABLE_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_PROJECTILE_USABLE_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.projectileUsable }, { config = config.copy(projectileUsable = it) })
-            }
+                val projectileShowCrosshair by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_PROJECTILE_SHOW_CROSSHAIR_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_PROJECTILE_SHOW_CROSSHAIR_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(
+                        true,
+                        { config.projectileShowCrosshair },
+                        { config = config.copy(projectileShowCrosshair = it) }
+                    )
+                }
 
-            val rangedWeaponUsable by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_RANGED_WEAPONS_USABLE_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_RANGED_WEAPONS_USABLE_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.rangedWeaponUsable }, { config = config.copy(rangedWeaponUsable = it) })
-            }
-
-            val equippableUsable by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_ITEMS_EQUIPPABLE_ITEMS_USABLE_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_EQUIPPABLE_ITEMS_USABLE_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.equippableUsable }, { config = config.copy(equippableUsable = it) })
+                val rangedWeaponShowCrosshair by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_RANGED_WEAPONS_SHOW_CROSSHAIR_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_RANGED_WEAPONS_SHOW_CROSSHAIR_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(
+                        true,
+                        { config.rangedWeaponShowCrosshair },
+                        { config = config.copy(rangedWeaponShowCrosshair = it) }
+                    )
+                }
             }
         }
 

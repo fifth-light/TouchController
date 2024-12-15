@@ -18,6 +18,13 @@ val defaultUsableItems = persistentListOf(
     Items.KNOWLEDGE_BOOK,
     Items.WRITABLE_BOOK,
     Items.WRITTEN_BOOK,
+    Items.OMINOUS_BOTTLE,
+    Items.ENDER_EYE,
+    Items.ENDER_PEARL,
+)
+
+val defaultShowCrosshairItems = persistentListOf(
+    Items.ENDER_PEARL,
 )
 
 @Serializable
@@ -27,14 +34,17 @@ data class TouchControllerConfig(
     val disableCrosshair: Boolean = true,
     val showPointers: Boolean = false,
     val enableTouchEmulation: Boolean = false,
-    val projectileShowCrosshair: Boolean = true,
-    val rangedWeaponShowCrosshair: Boolean = true,
     @Serializable(with = ItemsListSerializer::class)
     val usableItems: ItemsList = ItemsList(defaultUsableItems),
     val foodUsable: Boolean = true,
     val projectileUsable: Boolean = true,
     val rangedWeaponUsable: Boolean = true,
     val equippableUsable: Boolean = true,
+    val bundleUsable: Boolean = true,
+    @Serializable(with = ItemsListSerializer::class)
+    val showCrosshairItems: ItemsList = ItemsList(defaultShowCrosshairItems),
+    val projectileShowCrosshair: Boolean = true,
+    val rangedWeaponShowCrosshair: Boolean = true,
     val crosshair: CrosshairConfig = CrosshairConfig()
 )
 

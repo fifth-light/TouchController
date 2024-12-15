@@ -27,7 +27,9 @@ import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
 
 private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
-    if (config.projectileShowCrosshair && this is ProjectileItem) {
+    if (this in config.showCrosshairItems.items) {
+        return true
+    } else if (config.projectileShowCrosshair && this is ProjectileItem) {
         return true
     } else if (config.rangedWeaponShowCrosshair && this is RangedWeaponItem) {
         return true

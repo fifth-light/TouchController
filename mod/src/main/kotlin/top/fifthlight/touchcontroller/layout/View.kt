@@ -13,7 +13,9 @@ import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
 
 private fun Item.isUsable(config: TouchControllerConfig): Boolean {
-    if (config.foodUsable && components.get(DataComponentTypes.FOOD) != null) {
+    if (this in config.usableItems.items) {
+        return true
+    } else if (config.foodUsable && components.get(DataComponentTypes.FOOD) != null) {
         return true
     } else if (config.projectileUsable && this is ProjectileItem) {
         return true
@@ -21,10 +23,11 @@ private fun Item.isUsable(config: TouchControllerConfig): Boolean {
         return true
     } else if (config.equippableUsable && components.get(DataComponentTypes.EQUIPPABLE) != null) {
         return true
-    } else if (this in config.usableItems.items) {
+    } else if (config.bundleUsable && components.get(DataComponentTypes.BUNDLE_CONTENTS) != null) {
         return true
+    } else {
+        return false
     }
-    return false
 }
 
 fun Context.View() {

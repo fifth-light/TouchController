@@ -22,7 +22,8 @@ class ItemsListController(
     override fun formatValue(): Text = option().pendingValue().let {
         Text.translatable(
             when (it.size) {
-                0, 1 -> Texts.CONFIG_CONTROLLER_ITEMS_LIST_VALUE_SINGLE
+                0 -> Texts.CONFIG_CONTROLLER_ITEMS_LIST_VALUE_EMPTY
+                1 -> Texts.CONFIG_CONTROLLER_ITEMS_LIST_VALUE_SINGLE
                 else -> Texts.CONFIG_CONTROLLER_ITEMS_LIST_VALUE_MULTIPLE
             }, it.size
         )
