@@ -27,11 +27,18 @@ fun openConfigScreen(parent: Screen): Screen {
             val regularGroup by groups.registering("regular") {
                 name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_TITLE)
 
-                val disableMouse by options.registering {
-                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_TITLE)
-                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_DESCRIPTION))
+                val disableMouseMove by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_DESCRIPTION))
                     controller(textSwitch())
-                    binding(true, { config.disableMouse }, { config = config.copy(disableMouse = it) })
+                    binding(true, { config.disableMouseMove }, { config = config.copy(disableMouseMove = it) })
+                }
+
+                val disableMouseClick by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.disableMouseClick }, { config = config.copy(disableMouseClick = it) })
                 }
 
                 val disableMouseLock by options.registering {

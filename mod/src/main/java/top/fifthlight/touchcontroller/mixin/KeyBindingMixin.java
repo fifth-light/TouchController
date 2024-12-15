@@ -20,16 +20,21 @@ public abstract class KeyBindingMixin {
     @Shadow @Final private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
 
     @Unique
-    private static boolean doCancelKey(InputUtil.Key key) {
+    private static boolean doDisableMouseClick() {
         var configHolder = (TouchControllerConfigHolder) KoinJavaComponent.getOrNull(TouchControllerConfigHolder.class);
         if (configHolder == null) {
             return false;
         }
         var config = configHolder.getConfig().getValue();
-        if (!config.getEnableTouchEmulation()) {
+        return config.getDisableMouseClick() || config.getEnableTouchEmulation();
+    }
+
+    @Unique
+    private static boolean doCancelKey(InputUtil.Key key) {
+        var client = MinecraftClient.getInstance();
+        if (!doDisableMouseClick()) {
             return false;
         }
-        var client = MinecraftClient.getInstance();
         KeyBinding keyBinding = KEY_TO_BINDINGS.get(key);
         return keyBinding == client.options.attackKey || keyBinding == client.options.useKey;
     }

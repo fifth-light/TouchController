@@ -20,8 +20,10 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_TOOLTIP = translatable("screen.options.category.global.tooltip")
 
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_TITLE = translatable("screen.options.category.global.regular.title")
-    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_TITLE = translatable("screen.options.category.global.regular.disable_mouse.title")
-    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_DESCRIPTION = translatable("screen.options.category.global.regular.disable_mouse.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_TITLE = translatable("screen.options.category.global.regular.disable_mouse_move.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_DESCRIPTION = translatable("screen.options.category.global.regular.disable_mouse_move.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_TITLE = translatable("screen.options.category.global.regular.disable_mouse_click.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_DESCRIPTION = translatable("screen.options.category.global.regular.disable_mouse_click.description")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_TITLE = translatable("screen.options.category.global.regular.disable_cursor_lock.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_DESCRIPTION = translatable("screen.options.category.global.regular.disable_cursor_lock.description")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE = translatable("screen.options.category.global.regular.disable_crosshair.title")

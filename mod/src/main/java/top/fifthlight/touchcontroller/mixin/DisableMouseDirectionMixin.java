@@ -25,7 +25,7 @@ abstract class DisableMouseDirectionMixin {
             return;
         }
         var config = configHolder.getConfig().getValue();
-        if (config.getDisableMouse()) {
+        if (config.getDisableMouseMove()) {
             ci.cancel();
         }
     }

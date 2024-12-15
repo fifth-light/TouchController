@@ -29,7 +29,8 @@ val defaultShowCrosshairItems = persistentListOf(
 
 @Serializable
 data class TouchControllerConfig(
-    val disableMouse: Boolean = true,
+    val disableMouseMove: Boolean = true,
+    val disableMouseClick: Boolean = true,
     val disableMouseLock: Boolean = false,
     val disableCrosshair: Boolean = true,
     val showPointers: Boolean = false,
