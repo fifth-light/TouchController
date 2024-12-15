@@ -192,7 +192,6 @@ fn handle_touch_event(message: &CWPSTRUCT) -> Result<(), EventError> {
     } = pointer_state;
     *tick += 1;
 
-    eprintln!("Tick: {}", *tick);
     for pointer in pointers {
         let id = match id_map.entry(pointer.dwID) {
             Entry::Occupied(mut entry) => {
@@ -210,15 +209,6 @@ fn handle_touch_event(message: &CWPSTRUCT) -> Result<(), EventError> {
 
         let x = (pointer.x - scaled_left) as f32 / scaled_width;
         let y = (pointer.y - scaled_top) as f32 / scaled_height;
-        eprintln!(
-            "id: {}, x: {}, y: {}, down: {}, move: {}, up: {}",
-            id,
-            x,
-            y,
-            pointer.dwFlags.0 & TOUCHEVENTF_DOWN.0 != 0,
-            pointer.dwFlags.0 & TOUCHEVENTF_MOVE.0 != 0,
-            pointer.dwFlags.0 & TOUCHEVENTF_UP.0 != 0
-        );
         if pointer.dwFlags.0 & TOUCHEVENTF_DOWN.0 != 0
             || pointer.dwFlags.0 & TOUCHEVENTF_MOVE.0 != 0
         {
