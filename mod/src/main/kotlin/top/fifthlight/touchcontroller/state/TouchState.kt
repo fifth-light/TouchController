@@ -8,10 +8,16 @@ sealed class PointerState {
         val initialPosition: Offset,
         val lastPosition: Offset,
         val moving: Boolean = false,
-        val longPressTriggered: Boolean = false,
-        val consumed: Boolean = false,
+        val viewState: ViewPointerState,
         val pressTime: Int,
-    ) : PointerState()
+    ) : PointerState() {
+        enum class ViewPointerState {
+            INITIAL,
+            CONSUMED,
+            BREAKING,
+            USING,
+        }
+    }
 
     data object Joystick : PointerState()
     data object Invalid : PointerState()

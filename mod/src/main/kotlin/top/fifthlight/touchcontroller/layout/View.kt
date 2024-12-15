@@ -10,6 +10,7 @@ import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.ext.size
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerAccessor
 import top.fifthlight.touchcontroller.state.PointerState
+import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
 
 private fun Item.isUsable(config: TouchControllerConfig): Boolean {
     if (config.foodUsable && components.get(DataComponentTypes.FOOD) != null) {
@@ -31,26 +32,44 @@ fun Context.View() {
     for (key in pointers.keys.toList()) {
         val state = pointers[key]!!.state
         if (state is PointerState.Released) {
-            if (!releasedView && state.previousState is PointerState.View) {
-                releasedView = true
+            if (state.previousState is PointerState.View) {
                 val previousState = state.previousState
-                val pressTime = timer.tick - previousState.pressTime
-                if (pressTime < 5 && !previousState.moving) {
-                    val crosshairTarget = client.crosshairTarget ?: break
-                    when (crosshairTarget.type) {
-                        BLOCK -> {
-                            status.startItemUse = true
-                            status.itemUse.add()
-                        }
+                when (previousState.viewState) {
+                    CONSUMED -> {}
+                    BREAKING -> {
+                        status.attack.release()
+                    }
 
-                        ENTITY -> {
-                            status.attack.add()
-                        }
+                    USING -> {
+                        status.itemUse.release()
+                    }
 
-                        MISS, null -> {}
+                    INITIAL -> {
+                        if (!releasedView) {
+                            val pressTime = timer.tick - previousState.pressTime
+                            // Pressed less than 5 ticks and not moving, recognized as short click
+                            if (pressTime < 5 && !previousState.moving) {
+                                val crosshairTarget = client.crosshairTarget ?: break
+                                when (crosshairTarget.type) {
+                                    BLOCK -> {
+                                        // Short click on block: use item
+                                        status.itemUse.click()
+                                    }
+
+                                    ENTITY -> {
+                                        // Short click on entity: attack the entity
+                                        status.attack.click()
+                                    }
+
+                                    MISS, null -> {}
+                                }
+                            }
+                        }
                     }
                 }
+                releasedView = true
             }
+            // Remove all released pointers, because View is the last layout
             pointers.remove(key)
         }
     }
@@ -61,6 +80,8 @@ fun Context.View() {
 
     currentViewPointer?.let { pointer ->
         val state = pointer.state as PointerState.View
+
+        // Drop all unhandled pointers
         pointers.values.forEach {
             when (it.state) {
                 PointerState.New -> it.state = PointerState.Invalid
@@ -70,51 +91,59 @@ fun Context.View() {
 
         var moving = state.moving
         if (!state.moving) {
+            // Moving detect
             val delta = (pointer.rawOffset - state.initialPosition).squaredLength
+            // TODO make the threshold configurable
             val threshold = (client.window.size.toSize() * 0.02f).squaredLength
             if (delta > threshold) {
                 moving = true
             }
         }
+        // TODO make the sensitivity configurable
         result.lookDirection = pointer.rawOffset - state.lastPosition
 
-        if (state.consumed) {
+        val player = client.player
+        // Consume the pointer if player is null
+        if (player == null) {
+            pointer.state = state.copy(
+                lastPosition = pointer.rawOffset,
+                moving = moving,
+                viewState = CONSUMED
+            )
+            return@let
+        }
+
+        // Early exit for consumed pointer
+        if (state.viewState == CONSUMED) {
             pointer.state = state.copy(lastPosition = pointer.rawOffset, moving = moving)
             return@let
         }
 
-        var consumed = false
-        var itemUsable = false
-        val player = client.player
         val pressTime = timer.tick - state.pressTime
-        var longPressTriggered = state.longPressTriggered
+        var viewState = state.viewState
         val crosshairTarget = client.crosshairTarget
-
-        if (player != null) {
-            for (hand in Hand.entries) {
-                val stack = player.getStackInHand(hand)
-                if (stack.item.isUsable(config)) {
-                    itemUsable = true
-                    break
-                }
-            }
+        val itemUsable = Hand.entries.any { hand ->
+            player.getStackInHand(hand).item.isUsable(config)
         }
 
+        // If pointer kept still and held for 5 tick
         if (pressTime == 5 && !moving) {
             if (itemUsable) {
-                longPressTriggered = true
-                status.startItemUse = true
+                // Trigger item long click
+                status.itemUse.press()
+                viewState = USING
             } else {
                 when (crosshairTarget?.type) {
                     BLOCK -> {
-                        longPressTriggered = true
-                        status.startItemUse = true
+                        // Trigger block breaking
+                        status.attack.press()
+                        viewState = BREAKING
                     }
 
                     ENTITY -> {
-                        status.itemUse.add()
-                        status.startItemUse = true
-                        consumed = true
+                        // Trigger item use once and consume
+                        status.itemUse.click()
+                        viewState = CONSUMED
                     }
 
                     MISS, null -> {}
@@ -122,19 +151,10 @@ fun Context.View() {
             }
         }
 
-        if (!consumed && longPressTriggered) {
-            if (itemUsable) {
-                status.itemUse.add()
-            } else if (crosshairTarget?.type == BLOCK) {
-                status.attack.add()
-            }
-        }
-
         pointer.state = state.copy(
             lastPosition = pointer.rawOffset,
             moving = moving,
-            longPressTriggered = longPressTriggered,
-            consumed = consumed
+            viewState = viewState
         )
     } ?: run {
         pointers.values.forEach {
@@ -144,7 +164,10 @@ fun Context.View() {
                         it.state = PointerState.Invalid
                     } else {
                         it.state = PointerState.View(
-                            initialPosition = it.rawOffset, lastPosition = it.rawOffset, pressTime = timer.tick
+                            initialPosition = it.rawOffset,
+                            lastPosition = it.rawOffset,
+                            pressTime = timer.tick,
+                            viewState = INITIAL
                         )
                         currentViewPointer = it
                     }
@@ -156,6 +179,7 @@ fun Context.View() {
     }
 
     currentViewPointer?.let { pointer ->
+        // Update current view pointer
         val manager = client.interactionManager
         val accessor = manager as ClientPlayerInteractionManagerAccessor
 
@@ -164,7 +188,8 @@ fun Context.View() {
             breakPercent = accessor.currentBreakingProgress,
         )
     } ?: run {
-        if (status.attack.active() || status.itemUse.active()) {
+        if (status.attack.timesPressed > 0 || status.itemUse.timesPressed > 0) {
+            // Keep last crosshair status for key handling
             result.crosshairStatus = status.lastCrosshairStatus
         }
     }

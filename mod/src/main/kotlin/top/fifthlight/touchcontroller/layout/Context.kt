@@ -15,26 +15,35 @@ import top.fifthlight.touchcontroller.proxy.data.IntSize
 import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.state.Pointer
 
-data class ClickCounter(
-    private var counter: Int = 0
+data class KeyBindingResult(
+    var timesPressed: Int = 0,
+    var isPressed: Boolean = false
 ) {
-    fun add() {
-        counter++
+    // Click for once, don't hold this key
+    fun click() {
+        timesPressed++
     }
 
-    fun active(): Boolean = counter > 0
-
-    fun consume(): Boolean {
-        return if (counter > 0) {
-            counter--
-            true
-        } else {
-            false
+    // Hold this key
+    fun press() {
+        if (!isPressed) {
+            timesPressed++
         }
+        isPressed = true
     }
 
-    fun clear() {
-        counter = 0
+    // Release this key
+    fun release() {
+        isPressed = false
+    }
+
+    fun wasPressed(): Boolean {
+        if (timesPressed > 0) {
+            timesPressed--
+            return true
+        } else {
+            return false
+        }
     }
 }
 
@@ -89,10 +98,9 @@ data class ContextStatus(
     val cancelFlying: DoubleClickState = DoubleClickState(),
     val sneakLocking: DoubleClickState = DoubleClickState(),
     var jumping: Boolean = false,
-    val attack: ClickCounter = ClickCounter(),
-    val itemUse: ClickCounter = ClickCounter(),
+    val attack: KeyBindingResult = KeyBindingResult(),
+    val itemUse: KeyBindingResult = KeyBindingResult(),
     var lastCrosshairStatus: CrosshairStatus? = null,
-    var startItemUse: Boolean = false,
 )
 
 data class ContextCounter(

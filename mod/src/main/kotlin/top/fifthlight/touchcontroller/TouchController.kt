@@ -14,7 +14,6 @@ import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
-import top.fifthlight.touchcontroller.event.ClientHandleInputEvents
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.event.KeyboardInputEvents
 import top.fifthlight.touchcontroller.platform.PlatformHolder
@@ -55,7 +54,6 @@ object TouchController : ClientModInitializer {
         WorldRenderEvents.START.register(get())
         KeyboardInputEvents.END_INPUT_TICK.register(get())
         ClientRenderEvents.START_TICK.register(get())
-        ClientHandleInputEvents.HANDLE_INPUT.register(get())
         ClientPlayConnectionEvents.JOIN.register(get())
         ClientLifecycleEvents.CLIENT_STARTED.register(get())
     }

@@ -11,7 +11,6 @@ import net.minecraft.client.MinecraftClient
 import org.koin.dsl.binds
 import org.koin.dsl.module
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
-import top.fifthlight.touchcontroller.event.ClientHandleInputEvents
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.event.KeyboardInputEvents
 import top.fifthlight.touchcontroller.handler.*
@@ -43,7 +42,6 @@ val appModule = module {
         WorldRenderEvents.Start::class
     )
     single<ClientRenderEvents.StartRenderTick> { ClientRenderHandler() }
-    single<ClientHandleInputEvents.HandleInput> { ClientInputHandler() }
     single<ClientPlayConnectionEvents.Join> { ClientPlayConnectionHandler() }
     single<ClientLifecycleEvents.ClientStarted> { ClientStartHandler() }
     single { GlobalStateModel() }
