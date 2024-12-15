@@ -9,6 +9,7 @@ koin = "4.0.0"
 serialization = "1.7.3"
 collections-immutable = "0.3.8"
 minotaur = "2.+"
+maven-publish = "0.30.0"
 
 # Minecraft Mods
 fabric-api = "0.108.0+1.21.3"
@@ -36,3 +37,4 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }
 modrinth-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }

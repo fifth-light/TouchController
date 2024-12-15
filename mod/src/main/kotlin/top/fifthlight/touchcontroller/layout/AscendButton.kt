@@ -19,6 +19,6 @@ fun Context.AscendButton(config: AscendButton) {
                 }
             }
         }
-        result.jump = result.jump || clicked
+        status.jumping = status.jumping || clicked
     }
 }

@@ -13,9 +13,12 @@ fun Context.Joystick(layout: Joystick) {
         it.state is PointerState.Joystick
     }
     currentPointer?.let {
-        pointers.values.forEach {
-            when (it.state) {
-                PointerState.New -> it.state = PointerState.Invalid
+        for (pointer in pointers.values) {
+            if (!pointer.inRect(size)) {
+                continue
+            }
+            when (pointer.state) {
+                PointerState.New -> pointer.state = PointerState.Invalid
                 else -> {}
             }
         }

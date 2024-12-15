@@ -24,39 +24,47 @@ fun openConfigScreen(parent: Screen): Screen {
             name(Texts.OPTIONS_CATEGORY_GLOBAL_TITLE)
             tooltip(Texts.OPTIONS_CATEGORY_GLOBAL_TOOLTIP)
 
-            val disableMouse by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.disableMouse }, { config = config.copy(disableMouse = it) })
+            val regularGroup by groups.registering("regular") {
+                name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_TITLE)
+
+                val disableMouse by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.disableMouse }, { config = config.copy(disableMouse = it) })
+                }
+
+                val disableMouseLock by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(false, { config.disableMouseLock }, { config = config.copy(disableMouseLock = it) })
+                }
+
+                val disableCrosshair by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.disableCrosshair }, { config = config.copy(disableCrosshair = it) })
+                }
             }
 
-            val disableMouseLock by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_LOCK_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_LOCK_DESCRIPTION))
-                controller(textSwitch())
-                binding(false, { config.disableMouseLock }, { config = config.copy(disableMouseLock = it) })
-            }
+            val debugGroup by groups.registering("debug") {
+                name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE)
 
-            val disableCrosshair by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_CROSSHAIR_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DISABLE_CROSSHAIR_DESCRIPTION))
-                controller(textSwitch())
-                binding(true, { config.disableCrosshair }, { config = config.copy(disableCrosshair = it) })
-            }
+                val showPointers by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(false, { config.showPointers }, { config = config.copy(showPointers = it) })
+                }
 
-            val showPointers by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_GLOBAL_SHOW_POINTERS_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_SHOW_POINTERS_DESCRIPTION))
-                controller(textSwitch())
-                binding(false, { config.showPointers }, { config = config.copy(showPointers = it) })
-            }
-
-            val enableTouchEmulation by rootOptions.registering {
-                name(Texts.OPTIONS_CATEGORY_GLOBAL_ENABLE_TOUCH_EMULATION_TITLE)
-                description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_ENABLE_TOUCH_EMULATION_DESCRIPTION))
-                controller(textSwitch())
-                binding(false, { config.enableTouchEmulation }, { config = config.copy(enableTouchEmulation = it) })
+                val enableTouchEmulation by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(false, { config.enableTouchEmulation }, { config = config.copy(enableTouchEmulation = it) })
+                }
             }
         }
 

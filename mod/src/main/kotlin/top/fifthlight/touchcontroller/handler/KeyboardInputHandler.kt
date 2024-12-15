@@ -30,10 +30,11 @@ class KeyboardInputHandler : KeyboardInputEvents.EndInputTick, KoinComponent {
             input.playerInput.backward(),
             input.playerInput.left(),
             input.playerInput.right(),
-            input.playerInput.jump() || result.jump,
+            input.playerInput.jump() || status.jumping,
             input.playerInput.sneak() || status.sneakLocked || result.sneak,
             input.playerInput.sprint()
         )
+        status.jumping = false
 
         timer.tick()
     }

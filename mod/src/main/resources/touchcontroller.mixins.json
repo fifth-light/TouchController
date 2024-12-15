@@ -8,6 +8,7 @@
   "client": [
     "ClientHandleInputEventsMixin",
     "ClientOpenChatScreenInvoker",
+    "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerAccessor",
     "ClientRenderMixin",
     "ControlsOptionsScreenMixin",

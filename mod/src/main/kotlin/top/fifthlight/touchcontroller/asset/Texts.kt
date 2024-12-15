@@ -9,6 +9,8 @@ object Texts {
     private fun key(id: String) = "${TouchController.NAMESPACE}.$id"
     private fun translatable(id: String): MutableText = Text.translatable(key(id))
 
+    // TODO generate binding below from translation JSON file
+
     val WARNING_PROXY_NOT_CONNECTED = translatable("warning.proxy_not_connected")
 
     val OPTIONS_SCREEN = translatable("screen.options")
@@ -16,16 +18,20 @@ object Texts {
 
     val OPTIONS_CATEGORY_GLOBAL_TITLE = translatable("screen.options.category.global.title")
     val OPTIONS_CATEGORY_GLOBAL_TOOLTIP = translatable("screen.options.category.global.tooltip")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_TITLE = translatable("screen.options.category.global.disable_mouse.title")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_DESCRIPTION = translatable("screen.options.category.global.disable_mouse.description")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_LOCK_TITLE = translatable("screen.options.category.global.disable_cursor_lock.title")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_MOUSE_LOCK_DESCRIPTION = translatable("screen.options.category.global.disable_cursor_lock.description")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_CROSSHAIR_TITLE = translatable("screen.options.category.global.disable_crosshair.title")
-    val OPTIONS_CATEGORY_GLOBAL_DISABLE_CROSSHAIR_DESCRIPTION = translatable("screen.options.category.global.disable_crosshair.description")
-    val OPTIONS_CATEGORY_GLOBAL_SHOW_POINTERS_TITLE = translatable("screen.options.category.global.show_pointers.title")
-    val OPTIONS_CATEGORY_GLOBAL_SHOW_POINTERS_DESCRIPTION = translatable("screen.options.category.global.show_pointers.description")
-    val OPTIONS_CATEGORY_GLOBAL_ENABLE_TOUCH_EMULATION_TITLE = translatable("screen.options.category.global.enable_touch_emulation.title")
-    val OPTIONS_CATEGORY_GLOBAL_ENABLE_TOUCH_EMULATION_DESCRIPTION = translatable("screen.options.category.global.enable_touch_emulation.description")
+
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_TITLE = translatable("screen.options.category.global.regular.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_TITLE = translatable("screen.options.category.global.regular.disable_mouse.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_DESCRIPTION = translatable("screen.options.category.global.regular.disable_mouse.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_TITLE = translatable("screen.options.category.global.regular.disable_cursor_lock.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_DESCRIPTION = translatable("screen.options.category.global.regular.disable_cursor_lock.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE = translatable("screen.options.category.global.regular.disable_crosshair.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION = translatable("screen.options.category.global.regular.disable_crosshair.description")
+
+    val OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE = translatable("screen.options.category.global.debug.title")
+    val OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE = translatable("screen.options.category.global.debug.show_pointers.title")
+    val OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_DESCRIPTION = translatable("screen.options.category.global.debug.show_pointers.description")
+    val OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_TITLE = translatable("screen.options.category.global.debug.enable_touch_emulation.title")
+    val OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_DESCRIPTION = translatable("screen.options.category.global.debug.enable_touch_emulation.description")
 
     val OPTIONS_CATEGORY_CUSTOM_TITLE = translatable("screen.options.category.custom.title")
     val OPTIONS_CATEGORY_CUSTOM_TOOLTIP = translatable("screen.options.category.custom.tooltip")
@@ -40,6 +46,7 @@ object Texts {
     val OPTIONS_UNDO_TOOLTIP = translatable("screen.options.undo.tooltip")
     val OPTIONS_CANCEL_TITLE = translatable("screen.options.cancel.title")
     val OPTIONS_CANCEL_TOOLTIP = translatable("screen.options.cancel.tooltip")
+    val OPTIONS_SAVE_BEFORE_CLOSING_TITLE = translatable("screen.options.save_before_closing.title")
     val OPTIONS_REMOVE_TITLE = translatable("screen.options.remove.title")
     val OPTIONS_REMOVE_TOOLTIP = translatable("screen.options.remove.tooltip")
 

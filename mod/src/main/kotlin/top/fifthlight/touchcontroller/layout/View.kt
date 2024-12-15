@@ -113,6 +113,7 @@ fun Context.View() {
 
                     ENTITY -> {
                         status.itemUse.add()
+                        status.startItemUse = true
                         consumed = true
                     }
 
