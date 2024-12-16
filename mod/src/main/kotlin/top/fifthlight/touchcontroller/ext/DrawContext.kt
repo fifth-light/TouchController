@@ -45,17 +45,28 @@ fun DrawContext.drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect = Rect.O
     }
 }
 
+fun DrawContext.drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect = Rect.ONE, color: UInt) =
+    drawTexture(id, dstRect, uvRect, color.toInt())
+
 fun DrawContext.drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect = Rect.ONE, color: Int) {
     RenderSystem.setShaderTexture(0, id)
     withShader(ShaderProgramKeys.POSITION_TEX_COLOR) {
         val matrix = matrices.peek().positionMatrix
         val bufferBuilder =
             Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR)
-        bufferBuilder.vertex(matrix, dstRect.left, dstRect.top, 0f).texture(uvRect.left, uvRect.top).color(color)
-        bufferBuilder.vertex(matrix, dstRect.left, dstRect.bottom, 0f).texture(uvRect.left, uvRect.bottom).color(color)
-        bufferBuilder.vertex(matrix, dstRect.right, dstRect.bottom, 0f).texture(uvRect.right, uvRect.bottom)
+        bufferBuilder
+            .vertex(matrix, dstRect.left, dstRect.top, 0f)
+            .texture(uvRect.left, uvRect.top).color(color)
+        bufferBuilder
+            .vertex(matrix, dstRect.left, dstRect.bottom, 0f)
+            .texture(uvRect.left, uvRect.bottom).color(color)
+        bufferBuilder
+            .vertex(matrix, dstRect.right, dstRect.bottom, 0f)
+            .texture(uvRect.right, uvRect.bottom)
             .color(color)
-        bufferBuilder.vertex(matrix, dstRect.right, dstRect.top, 0f).texture(uvRect.right, uvRect.top).color(color)
+        bufferBuilder
+            .vertex(matrix, dstRect.right, dstRect.top, 0f)
+            .texture(uvRect.right, uvRect.top).color(color)
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
     }
 }

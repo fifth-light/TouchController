@@ -9,7 +9,7 @@
     "ClientHandleInputEventsMixin",
     "ClientOpenChatScreenInvoker",
     "ClientPlayerEntityMixin",
-    "ClientPlayerInteractionManagerAccessor",
+    "ClientPlayerInteractionManagerMixin",
     "ClientRenderMixin",
     "ControlsOptionsScreenMixin",
     "CrosshairTargetMixin",

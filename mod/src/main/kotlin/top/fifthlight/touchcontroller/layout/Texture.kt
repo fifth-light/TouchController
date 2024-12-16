@@ -26,7 +26,10 @@ fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE) {
     }
 }
 
-fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: Int) {
+
+fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: Int) = Texture(id, textureUv, color.toUInt())
+
+fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: UInt) {
     if (opacity == 1f) {
         drawQueue.enqueue { drawContext, _ ->
             drawContext.drawTexture(
@@ -37,7 +40,7 @@ fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: Int) {
             )
         }
     } else {
-        val colorWithoutAlpha = color and 0xFFFFFF
+        val colorWithoutAlpha = color.toInt() and 0xFFFFFF
         val colorWithAlpha = ((0xFF * opacity).toInt() shl 24) or colorWithoutAlpha
         drawQueue.enqueue { drawContext, _ ->
             drawContext.drawTexture(

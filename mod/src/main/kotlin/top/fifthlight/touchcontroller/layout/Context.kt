@@ -77,6 +77,29 @@ enum class HudState {
     NORMAL
 }
 
+data class InventorySlotStatus(
+    var progress: Float = 0f,
+    var drop: Boolean = false,
+    var select: Boolean = false,
+)
+
+data class InventoryResult(
+    val slots: Array<InventorySlotStatus> = Array(9) { InventorySlotStatus() }
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as InventoryResult
+
+        return slots.contentEquals(other.slots)
+    }
+
+    override fun hashCode(): Int {
+        return slots.contentHashCode()
+    }
+}
+
 data class ContextResult(
     var forward: Float = 0f,
     var left: Float = 0f,
@@ -86,6 +109,7 @@ data class ContextResult(
     var crosshairStatus: CrosshairStatus? = null,
     var sneak: Boolean = false,
     var cancelFlying: Boolean = false,
+    val inventory: InventoryResult = InventoryResult()
 )
 
 data class ContextStatus(
