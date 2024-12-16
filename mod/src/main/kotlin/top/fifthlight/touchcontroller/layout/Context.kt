@@ -58,7 +58,7 @@ data class DoubleClickState(
 
         val interval = time - lastClick
         lastClick = time
-        val doubleClicked = interval < 7
+        val doubleClicked = interval <= 15
         if (doubleClicked) {
             lastClick = -1
         }

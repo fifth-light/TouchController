@@ -7,6 +7,7 @@
   "touchcontroller.screen.options.category.global.title": "全局",
   "touchcontroller.screen.options.category.global.tooltip": "全局选项",
   "touchcontroller.screen.options.category.global.regular.title": "常规",
+
   "touchcontroller.screen.options.category.global.regular.disable_mouse_move.title": "禁用鼠标移动",
   "touchcontroller.screen.options.category.global.regular.disable_mouse_move.description": "在游戏内禁用鼠标移动。当你的系统将触摸输入映射为鼠标输入时启用这个选项以屏蔽鼠标移动。",
   "touchcontroller.screen.options.category.global.regular.disable_mouse_click.title": "禁用鼠标点击",
@@ -15,6 +16,12 @@
   "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.description": "在游戏内禁用光标锁定，从而游戏不会捕获光标的焦点。在移动端关闭这个选项。",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.title": "禁用准心绘制",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "禁用游戏中的准心绘制。这只影响准心是否绘制，不影响触摸操作的方式。",
+  "touchcontroller.screen.options.category.control.title": "控制",
+  "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "视角移动灵敏度",
+  "touchcontroller.screen.options.category.control.view_movement_sensitivity.description": "设置横向滑动整个屏幕时视野旋转的角度",
+  "touchcontroller.screen.options.category.control.view_hold_detect_threshold.title": "长按检测阈值",
+  "touchcontroller.screen.options.category.control.view_hold_detect_threshold.description": "设置判断屏幕点击是移动或者是长按移动距离的阈值",
+
   "touchcontroller.screen.options.category.global.debug.title": "调试",
   "touchcontroller.screen.options.category.global.debug.show_pointers.title": "显示指针位置",
   "touchcontroller.screen.options.category.global.debug.show_pointers.description": "在屏幕上绘制所有指针。",

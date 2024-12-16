@@ -29,6 +29,12 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE = translatable("screen.options.category.global.regular.disable_crosshair.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION = translatable("screen.options.category.global.regular.disable_crosshair.description")
 
+    val OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE = translatable("screen.options.category.control.title")
+    val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE = translatable("screen.options.category.control.view_movement_sensitivity.title")
+    val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_DESCRIPTION = translatable("screen.options.category.control.view_movement_sensitivity.description")
+    val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_TITLE = translatable("screen.options.category.control.view_hold_detect_threshold.title")
+    val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_DESCRIPTION = translatable("screen.options.category.control.view_hold_detect_threshold.description")
+
     val OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE = translatable("screen.options.category.global.debug.title")
     val OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE = translatable("screen.options.category.global.debug.show_pointers.title")
     val OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_DESCRIPTION = translatable("screen.options.category.global.debug.show_pointers.description")

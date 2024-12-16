@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.config
 
 import dev.isxander.yacl3.api.OptionDescription
 import dev.isxander.yacl3.dsl.YetAnotherConfigLib
+import dev.isxander.yacl3.dsl.slider
 import dev.isxander.yacl3.dsl.textSwitch
 import kotlinx.collections.immutable.toPersistentList
 import net.minecraft.client.gui.screen.Screen
@@ -53,6 +54,32 @@ fun openConfigScreen(parent: Screen): Screen {
                     description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION))
                     controller(textSwitch())
                     binding(true, { config.disableCrosshair }, { config = config.copy(disableCrosshair = it) })
+                }
+            }
+
+            val controlGroup by groups.registering("control") {
+                name(Texts.OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE)
+
+                val viewMovementSensitivity by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_DESCRIPTION))
+                    controller(slider(0f..900f))
+                    binding(
+                        495f,
+                        { config.viewMovementSensitivity },
+                        { config = config.copy(viewMovementSensitivity = it) }
+                    )
+                }
+
+                val viewHoldDetectThreshold by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_DESCRIPTION))
+                    controller(slider(0..10))
+                    binding(
+                        2,
+                        { config.viewHoldDetectThreshold },
+                        { config = config.copy(viewHoldDetectThreshold = it) }
+                    )
                 }
             }
 

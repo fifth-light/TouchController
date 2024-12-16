@@ -7,8 +7,8 @@ import net.minecraft.item.RangedWeaponItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult.Type.*
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.ext.size
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerAccessor
+import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
 
@@ -31,6 +31,11 @@ private fun Item.isUsable(config: TouchControllerConfig): Boolean {
 }
 
 fun Context.View() {
+    fun Offset.fixAspectRadio(): Offset = Offset(
+        x = x,
+        y = y * window.height / window.width
+    )
+
     var releasedView = false
     for (key in pointers.keys.toList()) {
         val state = pointers[key]!!.state
@@ -94,22 +99,22 @@ fun Context.View() {
 
         var moving = state.moving
         if (!state.moving) {
-            // Moving detect
-            val delta = (pointer.rawOffset - state.initialPosition).squaredLength
-            // TODO make the threshold configurable
-            val threshold = (client.window.size.toSize() * 0.02f).squaredLength
-            if (delta > threshold) {
+            // Move detect
+            val delta = (pointer.position - state.initialPosition).fixAspectRadio().squaredLength
+            val threshold = config.viewHoldDetectThreshold * 0.01f
+            if (delta > threshold * threshold) {
                 moving = true
             }
         }
-        // TODO make the sensitivity configurable
-        result.lookDirection = pointer.rawOffset - state.lastPosition
+
+        val movement = (pointer.position - state.lastPosition).fixAspectRadio()
+        result.lookDirection = movement * config.viewMovementSensitivity
 
         val player = client.player
         // Consume the pointer if player is null
         if (player == null) {
             pointer.state = state.copy(
-                lastPosition = pointer.rawOffset,
+                lastPosition = pointer.position,
                 moving = moving,
                 viewState = CONSUMED
             )
@@ -118,7 +123,7 @@ fun Context.View() {
 
         // Early exit for consumed pointer
         if (state.viewState == CONSUMED) {
-            pointer.state = state.copy(lastPosition = pointer.rawOffset, moving = moving)
+            pointer.state = state.copy(lastPosition = pointer.position, moving = moving)
             return@let
         }
 
@@ -155,7 +160,7 @@ fun Context.View() {
         }
 
         pointer.state = state.copy(
-            lastPosition = pointer.rawOffset,
+            lastPosition = pointer.position,
             moving = moving,
             viewState = viewState
         )
@@ -167,8 +172,8 @@ fun Context.View() {
                         it.state = PointerState.Invalid
                     } else {
                         it.state = PointerState.View(
-                            initialPosition = it.rawOffset,
-                            lastPosition = it.rawOffset,
+                            initialPosition = it.position,
+                            lastPosition = it.position,
                             pressTime = timer.tick,
                             viewState = INITIAL
                         )

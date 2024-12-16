@@ -29,12 +29,22 @@ val defaultShowCrosshairItems = persistentListOf(
 
 @Serializable
 data class TouchControllerConfig(
+    // Global
     val disableMouseMove: Boolean = true,
     val disableMouseClick: Boolean = true,
     val disableMouseLock: Boolean = false,
     val disableCrosshair: Boolean = true,
     val showPointers: Boolean = false,
     val enableTouchEmulation: Boolean = false,
+
+    // Control
+    val viewMovementSensitivity: Float = 495f,
+    val viewHoldDetectThreshold: Int = 2,
+
+    // Crosshair
+    val crosshair: CrosshairConfig = CrosshairConfig(),
+
+    // Items
     @Serializable(with = ItemsListSerializer::class)
     val usableItems: ItemsList = ItemsList(defaultUsableItems),
     val foodUsable: Boolean = true,
@@ -46,7 +56,6 @@ data class TouchControllerConfig(
     val showCrosshairItems: ItemsList = ItemsList(defaultShowCrosshairItems),
     val projectileShowCrosshair: Boolean = true,
     val rangedWeaponShowCrosshair: Boolean = true,
-    val crosshair: CrosshairConfig = CrosshairConfig()
 )
 
 @Serializable

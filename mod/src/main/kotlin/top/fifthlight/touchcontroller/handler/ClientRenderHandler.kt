@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.handler
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.Entity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
@@ -19,6 +20,11 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
     private val configHolder: TouchControllerConfigHolder by inject()
     private val controllerHudModel: ControllerHudModel by inject()
     private val touchStateModel: TouchStateModel by inject()
+
+    private fun Entity.changeLookDirectionByDegrees(deltaYaw: Double, deltaPitch: Double) {
+        // Magic value 0.15 from net.minecraft.entity.Entity.changeLookDirection
+        changeLookDirection(deltaYaw / 0.15, deltaPitch / 0.15)
+    }
 
     override fun onStartTick(client: MinecraftClient, tick: Boolean) {
         val state = client.player?.let { player ->
@@ -62,7 +68,7 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
             client.openGameMenu(false)
         }
         result.lookDirection?.let { (x, y) ->
-            client.player?.changeLookDirection(x.toDouble(), y.toDouble())
+            client.player?.changeLookDirectionByDegrees(x.toDouble(), y.toDouble())
         }
     }
 }
