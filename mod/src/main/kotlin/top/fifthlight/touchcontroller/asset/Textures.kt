@@ -61,4 +61,8 @@ object Textures {
     val WATER_DESCEND_ACTIVE = texture("textures/gui/descend/waterdescend_active.png")
     val FLYING_DESCEND = texture("textures/gui/descend/flyingdescend.png")
     val FLYING_DESCEND_ACTIVE = texture("textures/gui/descend/flyingdescend_active.png")
+
+    val INVENTORY = texture("textures/gui/inventory/inventory.png")
+    val INVENTORY_ACTIVE = texture("textures/gui/inventory/inventory_active.png")
+
 }

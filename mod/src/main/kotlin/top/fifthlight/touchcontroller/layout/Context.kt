@@ -101,6 +101,7 @@ data class ContextStatus(
     val attack: KeyBindingResult = KeyBindingResult(),
     val itemUse: KeyBindingResult = KeyBindingResult(),
     var lastCrosshairStatus: CrosshairStatus? = null,
+    val openInventory: KeyBindingResult = KeyBindingResult()
 )
 
 data class ContextCounter(
