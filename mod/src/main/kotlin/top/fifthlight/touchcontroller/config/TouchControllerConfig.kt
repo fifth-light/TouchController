@@ -96,5 +96,6 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
         align = Align.CENTER_TOP,
         offset = IntOffset(9, 0),
         opacity = 0.6f
-    )
+    ),
+    InventoryButton()
 )
