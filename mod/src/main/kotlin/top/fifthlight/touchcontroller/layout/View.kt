@@ -7,7 +7,7 @@ import net.minecraft.item.RangedWeaponItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult.Type.*
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerAccessor
+import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
 import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
@@ -189,7 +189,7 @@ fun Context.View() {
     currentViewPointer?.let { pointer ->
         // Update current view pointer
         val manager = client.interactionManager
-        val accessor = manager as ClientPlayerInteractionManagerAccessor
+        val accessor = manager as ClientPlayerInteractionManagerMixin
 
         result.crosshairStatus = CrosshairStatus(
             position = pointer.position,

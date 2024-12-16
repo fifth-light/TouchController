@@ -12,6 +12,7 @@ import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.Hud
 import top.fifthlight.touchcontroller.layout.HudState
 import top.fifthlight.touchcontroller.mixin.ClientOpenChatScreenInvoker
+import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.model.TouchStateModel
 import top.fifthlight.touchcontroller.proxy.data.IntOffset
@@ -27,15 +28,14 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
     }
 
     override fun onStartTick(client: MinecraftClient, tick: Boolean) {
-        val state = client.player?.let { player ->
-            if (player.isSubmergedInWater) {
-                HudState.SWIMMING
-            } else if (player.abilities.flying) {
-                HudState.FLYING
-            } else {
-                HudState.NORMAL
-            }
-        } ?: HudState.NORMAL
+        val player = client.player ?: return
+        val state = if (player.isSubmergedInWater) {
+            HudState.SWIMMING
+        } else if (player.abilities.flying) {
+            HudState.FLYING
+        } else {
+            HudState.NORMAL
+        }
         if (state != HudState.NORMAL) controllerHudModel.status.sneakLocked = false
         val drawQueue = DrawQueue()
         val result = Context(
@@ -59,7 +59,7 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
         controllerHudModel.pendingDrawQueue = drawQueue
 
         if (result.cancelFlying) {
-            client.player?.abilities?.flying = false
+            player.abilities?.flying = false
         }
         if (result.chat) {
             (client as ClientOpenChatScreenInvoker).callOpenChatScreen("")
@@ -68,7 +68,29 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
             client.openGameMenu(false)
         }
         result.lookDirection?.let { (x, y) ->
-            client.player?.changeLookDirectionByDegrees(x.toDouble(), y.toDouble())
+            player.changeLookDirectionByDegrees(x.toDouble(), y.toDouble())
+        }
+        result.inventory.slots.forEachIndexed { index, slot ->
+            if (slot.select) {
+                player.inventory.setSelectedSlot(index)
+            }
+            if (slot.drop) {
+                val stack = player.inventory.getStack(index)
+                if (stack.isEmpty) {
+                    player.inventory.setSelectedSlot(index)
+                } else {
+                    val originalSlot = player.inventory.selectedSlot
+                    val interactionManagerAccessor = client.interactionManager as ClientPlayerInteractionManagerMixin
+
+                    player.inventory.setSelectedSlot(index)
+                    interactionManagerAccessor.callSyncSelectedSlot()
+
+                    player.dropSelectedItem(true)
+
+                    player.inventory.setSelectedSlot(originalSlot)
+                    interactionManagerAccessor.callSyncSelectedSlot()
+                }
+            }
         }
     }
 }

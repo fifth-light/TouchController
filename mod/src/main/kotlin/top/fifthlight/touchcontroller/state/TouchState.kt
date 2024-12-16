@@ -4,6 +4,7 @@ import top.fifthlight.touchcontroller.proxy.data.Offset
 
 sealed class PointerState {
     data object New : PointerState()
+
     data class View(
         val initialPosition: Offset,
         val lastPosition: Offset,
@@ -20,7 +21,9 @@ sealed class PointerState {
     }
 
     data object Joystick : PointerState()
+
     data object Invalid : PointerState()
+
     data class Released(
         val previousPosition: Offset,
         val previousState: PointerState
@@ -31,7 +34,10 @@ sealed class PointerState {
     }
 
     data class Button(val id: String) : PointerState()
+
     data class SwipeButton(val id: String) : PointerState()
+
+    data class InventorySlot(val index: Int, val startTick: Int) : PointerState()
 }
 
 data class Pointer(

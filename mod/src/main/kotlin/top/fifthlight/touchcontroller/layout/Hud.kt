@@ -31,6 +31,10 @@ fun Context.Hud(widgets: List<ControllerWidget>) {
                 }
             }
         }
+
+        if (client.currentScreen == null) {
+            Inventory()
+        }
     }
 
     if (client.currentScreen == null) {
