@@ -5,6 +5,7 @@ import top.fifthlight.touchcontroller.state.PointerState
 data class ButtonResult(
     val newPointer: Boolean = false,
     val clicked: Boolean = false,
+    val release: Boolean = false
 )
 
 fun Context.SwipeButton(
@@ -14,8 +15,9 @@ fun Context.SwipeButton(
     val pointers = getPointersInRect(size)
     var newPointer = false
     var clicked = false
+    var release = false
     for (pointer in pointers) {
-        when (pointer.state) {
+        when (val state = pointer.state) {
             PointerState.New -> {
                 pointer.state = PointerState.SwipeButton(id)
                 newPointer = true
@@ -26,13 +28,21 @@ fun Context.SwipeButton(
                 clicked = true
             }
 
+            is PointerState.Released -> {
+                val previousState = state.previousState
+                if (previousState is PointerState.SwipeButton && previousState.id == id) {
+                    release = true
+                }
+            }
+
             else -> {}
         }
     }
     content(clicked)
     return ButtonResult(
         newPointer = newPointer,
-        clicked = clicked
+        clicked = clicked,
+        release = release
     )
 }
 
@@ -43,6 +53,7 @@ fun Context.Button(
     val pointers = getPointersInRect(size)
     var newPointer = false
     var clicked = false
+    var release = false
     for (pointer in pointers) {
         when (val state = pointer.state) {
             PointerState.New -> {
@@ -57,6 +68,13 @@ fun Context.Button(
                 }
             }
 
+            is PointerState.Released -> {
+                val previousState = state.previousState
+                if (previousState is PointerState.Button && previousState.id == id) {
+                    release = true
+                }
+            }
+
             else -> {}
         }
     }
@@ -64,6 +82,7 @@ fun Context.Button(
     content(clicked)
     return ButtonResult(
         newPointer = newPointer,
-        clicked = clicked
+        clicked = clicked,
+        release = release
     )
 }

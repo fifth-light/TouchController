@@ -4,7 +4,7 @@ import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.PauseButton
 
 fun Context.PauseButton(config: PauseButton) {
-    val (newClick, _) = Button(id = "pause") {
+    val (newClick) = Button(id = "pause") {
         if (config.classic) {
             Texture(id = Textures.PAUSE_CLASSIC)
         } else {

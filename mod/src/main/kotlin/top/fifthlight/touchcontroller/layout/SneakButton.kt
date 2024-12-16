@@ -9,7 +9,7 @@ fun Context.RawSneakButton(
     dpad: Boolean = false,
     size: IntSize = this.size
 ) {
-    val (newPointer, _) = Button(id = "sneak") {
+    val (newPointer) = Button(id = "sneak") {
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (Triple(dpad, classic, status.sneakLocked)) {
                 Triple(false, true, false), Triple(true, true, false) -> Texture(id = Textures.SNEAK_CLASSIC)

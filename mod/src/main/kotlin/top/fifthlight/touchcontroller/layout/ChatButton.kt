@@ -4,7 +4,7 @@ import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.ChatButton
 
 fun Context.ChatButton(config: ChatButton) {
-    val (newClick, _) = Button(id = "chat") {
+    val (newClick) = Button(id = "chat") {
         if (config.classic) {
             Texture(id = Textures.CHAT_CLASSIC)
         } else {
