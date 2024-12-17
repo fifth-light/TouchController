@@ -15,7 +15,7 @@
   "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.title": "禁用光标锁定",
   "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.description": "在游戏内禁用光标锁定，从而使游戏不会捕获光标的焦点。在移动端请关闭这个选项。",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.title": "禁用准心绘制",
-  "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "禁用游戏中的准心绘制。这只影响准心是否绘制，不影响触摸操作的方式。",
+  "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "在游戏内隐藏准星。这只影响准心是否显示，不影响触摸操作的方式。",
   "touchcontroller.screen.options.category.control.title": "控制",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "视角移动灵敏度",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.description": "设置横向滑动整个屏幕时视野旋转的角度",
