@@ -1,9 +1,7 @@
 package top.fifthlight.touchcontroller.config
 
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.fabricmc.loader.api.FabricLoader
@@ -31,62 +29,36 @@ class TouchControllerConfigHolder : KoinComponent {
     private val _layout = MutableStateFlow(defaultTouchControllerLayout)
     val layout = _layout.asStateFlow()
 
+    fun load() {
+        try {
+            logger.info("Reading TouchController config file")
+            _config.value = json.decodeFromString(configFile.readText())
+            logger.info("Reading TouchController layout file")
+            _layout.value = json.decodeFromString(TouchControllerLayoutSerializer(), layoutFile.readText())
+        } catch (ex: Exception) {
+            logger.warn("Failed to read config: ", ex)
+        }
+    }
+
+    private fun createConfigDirectory() {
+        try {
+            configDir.createDirectory()
+        } catch (_: FileAlreadyExistsException) {
+        }
+    }
+
     fun saveConfig(config: TouchControllerConfig) {
         _config.value = config
+        createConfigDirectory()
+        logger.info("Saving TouchController config file")
+        configFile.writeText(json.encodeToString(config))
     }
 
     fun saveLayout(layout: TouchControllerLayout) {
         _layout.value = layout
-    }
-
-    init {
-        @OptIn(DelicateCoroutinesApi::class)
-        GlobalScope.launch {
-            fun createConfigDirectory() {
-                try {
-                    configDir.createDirectory()
-                } catch (_: FileAlreadyExistsException) {
-                }
-            }
-            withContext(Dispatchers.IO) {
-                try {
-                    _config.value = json.decodeFromString(configFile.readText())
-                } catch (ex: Exception) {
-                    logger.warn("Failed to read config: ", ex)
-                }
-                try {
-                    _layout.value = json.decodeFromString(TouchControllerLayoutSerializer(), layoutFile.readText())
-                } catch (ex: Exception) {
-                    logger.warn("Failed to read layout: ", ex)
-                }
-            }
-            launch {
-                config.collectLatest { config ->
-                    withContext(Dispatchers.IO) {
-                        try {
-                            createConfigDirectory()
-                            configFile.writeText(json.encodeToString(config))
-                        } catch (ex: Exception) {
-                            logger.warn("Failed to write config: ", ex)
-                        }
-                    }
-                }
-            }
-            launch {
-                val serializer = TouchControllerLayoutSerializer()
-                layout.collectLatest { layout ->
-                    withContext(Dispatchers.IO) {
-                        try {
-                            createConfigDirectory()
-                            layoutFile.writeText(
-                                json.encodeToString(serializer, layout)
-                            )
-                        } catch (ex: Exception) {
-                            logger.warn("Failed to write layout: ", ex)
-                        }
-                    }
-                }
-            }
-        }
+        createConfigDirectory()
+        val serializer = TouchControllerLayoutSerializer()
+        logger.info("Saving TouchController layout file")
+        layoutFile.writeText(json.encodeToString(serializer, layout))
     }
 }
