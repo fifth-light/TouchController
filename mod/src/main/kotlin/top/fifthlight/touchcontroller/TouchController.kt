@@ -12,7 +12,6 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.event.KeyboardInputEvents
@@ -46,8 +45,6 @@ object TouchController : ClientModInitializer {
     }
 
     private fun Koin.initialize() {
-        val configHolder: TouchControllerConfigHolder = get()
-        configHolder.load()
         FabricHudRenderCallback.EVENT.register(get())
         TouchControllerHudRenderCallback.CROSSHAIR.register(get())
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(get())

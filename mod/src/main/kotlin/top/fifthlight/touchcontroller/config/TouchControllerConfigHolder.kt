@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.config
 
-import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,27 +26,10 @@ class TouchControllerConfigHolder : KoinComponent {
     private val layoutFile = configDir.resolve("layout.json")
 
     private val json: Json by inject()
-    private var configLoaded = atomic(false)
     private val _config = MutableStateFlow(TouchControllerConfig())
     val config = _config.asStateFlow()
     private val _layout = MutableStateFlow(defaultTouchControllerLayout)
     val layout = _layout.asStateFlow()
-
-    fun load() {
-        if (configLoaded.compareAndSet(expect = false, update = true)) {
-            @OptIn(DelicateCoroutinesApi::class)
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    try {
-                        _config.value = json.decodeFromString(configFile.readText())
-                        _layout.value = json.decodeFromString(TouchControllerLayoutSerializer(), layoutFile.readText())
-                    } catch (ex: Exception) {
-                        logger.warn("Failed to read config: ", ex)
-                    }
-                }
-            }
-        }
-    }
 
     fun saveConfig(config: TouchControllerConfig) {
         _config.value = config
@@ -66,11 +48,20 @@ class TouchControllerConfigHolder : KoinComponent {
                 } catch (_: FileAlreadyExistsException) {
                 }
             }
+            withContext(Dispatchers.IO) {
+                try {
+                    _config.value = json.decodeFromString(configFile.readText())
+                } catch (ex: Exception) {
+                    logger.warn("Failed to read config: ", ex)
+                }
+                try {
+                    _layout.value = json.decodeFromString(TouchControllerLayoutSerializer(), layoutFile.readText())
+                } catch (ex: Exception) {
+                    logger.warn("Failed to read layout: ", ex)
+                }
+            }
             launch {
                 config.collectLatest { config ->
-                    if (!configLoaded.value) {
-                        return@collectLatest
-                    }
                     withContext(Dispatchers.IO) {
                         try {
                             createConfigDirectory()
@@ -84,9 +75,6 @@ class TouchControllerConfigHolder : KoinComponent {
             launch {
                 val serializer = TouchControllerLayoutSerializer()
                 layout.collectLatest { layout ->
-                    if (!configLoaded.value) {
-                        return@collectLatest
-                    }
                     withContext(Dispatchers.IO) {
                         try {
                             createConfigDirectory()
