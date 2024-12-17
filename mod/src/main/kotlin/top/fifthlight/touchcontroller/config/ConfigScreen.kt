@@ -1,6 +1,8 @@
 package top.fifthlight.touchcontroller.config
 
+import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionDescription
+import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.dsl.YetAnotherConfigLib
 import dev.isxander.yacl3.dsl.slider
 import dev.isxander.yacl3.dsl.textSwitch
@@ -83,23 +85,24 @@ fun openConfigScreen(parent: Screen): Screen {
                 }
             }
 
-            val debugGroup by groups.registering("debug") {
+            groups.register("debug", OptionGroup.createBuilder().apply {
                 name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE)
+                collapsed(true)
 
-                val showPointers by options.registering {
+                option(Option.createBuilder<Boolean>().apply {
                     name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE)
                     description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_DESCRIPTION))
                     controller(textSwitch())
                     binding(false, { config.showPointers }, { config = config.copy(showPointers = it) })
-                }
+                }.build())
 
-                val enableTouchEmulation by options.registering {
+                option(Option.createBuilder<Boolean>().apply {
                     name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_TITLE)
                     description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_DESCRIPTION))
                     controller(textSwitch())
                     binding(false, { config.enableTouchEmulation }, { config = config.copy(enableTouchEmulation = it) })
-                }
-            }
+                }.build())
+            }.build())
         }
 
         val itemsCategory by categories.registering("items") {
