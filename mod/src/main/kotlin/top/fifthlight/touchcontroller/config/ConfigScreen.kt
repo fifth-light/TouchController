@@ -162,7 +162,7 @@ fun openConfigScreen(parent: Screen): Screen {
                     name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_TITLE)
                     description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_DESCRIPTION))
                     controller(textSwitch())
-                    binding(true, { config.bundleUsable }, { config = config.copy(bundleUsable = it) })
+                    binding(true, { config.consumableUsable }, { config = config.copy(consumableUsable = it) })
                 }
             }
 
