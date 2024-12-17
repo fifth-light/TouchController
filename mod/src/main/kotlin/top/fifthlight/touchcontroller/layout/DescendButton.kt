@@ -7,7 +7,11 @@ fun Context.DescendButton(config: DescendButton) {
     if (designMode || state != HudState.NORMAL) {
         val (_, clicked) = Button(id = "descend") { clicked ->
             if (config.classic) {
-                Texture(id = Textures.DESCEND_CLASSIC)
+                if (clicked) {
+                    Texture(id = Textures.DESCEND_CLASSIC, color = 0xFFAAAAAAu)
+                } else {
+                    Texture(id = Textures.DESCEND_CLASSIC)
+                }
             } else if (designMode) {
                 Texture(id = Textures.FLYING_DESCEND)
             } else {

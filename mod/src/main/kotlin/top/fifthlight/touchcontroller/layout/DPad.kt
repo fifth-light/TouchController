@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.layout
 
-import net.minecraft.util.Colors
 import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.DPad
 import top.fifthlight.touchcontroller.control.DPadExtraButton
@@ -38,7 +37,7 @@ fun Context.DPad(config: DPad) {
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_UP_CLASSIC)
-                    Pair(true, true) -> Texture(id = Textures.DPAD_UP_CLASSIC, color = Colors.WHITE)
+                    Pair(true, true) -> Texture(id = Textures.DPAD_UP_CLASSIC, color = 0xFFAAAAAAu)
                     Pair(false, false) -> Texture(id = Textures.DPAD_UP)
                     Pair(false, true) -> Texture(id = Textures.DPAD_UP_ACTIVE)
                 }
@@ -59,7 +58,7 @@ fun Context.DPad(config: DPad) {
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_DOWN_CLASSIC)
-                    Pair(true, true) -> Texture(id = Textures.DPAD_DOWN_CLASSIC, color = Colors.WHITE)
+                    Pair(true, true) -> Texture(id = Textures.DPAD_DOWN_CLASSIC, color = 0xFFAAAAAAu)
                     Pair(false, false) -> Texture(id = Textures.DPAD_DOWN)
                     Pair(false, true) -> Texture(id = Textures.DPAD_DOWN_ACTIVE)
                 }
@@ -80,7 +79,7 @@ fun Context.DPad(config: DPad) {
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_LEFT_CLASSIC)
-                    Pair(true, true) -> Texture(id = Textures.DPAD_LEFT_CLASSIC, color = Colors.WHITE)
+                    Pair(true, true) -> Texture(id = Textures.DPAD_LEFT_CLASSIC, color = 0xFFAAAAAAu)
                     Pair(false, false) -> Texture(id = Textures.DPAD_LEFT)
                     Pair(false, true) -> Texture(id = Textures.DPAD_LEFT_ACTIVE)
                 }
@@ -101,7 +100,7 @@ fun Context.DPad(config: DPad) {
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_RIGHT_CLASSIC)
-                    Pair(true, true) -> Texture(id = Textures.DPAD_RIGHT_CLASSIC, color = Colors.WHITE)
+                    Pair(true, true) -> Texture(id = Textures.DPAD_RIGHT_CLASSIC, color = 0xFFAAAAAAu)
                     Pair(false, false) -> Texture(id = Textures.DPAD_RIGHT)
                     Pair(false, true) -> Texture(id = Textures.DPAD_RIGHT_ACTIVE)
                 }
@@ -129,7 +128,7 @@ fun Context.DPad(config: DPad) {
                 ) {
                     when (Pair(config.classic, clicked)) {
                         Pair(true, false) -> Texture(id = Textures.DPAD_UP_LEFT_CLASSIC)
-                        Pair(true, true) -> Texture(id = Textures.DPAD_UP_LEFT_CLASSIC, color = Colors.WHITE)
+                        Pair(true, true) -> Texture(id = Textures.DPAD_UP_LEFT_CLASSIC, color = 0xFFAAAAAAu)
                         Pair(false, false) -> Texture(id = Textures.DPAD_UP_LEFT)
                         Pair(false, true) -> Texture(id = Textures.DPAD_UP_LEFT_ACTIVE)
                     }
@@ -155,7 +154,7 @@ fun Context.DPad(config: DPad) {
                 ) {
                     when (Pair(config.classic, clicked)) {
                         Pair(true, false) -> Texture(id = Textures.DPAD_UP_RIGHT_CLASSIC)
-                        Pair(true, true) -> Texture(id = Textures.DPAD_UP_RIGHT_CLASSIC, color = Colors.WHITE)
+                        Pair(true, true) -> Texture(id = Textures.DPAD_UP_RIGHT_CLASSIC, color = 0xFFAAAAAAu)
                         Pair(false, false) -> Texture(id = Textures.DPAD_UP_RIGHT)
                         Pair(false, true) -> Texture(id = Textures.DPAD_UP_RIGHT_ACTIVE)
                     }

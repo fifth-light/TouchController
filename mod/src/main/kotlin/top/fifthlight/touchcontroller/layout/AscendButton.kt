@@ -7,7 +7,11 @@ fun Context.AscendButton(config: AscendButton) {
     if (designMode || state != HudState.NORMAL) {
         val (_, clicked) = Button(id = "ascend") { clicked ->
             if (config.classic) {
-                Texture(id = Textures.ASCEND_CLASSIC)
+                if (clicked) {
+                    Texture(id = Textures.ASCEND_CLASSIC, color = 0xFFAAAAAAu)
+                } else {
+                    Texture(id = Textures.ASCEND_CLASSIC)
+                }
             } else if (designMode) {
                 Texture(id = Textures.FLYING_ASCEND)
             } else {

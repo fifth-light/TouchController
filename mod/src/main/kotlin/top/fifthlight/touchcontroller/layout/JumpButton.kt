@@ -8,9 +8,17 @@ private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, classic: 
     withAlign(align = Align.CENTER_CENTER, size = size) {
         if (classic) {
             if (state == HudState.NORMAL) {
-                Texture(id = Textures.JUMP_CLASSIC)
+                if (clicked) {
+                    Texture(id = Textures.JUMP_CLASSIC, color = 0xFFAAAAAAu)
+                } else {
+                    Texture(id = Textures.JUMP_CLASSIC)
+                }
             } else {
-                Texture(id = Textures.JUMP_FLYING)
+                if (clicked) {
+                    Texture(id = Textures.JUMP_FLYING, color = 0xFFAAAAAAu)
+                } else {
+                    Texture(id = Textures.JUMP_FLYING)
+                }
             }
         } else {
             if (clicked) {
