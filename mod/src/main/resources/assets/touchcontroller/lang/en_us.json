@@ -38,7 +38,7 @@
   "touchcontroller.screen.options.reset.title": "Reset",
   "touchcontroller.screen.options.reset.tooltip": "Reset all options to default value.",
   "touchcontroller.screen.options.undo.title": "Undo",
-  "touchcontroller.screen.options.undo.tooltip": "Cancel all pending changes.",
+  "touchcontroller.screen.options.undo.tooltip": "Cancel all pending changes, reset them to initial state.",
   "touchcontroller.screen.options.cancel.title": "Cancel",
   "touchcontroller.screen.options.cancel.tooltip": "Cancel all pending changes and exit.",
   "touchcontroller.screen.options.save_before_closing.title": "Save before closing!",

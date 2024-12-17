@@ -38,7 +38,7 @@
   "touchcontroller.screen.options.reset.title": "重置",
   "touchcontroller.screen.options.reset.tooltip": "重置所有设置到默认值。",
   "touchcontroller.screen.options.undo.title": "撤销",
-  "touchcontroller.screen.options.undo.tooltip": "撤销所有的修改，关闭界面。",
+  "touchcontroller.screen.options.undo.tooltip": "撤销所有的修改，将设置恢复到初始状态。",
   "touchcontroller.screen.options.cancel.title": "取消",
   "touchcontroller.screen.options.cancel.tooltip": "撤销所有的修改，关闭界面。",
   "touchcontroller.screen.options.save_before_closing.title": "退出前保存！",
