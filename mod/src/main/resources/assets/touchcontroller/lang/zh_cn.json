@@ -13,7 +13,7 @@
   "touchcontroller.screen.options.category.global.regular.disable_mouse_click.title": "禁用鼠标点击",
   "touchcontroller.screen.options.category.global.regular.disable_mouse_click.description": "在游戏内禁用鼠标点击。当你的系统将触摸输入映射为鼠标输入时启用这个选项以屏蔽鼠标点击。",
   "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.title": "禁用光标锁定",
-  "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.description": "在游戏内禁用光标锁定，从而使游戏不会捕获光标的焦点。在移动端请关闭这个选项。",
+  "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.description": "在游戏内禁用光标锁定，从而使游戏不会捕获光标的焦点。仅需在PC端开启这个选项。",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.title": "禁用准心绘制",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "禁用游戏中的准心绘制。这只影响准心是否绘制，不影响触摸操作的方式。",
   "touchcontroller.screen.options.category.control.title": "控制",
