@@ -117,6 +117,8 @@ object Texts {
     val OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_EQUIPPABLE_ITEMS_USABLE_DESCRIPTION = translatable("screen.options.category.items.usable_items.equippable_items_usable.description")
     val OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_BUNDLE_USABLE_TITLE = translatable("screen.options.category.items.usable_items.bundle_usable.title")
     val OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_BUNDLE_USABLE_DESCRIPTION = translatable("screen.options.category.items.usable_items.bundle_usable.description")
+    val OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_TITLE = translatable("screen.options.category.items.usable_items.consumable_usable.title")
+    val OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_DESCRIPTION = translatable("screen.options.category.items.usable_items.consumable_usable.description")
 
     val OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_TITLE = translatable("screen.options.category.items.show_crosshair_items.title")
     val OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE = translatable("screen.options.category.items.show_crosshair_items.items.title")

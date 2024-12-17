@@ -25,6 +25,8 @@ private fun Item.isUsable(config: TouchControllerConfig): Boolean {
         return true
     } else if (config.bundleUsable && components.get(DataComponentTypes.BUNDLE_CONTENTS) != null) {
         return true
+    } else if (config.consumableUsable && components.get(DataComponentTypes.CONSUMABLE) != null) {
+        return true
     } else {
         return false
     }

@@ -157,6 +157,13 @@ fun openConfigScreen(parent: Screen): Screen {
                     controller(textSwitch())
                     binding(true, { config.bundleUsable }, { config = config.copy(bundleUsable = it) })
                 }
+
+                val consumableUsable by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_CONSUMABLE_USABLE_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.bundleUsable }, { config = config.copy(bundleUsable = it) })
+                }
             }
 
 

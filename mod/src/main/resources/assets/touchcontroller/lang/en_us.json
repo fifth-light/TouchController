@@ -103,6 +103,8 @@
   "touchcontroller.screen.options.category.items.usable_items.equippable_items_usable.description": "Make equippable items like armors usable by long pressing the screen without selecting blocks.",
   "touchcontroller.screen.options.category.items.usable_items.bundle_usable.title": "Bundle items usable by long pressing screen",
   "touchcontroller.screen.options.category.items.usable_items.bundle_usable.description": "Make bundle usable by long pressing the screen without selecting blocks.",
+  "touchcontroller.screen.options.category.items.usable_items.consumable_usable.title": "Consumable items usable by long pressing screen",
+  "touchcontroller.screen.options.category.items.usable_items.consumable_usable.description": "Make consumable items like potions usable by long pressing the screen without selecting blocks.",
   "touchcontroller.screen.options.category.items.show_crosshair_items.title": "Items which show crosshair when holding",
   "touchcontroller.screen.options.category.items.show_crosshair_items.items.title": "Items which show crosshair when holding",
   "touchcontroller.screen.options.category.items.show_crosshair_items.items.description": "Items which show crosshair when holding to help you aiming",

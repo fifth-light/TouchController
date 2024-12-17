@@ -103,6 +103,8 @@
   "touchcontroller.screen.options.category.items.usable_items.equippable_items_usable.description": "让可装备物品（如护甲等）无需选择方块即可通过长按屏幕使用。",
   "touchcontroller.screen.options.category.items.usable_items.bundle_usable.title": "让收纳袋可长按屏幕使用",
   "touchcontroller.screen.options.category.items.usable_items.bundle_usable.description": "让收纳袋无需选择方块即可通过长按屏幕使用。",
+  "touchcontroller.screen.options.category.items.usable_items.consumable_usable.title": "让可食用物品可长按屏幕使用",
+  "touchcontroller.screen.options.category.items.usable_items.consumable_usable.description": "让可食用物品（例如药水）无需选择方块即可通过长按屏幕使用。",
   "touchcontroller.screen.options.category.items.show_crosshair_items.title": "手持时显示准心的物品",
   "touchcontroller.screen.options.category.items.show_crosshair_items.items.title": "手持时显示准心的物品",
   "touchcontroller.screen.options.category.items.show_crosshair_items.items.description": "配置手持时显示准心的物品，以帮助你瞄准。",
