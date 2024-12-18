@@ -8,6 +8,10 @@ import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
 class LauncherProxyClient(transport: MessageTransport) : AutoCloseable {
     private val messageClient = LauncherProxyMessageClient(transport)
 
+    fun run() {
+        messageClient.run()
+    }
+
     fun addPointer(index: Int, x: Float, y: Float) = addPointer(index, Offset(x, y))
 
     fun addPointer(index: Int, offset: Offset) {

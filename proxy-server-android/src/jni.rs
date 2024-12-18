@@ -1,6 +1,7 @@
+use bytemuck::cast_slice;
 use jni::{
-    objects::{JClass, JObject, JString},
-    sys::jlong,
+    objects::{JByteArray, JClass, JString},
+    sys::{jint, jlong},
     JNIEnv,
 };
 
@@ -33,28 +34,28 @@ pub extern "system" fn Java_top_fifthlight_touchcontroller_platform_android_Tran
 }
 
 #[no_mangle]
-pub extern "system" fn Java_top_fifthlight_touchcontroller_platform_android_Transport_receive<
-    'a,
->(
-    mut env: JNIEnv<'a>,
+pub extern "system" fn Java_top_fifthlight_touchcontroller_platform_android_Transport_receive(
+    mut env: JNIEnv<'_>,
     _class: JClass,
     handle: jlong,
-) -> JObject<'a> {
+    buffer: JByteArray,
+) -> jint {
     let transport = unsafe { &mut *(handle as *mut UnixSocketTransport) };
 
     match transport.receive() {
-        Ok(Some(buffer)) => {
-            let byte_array = env.byte_array_from_slice(&buffer).unwrap();
-            JObject::from(byte_array)
+        Ok(Some(message)) => {
+            env.set_byte_array_region(buffer, 0, cast_slice(&message))
+                .expect("Failed to set array region");
+            message.len() as jint
         }
         Ok(None) => {
             // No data available
-            JObject::null()
+            0
         }
         Err(err) => {
             env.throw_new("java/io/IOException", err.to_string())
                 .unwrap();
-            JObject::null()
+            -1
         }
     }
 }

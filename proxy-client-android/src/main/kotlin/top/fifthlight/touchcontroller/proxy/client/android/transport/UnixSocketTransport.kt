@@ -28,6 +28,8 @@ private class UnixSocketTransport(
                 if (buffer.remaining() > 255) {
                     // Message too big
                     throw IOException("Message too big: ${buffer.remaining()}")
+                } else if (!buffer.hasRemaining()) {
+                    throw IllegalArgumentException("Empty message")
                 }
                 // Length-prefixed encoding
                 stream.write(buffer.remaining())
@@ -43,6 +45,7 @@ private class UnixSocketTransport(
                     buffer.get(array)
                     stream.write(array)
                 }
+                break
             } catch (ex: IOException) {
                 Log.w(TAG, "Send message failed: ", ex)
                 try {

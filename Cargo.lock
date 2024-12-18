@@ -132,9 +132,9 @@ dependencies = [
 name = "proxy-server-android"
 version = "0.0.1"
 dependencies = [
-    "bytemuck",
-    "jni",
-    "proxy-protocol",
+ "bytemuck",
+ "jni",
+ "proxy-protocol",
 ]
 
 [[package]]

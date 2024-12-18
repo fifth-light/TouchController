@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.handler
 
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BeforeBlockOutline
@@ -69,23 +68,21 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
         globalStateModel.update(client)
 
         platform.platform?.let { platform ->
-            runBlocking {
-                while (true) {
-                    val message = platform.pollEvent() ?: break
-                    when (message) {
-                        is AddPointerMessage -> {
-                            touchStateModel.addPointer(
-                                index = message.index,
-                                position = message.position
-                            )
-                        }
-
-                        is RemovePointerMessage -> {
-                            touchStateModel.removePointer(message.index)
-                        }
-
-                        ClearPointerMessage -> touchStateModel.clearPointer()
+            while (true) {
+                val message = platform.pollEvent() ?: break
+                when (message) {
+                    is AddPointerMessage -> {
+                        touchStateModel.addPointer(
+                            index = message.index,
+                            position = message.position
+                        )
                     }
+
+                    is RemovePointerMessage -> {
+                        touchStateModel.removePointer(message.index)
+                    }
+
+                    ClearPointerMessage -> touchStateModel.clearPointer()
                 }
             }
         }

@@ -13,6 +13,7 @@ import java.nio.file.attribute.DosFileAttributeView
 import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermission
 import kotlin.io.path.copyTo
+import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.fileAttributesView
 import kotlin.jvm.optionals.getOrNull
@@ -61,19 +62,36 @@ object PlatformProvider {
         }
 
     private data class NativeLibraryInfo(
-        val targetArch: String,
         val modContainerName: String,
         val modContainerPath: String,
         val debugPath: Path?,
         val extractPrefix: String,
         val extractSuffix: String,
         val readOnlySetter: (Path) -> Unit = {},
+        val removeAfterLoaded: Boolean,
         val platformFactory: () -> Platform
     )
+
+    private fun windowsReadOnlySetter(path: Path) {
+        val attributeView = path.fileAttributesView<DosFileAttributeView>()
+        attributeView.setReadOnly(true)
+    }
+
+    private fun posixReadOnlySetter(path: Path) {
+        val attributeView = path.fileAttributesView<PosixFileAttributeView>()
+        // 500
+        attributeView.setPermissions(
+            setOf(
+                PosixFilePermission.OWNER_READ,
+                PosixFilePermission.OWNER_EXECUTE
+            )
+        )
+    }
 
     private fun load(): Platform? {
         val socketPort = System.getenv("TOUCH_CONTROLLER_PROXY")?.toIntOrNull()
         if (socketPort != null) {
+            logger.warn("TOUCH_CONTROLLER_PROXY set, use legacy UDP transport")
             val proxy = localhostLauncherSocketProxyServer(socketPort) ?: return null
             return ProxyPlatform(proxy)
         }
@@ -90,54 +108,54 @@ object PlatformProvider {
                 "arm64", "aarch64" -> "aarch64-pc-windows-gnullvm"
                 else -> null
             } ?: run {
-                logger.warn("Unsupported system arch")
+                logger.warn("Unsupported Windows arch")
                 return null
             }
             logger.info("Target arch: $targetArch")
 
             NativeLibraryInfo(
-                targetArch = targetArch,
                 modContainerName = "top_fifthlight_touchcontroller_proxy-windows",
                 modContainerPath = "$targetArch/proxy_windows.dll",
                 debugPath = Path.of("..", "..", "target", targetArch, "release", "proxy_windows.dll"),
                 extractPrefix = "proxy_windows",
                 extractSuffix = ".dll",
-                readOnlySetter = {
-                    val attributeView = it.fileAttributesView<DosFileAttributeView>()
-                    attributeView.setReadOnly(true)
-                },
+                readOnlySetter = ::windowsReadOnlySetter,
+                removeAfterLoaded = false,
                 platformFactory = ::Win32Platform
             )
         } else if (systemName.startsWith("Linux")) {
             if (isAndroid) {
-                val targetArch = try {
-                    Runtime.getRuntime().exec(arrayOf("getprop", "ro.product.cpu.abi"), null).inputStream.reader()
-                        .readText()
-                } catch (ex: Exception) {
-                    logger.warn("Failed to run getprop", ex)
+                logger.info("Android detected")
+
+                val socketName = System.getenv("TOUCH_CONTROLLER_PROXY_SOCKET")?.takeIf { it.isNotEmpty() }
+                if (socketName == null) {
+                    logger.info("No TOUCH_CONTROLLER_PROXY_SOCKET environment set, TouchController will not be loaded")
+                    return null
+                }
+
+                val targetArch = when (systemArch) {
+                    "x86_32", "x86", "i386", "i486", "i586", "i686" -> "i686-linux-android"
+                    "amd64", "x86_64" -> "x86_64-linux-android"
+                    "armeabi", "armeabi-v7a", "armhf", "arm", "armel" -> "armv7-linux-androideabi"
+                    "arm64", "aarch64" -> "aarch64-linux-android"
+                    else -> null
+                } ?: run {
+                    logger.warn("Unsupported Android arch")
                     return null
                 }
 
                 NativeLibraryInfo(
-                    targetArch = targetArch,
                     modContainerName = "top_fifthlight_touchcontroller_proxy-server-android",
                     modContainerPath = "$targetArch/libproxy_server_android.so",
                     debugPath = null,
                     extractPrefix = "libproxy_server_android",
                     extractSuffix = ".so",
-                    readOnlySetter = {
-                        val attributeView = it.fileAttributesView<PosixFileAttributeView>()
-                        // 500
-                        attributeView.setPermissions(
-                            setOf(
-                                PosixFilePermission.OWNER_WRITE,
-                                PosixFilePermission.OWNER_EXECUTE
-                            )
-                        )
-                    },
-                    platformFactory = ::AndroidPlatform
+                    readOnlySetter = ::posixReadOnlySetter,
+                    removeAfterLoaded = true,
+                    platformFactory = {
+                        AndroidPlatform(socketName)
+                    }
                 )
-                return null
             } else {
                 logger.warn("Linux is not supported for now!")
                 return null
@@ -173,6 +191,10 @@ object PlatformProvider {
             return null
         }
         logger.info("Loaded native library")
+
+        if (info.removeAfterLoaded) {
+            destinationFile.deleteIfExists()
+        }
 
         return info.platformFactory()
     }

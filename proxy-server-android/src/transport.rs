@@ -58,14 +58,21 @@ impl UnixSocketTransport {
                 }
                 None => {
                     let mut buffer = [0u8; 1];
-                    if handle_error(self.inner.read_exact(&mut buffer))?.is_some() {
-                        let length = buffer[0];
+                    if let Some(read_length) = handle_error(self.inner.read(&mut buffer))? {
+                        if read_length == 0 {
+                            return Ok(None);
+                        }
+
+                        let packet_length = buffer[0];
                         // Ignore packet with zero length
-                        if length == 0 {
+                        if packet_length == 0 {
                             continue;
                         }
-                        let length = length as usize;
-                        self.buffer = Some((length, 0, vec![0; length]))
+                        let packet_length = packet_length as usize;
+                        self.buffer = Some((packet_length, 0, vec![0; packet_length]));
+                        continue;
+                    } else {
+                        return Ok(None);
                     }
                 }
             }

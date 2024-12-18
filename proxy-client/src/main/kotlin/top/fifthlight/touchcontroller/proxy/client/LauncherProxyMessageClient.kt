@@ -31,21 +31,19 @@ class LauncherProxyMessageClient(private val transport: MessageTransport) : Auto
             return
         }
         running = true
-        Thread {
-            val buffer = ByteBuffer.allocate(1024)
-            while (true) {
-                when (val item = sendQueue.poll()) {
-                    is MessageItem.Close -> break
-                    is MessageItem.Message -> {
-                        val message = item.message
-                        message.encode(buffer)
-                        buffer.flip()
-                        transport.send(buffer)
-                        buffer.clear()
-                    }
+        val buffer = ByteBuffer.allocate(1024)
+        while (true) {
+            when (val item = sendQueue.take()) {
+                is MessageItem.Close -> break
+                is MessageItem.Message -> {
+                    val message = item.message
+                    buffer.clear()
+                    message.encode(buffer)
+                    buffer.flip()
+                    transport.send(buffer)
                 }
             }
-        }.start()
+        }
     }
 
     /**

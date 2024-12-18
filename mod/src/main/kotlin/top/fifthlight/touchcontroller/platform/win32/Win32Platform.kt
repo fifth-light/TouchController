@@ -19,7 +19,7 @@ class Win32Platform: Platform {
     }
 
     private val readBuffer = ByteArray(128)
-    override suspend fun pollEvent(): ProxyMessage? {
+    override fun pollEvent(): ProxyMessage? {
         val length = Interface.pollEvent(readBuffer).takeIf { it != 0 } ?: return null
         val buffer = ByteBuffer.wrap(readBuffer)
         buffer.limit(length)
