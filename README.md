@@ -24,12 +24,13 @@ TouchController 的平台输入代码和实际的输入处理代码部分是相�
 - aarch64-linux-android
 - i686-linux-android
 - x86_64-linux-android
-- i686-pc-windows-gnu
-- x86_64-pc-windows-gnu
+- i686-pc-windows-gnullvm
+- x86_64-pc-windows-gnullvm
+- aarch64-pc-windows-gnullvm
 
-这些工具链可以用 `rustup target add <工具链目标>` 添加，然后使用 `cargo install cargo-ndk` 安装 `cargo-ndk`。
+这些工具链可以用 `rustup target add <工具链目标>` 添加。
 
-你需要一份 Android SDK，可以在 Android Studio 内安装，然后在项目根目录创建 `local.properties`，其中内容如下：
+你还需要一份 Android SDK，可以在 Android Studio 内安装，然后在项目根目录创建 `local.properties`，其中内容如下：
 
 ```
 sdk.dir=<Android SDK 目录>
@@ -37,12 +38,10 @@ sdk.dir=<Android SDK 目录>
 
 默认 Android Studio 会帮你做这件事情，如果你用 Android Studio 打开过这个项目，则不需要配置这个选项。
 
-接下来你还需要安装一份 Android NDK，同样也可以在 Android Studio 内安装。
+接下来你还需要安装一份 Android NDK，同样也可以在 Android Studio 内安装，安装完后使用 `cargo install cargo-ndk` 安装 `cargo-ndk`。
 
-你还需要 MinGW，不同操作系统有不同的安装方法：
-
-- Linux：一般来说你的发行版会打包 MinGW，直接安装即可，例如 Debian 系的 `mingw-w64` 包和 Redhat 系的 `mingw64-gcc` 和 `mingw32-gcc` 包。
-- Windows：在 [MinGW-W64-builds](https://github.com/niXman/mingw-builds-binaries/releases) 下载 mingw64 和 mingw32，然后将其中的 bin 文件夹加入 PATH 环境变量即可。
+然后你还需要 LLVM MinGW，在 [mstorsjo/llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases) 获取工具链，并将其中的
+bin 目录加入 PATH 环境变量即可。
 
 最后运行 `./gradlew build` 就可以编译了，编译好的 mod 文件在 `mod/build/libs` 下。
 
