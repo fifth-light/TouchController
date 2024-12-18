@@ -21,8 +21,9 @@ object PlatformProvider {
         return if (System.getProperty("os.name").startsWith("Windows")) {
             // Windows
             val targetArch = when (systemArch) {
-                "x86_32", "x86", "i386", "i486", "i586", "i686" -> "i686-pc-windows-gnu"
-                "amd64", "x86_64" -> "x86_64-pc-windows-gnu"
+                "x86_32", "x86", "i386", "i486", "i586", "i686" -> "i686-pc-windows-gnullvm"
+                "amd64", "x86_64" -> "x86_64-pc-windows-gnullvm"
+                "arm64", "aarch64" -> "aarch64-pc-windows-gnullvm"
                 else -> null
             } ?: run {
                 logger.warn("Unsupported system arch")

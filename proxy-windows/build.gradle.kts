@@ -3,8 +3,9 @@ import org.gradle.internal.extensions.stdlib.capitalized
 version = "0.0.1"
 
 val targets = mapOf(
-    "i686" to "i686-pc-windows-gnu",
-    "x86_64" to "x86_64-pc-windows-gnu",
+    "i686" to "i686-pc-windows-gnullvm",
+    "x86_64" to "x86_64-pc-windows-gnullvm",
+    "aarch64" to "aarch64-pc-windows-gnullvm",
 )
 
 val compileRustTasks = targets.map { (arch, target) ->
