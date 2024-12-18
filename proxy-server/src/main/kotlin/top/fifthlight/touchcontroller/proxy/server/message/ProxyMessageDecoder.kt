@@ -1,5 +1,6 @@
-package top.fifthlight.touchcontroller.proxy.message
+package top.fifthlight.touchcontroller.proxy.server.message
 
+import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
 import java.nio.ByteBuffer
 
 abstract class ProxyMessageDecoder {
@@ -12,8 +13,8 @@ class BadMessageLengthException(expected: Int, actual: Int) :
     MessageDecodeException("Bad message length: expected $expected bytes, but got $actual bytes")
 
 fun decodeMessage(type: Int, payload: ByteBuffer): ProxyMessage = when (type) {
-    1 -> AddPointerMessage.DECODER
-    2 -> RemovePointerMessage.DECODER
-    3 -> ClearPointerMessage.DECODER
+    1 -> AddPointerMessageDecoder
+    2 -> RemovePointerMessageDecoder
+    3 -> ClearPointerMessageDecoder
     else -> throw BadMessageTypeException(type)
 }.decode(payload)

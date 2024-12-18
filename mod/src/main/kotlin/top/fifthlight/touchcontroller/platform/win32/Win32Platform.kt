@@ -4,9 +4,9 @@ import net.minecraft.client.util.Window
 import org.lwjgl.glfw.GLFWNativeWin32
 import org.slf4j.LoggerFactory
 import top.fifthlight.touchcontroller.platform.Platform
-import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
-import top.fifthlight.touchcontroller.proxy.message.decodeMessage
+import top.fifthlight.touchcontroller.proxy.server.message.MessageDecodeException
+import top.fifthlight.touchcontroller.proxy.server.message.decodeMessage
 import java.nio.ByteBuffer
 
 class Win32Platform: Platform {

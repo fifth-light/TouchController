@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
-import top.fifthlight.touchcontroller.proxy.message.decodeMessage
+import top.fifthlight.touchcontroller.proxy.server.message.MessageDecodeException
+import top.fifthlight.touchcontroller.proxy.server.message.decodeMessage
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket

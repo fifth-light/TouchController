@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "proxy-protocol",
     "proxy-windows",
+    "proxy-server-android",
 ]
 
 [workspace.dependencies]

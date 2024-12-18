@@ -29,5 +29,3 @@ data class Size(
 
     fun toIntSize() = IntSize(width = width.toInt(), height = height.toInt())
 }
-
-operator fun Float.div(size: Size) = Size(width = this / size.width, height = this / size.height)

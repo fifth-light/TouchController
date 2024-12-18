@@ -30,6 +30,14 @@ jobs:
                   target: 'i686-pc-windows-gnu, x86_64-pc-windows-gnu'
             -   name: Setup MinGW GCC
                 run: sudo apt-get install -y gcc-mingw-w64-i686 gcc-mingw-w64-x86-64
+            -   name: Setup Android SDK
+                uses: android-actions/setup-android@v3
+            -   name: Setup Android NDK
+                uses: nttld/setup-ndk@v1
+                with:
+                    ndk-version: r27c
+                    link-to-sdk: true
+                    local-cache: true
             -   name: Setup Gradle
                 uses: gradle/actions/setup-gradle@v4
             -   name: Build

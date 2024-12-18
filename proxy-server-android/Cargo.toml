@@ -1,0 +1,12 @@
+[package]
+name = "proxy-server-android"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+proxy-protocol.path = "../proxy-protocol"
+jni.workspace = true
+bytemuck.workspace = true
