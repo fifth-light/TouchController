@@ -5,6 +5,7 @@ pluginManagement {
 			url = uri("https://maven.fabricmc.net/")
 		}
 		mavenCentral()
+        google()
 		gradlePluginPortal()
 	}
 }
@@ -19,3 +20,5 @@ include("mod")
 include("proxy-server")
 include("proxy-client")
 include("proxy-windows")
+include("proxy-client-android")
+include("proxy-server-android")

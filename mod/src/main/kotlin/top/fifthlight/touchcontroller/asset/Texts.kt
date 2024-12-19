@@ -12,6 +12,7 @@ object Texts {
     // TODO generate binding below from translation JSON file
 
     val WARNING_PROXY_NOT_CONNECTED = translatable("warning.proxy_not_connected")
+    val WARNING_LEGACY_UDP_PROXY_USED = translatable("warning.legacy_udp_proxy_used")
 
     val OPTIONS_SCREEN = translatable("screen.options")
     val OPTIONS_SCREEN_TITLE = translatable("screen.options.title")
@@ -28,6 +29,8 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_LOCK_DESCRIPTION = translatable("screen.options.category.global.regular.disable_cursor_lock.description")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE = translatable("screen.options.category.global.regular.disable_crosshair.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION = translatable("screen.options.category.global.regular.disable_crosshair.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_TITLE = translatable("screen.options.category.global.regular.disable_hot_bar_key.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_DESCRIPTION = translatable("screen.options.category.global.regular.disable_hot_bar_key.description")
 
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE = translatable("screen.options.category.control.title")
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE = translatable("screen.options.category.control.view_movement_sensitivity.title")

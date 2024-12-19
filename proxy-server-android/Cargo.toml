@@ -1,0 +1,21 @@
+[package]
+name = "proxy-server-android"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+tokio = { workspace = true, features = [
+    "macros",
+    "sync",
+    "rt-multi-thread",
+    "net",
+    "io-util",
+] }
+log.workspace = true
+android_logger = "0.14"
+proxy-protocol.path = "../proxy-protocol"
+jni.workspace = true
+bytemuck.workspace = true

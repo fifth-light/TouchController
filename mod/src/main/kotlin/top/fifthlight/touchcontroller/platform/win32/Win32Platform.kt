@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory
 import top.fifthlight.touchcontroller.platform.Platform
 import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
-import top.fifthlight.touchcontroller.proxy.message.decodeMessage
 import java.nio.ByteBuffer
 
 class Win32Platform: Platform {
@@ -19,7 +18,7 @@ class Win32Platform: Platform {
     }
 
     private val readBuffer = ByteArray(128)
-    override suspend fun pollEvent(): ProxyMessage? {
+    override fun pollEvent(): ProxyMessage? {
         val length = Interface.pollEvent(readBuffer).takeIf { it != 0 } ?: return null
         val buffer = ByteBuffer.wrap(readBuffer)
         buffer.limit(length)
@@ -28,10 +27,14 @@ class Win32Platform: Platform {
         }
         val type = buffer.getInt()
         return try {
-            decodeMessage(type, buffer)
+            ProxyMessage.decode(type, buffer)
         } catch (ex: MessageDecodeException) {
             logger.warn("Bad message from native side: $ex")
             null
         }
+    }
+
+    override fun sendEvent(message: ProxyMessage) {
+        // Win32 don't support vibration for now
     }
 }

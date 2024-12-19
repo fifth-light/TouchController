@@ -5,7 +5,7 @@ import java.nio.ByteBuffer
 data object ClearPointerMessage : ProxyMessage() {
     override val type: Int = 3
 
-    private class Decoder: ProxyMessageDecoder() {
+    object Decoder : ProxyMessageDecoder<ClearPointerMessage>() {
         override fun decode(payload: ByteBuffer): ClearPointerMessage {
             if (payload.hasRemaining()) {
                 throw BadMessageLengthException(
@@ -16,6 +16,4 @@ data object ClearPointerMessage : ProxyMessage() {
             return ClearPointerMessage
         }
     }
-
-    val DECODER: ProxyMessageDecoder = Decoder()
 }

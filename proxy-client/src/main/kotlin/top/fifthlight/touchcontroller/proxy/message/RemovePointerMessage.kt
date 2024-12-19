@@ -12,7 +12,7 @@ data class RemovePointerMessage(
         buffer.putInt(index)
     }
 
-    private class Decoder: ProxyMessageDecoder() {
+    object Decoder : ProxyMessageDecoder<RemovePointerMessage>() {
         override fun decode(payload: ByteBuffer): RemovePointerMessage {
             if (payload.remaining() != 4) {
                 throw BadMessageLengthException(
@@ -24,9 +24,5 @@ data class RemovePointerMessage(
                 index = payload.getInt(),
             )
         }
-    }
-
-    companion object {
-        val DECODER: ProxyMessageDecoder = Decoder()
     }
 }

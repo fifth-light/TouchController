@@ -27,9 +27,18 @@ jobs:
             -   name: Setup Rust
                 uses: actions-rust-lang/setup-rust-toolchain@v1
                 with:
-                    target: 'i686-pc-windows-gnullvm, x86_64-pc-windows-gnullvm, aarch64-pc-windows-gnullvm'
+                    target: 'i686-pc-windows-gnullvm, x86_64-pc-windows-gnullvm, aarch64-pc-windows-gnullvm, armv7-linux-androideabi, aarch64-linux-android, i686-linux-android, x86_64-linux-android'
+            -   name: Setup Android SDK
+                uses: android-actions/setup-android@v3
+            -   name: Setup Android NDK
+                uses: nttld/setup-ndk@v1
+                with:
+                    ndk-version: r27c
+                    link-to-sdk: true
             -   name: Setup Gradle
                 uses: gradle/actions/setup-gradle@v4
+            -   name: Install cargo-ndk
+                run: cargo install cargo-ndk
             -   name: Build
                 run: |
                     wget -qO ~/llvm-mingw.tar.xz https://github.com/mstorsjo/llvm-mingw/releases/download/20241217/llvm-mingw-20241217-ucrt-ubuntu-20.04-x86_64.tar.xz

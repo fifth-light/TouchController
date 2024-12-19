@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.handler
 
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BeforeBlockOutline
@@ -25,6 +24,7 @@ import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
+import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
 
 private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
     if (this in config.showCrosshairItems.items) {
@@ -39,7 +39,7 @@ private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
 
 class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRenderCallback.CrosshairRender,
     KoinComponent {
-    private val platform: PlatformHolder by inject()
+    private val platformHolder: PlatformHolder by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val globalStateModel: GlobalStateModel by inject()
     private val controllerHudModel: ControllerHudModel by inject()
@@ -68,24 +68,29 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
     override fun onStart(context: WorldRenderContext) {
         globalStateModel.update(client)
 
-        platform.platform?.let { platform ->
-            runBlocking {
-                while (true) {
-                    val message = platform.pollEvent() ?: break
-                    when (message) {
-                        is AddPointerMessage -> {
-                            touchStateModel.addPointer(
-                                index = message.index,
-                                position = message.position
-                            )
-                        }
+        if (controllerHudModel.status.vibrate) {
+            platformHolder.platform?.sendEvent(VibrateMessage(VibrateMessage.Kind.BLOCK_BROKEN))
+            controllerHudModel.status.vibrate = false
+        }
 
-                        is RemovePointerMessage -> {
-                            touchStateModel.removePointer(message.index)
-                        }
-
-                        ClearPointerMessage -> touchStateModel.clearPointer()
+        platformHolder.platform?.let { platform ->
+            while (true) {
+                val message = platform.pollEvent() ?: break
+                when (message) {
+                    is AddPointerMessage -> {
+                        touchStateModel.addPointer(
+                            index = message.index,
+                            position = message.position
+                        )
                     }
+
+                    is RemovePointerMessage -> {
+                        touchStateModel.removePointer(message.index)
+                    }
+
+                    ClearPointerMessage -> touchStateModel.clearPointer()
+
+                    else -> {}
                 }
             }
         }

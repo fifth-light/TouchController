@@ -1,5 +1,6 @@
 {
   "touchcontroller.warning.proxy_not_connected": "Warning: No proxy connected. TouchController will be disabled.",
+  "touchcontroller.warning.legacy_udp_proxy_used": "Warning: Legacy UDP proxy protocol used. You can still use TouchController for now, but it is suggested to upgrade your launcher for more features.",
 
   "touchcontroller.screen.options": "Touch Settings...",
   "touchcontroller.screen.options.title": "Touch Settings",
@@ -16,6 +17,9 @@
   "touchcontroller.screen.options.category.global.regular.disable_cursor_lock.description": "Disable cursor lock in game, so the game will not grab the focus of your cursor. Disable this option on mobile.",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.title": "Disable crosshair rendering",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "Disable rendering of crosshair in game. Don't affect touch input.",
+  "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.title": "Disable hot bar key",
+  "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.description": "Disable hot bar key which default bind to 0 to 9. Enable this option on mobile launcher sending these keystrokes when pressing hot bar.",
+
   "touchcontroller.screen.options.category.control.title": "Control",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "View movement sensitivity",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.description": "Set the angle of view direction changed when scroll the whole screen horizontally",

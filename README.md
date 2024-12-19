@@ -18,11 +18,27 @@ TouchController 的平台输入代码和实际的输入处理代码部分是相�
 
 首先你需要 Rust 编译器，可以使用 [rustup](https://rustup.rs/) 安装。
 
-接下来你需要用 `rustup target add <目标>` 的方式安装以下目标的 Rust 工具链：
+接下来你需要安装以下几个目标的 Rust 工具链：
 
+- armv7-linux-androideabi
+- aarch64-linux-android
+- i686-linux-android
+- x86_64-linux-android
 - i686-pc-windows-gnullvm
 - x86_64-pc-windows-gnullvm
 - aarch64-pc-windows-gnullvm
+
+这些工具链可以用 `rustup target add <工具链目标>` 添加。
+
+你还需要一份 Android SDK，可以在 Android Studio 内安装，然后在项目根目录创建 `local.properties`，其中内容如下：
+
+```
+sdk.dir=<Android SDK 目录>
+```
+
+默认 Android Studio 会帮你做这件事情，如果你用 Android Studio 打开过这个项目，则不需要配置这个选项。
+
+接下来你还需要安装一份 Android NDK，同样也可以在 Android Studio 内安装，安装完后使用 `cargo install cargo-ndk` 安装 `cargo-ndk`。
 
 然后你还需要 LLVM MinGW，在 [mstorsjo/llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases) 获取工具链，并将其中的
 bin 目录加入 PATH 环境变量即可。

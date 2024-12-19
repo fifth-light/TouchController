@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BeforeBlockOutline
+import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
 import org.koin.dsl.binds
@@ -44,6 +45,7 @@ val appModule = module {
     single<ClientRenderEvents.StartRenderTick> { ClientRenderHandler() }
     single<ClientPlayConnectionEvents.Join> { ClientPlayConnectionHandler() }
     single<ClientLifecycleEvents.ClientStarted> { ClientStartHandler() }
+    single<ClientPlayerBlockBreakEvents.After> { ClientPlayerBlockBreakHandler() }
     single { GlobalStateModel() }
     single { ControllerHudModel() }
     single { TouchStateModel() }

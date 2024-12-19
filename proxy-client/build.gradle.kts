@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "0.0.1"
+version = "0.0.2"
 
 tasks.withType<Sign>().configureEach {
     onlyIf("have publish task") {
@@ -27,7 +27,7 @@ mavenPublishing {
 
     pom {
         name.set("Proxy client library of TouchController")
-        description.set("A library to connect to the Minecraft mod TouchController.")
+        description.set("A library for connecting to the Minecraft mod TouchController.")
         inceptionYear.set("2024")
         url.set("https://github.com/fifth-light/TouchController")
         licenses {
@@ -57,7 +57,6 @@ base {
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
 }
 

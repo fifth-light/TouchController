@@ -57,6 +57,13 @@ fun openConfigScreen(parent: Screen): Screen {
                     controller(textSwitch())
                     binding(true, { config.disableCrosshair }, { config = config.copy(disableCrosshair = it) })
                 }
+
+                val disableHotBarKey by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(false, { config.disableHotBarKey }, { config = config.copy(disableHotBarKey = it) })
+                }
             }
 
             val controlGroup by groups.registering("control") {

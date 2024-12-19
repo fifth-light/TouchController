@@ -16,7 +16,7 @@ data class AddPointerMessage(
         buffer.putFloat(position.y)
     }
 
-    private class Decoder: ProxyMessageDecoder() {
+    object Decoder : ProxyMessageDecoder<AddPointerMessage>() {
         override fun decode(payload: ByteBuffer): AddPointerMessage {
             if (payload.remaining() != 12) {
                 throw BadMessageLengthException(
@@ -32,9 +32,5 @@ data class AddPointerMessage(
                 )
             )
         }
-    }
-
-    companion object {
-        val DECODER: ProxyMessageDecoder = Decoder()
     }
 }

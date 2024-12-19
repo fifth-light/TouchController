@@ -1,13 +1,12 @@
 [workspace]
 resolver = "2"
-members = [
-    "proxy-protocol",
-    "proxy-windows",
-]
+members = ["proxy-protocol", "proxy-windows", "proxy-server-android"]
 
 [workspace.dependencies]
 jni = "0.21"
 bytemuck = "1.20"
+tokio = "1"
+log = "0.4"
 
 [profile.release]
 lto = true

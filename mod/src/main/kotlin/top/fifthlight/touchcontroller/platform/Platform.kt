@@ -10,7 +10,8 @@ data class PlatformHolder(
 )
 
 interface Platform {
-    suspend fun init(scope: CoroutineScope) {}
+    fun init(scope: CoroutineScope) {}
     fun onWindowCreated(window: Window) {}
-    suspend fun pollEvent(): ProxyMessage?
+    fun pollEvent(): ProxyMessage?
+    fun sendEvent(message: ProxyMessage)
 }

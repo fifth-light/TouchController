@@ -8,6 +8,11 @@ coroutines = "1.9.0"
 koin = "4.0.0"
 serialization = "1.7.3"
 collections-immutable = "0.3.8"
+
+# Android
+agp = "8.7.3"
+rust-android-gradle = "0.9.5"
+
 minotaur = "2.+"
 maven-publish = "0.30.0"
 
@@ -38,3 +43,8 @@ jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serializati
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }
 modrinth-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+
+# Android
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+rust-android-gradle = { id = "org.mozilla.rust-android-gradle.rust-android", version.ref = "rust-android-gradle" }
+android-library = { id = "com.android.library", version.ref = "agp" }
