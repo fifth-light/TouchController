@@ -1,8 +1,10 @@
 package top.fifthlight.touchcontroller.proxy.client
 
+import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
 import java.nio.ByteBuffer
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * 与 TouchController 交互的底层接口。
@@ -20,30 +22,56 @@ class LauncherProxyMessageClient(private val transport: MessageTransport) : Auto
     }
 
     private val sendQueue = LinkedBlockingQueue<MessageItem>()
-    private var running: Boolean = false
-    private var closed: Boolean = false
+    private val receiveQueue = LinkedBlockingQueue<MessageItem>()
+    private var running = AtomicBoolean(false)
+    private var closed = AtomicBoolean(false)
 
     /**
-     * 开始发送消息，会堵塞当前线程。
+     * 开始发送消息，会新建线程用于处理，不会阻塞当前线程。
      */
     fun run() {
-        if (running) {
+        if (!running.compareAndSet(false, true)) {
             return
         }
-        running = true
-        val buffer = ByteBuffer.allocate(1024)
-        while (true) {
-            when (val item = sendQueue.take()) {
-                is MessageItem.Close -> break
-                is MessageItem.Message -> {
-                    val message = item.message
-                    buffer.clear()
-                    message.encode(buffer)
-                    buffer.flip()
-                    transport.send(buffer)
+        Thread {
+            // Send thread
+            val buffer = ByteBuffer.allocate(256)
+            while (true) {
+                when (val item = sendQueue.take()) {
+                    is MessageItem.Close -> break
+                    is MessageItem.Message -> {
+                        val message = item.message
+                        buffer.clear()
+                        message.encode(buffer)
+                        buffer.flip()
+                        transport.send(buffer)
+                    }
                 }
             }
-        }
+            transport.close()
+        }.start()
+        Thread {
+            // Receive thread
+            val buffer = ByteBuffer.allocate(256)
+            while (transport.receive(buffer)) {
+                buffer.flip()
+
+                if (buffer.remaining() < 4) {
+                    // Message without type
+                    buffer.clear()
+                    continue
+                }
+                val type = buffer.getInt()
+                try {
+                    val message = ProxyMessage.decode(type, buffer)
+                    receiveQueue.offer(MessageItem.Message(message))
+                } catch (ex: MessageDecodeException) {
+                    // Ignore bad message
+                }
+
+                buffer.clear()
+            }
+        }.start()
     }
 
     /**
@@ -52,8 +80,23 @@ class LauncherProxyMessageClient(private val transport: MessageTransport) : Auto
      * @param message 要发送的数据包
      */
     fun send(message: ProxyMessage) {
-        if (!closed) {
+        if (!closed.get()) {
             sendQueue.offer(MessageItem.Message(message))
+        }
+    }
+
+    /**
+     * 接收一个数据包。这个方法会阻塞直到接收到数据包或者被关闭为止。
+     *
+     * @return 接收到的数据包，如果当前  LauncherProxyMessageClient 被关闭则会返回 null。
+     */
+    fun receive(): ProxyMessage? {
+        if (closed.get()) {
+            return null
+        }
+        return when (val item = receiveQueue.take() ?: return null) {
+            is MessageItem.Message -> item.message
+            MessageItem.Close -> null
         }
     }
 
@@ -61,9 +104,9 @@ class LauncherProxyMessageClient(private val transport: MessageTransport) : Auto
      * 关闭这个对象。关闭后消息队列中仍有的消息依然会尝试发送，但是新消息不会再被发送。
      */
     override fun close() {
-        if (!closed) {
-            closed = true
+        if (closed.compareAndSet(false, true)) {
             sendQueue.offer(MessageItem.Close)
+            receiveQueue.offer(MessageItem.Close)
         }
     }
 }

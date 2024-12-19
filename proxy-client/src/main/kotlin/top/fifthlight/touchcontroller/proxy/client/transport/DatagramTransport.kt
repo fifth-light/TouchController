@@ -7,13 +7,25 @@ import java.net.InetSocketAddress
 import java.net.SocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
+import java.util.concurrent.Semaphore
 
 private class DatagramTransport(
     private val channel: DatagramChannel,
     private val address: SocketAddress
 ) : MessageTransport {
+    private val lockingSemaphore = Semaphore(0)
+
     override fun send(buffer: ByteBuffer) {
         channel.send(buffer, address)
+    }
+
+    override fun receive(buffer: ByteBuffer): Boolean {
+        lockingSemaphore.acquire()
+        return false
+    }
+
+    override fun close() {
+        lockingSemaphore.release()
     }
 }
 

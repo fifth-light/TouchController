@@ -11,4 +11,18 @@ data class RemovePointerMessage(
         super.encode(buffer)
         buffer.putInt(index)
     }
+
+    object Decoder : ProxyMessageDecoder<RemovePointerMessage>() {
+        override fun decode(payload: ByteBuffer): RemovePointerMessage {
+            if (payload.remaining() != 4) {
+                throw BadMessageLengthException(
+                    expected = 4,
+                    actual = payload.remaining()
+                )
+            }
+            return RemovePointerMessage(
+                index = payload.getInt(),
+            )
+        }
+    }
 }

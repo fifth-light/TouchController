@@ -5,9 +5,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.channels.onClosed
 import kotlinx.coroutines.withContext
+import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
-import top.fifthlight.touchcontroller.proxy.server.message.MessageDecodeException
-import top.fifthlight.touchcontroller.proxy.server.message.decodeMessage
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -34,7 +33,7 @@ class LauncherSocketProxyServer internal constructor(private val socket: Datagra
 
                 val type = buffer.getInt()
                 val message = try {
-                    decodeMessage(type, buffer)
+                    ProxyMessage.decode(type, buffer)
                 } catch (ex: MessageDecodeException) {
                     continue
                 }

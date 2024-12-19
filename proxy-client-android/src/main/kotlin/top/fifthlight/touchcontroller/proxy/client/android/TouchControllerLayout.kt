@@ -12,6 +12,7 @@ class TouchControllerLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
     var client: LauncherProxyClient? = null
+
     private val pointerIdMap = SparseIntArray()
     private var nextPointerId = 1
 
@@ -32,7 +33,7 @@ class TouchControllerLayout @JvmOverloads constructor(
             MotionEvent.ACTION_POINTER_DOWN -> {
                 val pointerId = nextPointerId++
                 val i = event.actionIndex
-                pointerIdMap.put(event.getPointerId(i), pointerId);
+                pointerIdMap.put(event.getPointerId(i), pointerId)
                 client.addPointer(pointerId, event.getOffset(i))
             }
 

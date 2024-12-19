@@ -13,4 +13,5 @@ interface Platform {
     fun init(scope: CoroutineScope) {}
     fun onWindowCreated(window: Window) {}
     fun pollEvent(): ProxyMessage?
+    fun sendEvent(message: ProxyMessage)
 }

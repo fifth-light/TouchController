@@ -24,6 +24,7 @@ import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
+import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
 
 private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
     if (this in config.showCrosshairItems.items) {
@@ -38,7 +39,7 @@ private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
 
 class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRenderCallback.CrosshairRender,
     KoinComponent {
-    private val platform: PlatformHolder by inject()
+    private val platformHolder: PlatformHolder by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val globalStateModel: GlobalStateModel by inject()
     private val controllerHudModel: ControllerHudModel by inject()
@@ -67,7 +68,12 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
     override fun onStart(context: WorldRenderContext) {
         globalStateModel.update(client)
 
-        platform.platform?.let { platform ->
+        if (controllerHudModel.status.vibrate) {
+            platformHolder.platform?.sendEvent(VibrateMessage(VibrateMessage.Kind.BLOCK_BROKEN))
+            controllerHudModel.status.vibrate = false
+        }
+
+        platformHolder.platform?.let { platform ->
             while (true) {
                 val message = platform.pollEvent() ?: break
                 when (message) {
@@ -83,6 +89,8 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
                     }
 
                     ClearPointerMessage -> touchStateModel.clearPointer()
+
+                    else -> {}
                 }
             }
         }

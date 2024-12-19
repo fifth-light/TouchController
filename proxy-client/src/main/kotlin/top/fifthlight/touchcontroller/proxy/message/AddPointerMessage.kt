@@ -15,4 +15,22 @@ data class AddPointerMessage(
         buffer.putFloat(position.x)
         buffer.putFloat(position.y)
     }
+
+    object Decoder : ProxyMessageDecoder<AddPointerMessage>() {
+        override fun decode(payload: ByteBuffer): AddPointerMessage {
+            if (payload.remaining() != 12) {
+                throw BadMessageLengthException(
+                    expected = 12,
+                    actual = payload.remaining()
+                )
+            }
+            return AddPointerMessage(
+                index = payload.getInt(),
+                position = Offset(
+                    x = payload.getFloat(),
+                    y = payload.getFloat()
+                )
+            )
+        }
+    }
 }

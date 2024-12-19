@@ -109,7 +109,7 @@ data class ContextResult(
     var crosshairStatus: CrosshairStatus? = null,
     var sneak: Boolean = false,
     var cancelFlying: Boolean = false,
-    val inventory: InventoryResult = InventoryResult()
+    val inventory: InventoryResult = InventoryResult(),
 )
 
 data class ContextStatus(
@@ -125,7 +125,8 @@ data class ContextStatus(
     val attack: KeyBindingResult = KeyBindingResult(),
     val itemUse: KeyBindingResult = KeyBindingResult(),
     var lastCrosshairStatus: CrosshairStatus? = null,
-    val openInventory: KeyBindingResult = KeyBindingResult()
+    val openInventory: KeyBindingResult = KeyBindingResult(),
+    var vibrate: Boolean = false,
 )
 
 data class ContextCounter(

@@ -14,4 +14,8 @@ class ProxyPlatform(private val proxy: LauncherSocketProxyServer) : Platform {
     }
 
     override fun pollEvent(): ProxyMessage? = proxy.receive()
+
+    override fun sendEvent(message: ProxyMessage) {
+        // UDP backend don't support vibration for now
+    }
 }

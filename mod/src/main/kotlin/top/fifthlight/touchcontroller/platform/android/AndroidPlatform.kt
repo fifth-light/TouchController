@@ -2,9 +2,8 @@ package top.fifthlight.touchcontroller.platform.android
 
 import org.slf4j.LoggerFactory
 import top.fifthlight.touchcontroller.platform.Platform
+import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
-import top.fifthlight.touchcontroller.proxy.server.message.MessageDecodeException
-import top.fifthlight.touchcontroller.proxy.server.message.decodeMessage
 import java.nio.ByteBuffer
 
 class AndroidPlatform(name: String) : Platform {
@@ -23,10 +22,17 @@ class AndroidPlatform(name: String) : Platform {
         }
         val type = buffer.getInt()
         return try {
-            decodeMessage(type, buffer)
+            ProxyMessage.decode(type, buffer)
         } catch (ex: MessageDecodeException) {
             logger.warn("Bad message: $ex")
             null
         }
+    }
+
+    override fun sendEvent(message: ProxyMessage) {
+        val buffer = ByteBuffer.allocate(256)
+        message.encode(buffer)
+        buffer.flip()
+        Transport.send(handle, buffer.array(), buffer.arrayOffset() + buffer.position(), buffer.remaining())
     }
 }
