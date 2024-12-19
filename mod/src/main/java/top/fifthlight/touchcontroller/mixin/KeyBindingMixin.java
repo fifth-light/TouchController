@@ -20,23 +20,27 @@ public abstract class KeyBindingMixin {
     @Shadow @Final private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
 
     @Unique
-    private static boolean doDisableMouseClick() {
+    private static boolean doCancelKey(InputUtil.Key key) {
         var configHolder = (TouchControllerConfigHolder) KoinJavaComponent.getOrNull(TouchControllerConfigHolder.class);
         if (configHolder == null) {
             return false;
         }
         var config = configHolder.getConfig().getValue();
-        return config.getDisableMouseClick() || config.getEnableTouchEmulation();
-    }
 
-    @Unique
-    private static boolean doCancelKey(InputUtil.Key key) {
         var client = MinecraftClient.getInstance();
-        if (!doDisableMouseClick()) {
-            return false;
-        }
         KeyBinding keyBinding = KEY_TO_BINDINGS.get(key);
-        return keyBinding == client.options.attackKey || keyBinding == client.options.useKey;
+
+        if (keyBinding == client.options.attackKey || keyBinding == client.options.useKey) {
+            return config.getDisableMouseClick() || config.getEnableTouchEmulation();
+        }
+
+        for (int i = 0; i < 9; i++) {
+            if (client.options.hotbarKeys[i] == keyBinding) {
+                return config.getDisableHotBarKey();
+            }
+        }
+
+        return false;
     }
 
     @Inject(method = "onKeyPressed", at = @At("HEAD"), cancellable = true)
