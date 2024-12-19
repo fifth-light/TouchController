@@ -151,5 +151,10 @@ private class UnixSocketTransport(
     }
 }
 
+/**
+ * 使用给定的名称创建一个使用 Unix 域套接字的底层运输层。
+ *
+ * @param name Unix 域套接字的名字。
+ */
 fun UnixSocketTransport(name: String): MessageTransport =
     UnixSocketTransport(LocalServerSocket(name))

@@ -8,9 +8,15 @@ import android.widget.FrameLayout
 import top.fifthlight.touchcontroller.proxy.client.LauncherProxyClient
 import top.fifthlight.touchcontroller.proxy.data.Offset
 
+/**
+ * 一个将触摸消息传送到 TouchController 的 FrameLayout。
+ */
 class TouchControllerLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
+    /**
+     * 要发送触摸事件的 LauncherProxyClient。需要运行 LauncherProxyClient 的 run() 方法，否则消息不会发送到游戏内。
+     */
     var client: LauncherProxyClient? = null
 
     private val pointerIdMap = SparseIntArray()

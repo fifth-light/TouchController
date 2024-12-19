@@ -27,7 +27,7 @@ class LauncherProxyMessageClient(private val transport: MessageTransport) : Auto
     private var closed = AtomicBoolean(false)
 
     /**
-     * 开始发送消息，会新建线程用于处理，不会阻塞当前线程。
+     * 开始处理消息，会新建线程用于处理，不会阻塞当前线程。
      */
     fun run() {
         if (!running.compareAndSet(false, true)) {

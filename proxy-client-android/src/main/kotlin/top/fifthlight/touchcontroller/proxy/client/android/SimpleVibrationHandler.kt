@@ -7,6 +7,11 @@ import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
 
 private val TAG = "SimpleVibrationHandler"
 
+/**
+ * 一个简单的震动事件处理器。
+ *
+ * @param service Vibrator 系统服务。
+ */
 class SimpleVibrationHandler(private val service: Vibrator) : LauncherProxyClient.VibrationHandler {
     override fun viberate(kind: VibrateMessage.Kind) {
         try {
