@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.modrinth.minotaur)
 }
 
-version = "0.0.11"
+version = "0.0.12"
 group = "top.fifthlight.touchcontroller"
 
 var modName = "TouchController"
