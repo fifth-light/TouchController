@@ -7,10 +7,12 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 
 class ClientPlayerBlockBreakHandler : ClientPlayerBlockBreakEvents.After, KoinComponent {
     private val controllerHudModel: ControllerHudModel by inject()
+    private val configHolder: TouchControllerConfigHolder by inject()
 
     override fun afterBlockBreak(
         world: ClientWorld,
@@ -18,6 +20,8 @@ class ClientPlayerBlockBreakHandler : ClientPlayerBlockBreakEvents.After, KoinCo
         position: BlockPos,
         blockState: BlockState
     ) {
-        controllerHudModel.status.vibrate = true
+        if (configHolder.config.value.vibration) {
+            controllerHudModel.status.vibrate = true
+        }
     }
 }

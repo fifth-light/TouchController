@@ -64,6 +64,13 @@ fun openConfigScreen(parent: Screen): Screen {
                     controller(textSwitch())
                     binding(false, { config.disableHotBarKey }, { config = config.copy(disableHotBarKey = it) })
                 }
+
+                val vibration by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(true, { config.vibration }, { config = config.copy(vibration = it) })
+                }
             }
 
             val controlGroup by groups.registering("control") {
