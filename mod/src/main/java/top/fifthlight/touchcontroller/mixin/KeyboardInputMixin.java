@@ -13,7 +13,8 @@ public abstract class KeyboardInputMixin {
             at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/client/input/KeyboardInput;movementSideways:F",
-                    shift = At.Shift.AFTER
+                    shift = At.Shift.AFTER,
+                    ordinal = 0
             ),
             method = "tick"
     )
