@@ -43,7 +43,7 @@ class TouchControllerConfigHolder : KoinComponent {
     }
 
     private fun createConfigDirectory() {
-        if(!configDir.exists()){
+        if (!configDir.exists()) {
             // Change Minecraft options
             val options = MinecraftClient.getInstance().options
             options.autoJump.value = true
