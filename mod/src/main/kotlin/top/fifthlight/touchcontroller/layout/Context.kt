@@ -47,9 +47,9 @@ data class KeyBindingResult(
     }
 }
 
-data class DoubleClickState(
+data class DoubleClickState(private val clickTime: Int = 15) {
     private var lastClick: Int = -1
-) {
+
     fun click(time: Int): Boolean {
         if (lastClick == -1) {
             lastClick = time
@@ -58,7 +58,7 @@ data class DoubleClickState(
 
         val interval = time - lastClick
         lastClick = time
-        val doubleClicked = interval <= 15
+        val doubleClicked = interval <= clickTime
         if (doubleClicked) {
             lastClick = -1
         }
@@ -127,6 +127,8 @@ data class ContextStatus(
     var lastCrosshairStatus: CrosshairStatus? = null,
     val openInventory: KeyBindingResult = KeyBindingResult(),
     var vibrate: Boolean = false,
+    val quickHandSwap: DoubleClickState = DoubleClickState(7),
+    val swapHands: KeyBindingResult = KeyBindingResult(),
 )
 
 data class ContextCounter(

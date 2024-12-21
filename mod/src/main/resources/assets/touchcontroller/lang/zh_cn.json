@@ -21,6 +21,8 @@
   "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.description": "禁用默认绑定到 0 至 9 的快捷栏按键。在使用点击快捷栏时会发送这些按键的移动端启动器时启用这个选项。",
   "touchcontroller.screen.options.category.global.regular.vibration.title": "震动",
   "touchcontroller.screen.options.category.global.regular.vibration.description": "为破坏方块提供触感反馈。目前只支持 Android 平台。",
+  "touchcontroller.screen.options.category.global.regular.quick_hand_swap.title": "快速主副手交换",
+  "touchcontroller.screen.options.category.global.regular.quick_hand_swap.description": "双击快捷栏中的一个格子时交换主副手的物品。",
 
   "touchcontroller.screen.options.category.control.title": "控制",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "视角移动灵敏度",
@@ -65,6 +67,7 @@
   "touchcontroller.screen.options.widget.dpad.property.classic": "经典外观",
   "touchcontroller.screen.options.widget.dpad.property.size": "按键大小: %s%%",
   "touchcontroller.screen.options.widget.dpad.property.padding": "按键边距: %d",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_size": "附加按钮大小: %d",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.none": "附加按钮：无",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.jump": "附加按钮：跳跃",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.sneak": "附加按钮：潜行",

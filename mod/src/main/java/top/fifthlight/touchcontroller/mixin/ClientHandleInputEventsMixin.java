@@ -33,6 +33,8 @@ public abstract class ClientHandleInputEventsMixin {
             return instance.wasPressed() || status.getItemUse().wasPressed();
         } else if (instance == options.inventoryKey) {
             return instance.wasPressed() || status.getOpenInventory().wasPressed();
+        } else if (instance == options.swapHandsKey) {
+            return instance.wasPressed() || status.getSwapHands().wasPressed();
         } else {
             return instance.wasPressed();
         }
@@ -54,6 +56,8 @@ public abstract class ClientHandleInputEventsMixin {
             return instance.isPressed() || status.getItemUse().isPressed();
         } else if (instance == options.inventoryKey) {
             return instance.isPressed() || status.getOpenInventory().isPressed();
+        } else if (instance == options.swapHandsKey) {
+            return instance.isPressed() || status.getSwapHands().isPressed();
         } else {
             return instance.isPressed();
         }

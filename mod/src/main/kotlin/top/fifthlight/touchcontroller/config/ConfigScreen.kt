@@ -71,6 +71,13 @@ fun openConfigScreen(parent: Screen): Screen {
                     controller(textSwitch())
                     binding(true, { config.vibration }, { config = config.copy(vibration = it) })
                 }
+
+                val quickHandSwap by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_DESCRIPTION))
+                    controller(textSwitch())
+                    binding(false, { config.quickHandSwap }, { config = config.copy(quickHandSwap = it) })
+                }
             }
 
             val controlGroup by groups.registering("control") {

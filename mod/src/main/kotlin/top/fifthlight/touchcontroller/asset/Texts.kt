@@ -33,6 +33,8 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_DESCRIPTION = translatable("screen.options.category.global.regular.disable_hot_bar_key.description")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_TITLE = translatable("screen.options.category.global.regular.vibration.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_DESCRIPTION = translatable("screen.options.category.global.regular.vibration.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE = translatable("screen.options.category.global.regular.quick_hand_swap.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_DESCRIPTION = translatable("screen.options.category.global.regular.quick_hand_swap.description")
 
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE = translatable("screen.options.category.control.title")
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE = translatable("screen.options.category.control.view_movement_sensitivity.title")
@@ -77,6 +79,7 @@ object Texts {
     val OPTIONS_WIDGET_DPAD_PROPERTY_CLASSIC = translatable("screen.options.widget.dpad.property.classic")
     val OPTIONS_WIDGET_DPAD_PROPERTY_SIZE = key("screen.options.widget.dpad.property.size")
     val OPTIONS_WIDGET_DPAD_PROPERTY_PADDING = key("screen.options.widget.dpad.property.padding")
+    val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SIZE = key("screen.options.widget.dpad.property.extra_button_size")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_NONE = translatable("screen.options.widget.dpad.property.extra_button.none")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_JUMP = translatable("screen.options.widget.dpad.property.extra_button.jump")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SNEAK = translatable("screen.options.widget.dpad.property.extra_button.sneak")
