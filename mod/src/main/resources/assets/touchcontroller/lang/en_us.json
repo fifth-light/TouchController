@@ -67,6 +67,7 @@
   "touchcontroller.screen.options.widget.dpad.property.classic": "Classic look",
   "touchcontroller.screen.options.widget.dpad.property.size": "Button size: %s%%",
   "touchcontroller.screen.options.widget.dpad.property.padding": "Button margin: %d",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_size": "Extra button size: %d",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.none": "Extra button: None",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.jump": "Extra button: Jump",
   "touchcontroller.screen.options.widget.dpad.property.extra_button.sneak": "Extra button: Sneak",

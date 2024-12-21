@@ -79,6 +79,7 @@ object Texts {
     val OPTIONS_WIDGET_DPAD_PROPERTY_CLASSIC = translatable("screen.options.widget.dpad.property.classic")
     val OPTIONS_WIDGET_DPAD_PROPERTY_SIZE = key("screen.options.widget.dpad.property.size")
     val OPTIONS_WIDGET_DPAD_PROPERTY_PADDING = key("screen.options.widget.dpad.property.padding")
+    val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SIZE = key("screen.options.widget.dpad.property.extra_button_size")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_NONE = translatable("screen.options.widget.dpad.property.extra_button.none")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_JUMP = translatable("screen.options.widget.dpad.property.extra_button.jump")
     val OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SNEAK = translatable("screen.options.widget.dpad.property.extra_button.sneak")
