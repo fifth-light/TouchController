@@ -1,5 +1,8 @@
-package top.fifthlight.touchcontroller.proxy.data
+package top.fifthlight.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class IntRect(
     val offset: IntOffset,
     val size: IntSize
@@ -12,4 +15,9 @@ data class IntRect(
         get() = offset.x + size.width
     val bottom
         get() = offset.y + size.height
+
+    fun toRect() = Rect(
+        offset = offset.toOffset(),
+        size = size.toSize()
+    )
 }

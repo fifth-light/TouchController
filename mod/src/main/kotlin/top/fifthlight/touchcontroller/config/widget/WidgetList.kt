@@ -9,6 +9,8 @@ import net.minecraft.util.Colors
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.component.inject
+import top.fifthlight.data.IntOffset
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.control.*
 import top.fifthlight.touchcontroller.ext.withScale
@@ -16,8 +18,6 @@ import top.fifthlight.touchcontroller.ext.withTranslate
 import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.ContextResult
 import top.fifthlight.touchcontroller.layout.DrawQueue
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
-import top.fifthlight.touchcontroller.proxy.data.IntSize
 
 class WidgetList(
     client: MinecraftClient,

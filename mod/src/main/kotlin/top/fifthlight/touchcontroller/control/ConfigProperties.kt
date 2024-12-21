@@ -5,10 +5,10 @@ import net.minecraft.client.gui.widget.CheckboxWidget
 import net.minecraft.text.Text
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.annoations.DontTranslate
 import top.fifthlight.touchcontroller.config.widget.ConfigSliderWidget
 import top.fifthlight.touchcontroller.ext.setDimensions
-import top.fifthlight.touchcontroller.proxy.data.IntSize
 
 class BooleanProperty<Config : ControllerWidget>(
     private val getValue: (Config) -> Boolean,

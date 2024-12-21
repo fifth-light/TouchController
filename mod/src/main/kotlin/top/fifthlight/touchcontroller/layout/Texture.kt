@@ -1,8 +1,8 @@
 package top.fifthlight.touchcontroller.layout
 
 import net.minecraft.util.Identifier
+import top.fifthlight.data.Rect
 import top.fifthlight.touchcontroller.ext.drawTexture
-import top.fifthlight.touchcontroller.proxy.data.Rect
 
 fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE) {
     if (opacity == 1f) {

@@ -1,4 +1,4 @@
-package top.fifthlight.touchcontroller.proxy.data
+package top.fifthlight.data
 
 import kotlinx.serialization.Serializable
 

@@ -2,7 +2,7 @@ package top.fifthlight.touchcontroller.ext
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.Window
-import top.fifthlight.touchcontroller.proxy.data.IntSize
+import top.fifthlight.data.IntSize
 
 val DrawContext.scaledWindowSize
     get() = IntSize(

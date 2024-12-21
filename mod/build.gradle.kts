@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.modrinth.minotaur)
+    alias(libs.plugins.compose.compiler)
 }
 
 version = "0.0.12"
@@ -42,11 +43,16 @@ dependencies {
     modImplementation(libs.modmenu)
     modImplementation(libs.yacl)
 
+    includeAndImplementation(project(":common-data"))
+
     include(project(":proxy-windows"))
     include(project(":proxy-server-android"))
-
     includeAndImplementation(project(":proxy-client"))
     includeAndImplementation(project(":proxy-server"))
+
+    includeAndImplementation(libs.compose.runtime)
+    includeAndImplementation(project(":combine"))
+
     includeAndImplementation(libs.koin.core)
     includeAndImplementation(libs.koin.logger.slf4j)
     includeAndImplementation(libs.kotlinx.collections.immutable)

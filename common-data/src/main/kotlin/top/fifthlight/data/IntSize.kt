@@ -1,5 +1,8 @@
-package top.fifthlight.touchcontroller.proxy.data
+package top.fifthlight.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class IntSize(
     val width: Int,
     val height: Int,

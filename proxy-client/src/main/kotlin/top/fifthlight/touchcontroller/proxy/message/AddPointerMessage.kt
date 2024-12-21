@@ -1,6 +1,6 @@
 package top.fifthlight.touchcontroller.proxy.message
 
-import top.fifthlight.touchcontroller.proxy.data.Offset
+import top.fifthlight.data.Offset
 import java.nio.ByteBuffer
 
 data class AddPointerMessage(

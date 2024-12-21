@@ -1,8 +1,8 @@
 package top.fifthlight.touchcontroller.layout
 
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.JumpButton
-import top.fifthlight.touchcontroller.proxy.data.IntSize
 
 private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, classic: Boolean) {
     withAlign(align = Align.CENTER_CENTER, size = size) {

@@ -1,6 +1,6 @@
 package top.fifthlight.touchcontroller.layout
 
-import top.fifthlight.touchcontroller.proxy.data.IntSize
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.state.PointerState
 
 private const val INVENTORY_SLOT_HOLD_DROP_TIME = 40

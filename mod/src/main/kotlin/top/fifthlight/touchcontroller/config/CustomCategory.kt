@@ -7,6 +7,7 @@ import dev.isxander.yacl3.api.utils.OptionUtils
 import dev.isxander.yacl3.gui.YACLScreen
 import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.plus
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.ScreenRect
 import net.minecraft.client.gui.tab.Tab
 import net.minecraft.client.gui.tooltip.Tooltip
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.widget.Positioner
 import net.minecraft.text.Text
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import top.fifthlight.combine.platform.ExampleCombineScreen
 import top.fifthlight.touchcontroller.annoations.DontTranslate
 import top.fifthlight.touchcontroller.asset.Texts
 import top.fifthlight.touchcontroller.config.widget.BorderLayout
@@ -131,6 +133,13 @@ private class CustomTab(
                 setColumnSpacing(padding)
                 setRowSpacing(padding)
                 createAdder(2).apply {
+                    ButtonWidget.builder(Text.literal("Combine UI test")) {
+                        MinecraftClient.getInstance().setScreen(ExampleCombineScreen(screen))
+                    }.apply {
+                        size(rightPanelWidth, buttonHeight)
+                    }.build().also {
+                        add(it, 2)
+                    }
                     ButtonWidget.builder(@DontTranslate Text.of("Cancel")) {
                         screen.cancelOrReset()
                         updateButtons()

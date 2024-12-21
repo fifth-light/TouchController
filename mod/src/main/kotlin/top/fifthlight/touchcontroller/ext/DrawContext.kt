@@ -8,8 +8,8 @@ import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.util.Identifier
-import top.fifthlight.touchcontroller.proxy.data.Offset
-import top.fifthlight.touchcontroller.proxy.data.Rect
+import top.fifthlight.data.Offset
+import top.fifthlight.data.Rect
 
 inline fun <reified T> DrawContext.withTranslate(offset: Offset, crossinline block: () -> T): T =
     matrices.withMatrix {

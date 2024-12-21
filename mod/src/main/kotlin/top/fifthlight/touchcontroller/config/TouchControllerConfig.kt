@@ -4,11 +4,11 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import net.minecraft.item.Items
+import top.fifthlight.data.IntOffset
 import top.fifthlight.touchcontroller.control.*
 import top.fifthlight.touchcontroller.ext.ItemsList
 import top.fifthlight.touchcontroller.ext.ItemsListSerializer
 import top.fifthlight.touchcontroller.layout.Align
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
 
 val defaultUsableItems = persistentListOf(
     Items.FISHING_ROD,

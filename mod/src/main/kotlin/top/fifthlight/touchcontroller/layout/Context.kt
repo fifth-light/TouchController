@@ -5,14 +5,14 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.util.Window
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import top.fifthlight.data.IntOffset
+import top.fifthlight.data.IntRect
+import top.fifthlight.data.IntSize
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.ext.scaledSize
 import top.fifthlight.touchcontroller.ext.size
 import top.fifthlight.touchcontroller.ext.withTranslate
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
-import top.fifthlight.touchcontroller.proxy.data.IntRect
-import top.fifthlight.touchcontroller.proxy.data.IntSize
-import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.state.Pointer
 
 data class KeyBindingResult(

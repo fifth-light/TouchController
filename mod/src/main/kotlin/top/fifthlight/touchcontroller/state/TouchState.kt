@@ -1,6 +1,6 @@
 package top.fifthlight.touchcontroller.state
 
-import top.fifthlight.touchcontroller.proxy.data.Offset
+import top.fifthlight.data.Offset
 
 sealed class PointerState {
     data object New : PointerState()

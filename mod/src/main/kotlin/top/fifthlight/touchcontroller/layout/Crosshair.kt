@@ -8,9 +8,9 @@ import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.util.Colors
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.CrosshairConfig
 import top.fifthlight.touchcontroller.ext.*
-import top.fifthlight.touchcontroller.proxy.data.Offset
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin

@@ -1,7 +1,7 @@
 package top.fifthlight.touchcontroller.model
 
 import org.koin.core.component.KoinComponent
-import top.fifthlight.touchcontroller.proxy.data.Offset
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.state.Pointer
 import top.fifthlight.touchcontroller.state.PointerState
 

@@ -1,5 +1,8 @@
-package top.fifthlight.touchcontroller.proxy.data
+package top.fifthlight.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Rect(
     val offset: Offset = Offset.ZERO,
     val size: Size

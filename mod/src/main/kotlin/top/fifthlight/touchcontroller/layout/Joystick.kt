@@ -1,10 +1,10 @@
 package top.fifthlight.touchcontroller.layout
 
+import top.fifthlight.data.Offset
+import top.fifthlight.data.Rect
 import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.Joystick
 import top.fifthlight.touchcontroller.ext.drawTexture
-import top.fifthlight.touchcontroller.proxy.data.Offset
-import top.fifthlight.touchcontroller.proxy.data.Rect
 import top.fifthlight.touchcontroller.state.PointerState
 import kotlin.math.sqrt
 

@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import top.fifthlight.data.IntOffset
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.ext.scaledSize
@@ -15,7 +16,6 @@ import top.fifthlight.touchcontroller.mixin.ClientOpenChatScreenInvoker
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.model.TouchStateModel
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
 
 class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
     private val configHolder: TouchControllerConfigHolder by inject()

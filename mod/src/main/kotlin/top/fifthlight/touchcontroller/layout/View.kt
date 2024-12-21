@@ -6,9 +6,9 @@ import net.minecraft.item.ProjectileItem
 import net.minecraft.item.RangedWeaponItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult.Type.*
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
-import top.fifthlight.touchcontroller.proxy.data.Offset
 import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
 

@@ -12,6 +12,9 @@ import net.minecraft.text.Text
 import net.minecraft.util.Colors
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import top.fifthlight.data.IntOffset
+import top.fifthlight.data.IntSize
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.ObservableValue
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.config.TouchControllerLayout
@@ -25,9 +28,6 @@ import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.ContextResult
 import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.withAlign
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
-import top.fifthlight.touchcontroller.proxy.data.IntSize
-import top.fifthlight.touchcontroller.proxy.data.Offset
 
 class LayoutEditor(
     x: Int = 0,

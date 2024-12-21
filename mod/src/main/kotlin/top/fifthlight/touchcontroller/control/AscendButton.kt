@@ -7,12 +7,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.text.Text
+import top.fifthlight.data.IntOffset
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.asset.Texts
 import top.fifthlight.touchcontroller.layout.Align
 import top.fifthlight.touchcontroller.layout.AscendButton
 import top.fifthlight.touchcontroller.layout.Context
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
-import top.fifthlight.touchcontroller.proxy.data.IntSize
 import kotlin.math.round
 
 @Serializable

@@ -1,6 +1,6 @@
 package top.fifthlight.touchcontroller.proxy.client
 
-import top.fifthlight.touchcontroller.proxy.data.Offset
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage

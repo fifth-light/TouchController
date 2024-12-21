@@ -1,6 +1,6 @@
 package top.fifthlight.touchcontroller.state
 
-import top.fifthlight.touchcontroller.proxy.data.IntSize
+import top.fifthlight.data.IntSize
 
 data class GlobalState(
     val inGame: Boolean = false,

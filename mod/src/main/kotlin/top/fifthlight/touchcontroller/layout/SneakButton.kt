@@ -1,8 +1,8 @@
 package top.fifthlight.touchcontroller.layout
 
+import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.SneakButton
-import top.fifthlight.touchcontroller.proxy.data.IntSize
 
 fun Context.RawSneakButton(
     classic: Boolean = true,

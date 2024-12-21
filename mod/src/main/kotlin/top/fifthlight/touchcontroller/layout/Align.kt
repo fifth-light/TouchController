@@ -1,7 +1,7 @@
 package top.fifthlight.touchcontroller.layout
 
-import top.fifthlight.touchcontroller.proxy.data.IntOffset
-import top.fifthlight.touchcontroller.proxy.data.IntSize
+import top.fifthlight.data.IntOffset
+import top.fifthlight.data.IntSize
 
 enum class Align {
     LEFT_TOP,

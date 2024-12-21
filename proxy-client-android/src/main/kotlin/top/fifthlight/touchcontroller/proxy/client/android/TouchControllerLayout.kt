@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.widget.FrameLayout
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.proxy.client.LauncherProxyClient
-import top.fifthlight.touchcontroller.proxy.data.Offset
 
 /**
  * 一个将触摸消息传送到 TouchController 的 FrameLayout。

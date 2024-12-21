@@ -57,6 +57,7 @@ base {
 }
 
 dependencies {
+    api(project(":common-data"))
     implementation(libs.kotlinx.serialization.core)
 }
 
