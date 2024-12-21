@@ -21,6 +21,8 @@
   "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.description": "Disable hot bar key which default bind to 0 to 9. Enable this option on mobile launcher sending these keystrokes when pressing hot bar.",
   "touchcontroller.screen.options.category.global.regular.vibration.title": "Vibration",
   "touchcontroller.screen.options.category.global.regular.vibration.description": "Provide haptic feedback when breaking blocks. Only support on Android for now.",
+  "touchcontroller.screen.options.category.global.regular.quick_hand_swap.title": "Quick hand swap",
+  "touchcontroller.screen.options.category.global.regular.quick_hand_swap.description": "Swap hand on double clicking a item slot in hot bar.",
 
   "touchcontroller.screen.options.category.control.title": "Control",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "View movement sensitivity",

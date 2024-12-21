@@ -33,6 +33,8 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_DESCRIPTION = translatable("screen.options.category.global.regular.disable_hot_bar_key.description")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_TITLE = translatable("screen.options.category.global.regular.vibration.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_DESCRIPTION = translatable("screen.options.category.global.regular.vibration.description")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE = translatable("screen.options.category.global.regular.quick_hand_swap.title")
+    val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_DESCRIPTION = translatable("screen.options.category.global.regular.quick_hand_swap.description")
 
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE = translatable("screen.options.category.control.title")
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE = translatable("screen.options.category.control.view_movement_sensitivity.title")
