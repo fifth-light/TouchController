@@ -18,7 +18,7 @@
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.title": "禁用准心绘制",
   "touchcontroller.screen.options.category.global.regular.disable_crosshair.description": "在游戏内隐藏准星。这只影响准心是否显示，不影响触摸操作的方式。",
   "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.title": "禁用快捷栏按键",
-  "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.description": "禁用默认绑定到 0 至 9 的快捷栏按键。在使用点击快捷栏时会发送这些按键的移动端启动器时启用这个选项。",
+  "touchcontroller.screen.options.category.global.regular.disable_hot_bar_key.description": "禁用默认绑定到 0 至 9 的快捷栏按键。部分移动端启动器在点击快捷栏时会发送这些按键，使用这些启动器时启用这个选项。",
   "touchcontroller.screen.options.category.global.regular.vibration.title": "震动",
   "touchcontroller.screen.options.category.global.regular.vibration.description": "为破坏方块提供触感反馈。目前只支持 Android 平台。",
   "touchcontroller.screen.options.category.global.regular.quick_hand_swap.title": "快速主副手交换",
