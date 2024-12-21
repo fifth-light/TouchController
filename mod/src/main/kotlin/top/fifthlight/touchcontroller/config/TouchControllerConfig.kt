@@ -35,6 +35,7 @@ data class TouchControllerConfig(
     val disableCrosshair: Boolean = true,
     val disableHotBarKey: Boolean = false,
     val vibration: Boolean = true,
+    val quickHandSwap: Boolean = false,
     val showPointers: Boolean = false,
     val enableTouchEmulation: Boolean = false,
 

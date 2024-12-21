@@ -28,6 +28,7 @@ data class DPad(
     val size: Float = 2f,
     val padding: Int = if (classic) 4 else -1,
     val extraButton: DPadExtraButton = DPadExtraButton.SNEAK,
+    val extraButtonSize: Int = 18,
     override val align: Align = Align.LEFT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f
@@ -61,6 +62,12 @@ data class DPad(
                 range = -1..16,
                 messageFormatter = { Text.translatable(Texts.OPTIONS_WIDGET_DPAD_PROPERTY_PADDING, it) }
             ),
+            IntProperty(
+                getValue = { it.extraButtonSize },
+                setValue = { config, value -> config.copy(extraButtonSize = value) },
+                range = 12..22,
+                messageFormatter = { Text.translatable(Texts.OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SIZE, it) }
+            ),
             BooleanProperty(
                 getValue = { it.classic },
                 setValue = { config, value -> config.copy(classic = value) },
@@ -74,8 +81,9 @@ data class DPad(
     override val properties = super.properties + _properties as PersistentList<Property<ControllerWidget, *, *>>
 
     fun buttonSize() = IntSize(((22 + padding) * size).toInt())
-    fun largeDisplaySize() = IntSize((22 * size).toInt())
-    fun smallDisplaySize() = IntSize((18 * size).toInt())
+    fun buttonDisplaySize() = IntSize((22 * size).toInt())
+    fun smallButtonDisplaySize() = IntSize((18 * size).toInt())
+    fun extraButtonDisplaySize() = IntSize((extraButtonSize * size).toInt())
 
     override fun size(): IntSize = buttonSize() * 3
 

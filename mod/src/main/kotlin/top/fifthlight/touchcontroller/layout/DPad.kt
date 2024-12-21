@@ -16,13 +16,14 @@ private const val ID_RIGHT_BACKWARD = "dpad_right_backward"
 
 fun Context.DPad(config: DPad) {
     val buttonSize = config.buttonSize()
-    val largeDisplaySize = config.largeDisplaySize()
+    val buttonDisplaySize = config.buttonDisplaySize()
     val smallDisplaySize = if (config.classic) {
-        config.smallDisplaySize()
+        config.smallButtonDisplaySize()
     } else {
-        config.largeDisplaySize()
+        config.buttonDisplaySize()
     }
-    val offset = (largeDisplaySize - smallDisplaySize) / 2
+    val extraButtonDisplaySize = config.extraButtonDisplaySize()
+    val offset = (buttonDisplaySize - smallDisplaySize) / 2
 
     val forward = withRect(
         x = buttonSize.width,
@@ -33,7 +34,7 @@ fun Context.DPad(config: DPad) {
         SwipeButton(id = ID_FORWARD) { clicked ->
             withAlign(
                 align = Align.CENTER_CENTER,
-                size = largeDisplaySize
+                size = buttonDisplaySize
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_UP_CLASSIC)
@@ -54,7 +55,7 @@ fun Context.DPad(config: DPad) {
         SwipeButton(id = ID_BACKWARD) { clicked ->
             withAlign(
                 align = Align.CENTER_CENTER,
-                size = largeDisplaySize
+                size = buttonDisplaySize
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_DOWN_CLASSIC)
@@ -75,7 +76,7 @@ fun Context.DPad(config: DPad) {
         SwipeButton(id = ID_LEFT) { clicked ->
             withAlign(
                 align = Align.CENTER_CENTER,
-                size = largeDisplaySize
+                size = buttonDisplaySize
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_LEFT_CLASSIC)
@@ -96,7 +97,7 @@ fun Context.DPad(config: DPad) {
         SwipeButton(id = ID_RIGHT) { clicked ->
             withAlign(
                 align = Align.CENTER_CENTER,
-                size = largeDisplaySize
+                size = buttonDisplaySize
             ) {
                 when (Pair(config.classic, clicked)) {
                     Pair(true, false) -> Texture(id = Textures.DPAD_RIGHT_CLASSIC)
@@ -238,14 +239,14 @@ fun Context.DPad(config: DPad) {
     ) {
         when (config.extraButton) {
             DPadExtraButton.NONE -> {}
-            DPadExtraButton.SNEAK -> RawSneakButton(dpad = true, classic = config.classic, size = smallDisplaySize)
+            DPadExtraButton.SNEAK -> RawSneakButton(dpad = true, classic = config.classic, size = extraButtonDisplaySize)
             DPadExtraButton.JUMP -> {
                 val hasForward = pointers.values.any {
                     (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD
                 }
                 val jumpClicked = RawJumpButton(
                     classic = config.classic,
-                    size = smallDisplaySize,
+                    size = extraButtonDisplaySize,
                     swipe = true,
                     enabled = false
                 )
