@@ -5,7 +5,7 @@ import top.fifthlight.touchcontroller.control.DescendButton
 
 fun Context.DescendButton(config: DescendButton) {
     if (designMode || state != HudState.NORMAL) {
-        val (_, clicked) = Button(id = "descend") { clicked ->
+        val (_, clicked) = SwipeButton(id = "descend") { clicked ->
             if (config.classic) {
                 if (clicked) {
                     Texture(id = Textures.DESCEND_CLASSIC, color = 0xFFAAAAAAu)
