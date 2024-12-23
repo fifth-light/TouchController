@@ -26,10 +26,10 @@ class KeyboardInputHandler : KeyboardInputEvents.EndInputTick, KoinComponent {
         input.movementForward = input.movementForward.coerceIn(-1f, 1f)
         input.movementSideways = input.movementSideways.coerceIn(-1f, 1f)
         input.playerInput = PlayerInput(
-            input.playerInput.forward(),
-            input.playerInput.backward(),
-            input.playerInput.left(),
-            input.playerInput.right(),
+            input.playerInput.forward() || result.forward > 0.5f,
+            input.playerInput.backward() || result.forward < -0.5f,
+            input.playerInput.left() || result.left > 0.5f,
+            input.playerInput.right() || result.left < -0.5f,
             input.playerInput.jump() || status.jumping,
             input.playerInput.sneak() || status.sneakLocked || result.sneak,
             input.playerInput.sprint() || result.sprint
