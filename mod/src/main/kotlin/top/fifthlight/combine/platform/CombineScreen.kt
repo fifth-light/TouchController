@@ -8,7 +8,10 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import top.fifthlight.combine.input.*
+import top.fifthlight.combine.input.PointerButton
+import top.fifthlight.combine.input.PointerEvent
+import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.PointerType
 import top.fifthlight.combine.node.CombineOwner
 import top.fifthlight.combine.paint.RenderContext
 import top.fifthlight.combine.sound.LocalSoundManager
@@ -59,17 +62,13 @@ open class CombineScreen(
         val mouseButton = mapMouseButton(button) ?: return true
         pendingInputEvents.add(
             PointerEvent(
-                changes = listOf(
-                    PointerInputChange(
-                        id = 0,
-                        position = Offset(
-                            x = (mouseX / width).toFloat(),
-                            y = (mouseY / height).toFloat(),
-                        ),
-                        type = PointerType.Mouse,
-                        button = mouseButton,
-                    )
+                id = 0,
+                position = Offset(
+                    x = mouseX.toFloat(),
+                    y = mouseY.toFloat(),
                 ),
+                pointerType = PointerType.Mouse,
+                button = mouseButton,
                 type = PointerEventType.Press
             )
         )
@@ -80,17 +79,13 @@ open class CombineScreen(
         val mouseButton = mapMouseButton(button) ?: return true
         pendingInputEvents.add(
             PointerEvent(
-                changes = listOf(
-                    PointerInputChange(
-                        id = 0,
-                        position = Offset(
-                            x = (mouseX / width).toFloat(),
-                            y = (mouseY / height).toFloat(),
-                        ),
-                        type = PointerType.Mouse,
-                        button = mouseButton,
-                    )
+                id = 0,
+                position = Offset(
+                    x = mouseX.toFloat(),
+                    y = mouseY.toFloat(),
                 ),
+                pointerType = PointerType.Mouse,
+                button = mouseButton,
                 type = PointerEventType.Release
             )
         )
@@ -100,17 +95,13 @@ open class CombineScreen(
     override fun mouseMoved(mouseX: Double, mouseY: Double) {
         pendingInputEvents.add(
             PointerEvent(
-                changes = listOf(
-                    PointerInputChange(
-                        id = 0,
-                        position = Offset(
-                            x = (mouseX / width).toFloat(),
-                            y = (mouseY / height).toFloat(),
-                        ),
-                        type = PointerType.Mouse,
-                        button = null,
-                    )
+                id = 0,
+                position = Offset(
+                    x = mouseX.toFloat(),
+                    y = mouseY.toFloat(),
                 ),
+                pointerType = PointerType.Mouse,
+                button = null,
                 type = PointerEventType.Move
             )
         )
@@ -124,20 +115,16 @@ open class CombineScreen(
     ): Boolean {
         pendingInputEvents.add(
             PointerEvent(
-                changes = listOf(
-                    PointerInputChange(
-                        id = 0,
-                        position = Offset(
-                            x = (mouseX / width).toFloat(),
-                            y = (mouseY / height).toFloat(),
-                        ),
-                        type = PointerType.Mouse,
-                        button = null,
-                        scrollDelta = Offset(
-                            x = horizontalAmount.toFloat(),
-                            y = verticalAmount.toFloat(),
-                        )
-                    )
+                id = 0,
+                position = Offset(
+                    x = mouseX.toFloat(),
+                    y = mouseY.toFloat(),
+                ),
+                pointerType = PointerType.Mouse,
+                button = null,
+                scrollDelta = Offset(
+                    x = horizontalAmount.toFloat(),
+                    y = verticalAmount.toFloat(),
                 ),
                 type = PointerEventType.Scroll
             )

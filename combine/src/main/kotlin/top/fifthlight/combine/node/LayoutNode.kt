@@ -2,6 +2,7 @@ package top.fifthlight.combine.node
 
 import top.fifthlight.combine.input.PointerEvent
 import top.fifthlight.combine.input.PointerEventReceiver
+import top.fifthlight.combine.input.PointerEventType
 import top.fifthlight.combine.layout.Measurable
 import top.fifthlight.combine.layout.MeasurePolicy
 import top.fifthlight.combine.layout.MeasureResult
@@ -14,49 +15,114 @@ private fun interface Renderable {
     fun render(context: RenderContext)
 }
 
-private sealed class WrapperLayoutNode(
+internal sealed class WrapperLayoutNode(
     val node: LayoutNode,
 ) : Measurable, Placeable, Renderable, PointerEventReceiver {
     var parent: WrapperLayoutNode? = null
+
     val parentPlaceable: Placeable?
-        get() = parent ?: node.parent
+        get() = parent ?: node.parent?.initialWrapper
 
     fun coerceConstraintBounds(constraints: Constraints, parent: Placeable) = object : Placeable by this {
         override var width: Int = parent.width.coerceIn(constraints.minWidth..constraints.maxWidth)
         override var height: Int = parent.height.coerceIn(constraints.minHeight..constraints.maxHeight)
     }
 
-    class Node(node: LayoutNode) : WrapperLayoutNode(node), Placeable by node {
+    class Node(node: LayoutNode) : WrapperLayoutNode(node) {
         override val parentData: Any? = node.parentData
 
+        override var width: Int = 0
+        override var height: Int = 0
+        override var x: Int = 0
+        override var y: Int = 0
+        override val absoluteX: Int
+            get() = (parentPlaceable?.absoluteX ?: 0) + x
+        override val absoluteY: Int
+            get() = (parentPlaceable?.absoluteY ?: 0) + y
+
         override fun measure(constraints: Constraints): Placeable {
-            with(node) {
-                val result = measurePolicy.measure(children, constraints)
+            val result = node.measurePolicy.measure(node.children, constraints)
 
-                width = result.width
-                height = result.height
-                result.placer.placeChildren()
+            width = result.width
+            height = result.height
+            result.placer.placeChildren()
 
-                return coerceConstraintBounds(constraints, this)
-            }
+            return coerceConstraintBounds(constraints, this)
+        }
+
+        override fun placeAt(x: Int, y: Int) {
+            this.x = x
+            this.y = y
         }
 
         override fun render(context: RenderContext) {
-            with(node) {
-                context.withState {
-                    context.canvas.transform(x, y)
-                    renderer.renderInContext(context)
-                    children.forEach { child ->
-                        child.render(context)
-                    }
+            context.withState {
+                context.canvas.transform(x, y)
+                node.renderer.renderInContext(context)
+                node.children.forEach { child ->
+                    child.render(context)
                 }
             }
         }
 
-        override fun onPointerEvent(event: PointerEvent) {
-            node.children.forEach { child ->
-                child.onPointerEvent(event)
+        private var pressEventTarget: LayoutNode? = null
+        private var moveEventTarget: LayoutNode? = null
+        override fun onPointerEvent(event: PointerEvent): Boolean {
+            fun inRange(placeable: Placeable): Boolean {
+                val xInRange =
+                    placeable.absoluteX <= event.position.x && event.position.x < placeable.absoluteX + placeable.width
+                val yInRange =
+                    placeable.absoluteY <= event.position.y && event.position.y < placeable.absoluteY + placeable.height
+                return xInRange && yInRange
             }
+
+            val target = pressEventTarget
+            val moveTarget = moveEventTarget
+            var moveHandled = false
+            fun process(): Boolean {
+                if (target != null) {
+                    moveHandled = true
+                    return target.onPointerEvent(event)
+                }
+                for (child in node.children) {
+                    if (!inRange(child)) {
+                        continue
+                    }
+                    if (event.type == PointerEventType.Move && !moveHandled) {
+                        if (moveTarget == null) {
+                            moveEventTarget = child
+                            child.onPointerEvent(event.copy(type = PointerEventType.Enter))
+                        } else if (moveTarget != child) {
+                            moveTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
+                            child.onPointerEvent(event.copy(type = PointerEventType.Enter))
+                            moveEventTarget = child
+                        }
+                        moveHandled = true
+                    }
+                    if (child.onPointerEvent(event)) {
+                        if (event.type == PointerEventType.Press) {
+                            pressEventTarget = child
+                        }
+                        return true
+                    }
+                }
+                return false
+            }
+
+            val result = process()
+            if (event.type == PointerEventType.Release) {
+                pressEventTarget = null
+            }
+            if (target == null) {
+                if (event.type == PointerEventType.Move && !moveHandled && moveTarget != null) {
+                    moveTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
+                    moveEventTarget = null
+                }
+            } else if (target == moveTarget && !inRange(target)) {
+                target.onPointerEvent(event.copy(type = PointerEventType.Leave))
+                moveEventTarget = null
+            }
+            return result
         }
     }
 
@@ -72,14 +138,14 @@ private sealed class WrapperLayoutNode(
         override var height: Int = 0
         override var x: Int = 0
         override var y: Int = 0
-        override var absoluteX: Int = 0
-        override var absoluteY: Int = 0
+        override val absoluteX: Int
+            get() = (parentPlaceable?.absoluteX ?: 0) + x
+        override val absoluteY: Int
+            get() = (parentPlaceable?.absoluteY ?: 0) + y
 
         override fun placeAt(x: Int, y: Int) {
             this.x = x
             this.y = y
-            this.absoluteX = (parentPlaceable?.absoluteX ?: 0) + x
-            this.absoluteY = (parentPlaceable?.absoluteY ?: 0) + y
         }
 
         override fun measure(constraints: Constraints): Placeable {
@@ -114,14 +180,14 @@ private sealed class WrapperLayoutNode(
             get() = children.height
         override var x: Int = 0
         override var y: Int = 0
-        override var absoluteX: Int = 0
-        override var absoluteY: Int = 0
+        override val absoluteX: Int
+            get() = (parentPlaceable?.absoluteX ?: node.parent?.absoluteX ?: 0) + x
+        override val absoluteY: Int
+            get() = (parentPlaceable?.absoluteY ?: node.parent?.absoluteY ?: 0) + y
 
         override fun placeAt(x: Int, y: Int) {
             this.x = x
             this.y = y
-            this.absoluteX = (parentPlaceable?.absoluteX ?: 0) + x
-            this.absoluteY = (parentPlaceable?.absoluteY ?: 0) + y
         }
 
         override fun measure(constraints: Constraints): Placeable {
@@ -148,6 +214,12 @@ private sealed class WrapperLayoutNode(
         PointerEventReceiver by children,
         Renderable by children,
         Placeable by children {
+        // Override these properties, otherwise these will be implemented by children
+        override val absoluteX: Int
+            get() = (parentPlaceable?.absoluteX ?: 0) + x
+        override val absoluteY: Int
+            get() = (parentPlaceable?.absoluteY ?: 0) + y
+
         override fun measure(constraints: Constraints): Placeable {
             val result = children.measure(constraints)
             return object : Placeable by result {
@@ -156,6 +228,28 @@ private sealed class WrapperLayoutNode(
                     modifierNode.onPlaced(children)
                 }
             }
+        }
+    }
+
+    class PointerInput(
+        node: LayoutNode,
+        val children: WrapperLayoutNode,
+        val modifierNode: PointerInputModifierNode
+    ) : WrapperLayoutNode(node),
+        Measurable by children,
+        Renderable by children,
+        Placeable by children {
+        // Override these properties, otherwise these will be implemented by children
+        override val absoluteX: Int
+            get() = (parentPlaceable?.absoluteX ?: 0) + x
+        override val absoluteY: Int
+            get() = (parentPlaceable?.absoluteY ?: 0) + y
+
+        override fun onPointerEvent(event: PointerEvent): Boolean {
+            if (children.onPointerEvent(event)) {
+                return true
+            }
+            return modifierNode.onPointerEvent(event)
         }
     }
 }
@@ -185,6 +279,11 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
                 currentWrapper.parent = newWrapper
                 currentWrapper = newWrapper
             }
+            if (node is PointerInputModifierNode) {
+                val newWrapper = WrapperLayoutNode.PointerInput(this, currentWrapper, node)
+                currentWrapper.parent = newWrapper
+                currentWrapper = newWrapper
+            }
             if (node is ParentDataModifierNode) {
                 parentData = node.modifierParentData(parentData)
             }
@@ -192,30 +291,31 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
         }
 
     override var parentData: Any? = null
-    private val initialWrapper = WrapperLayoutNode.Node(this)
+    internal val initialWrapper = WrapperLayoutNode.Node(this)
     private var wrappedNode: WrapperLayoutNode = initialWrapper
     var modifier: Modifier = Modifier
         set(value) {
             field = value
-            parent = null
+            parentData = null
             wrappedNode = buildWrapperLayoutNode(value)
         }
 
     override fun measure(constraints: Constraints) = wrappedNode.measure(constraints)
 
-    override var width: Int = 0
-    override var height: Int = 0
-    override var x: Int = 0
-    override var y: Int = 0
-    override var absoluteX: Int = 0
-    override var absoluteY: Int = 0
+    override val width: Int
+        get() = wrappedNode.width
+    override val height: Int
+        get() = wrappedNode.height
+    override val x: Int
+        get() = wrappedNode.x
+    override val y: Int
+        get() = wrappedNode.y
+    override val absoluteX: Int
+        get() = wrappedNode.absoluteX
+    override val absoluteY: Int
+        get() = wrappedNode.absoluteY
 
-    override fun placeAt(x: Int, y: Int) {
-        this.x = x
-        this.y = y
-        this.absoluteX = (parent?.absoluteX ?: 0) + x
-        this.absoluteY = (parent?.absoluteY ?: 0) + y
-    }
+    override fun placeAt(x: Int, y: Int) = wrappedNode.placeAt(x, y)
 
     override fun render(context: RenderContext) = wrappedNode.render(context)
 

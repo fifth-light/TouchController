@@ -1,7 +1,6 @@
 package top.fifthlight.combine.input
 
 import androidx.compose.runtime.Immutable
-import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
 
 @JvmInline
@@ -30,6 +29,8 @@ value class PointerEventType private constructor(internal val value: Int) {
         val Release = PointerEventType(2)
         val Move = PointerEventType(3)
         val Scroll = PointerEventType(4)
+        val Enter = PointerEventType(5)
+        val Leave = PointerEventType(6)
     }
 
     override fun toString(): String =
@@ -38,6 +39,8 @@ value class PointerEventType private constructor(internal val value: Int) {
             Release -> "Release"
             Move -> "Move"
             Scroll -> "Scroll"
+            Enter -> "Enter"
+            Leave -> "Leave"
             else -> "Unknown"
         }
 }
@@ -59,41 +62,11 @@ value class PointerType private constructor(internal val value: Int) {
 }
 
 @Immutable
-data class PointerInputChange(
+data class PointerEvent(
     val id: Int,
     val position: Offset,
-    val type: PointerType = PointerType.Mouse,
+    val pointerType: PointerType = PointerType.Mouse,
     val button: PointerButton? = null,
-    val scrollDelta: Offset = Offset.ZERO
+    val scrollDelta: Offset = Offset.ZERO,
+    val type: PointerEventType,
 )
-
-data class PointerEvent(
-    val changes: List<PointerInputChange>,
-    var type: PointerEventType
-)
-
-interface AwaitPointerEventScope {
-    val size: IntSize
-
-    val currentEvent: PointerEvent
-
-    suspend fun awaitPointerEvent(): PointerEvent
-
-    suspend fun <T> withTimeoutOrNull(
-        timeMillis: Long,
-        block: suspend AwaitPointerEventScope.() -> T
-    ): T? = block()
-
-    suspend fun <T> withTimeout(
-        timeMillis: Long,
-        block: suspend AwaitPointerEventScope.() -> T
-    ): T = block()
-}
-
-interface PointerInputScope {
-    var interceptOutOfBoundsChildEvents: Boolean
-        get() = false
-        set(_) {}
-
-    suspend fun <R> awaitPointerEventScope(block: suspend AwaitPointerEventScope.() -> R): R
-}

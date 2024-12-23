@@ -1,5 +1,5 @@
 package top.fifthlight.combine.input
 
-interface PointerEventReceiver {
-    fun onPointerEvent(event: PointerEvent)
+fun interface PointerEventReceiver {
+    fun onPointerEvent(event: PointerEvent): Boolean
 }

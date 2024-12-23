@@ -10,7 +10,7 @@ import top.fifthlight.data.IntSize
 fun Box(
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.TopLeft,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = {}
 ) {
     Layout(
         modifier = modifier,
