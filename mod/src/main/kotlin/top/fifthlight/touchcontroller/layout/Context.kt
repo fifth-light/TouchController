@@ -110,6 +110,7 @@ data class ContextResult(
     var sneak: Boolean = false,
     var cancelFlying: Boolean = false,
     val inventory: InventoryResult = InventoryResult(),
+    var sprint: Boolean = false,
 )
 
 data class ContextStatus(
@@ -129,6 +130,7 @@ data class ContextStatus(
     var vibrate: Boolean = false,
     val quickHandSwap: DoubleClickState = DoubleClickState(7),
     val swapHands: KeyBindingResult = KeyBindingResult(),
+    var wasSprinting: Boolean = false,
 )
 
 data class ContextCounter(

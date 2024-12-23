@@ -20,6 +20,7 @@ import kotlin.math.round
 data class Joystick(
     val size: Float = 1f,
     val stickSize: Float = 1f,
+    val triggerSprint: Boolean = false,
     override val align: Align = Align.LEFT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f
@@ -33,7 +34,7 @@ data class Joystick(
                 endValue = 4f,
                 messageFormatter = {
                     Text.translatable(
-                        Texts.OPTIONS_WIDGET_JOYSTICK_SIZE,
+                        Texts.OPTIONS_WIDGET_JOYSTICK_PROPERTY_SIZE,
                         round(it * 100f).toString()
                     )
                 },
@@ -45,11 +46,16 @@ data class Joystick(
                 endValue = 4f,
                 messageFormatter = {
                     Text.translatable(
-                        Texts.OPTIONS_WIDGET_JOYSTICK_STICK_SIZE,
+                        Texts.OPTIONS_WIDGET_JOYSTICK_PROPERTY_STICK_SIZE,
                         round(it * 100f).toString()
                     )
                 },
             ),
+            BooleanProperty(
+                getValue = { it.triggerSprint },
+                setValue = { config, value -> config.copy(triggerSprint = value) },
+                message = Texts.OPTIONS_WIDGET_JOYSTICK_PROPERTY_TRIGGER_SPRINT
+            )
         )
     }
 

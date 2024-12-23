@@ -42,9 +42,12 @@ fun Context.Joystick(layout: Joystick) {
         }
     }
 
-    val normalizedOffset = currentPointer?.let { pointer ->
-        val offset = pointer.scaledOffset / size.width.toFloat() * 2f - 1f
-        val squaredLength = offset.x * offset.x + offset.y * offset.y
+    val rawOffset = currentPointer?.let { pointer ->
+        pointer.scaledOffset / size.width.toFloat() * 2f - 1f
+    }
+
+    val normalizedOffset = rawOffset?.let { offset ->
+        val squaredLength = offset.squaredLength
         if (squaredLength > 1) {
             val length = sqrt(squaredLength)
             offset / length
@@ -74,6 +77,9 @@ fun Context.Joystick(layout: Joystick) {
     }
 
     normalizedOffset?.let { (right, backward) ->
+        if (layout.triggerSprint && rawOffset.y < -1.1f) {
+            result.sprint = true
+        }
         result.left = -right
         result.forward = -backward
     }

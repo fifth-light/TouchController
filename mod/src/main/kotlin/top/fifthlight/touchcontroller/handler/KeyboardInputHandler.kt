@@ -32,7 +32,7 @@ class KeyboardInputHandler : KeyboardInputEvents.EndInputTick, KoinComponent {
             input.playerInput.right(),
             input.playerInput.jump() || status.jumping,
             input.playerInput.sneak() || status.sneakLocked || result.sneak,
-            input.playerInput.sprint()
+            input.playerInput.sprint() || result.sprint
         )
         status.jumping = false
 
