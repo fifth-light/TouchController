@@ -227,7 +227,7 @@ data class Context(
             contextTransform = { newQueue ->
                 copy(
                     drawQueue = newQueue,
-                    opacity = this.opacity * opacity
+                    opacity = (this.opacity * opacity).coerceAtMost(1f)
                 )
             },
             block = block

@@ -56,24 +56,32 @@ fun Context.Joystick(layout: Joystick) {
         }
     }
 
-    drawQueue.enqueue { drawContext, _ ->
-        val color = ((0xFF * opacity).toInt() shl 24) or 0xFFFFFF
-        drawContext.drawTexture(
-            id = Textures.JOYSTICK_PAD,
-            dstRect = Rect(size = size.toSize()),
-            color = color
-        )
-        val drawOffset = normalizedOffset ?: Offset.ZERO
-        val stickSize = layout.stickSize()
-        val actualOffset = ((drawOffset + 1f) / 2f * size) - stickSize.toSize() / 2f
-        drawContext.drawTexture(
-            id = Textures.JOYSTICK_STICK,
-            dstRect = Rect(
-                offset = actualOffset,
-                size = stickSize.toSize()
-            ),
-            color = color
-        )
+    val opacityMultiplier = if (!layout.increaseOpacityWhenActive || currentPointer == null) {
+        1f
+    } else {
+        1.5f
+    }
+
+    withOpacity(opacityMultiplier) {
+        drawQueue.enqueue { drawContext, _ ->
+            val color = ((0xFF * opacity).toInt() shl 24) or 0xFFFFFF
+            drawContext.drawTexture(
+                id = Textures.JOYSTICK_PAD,
+                dstRect = Rect(size = size.toSize()),
+                color = color
+            )
+            val drawOffset = normalizedOffset ?: Offset.ZERO
+            val stickSize = layout.stickSize()
+            val actualOffset = ((drawOffset + 1f) / 2f * size) - stickSize.toSize() / 2f
+            drawContext.drawTexture(
+                id = Textures.JOYSTICK_STICK,
+                dstRect = Rect(
+                    offset = actualOffset,
+                    size = stickSize.toSize()
+                ),
+                color = color
+            )
+        }
     }
 
     normalizedOffset?.let { (right, backward) ->

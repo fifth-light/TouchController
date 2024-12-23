@@ -87,6 +87,7 @@ object Texts {
     val OPTIONS_WIDGET_JOYSTICK_PROPERTY_SIZE = key("screen.options.widget.joystick.property.size")
     val OPTIONS_WIDGET_JOYSTICK_PROPERTY_STICK_SIZE = key("screen.options.widget.joystick.property.stick_size")
     val OPTIONS_WIDGET_JOYSTICK_PROPERTY_TRIGGER_SPRINT = translatable("screen.options.widget.joystick.property.trigger_sprint")
+    val OPTIONS_WIDGET_JOYSTICK_PROPERTY_INCREASE_OPACITY_WHEN_ACTIVE = translatable("screen.options.widget.joystick.property.increase_opacity_when_active")
 
     val OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_SIZE = key("screen.options.widget.sneak_button.property.size")
     val OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_CLASSIC = translatable("screen.options.widget.sneak_button.property.classic")

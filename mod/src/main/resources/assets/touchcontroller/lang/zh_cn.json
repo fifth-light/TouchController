@@ -81,6 +81,7 @@
   "touchcontroller.screen.options.widget.joystick.property.size": "面板大小: %s%%",
   "touchcontroller.screen.options.widget.joystick.property.stick_size": "手柄大小: %s%%",
   "touchcontroller.screen.options.widget.joystick.property.trigger_sprint": "触发疾跑",
+  "touchcontroller.screen.options.widget.joystick.property.increase_opacity_when_active": "激活时提高不透明度",
 
   "touchcontroller.screen.options.widget.pause_button.property.size": "按键大小: %s%%",
   "touchcontroller.screen.options.widget.pause_button.property.classic": "经典外观",

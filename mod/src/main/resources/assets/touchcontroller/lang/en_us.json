@@ -81,6 +81,7 @@
   "touchcontroller.screen.options.widget.joystick.property.size": "Panel size: %s%%",
   "touchcontroller.screen.options.widget.joystick.property.stick_size": "Stick size: %s%%",
   "touchcontroller.screen.options.widget.joystick.property.trigger_sprint": "Trigger sprint",
+  "touchcontroller.screen.options.widget.joystick.property.increase_opacity_when_active": "Increase opacity when active",
 
   "touchcontroller.screen.options.widget.pause_button.property.size": "Button size: %s%%",
   "touchcontroller.screen.options.widget.pause_button.property.classic": "Classic look",
