@@ -2,6 +2,7 @@ package top.fifthlight.combine.widget.ui
 
 import androidx.compose.runtime.Composable
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.combine.modifier.placement.size
 import top.fifthlight.combine.modifier.pointer.clickable
 import top.fifthlight.combine.paint.Colors
 import top.fifthlight.combine.sound.LocalSoundManager
@@ -20,6 +21,7 @@ fun Switch(
     val soundManager = LocalSoundManager.current
     Canvas(
         modifier = Modifier
+            .size(30, 16)
             .clickable {
                 if (clickSound) {
                     soundManager.play(SoundKind.BUTTON_PRESS, 1f)
@@ -27,8 +29,6 @@ fun Switch(
                 onChanged(!checked)
             }
             .then(modifier),
-        width = 30,
-        height = 16,
     ) {
         with(canvas) {
             fillRect(

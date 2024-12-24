@@ -1,12 +1,16 @@
 package top.fifthlight.combine.modifier.pointer
 
-import top.fifthlight.combine.input.PointerEventReceiver
+import top.fifthlight.combine.input.PointerEvent
+import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
 
-fun Modifier.onPointerInput(receiver: PointerEventReceiver) = then(PointerInputReceiverModifierNode(receiver))
+fun Modifier.onPointerInput(receiver: Placeable.(PointerEvent) -> Boolean) =
+    then(PointerInputReceiverModifierNode(receiver))
 
-private class PointerInputReceiverModifierNode(receiver: PointerEventReceiver) :
-    Modifier.Node<PointerInputReceiverModifierNode>,
-    PointerInputModifierNode,
-    PointerEventReceiver by receiver
+private class PointerInputReceiverModifierNode(
+    private val receiver: Placeable.(PointerEvent) -> Boolean
+) : Modifier.Node<PointerInputReceiverModifierNode>,
+    PointerInputModifierNode {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean = receiver.invoke(node, event)
+}

@@ -1,5 +1,8 @@
 package top.fifthlight.combine.modifier
 
-import top.fifthlight.combine.input.PointerEventReceiver
+import top.fifthlight.combine.input.PointerEvent
+import top.fifthlight.combine.layout.Placeable
 
-interface PointerInputModifierNode: PointerEventReceiver
+fun interface PointerInputModifierNode {
+    fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean
+}

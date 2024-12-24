@@ -11,10 +11,7 @@ import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
-import top.fifthlight.touchcontroller.ui.component.config.ConfigGroup
-import top.fifthlight.touchcontroller.ui.component.config.DescriptionPanel
-import top.fifthlight.touchcontroller.ui.component.config.HoverData
-import top.fifthlight.touchcontroller.ui.component.config.SwitchConfigItem
+import top.fifthlight.touchcontroller.ui.component.config.*
 
 data object GlobalCategory : ConfigCategory(
     title = "Global",
@@ -115,6 +112,36 @@ data object GlobalCategory : ConfigCategory(
                             if (it) {
                                 hoverData = HoverData(
                                     name = "Vibration",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                    FloatSliderConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "View movement sensitivity",
+                        value = config.viewMovementSensitivity,
+                        onValueChanged = { viewModel.updateConfig { copy(viewMovementSensitivity = it) } },
+                        range = 0f..900f,
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "View movement sensitivity",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                    IntSliderConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "View hold detect threshold",
+                        value = config.viewHoldDetectThreshold,
+                        onValueChanged = { viewModel.updateConfig { copy(viewHoldDetectThreshold = it) } },
+                        range = 0..10,
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "View hold detect threshold",
                                     description = ""
                                 )
                             }

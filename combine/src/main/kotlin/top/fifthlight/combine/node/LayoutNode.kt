@@ -174,7 +174,7 @@ internal sealed class WrapperLayoutNode(
     abstract class PositionWrapper(
         node: LayoutNode,
         val children: WrapperLayoutNode,
-    ): WrapperLayoutNode(node), Measurable, Placeable, Renderable {
+    ) : WrapperLayoutNode(node), Measurable, Placeable, Renderable {
         override val parentData: Any? = children.parentData
 
         override val width: Int
@@ -194,7 +194,7 @@ internal sealed class WrapperLayoutNode(
         }
 
         override fun measure(constraints: Constraints): Placeable {
-            children.measure(constraints)
+            children.measure(constraints).placeAt(0, 0)
             return coerceConstraintBounds(constraints, this)
         }
 
@@ -231,11 +231,11 @@ internal sealed class WrapperLayoutNode(
         PointerEventReceiver by children {
 
         override fun measure(constraints: Constraints): Placeable {
-            val result = children.measure(constraints)
+            val result = super.measure(constraints)
             return object : Placeable by result {
                 override fun placeAt(x: Int, y: Int) {
                     result.placeAt(x, y)
-                    modifierNode.onPlaced(children)
+                    modifierNode.onPlaced(this)
                 }
             }
         }
@@ -247,16 +247,8 @@ internal sealed class WrapperLayoutNode(
         private val modifierNode: PointerInputModifierNode
     ) : PositionWrapper(node, children) {
 
-        override fun onPointerEvent(event: PointerEvent): Boolean {
-            val modifierResult = modifierNode.onPointerEvent(event)
-            if (modifierResult) {
-                println("Modifier $modifierNode return true for event $event")
-                return true
-            } else {
-                val childrenResult = children.onPointerEvent(event)
-                return childrenResult
-            }
-        }
+        override fun onPointerEvent(event: PointerEvent): Boolean =
+            modifierNode.onPointerEvent(event, this) || children.onPointerEvent(event)
     }
 }
 

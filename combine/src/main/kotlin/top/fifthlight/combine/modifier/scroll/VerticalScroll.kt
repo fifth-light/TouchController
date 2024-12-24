@@ -24,7 +24,7 @@ fun Modifier.verticalScroll(
 private data class VerticalScrollNode(
     val scrollState: ScrollState,
 ) : LayoutModifierNode, DrawModifierNode, PointerInputModifierNode, Modifier.Node<VerticalScrollNode> {
-    override fun onPointerEvent(event: PointerEvent): Boolean {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
         return when (event.type) {
             PointerEventType.Scroll -> {
                 scrollState.updateProgress((scrollState.progress.value - event.scrollDelta.y * 12).toInt())
@@ -54,7 +54,7 @@ private data class VerticalScrollNode(
                     true
                 } else if (initialPosition != null) {
                     val distance = (initialPosition.y - event.position.y)
-                    if (distance.absoluteValue > 4) {
+                    if (distance.absoluteValue > 8) {
                         scrollState.scrolling = true
                         scrollState.initialProgress = scrollState.progress.value
                         // Send CANCEL pointer

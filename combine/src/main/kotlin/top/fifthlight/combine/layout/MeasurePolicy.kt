@@ -50,5 +50,7 @@ interface Placeable {
     fun placeAt(x: Int, y: Int)
     fun placeAt(offset: IntOffset) = placeAt(offset.x, offset.y)
 
-    val size: IntSize get() = IntSize(width, height)
+    val position get() = IntOffset(x, y)
+    val absolutePosition get() = IntOffset(absoluteX, absoluteY)
+    val size get() = IntSize(width, height)
 }

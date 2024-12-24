@@ -6,6 +6,7 @@ import top.fifthlight.combine.input.Interaction
 import top.fifthlight.combine.input.MutableInteractionSource
 import top.fifthlight.combine.input.PointerEvent
 import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
 
@@ -33,8 +34,7 @@ private data class ClickableModifierNode(
     val onClick: () -> Unit,
 ) : Modifier.Node<ClickableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent): Boolean {
-        println("event: $event")
+    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
         when (event.type) {
             PointerEventType.Press -> clickState.pressed = true
             PointerEventType.Move -> {}
@@ -49,7 +49,6 @@ private data class ClickableModifierNode(
             }
             else -> return false
         }
-        println("State: ${clickState.pressed} ${clickState.entered}")
         if (clickState.pressed) {
             if (clickState.entered) {
                 interactionSource.tryEmit(ClickInteraction.Active)
