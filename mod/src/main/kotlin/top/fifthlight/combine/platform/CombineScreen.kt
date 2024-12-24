@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
+import top.fifthlight.combine.data.LocalItemStackFactory
 import top.fifthlight.combine.input.PointerButton
 import top.fifthlight.combine.input.PointerEvent
 import top.fifthlight.combine.input.PointerEventType
@@ -48,7 +49,8 @@ open class CombineScreen(
             CompositionLocalProvider(
                 LocalSoundManager provides soundManager,
                 LocalScreen provides this,
-                LocalCloseHandler provides ScreenCloseHandler(this@CombineScreen)
+                LocalCloseHandler provides ScreenCloseHandler(this@CombineScreen),
+                LocalItemStackFactory provides ItemStackFactoryImpl,
             ) {
                 content()
             }

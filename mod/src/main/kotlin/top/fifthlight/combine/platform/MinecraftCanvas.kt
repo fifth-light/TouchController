@@ -10,6 +10,7 @@ import net.minecraft.client.render.*
 import net.minecraft.text.Text
 import org.joml.Quaternionf
 import top.fifthlight.combine.data.Identifier
+import top.fifthlight.combine.data.ItemStack
 import top.fifthlight.combine.paint.Canvas
 import top.fifthlight.combine.paint.Color
 import top.fifthlight.data.IntOffset
@@ -103,6 +104,14 @@ class MinecraftCanvas(
             dstRect.size.width,
             dstRect.size.height
         )
+    }
+
+    override fun drawItemStack(offset: IntOffset, size: IntSize, stack: ItemStack) {
+        val minecraftStack = ((stack as? ItemStackImpl) ?: return).inner
+        drawContext.matrices.scale(size.width.toFloat() / 16f, size.height.toFloat() / 16f, 1f)
+        pushState()
+        drawContext.drawItem(minecraftStack, offset.x, offset.y)
+        popState()
     }
 
     override fun pushClip(area: IntRect) {

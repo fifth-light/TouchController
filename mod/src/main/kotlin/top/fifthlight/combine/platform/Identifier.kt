@@ -1,8 +1,15 @@
 package top.fifthlight.combine.platform
 
-import top.fifthlight.combine.data.Identifier
+import net.minecraft.util.Identifier
+import top.fifthlight.combine.data.Identifier as CombineIdentifier
 
-fun Identifier.toMinecraft(): net.minecraft.util.Identifier = when (this) {
-    is Identifier.Vanilla -> net.minecraft.util.Identifier.ofVanilla(id)
-    is Identifier.Namespaced -> net.minecraft.util.Identifier.of(namespace, id)
+fun CombineIdentifier.toMinecraft(): Identifier = when (this) {
+    is CombineIdentifier.Vanilla -> Identifier.ofVanilla(id)
+    is CombineIdentifier.Namespaced -> Identifier.of(namespace, id)
+}
+
+fun Identifier.toCombine() = if (this.namespace == "minecraft") {
+    CombineIdentifier.Vanilla(path)
+} else {
+    CombineIdentifier.Namespaced(namespace, path)
 }
