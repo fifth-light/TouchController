@@ -31,6 +31,7 @@ value class PointerEventType private constructor(internal val value: Int) {
         val Scroll = PointerEventType(4)
         val Enter = PointerEventType(5)
         val Leave = PointerEventType(6)
+        val Cancel = PointerEventType(7)
     }
 
     override fun toString(): String =
@@ -41,6 +42,7 @@ value class PointerEventType private constructor(internal val value: Int) {
             Scroll -> "Scroll"
             Enter -> "Enter"
             Leave -> "Leave"
+            Cancel -> "Cancel"
             else -> "Unknown"
         }
 }

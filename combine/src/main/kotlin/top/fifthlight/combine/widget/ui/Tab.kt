@@ -10,6 +10,7 @@ import top.fifthlight.combine.modifier.placement.fillMaxHeight
 import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.modifier.placement.height
 import top.fifthlight.combine.modifier.placement.padding
+import top.fifthlight.combine.modifier.pointer.clickable
 import top.fifthlight.combine.paint.Colors
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Box
@@ -29,11 +30,18 @@ fun Tab(modifier: Modifier, content: @Composable RowScope.() -> Unit) {
 }
 
 @Composable
-fun RowScope.TabItem(text: String, selected: Boolean = false) {
+fun RowScope.TabItem(
+    modifier: Modifier = Modifier,
+    text: String,
+    selected: Boolean = false,
+    onSelected: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .height(24)
-            .weight(1f),
+            .weight(1f)
+            .clickable(onClick = onSelected)
+            .then(modifier),
         alignment = Alignment.BottomCenter
     ) {
         val heightModifier = if (selected) Modifier.fillMaxHeight() else Modifier.height(20)

@@ -13,13 +13,14 @@ import top.fifthlight.combine.modifier.pointer.clickable
 import top.fifthlight.combine.sound.LocalSoundManager
 import top.fifthlight.combine.sound.SoundKind
 import top.fifthlight.combine.widget.base.layout.Box
+import top.fifthlight.combine.widget.base.layout.BoxScope
 
 @Composable
 fun Button(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     clickSound: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     val soundManager = LocalSoundManager.current
     val interactionSource = remember { MutableInteractionSource() }

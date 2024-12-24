@@ -8,8 +8,8 @@ import top.fifthlight.combine.layout.MeasurePolicy
 import top.fifthlight.combine.layout.MeasureResult
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.*
+import top.fifthlight.combine.paint.NodeRenderer
 import top.fifthlight.combine.paint.RenderContext
-import top.fifthlight.combine.paint.Renderer
 
 private fun interface Renderable {
     fun render(context: RenderContext)
@@ -58,7 +58,7 @@ internal sealed class WrapperLayoutNode(
         override fun render(context: RenderContext) {
             context.withState {
                 context.canvas.transform(x, y)
-                node.renderer.renderInContext(context)
+                node.renderer.renderInContext(context, this)
                 node.children.forEach { child ->
                     child.render(context)
                 }
@@ -76,19 +76,19 @@ internal sealed class WrapperLayoutNode(
                 return xInRange && yInRange
             }
 
-            val target = pressEventTarget
+            val pressTarget = pressEventTarget
             val moveTarget = moveEventTarget
-            var moveHandled = false
+            var haveMoveChildren = false
             fun process(): Boolean {
-                if (target != null) {
-                    moveHandled = true
-                    return target.onPointerEvent(event)
+                if (pressTarget != null) {
+                    haveMoveChildren = true
+                    return pressTarget.onPointerEvent(event)
                 }
                 for (child in node.children) {
                     if (!inRange(child)) {
                         continue
                     }
-                    if (event.type == PointerEventType.Move && !moveHandled) {
+                    if (event.type == PointerEventType.Move && !haveMoveChildren) {
                         if (moveTarget == null) {
                             moveEventTarget = child
                             child.onPointerEvent(event.copy(type = PointerEventType.Enter))
@@ -97,7 +97,7 @@ internal sealed class WrapperLayoutNode(
                             child.onPointerEvent(event.copy(type = PointerEventType.Enter))
                             moveEventTarget = child
                         }
-                        moveHandled = true
+                        haveMoveChildren = true
                     }
                     if (child.onPointerEvent(event)) {
                         if (event.type == PointerEventType.Press) {
@@ -113,13 +113,17 @@ internal sealed class WrapperLayoutNode(
             if (event.type == PointerEventType.Release) {
                 pressEventTarget = null
             }
-            if (target == null) {
-                if (event.type == PointerEventType.Move && !moveHandled && moveTarget != null) {
+            if (pressTarget == null) {
+                if (event.type == PointerEventType.Move && !haveMoveChildren && moveTarget != null) {
                     moveTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
                     moveEventTarget = null
                 }
-            } else if (target == moveTarget && !inRange(target)) {
-                target.onPointerEvent(event.copy(type = PointerEventType.Leave))
+                if (event.type == PointerEventType.Leave && moveTarget != null) {
+                    moveTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
+                    moveEventTarget = null
+                }
+            } else if (pressTarget == moveTarget && !inRange(pressTarget)) {
+                pressTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
                 moveEventTarget = null
             }
             return result
@@ -167,13 +171,12 @@ internal sealed class WrapperLayoutNode(
         }
     }
 
-    class Draw(
+    abstract class PositionWrapper(
         node: LayoutNode,
         val children: WrapperLayoutNode,
-        val modifierNode: DrawModifierNode
-    ) : WrapperLayoutNode(node),
-        Measurable by children,
-        PointerEventReceiver by children {
+    ): WrapperLayoutNode(node), Measurable, Placeable, Renderable {
+        override val parentData: Any? = children.parentData
+
         override val width: Int
             get() = children.width
         override val height: Int
@@ -181,9 +184,9 @@ internal sealed class WrapperLayoutNode(
         override var x: Int = 0
         override var y: Int = 0
         override val absoluteX: Int
-            get() = (parentPlaceable?.absoluteX ?: node.parent?.absoluteX ?: 0) + x
+            get() = (parentPlaceable?.absoluteX ?: 0) + x
         override val absoluteY: Int
-            get() = (parentPlaceable?.absoluteY ?: node.parent?.absoluteY ?: 0) + y
+            get() = (parentPlaceable?.absoluteY ?: 0) + y
 
         override fun placeAt(x: Int, y: Int) {
             this.x = x
@@ -198,6 +201,21 @@ internal sealed class WrapperLayoutNode(
         override fun render(context: RenderContext) {
             context.withState {
                 context.canvas.transform(x, y)
+                children.render(context)
+            }
+        }
+    }
+
+    class Draw(
+        node: LayoutNode,
+        children: WrapperLayoutNode,
+        val modifierNode: DrawModifierNode
+    ) : PositionWrapper(node, children),
+        PointerEventReceiver by children {
+
+        override fun render(context: RenderContext) {
+            context.withState {
+                context.canvas.transform(x, y)
                 modifierNode.renderBeforeContext(context, this)
                 children.render(context)
                 modifierNode.renderAfterContext(context, this)
@@ -207,18 +225,10 @@ internal sealed class WrapperLayoutNode(
 
     class OnPlaced(
         node: LayoutNode,
-        val children: WrapperLayoutNode,
-        val modifierNode: PlaceListeningModifierNode
-    ) : WrapperLayoutNode(node),
-        Measurable by children,
-        PointerEventReceiver by children,
-        Renderable by children,
-        Placeable by children {
-        // Override these properties, otherwise these will be implemented by children
-        override val absoluteX: Int
-            get() = (parentPlaceable?.absoluteX ?: 0) + x
-        override val absoluteY: Int
-            get() = (parentPlaceable?.absoluteY ?: 0) + y
+        children: WrapperLayoutNode,
+        private val modifierNode: PlaceListeningModifierNode
+    ) : PositionWrapper(node, children),
+        PointerEventReceiver by children {
 
         override fun measure(constraints: Constraints): Placeable {
             val result = children.measure(constraints)
@@ -233,23 +243,19 @@ internal sealed class WrapperLayoutNode(
 
     class PointerInput(
         node: LayoutNode,
-        val children: WrapperLayoutNode,
-        val modifierNode: PointerInputModifierNode
-    ) : WrapperLayoutNode(node),
-        Measurable by children,
-        Renderable by children,
-        Placeable by children {
-        // Override these properties, otherwise these will be implemented by children
-        override val absoluteX: Int
-            get() = (parentPlaceable?.absoluteX ?: 0) + x
-        override val absoluteY: Int
-            get() = (parentPlaceable?.absoluteY ?: 0) + y
+        children: WrapperLayoutNode,
+        private val modifierNode: PointerInputModifierNode
+    ) : PositionWrapper(node, children) {
 
         override fun onPointerEvent(event: PointerEvent): Boolean {
-            if (children.onPointerEvent(event)) {
+            val modifierResult = modifierNode.onPointerEvent(event)
+            if (modifierResult) {
+                println("Modifier $modifierNode return true for event $event")
                 return true
+            } else {
+                val childrenResult = children.onPointerEvent(event)
+                return childrenResult
             }
-            return modifierNode.onPointerEvent(event)
         }
     }
 }
@@ -259,7 +265,7 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
     val children = mutableListOf<LayoutNode>()
 
     var measurePolicy: MeasurePolicy = DefaultMeasurePolicy
-    var renderer: Renderer = Renderer.EmptyRenderer
+    var renderer: NodeRenderer = NodeRenderer.EmptyRenderer
 
     private fun buildWrapperLayoutNode(modifier: Modifier): WrapperLayoutNode =
         modifier.foldIn<WrapperLayoutNode>(initialWrapper) { wrapper, node ->

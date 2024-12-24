@@ -106,7 +106,7 @@ fun Column(
 
             layout(width, height) {
                 placeables.forEachIndexed { index, placeable ->
-                    placeable!!.placeAt(horizontalAlignment.align(width, placeable.width), yPositions[index])
+                    placeable!!.placeAt(horizontalAlignment.align(placeable.width, width), yPositions[index])
                 }
             }
         }

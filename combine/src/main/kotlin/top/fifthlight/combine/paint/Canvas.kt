@@ -12,8 +12,10 @@ interface Canvas {
     fun transform(x: Int, y: Int)
     fun rotate(degrees: Float)
     fun fillRect(offset: IntOffset = IntOffset.ZERO, size: IntSize = IntSize.ZERO, color: Color)
-    fun drawText(offset: IntOffset, text: String, color: Color)
+    fun drawText(offset: IntOffset, width: Int, text: String, color: Color)
     fun drawTextWithShadow(offset: IntOffset, text: String, color: Color)
     fun drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect)
     fun drawGuiTexture(sprite: Identifier, dstRect: IntRect)
+    fun pushClip(area: IntRect)
+    fun popClip()
 }

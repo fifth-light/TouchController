@@ -7,13 +7,13 @@ import top.fifthlight.combine.modifier.Constraints
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.node.LayoutNode
 import top.fifthlight.combine.node.UiApplier
-import top.fifthlight.combine.paint.Renderer
+import top.fifthlight.combine.paint.NodeRenderer
 
 @Composable
 inline fun Layout(
     measurePolicy: MeasurePolicy,
     modifier: Modifier = Modifier,
-    renderer: Renderer = Renderer.EmptyRenderer,
+    renderer: NodeRenderer = NodeRenderer.EmptyRenderer,
     content: @Composable () -> Unit = {}
 ) {
     ComposeNode<LayoutNode, UiApplier>(

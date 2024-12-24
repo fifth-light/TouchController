@@ -7,6 +7,7 @@ import net.minecraft.client.gl.ShaderProgramKey
 import net.minecraft.client.gl.ShaderProgramKeys
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
+import net.minecraft.text.Text
 import org.joml.Quaternionf
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.paint.Canvas
@@ -70,9 +71,8 @@ class MinecraftCanvas(
         drawContext.fill(offset.x, offset.y, offset.x + size.width, offset.y + size.height, color.value)
     }
 
-    override fun drawText(offset: IntOffset, text: String, color: Color) {
-        // TODO wrap text
-        drawContext.drawText(textRenderer, text, offset.x, offset.y, color.value, false)
+    override fun drawText(offset: IntOffset, width: Int, text: String, color: Color) {
+        drawContext.drawTextWrapped(textRenderer, Text.literal(text), offset.x, offset.y, width, color.value)
     }
 
     override fun drawTextWithShadow(offset: IntOffset, text: String, color: Color) {
@@ -103,5 +103,13 @@ class MinecraftCanvas(
             dstRect.size.width,
             dstRect.size.height
         )
+    }
+
+    override fun pushClip(area: IntRect) {
+        drawContext.enableScissor(area.left, area.top, area.right, area.bottom)
+    }
+
+    override fun popClip() {
+        drawContext.disableScissor()
     }
 }

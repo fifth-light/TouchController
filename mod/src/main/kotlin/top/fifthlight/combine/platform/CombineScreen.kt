@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
+import kotlinx.coroutines.CoroutineScope
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
@@ -15,28 +16,41 @@ import top.fifthlight.combine.input.PointerType
 import top.fifthlight.combine.node.CombineOwner
 import top.fifthlight.combine.paint.RenderContext
 import top.fifthlight.combine.sound.LocalSoundManager
+import top.fifthlight.combine.util.CloseHandler
+import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
+import kotlin.coroutines.CoroutineContext
 
 val LocalScreen: ProvidableCompositionLocal<Screen> = staticCompositionLocalOf { error("No screen in context") }
+
+private class ScreenCloseHandler(private val screen: Screen): CloseHandler {
+    override fun close() {
+        screen.close()
+    }
+}
 
 open class CombineScreen(
     title: Text,
     private val parent: Screen?
-) : Screen(title) {
+) : Screen(title), CoroutineScope {
     private val currentClient = MinecraftClient.getInstance()
     private var initialized = false
     private val textMeasurer = MinecraftTextMeasurer(currentClient.textRenderer)
     private val dispatcher = MinecraftDispatcher(currentClient)
     private val soundManager = MinecraftSoundManager(currentClient.soundManager)
     private val owner = CombineOwner(dispatcher = dispatcher, textMeasurer = textMeasurer)
+    override val coroutineContext: CoroutineContext
+        get() = owner.coroutineContext
 
     fun setContent(content: @Composable () -> Unit) {
         owner.setContent {
-            CompositionLocalProvider(LocalSoundManager provides soundManager) {
-                CompositionLocalProvider(LocalScreen provides this) {
-                    content()
-                }
+            CompositionLocalProvider(
+                LocalSoundManager provides soundManager,
+                LocalScreen provides this,
+                LocalCloseHandler provides ScreenCloseHandler(this@CombineScreen)
+            ) {
+                content()
             }
         }
     }

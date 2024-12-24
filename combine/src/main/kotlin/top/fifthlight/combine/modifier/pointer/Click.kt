@@ -34,18 +34,22 @@ private data class ClickableModifierNode(
 ) : Modifier.Node<ClickableModifierNode>, PointerInputModifierNode {
 
     override fun onPointerEvent(event: PointerEvent): Boolean {
+        println("event: $event")
         when (event.type) {
             PointerEventType.Press -> clickState.pressed = true
+            PointerEventType.Move -> {}
+            PointerEventType.Enter -> clickState.entered = true
+            PointerEventType.Leave -> clickState.entered = false
+            PointerEventType.Cancel -> clickState.pressed = false
             PointerEventType.Release -> {
                 if (clickState.pressed && clickState.entered) {
                     onClick()
                 }
                 clickState.pressed = false
             }
-
-            PointerEventType.Enter -> clickState.entered = true
-            PointerEventType.Leave -> clickState.entered = false
+            else -> return false
         }
+        println("State: ${clickState.pressed} ${clickState.entered}")
         if (clickState.pressed) {
             if (clickState.entered) {
                 interactionSource.tryEmit(ClickInteraction.Active)

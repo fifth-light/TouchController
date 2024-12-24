@@ -26,11 +26,11 @@ fun Text(
             }
             layout(measureResult.width, measureResult.height) {}
         },
-        renderer = {
+        renderer = { node ->
             if (shadow) {
                 canvas.drawTextWithShadow(IntOffset.ZERO, text, color)
             } else {
-                canvas.drawText(IntOffset.ZERO, text, color)
+                canvas.drawText(IntOffset.ZERO, node.width, text, color)
             }
         }
     )

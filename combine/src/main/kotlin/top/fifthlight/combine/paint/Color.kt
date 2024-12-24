@@ -16,7 +16,10 @@ fun Color(r: Int, g: Int, b: Int) = Color(0xFF, r, g, b)
 
 object Colors {
     val WHITE = Color(0xFFFFFFFFu)
+    val ALTERNATE_WHITE = Color(0xFFBABABAu)
     val BLACK = Color(0xFF000000u)
+    val GRAY = Color(0xFF808080u)
+    val LIGHT_GRAY = Color(0xFFA0A0A0u)
     val RED = Color(0xFFFF0000u)
     val GREEN = Color(0xFF00FF00u)
     val BLUE = Color(0xFF0000FFu)

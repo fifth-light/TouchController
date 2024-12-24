@@ -14,19 +14,19 @@ interface RowScope {
     companion object : RowScope
 }
 
-private data class RowParentData(
-    val weight: Float
+private data class RowWeightParentData(
+    val weight: Float,
 )
 
 private data class RowWeightModifier(
-    val weight: Float
+    val weight: Float,
 ) : ParentDataModifierNode, Modifier.Node<RowWeightModifier> {
-    override fun modifierParentData(parentData: Any?): RowParentData {
-        val data = parentData as? RowParentData
+    override fun modifierParentData(parentData: Any?): RowWeightParentData {
+        val data = parentData as? RowWeightParentData
         if (data != null) {
             return data
         }
-        return RowParentData(weight)
+        return RowWeightParentData(weight)
     }
 }
 
@@ -58,7 +58,7 @@ fun Row(
 
             val placeables = Array<Placeable?>(measurables.size) { null }
             measurables.forEachIndexed { index, measurable ->
-                val parentData = measurable.parentData as? RowParentData
+                val parentData = measurable.parentData as? RowWeightParentData
                 if (parentData != null) {
                     widths[index] = -1
                     totalWeight += parentData.weight
@@ -82,7 +82,7 @@ fun Row(
 
             for (i in widths.indices) {
                 if (widths[i] == -1) {
-                    val weight = (measurables[i].parentData as RowParentData).weight
+                    val weight = (measurables[i].parentData as RowWeightParentData).weight
                     widths[i] = (weightUnitSpace * weight).toInt()
                     val placeable = measurables[i].measure(
                         constraints = childConstraint.copy(
@@ -106,7 +106,7 @@ fun Row(
 
             layout(width, height) {
                 placeables.forEachIndexed { index, placeable ->
-                    placeable!!.placeAt(xPositions[index], verticalAlignment.align(height, placeable.height))
+                    placeable!!.placeAt(xPositions[index], verticalAlignment.align(placeable.height, height))
                 }
             }
         }
