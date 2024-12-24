@@ -19,6 +19,7 @@ maven-publish = "0.30.0"
 
 # Compose
 compose = "1.7.1"
+androidx-collection = "1.4.5"
 
 # Minecraft Mods
 fabric-api = "0.108.0+1.21.3"
@@ -36,7 +37,8 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 koin-logger-slf4j = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
 
 # Compose
-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
+androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidx-collection" }
 
 # Minecraft Mods
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }

@@ -50,6 +50,7 @@ dependencies {
     includeAndImplementation(project(":proxy-client"))
     includeAndImplementation(project(":proxy-server"))
 
+    include(libs.androidx.collection)
     includeAndImplementation(libs.compose.runtime)
     includeAndImplementation(project(":combine"))
 
