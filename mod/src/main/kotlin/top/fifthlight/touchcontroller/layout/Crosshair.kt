@@ -53,7 +53,7 @@ private fun renderOuter(drawContext: DrawContext, config: CrosshairConfig) {
     }
 }
 
-private fun renderInner(drawContext: DrawContext, config: CrosshairConfig, state: CrosshairStatus) {
+private fun renderInner(drawContext: DrawContext, config: CrosshairConfig, state: Float) {
     withShader(ShaderProgramKeys.POSITION_COLOR) {
         val matrix = drawContext.matrices.peek().positionMatrix
         val bufferBuilder =
@@ -62,7 +62,7 @@ private fun renderInner(drawContext: DrawContext, config: CrosshairConfig, state
 
         var angle = 0f
         for (i in 0..CROSSHAIR_CIRCLE_PARTS) {
-            val point = point(angle, config.radius * state.breakPercent)
+            val point = point(angle, config.radius * state)
             angle -= CROSSHAIR_CIRCLE_ANGLE
 
             bufferBuilder.vertex(matrix, point.x, point.y, 0f).color(Colors.WHITE)
@@ -87,7 +87,8 @@ fun Context.Crosshair() {
                     val config = config.crosshair
                     renderOuter(drawContext, config)
                     if (status.breakPercent > 0f) {
-                        renderInner(drawContext, config, status)
+                        val progress = status.breakPercent * (1f - config.initialProgress) + config.initialProgress
+                        renderInner(drawContext, config, progress)
                     }
                 }
             }

@@ -36,6 +36,14 @@ object Texts {
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE = translatable("screen.options.category.global.regular.quick_hand_swap.title")
     val OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_DESCRIPTION = translatable("screen.options.category.global.regular.quick_hand_swap.description")
 
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_TITLE = translatable("screen.options.category.crosshair.title")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_RADIUS_TITLE = translatable("screen.options.category.crosshair.radius.title")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_RADIUS_DESCRIPTION = translatable("screen.options.category.crosshair.radius.description")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_BORDER_WIDTH_TITLE = translatable("screen.options.category.crosshair.border_width.title")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_BORDER_WIDTH_DESCRIPTION = translatable("screen.options.category.crosshair.border_width.description")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_INITIAL_PROGRESS_TITLE = translatable("screen.options.category.crosshair.initial_progress.title")
+    val OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_INITIAL_PROGRESS_DESCRIPTION = translatable("screen.options.category.crosshair.initial_progress.description")
+
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_TITLE = translatable("screen.options.category.control.title")
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE = translatable("screen.options.category.control.view_movement_sensitivity.title")
     val OPTIONS_CATEGORY_GLOBAL_CONTROL_VIEW_MOVEMENT_SENSITIVITY_DESCRIPTION = translatable("screen.options.category.control.view_movement_sensitivity.description")

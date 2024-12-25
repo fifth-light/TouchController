@@ -106,6 +106,43 @@ fun openConfigScreen(parent: Screen): Screen {
                 }
             }
 
+            val crosshairGroup by groups.registering("crosshair") {
+                name(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_TITLE)
+
+                val crosshairRadius by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_RADIUS_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_RADIUS_DESCRIPTION))
+                    controller(slider(16..96))
+                    binding(
+                        36,
+                        { config.crosshair.radius },
+                        { config = config.copy(crosshair = config.crosshair.copy(radius = it)) }
+                    )
+                }
+
+                val crosshairBorderWidth by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_BORDER_WIDTH_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_BORDER_WIDTH_DESCRIPTION))
+                    controller(slider(0..8))
+                    binding(
+                        2,
+                        { config.crosshair.outerRadius },
+                        { config = config.copy(crosshair = config.crosshair.copy(outerRadius = it)) }
+                    )
+                }
+
+                val crosshairStartProgress by options.registering {
+                    name(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_INITIAL_PROGRESS_TITLE)
+                    description(OptionDescription.of(Texts.OPTIONS_CATEGORY_GLOBAL_CROSSHAIR_INITIAL_PROGRESS_DESCRIPTION))
+                    controller(slider(0f..1f, step = 0.01f))
+                    binding(
+                        .5f,
+                        { config.crosshair.initialProgress },
+                        { config = config.copy(crosshair = config.crosshair.copy(initialProgress = it)) }
+                    )
+                }
+            }
+
             groups.register("debug", OptionGroup.createBuilder().apply {
                 name(Texts.OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE)
                 collapsed(true)

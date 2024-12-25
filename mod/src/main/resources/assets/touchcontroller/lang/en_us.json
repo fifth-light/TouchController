@@ -23,6 +23,13 @@
   "touchcontroller.screen.options.category.global.regular.vibration.description": "Provide haptic feedback when breaking blocks. Only support on Android for now.",
   "touchcontroller.screen.options.category.global.regular.quick_hand_swap.title": "Quick hand swap",
   "touchcontroller.screen.options.category.global.regular.quick_hand_swap.description": "Swap hand on double clicking a item slot in hot bar.",
+  "touchcontroller.screen.options.category.crosshair.title": "Touch crosshair",
+  "touchcontroller.screen.options.category.crosshair.radius.title": "Radius",
+  "touchcontroller.screen.options.category.crosshair.radius.description": "Radius of the touch crosshair.",
+  "touchcontroller.screen.options.category.crosshair.border_width.title": "Border width",
+  "touchcontroller.screen.options.category.crosshair.border_width.description": "Border width of the touch crosshair",
+  "touchcontroller.screen.options.category.crosshair.initial_progress.title": "Initial progress",
+  "touchcontroller.screen.options.category.crosshair.initial_progress.description": "Initial progress when breaking blocks.",
 
   "touchcontroller.screen.options.category.control.title": "Control",
   "touchcontroller.screen.options.category.control.view_movement_sensitivity.title": "View movement sensitivity",
