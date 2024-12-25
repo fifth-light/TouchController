@@ -17,7 +17,7 @@ interface Canvas {
     fun drawTextWithShadow(offset: IntOffset, text: String, color: Color)
     fun drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect)
     fun drawGuiTexture(sprite: Identifier, dstRect: IntRect)
-    fun drawItemStack(offset: IntOffset, size: IntSize, stack: ItemStack)
+    fun drawItemStack(offset: IntOffset, size: IntSize = IntSize(16), stack: ItemStack)
     fun pushClip(area: IntRect)
     fun popClip()
 }

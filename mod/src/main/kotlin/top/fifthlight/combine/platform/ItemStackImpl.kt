@@ -8,12 +8,12 @@ import top.fifthlight.combine.data.ItemStack as CombineItemStack
 class ItemStackImpl(
     val inner: ItemStack
 ) : CombineItemStack {
-    override var amount: Int
+    override val amount: Int
         get() = inner.count
-        set(value) {
-            inner.count = value
-        }
 
-    override val id: Identifier
-        get() = Registries.ITEM.getKey(inner.item).get().value.toCombine()
+    override val id: Identifier by lazy {
+        Registries.ITEM.getKey(inner.item).get().value.toCombine()
+    }
+
+    override fun withAmount(amount: Int) = ItemStackImpl(inner.copyWithCount(amount))
 }

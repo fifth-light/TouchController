@@ -9,6 +9,7 @@ import top.fifthlight.combine.input.PointerEventType
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
+import top.fifthlight.data.Offset
 
 sealed class ClickInteraction : Interaction {
     data object Empty : ClickInteraction()
@@ -26,12 +27,19 @@ fun Modifier.clickable(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     clickState: ClickState = remember { ClickState() },
     onClick: () -> Unit
+) = then(ClickableModifierNode(interactionSource, clickState, onClick = { onClick() }))
+
+@Composable
+fun Modifier.clickableWithOffset(
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    clickState: ClickState = remember { ClickState() },
+    onClick: (Offset) -> Unit
 ) = then(ClickableModifierNode(interactionSource, clickState, onClick))
 
 private data class ClickableModifierNode(
     val interactionSource: MutableInteractionSource,
     val clickState: ClickState,
-    val onClick: () -> Unit,
+    val onClick: (Offset) -> Unit,
 ) : Modifier.Node<ClickableModifierNode>, PointerInputModifierNode {
 
     override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
@@ -43,10 +51,11 @@ private data class ClickableModifierNode(
             PointerEventType.Cancel -> clickState.pressed = false
             PointerEventType.Release -> {
                 if (clickState.pressed && clickState.entered) {
-                    onClick()
+                    onClick(event.position - node.absolutePosition)
                 }
                 clickState.pressed = false
             }
+
             else -> return false
         }
         if (clickState.pressed) {

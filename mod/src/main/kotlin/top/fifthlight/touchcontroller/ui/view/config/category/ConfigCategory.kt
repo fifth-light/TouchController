@@ -1,4 +1,4 @@
-package top.fifthlight.touchcontroller.ui.screen.config.category
+package top.fifthlight.touchcontroller.ui.view.config.category
 
 import androidx.compose.runtime.Composable
 import top.fifthlight.combine.modifier.Modifier

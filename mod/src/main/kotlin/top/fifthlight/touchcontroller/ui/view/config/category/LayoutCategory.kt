@@ -1,4 +1,4 @@
-package top.fifthlight.touchcontroller.ui.screen.config.category
+package top.fifthlight.touchcontroller.ui.view.config.category
 
 data object LayoutCategory: ConfigCategory(
     title = "Layout",

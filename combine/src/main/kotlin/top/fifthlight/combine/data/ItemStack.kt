@@ -1,20 +1,17 @@
 package top.fifthlight.combine.data
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.Immutable
 
-val LocalItemStackFactory = staticCompositionLocalOf<ItemStackFactory> { error("No ItemStackFactory in context") }
-
-interface ItemStackFactory {
-    fun create(id: Identifier, amount: Int): ItemStack?
-}
-
+@Immutable
 interface ItemStack {
-    var amount: Int
+    val amount: Int
     val id: Identifier
+
+    fun withAmount(amount: Int): ItemStack
 
     companion object {
         @Composable
-        fun of(id: Identifier, amount: Int) = LocalItemStackFactory.current.create(id, amount)
+        fun of(id: Identifier, amount: Int = 1) = LocalItemFactory.current.createItemStack(id, amount)
     }
 }

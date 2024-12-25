@@ -19,6 +19,8 @@ data class Offset(
         val ZERO = Offset(0f, 0f)
     }
 
+    fun toIntOffset() = IntOffset(x = x.toInt(), y = y.toInt())
+
     operator fun plus(length: Float) = Offset(x = x + length, y = y + length)
     operator fun plus(offset: Offset) = Offset(x = x + offset.x, y = y + offset.y)
     operator fun minus(length: Float) = Offset(x = x - length, y = y - length)

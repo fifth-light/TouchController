@@ -1,36 +1,11 @@
 package top.fifthlight.touchcontroller.layout
 
-import net.minecraft.component.DataComponentTypes
-import net.minecraft.item.Item
-import net.minecraft.item.ProjectileItem
-import net.minecraft.item.RangedWeaponItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult.Type.*
 import top.fifthlight.data.Offset
-import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
 import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
-
-private fun Item.isUsable(config: TouchControllerConfig): Boolean {
-    if (this in config.usableItems.items) {
-        return true
-    } else if (config.foodUsable && components.get(DataComponentTypes.FOOD) != null) {
-        return true
-    } else if (config.projectileUsable && this is ProjectileItem) {
-        return true
-    } else if (config.rangedWeaponUsable && this is RangedWeaponItem) {
-        return true
-    } else if (config.equippableUsable && components.get(DataComponentTypes.EQUIPPABLE) != null) {
-        return true
-    } else if (config.bundleUsable && components.get(DataComponentTypes.BUNDLE_CONTENTS) != null) {
-        return true
-    } else if (config.consumableUsable && components.get(DataComponentTypes.CONSUMABLE) != null) {
-        return true
-    } else {
-        return false
-    }
-}
 
 fun Context.View() {
     fun Offset.fixAspectRadio(): Offset = Offset(
@@ -133,7 +108,7 @@ fun Context.View() {
         var viewState = state.viewState
         val crosshairTarget = client.crosshairTarget
         val itemUsable = Hand.entries.any { hand ->
-            player.getStackInHand(hand).item.isUsable(config)
+            player.getStackInHand(hand).item in config.usableItems
         }
 
         // If pointer kept still and held for 5 tick

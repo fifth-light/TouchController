@@ -43,23 +43,23 @@ fun Switch(
             )
             if (checked) {
                 fillRect(
-                    offset = IntOffset(0, 0),
-                    size = IntSize(10, 16),
-                    color = Colors.BLACK
-                )
-                fillRect(
-                    offset = IntOffset(1, 1),
-                    size = IntSize(8, 14),
-                    color = Colors.WHITE
-                )
-            } else {
-                fillRect(
                     offset = IntOffset(20, 0),
                     size = IntSize(10, 16),
                     color = Colors.BLACK
                 )
                 fillRect(
                     offset = IntOffset(21, 1),
+                    size = IntSize(8, 14),
+                    color = Colors.WHITE
+                )
+            } else {
+                fillRect(
+                    offset = IntOffset(0, 0),
+                    size = IntSize(10, 16),
+                    color = Colors.BLACK
+                )
+                fillRect(
+                    offset = IntOffset(1, 1),
                     size = IntSize(8, 14),
                     color = Colors.WHITE
                 )

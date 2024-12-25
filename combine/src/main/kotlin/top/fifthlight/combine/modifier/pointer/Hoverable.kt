@@ -9,6 +9,7 @@ import top.fifthlight.combine.input.PointerEventType
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
+import top.fifthlight.data.Offset
 
 sealed class HoverInteraction : Interaction {
     data object Empty : HoverInteraction()
@@ -32,8 +33,40 @@ private data class HoverableModifierNode(
                 onHovered(true)
                 interactionSource.tryEmit(HoverInteraction.Hover)
             }
+
             PointerEventType.Leave -> {
                 onHovered(false)
+                interactionSource.tryEmit(HoverInteraction.Empty)
+            }
+        }
+        return false
+    }
+}
+
+@Composable
+fun Modifier.hoverableWithOffset(
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onHovered: (Boolean?, Offset) -> Unit
+) = then(HoverableWithOffsetModifierNode(interactionSource, onHovered))
+
+private data class HoverableWithOffsetModifierNode(
+    val interactionSource: MutableInteractionSource,
+    val onHovered: (Boolean?, Offset) -> Unit,
+) : Modifier.Node<HoverableWithOffsetModifierNode>, PointerInputModifierNode {
+
+    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
+        when (event.type) {
+            PointerEventType.Enter -> {
+                onHovered(true, event.position - node.absolutePosition)
+                interactionSource.tryEmit(HoverInteraction.Hover)
+            }
+
+            PointerEventType.Move -> {
+                onHovered(null, event.position - node.absolutePosition)
+            }
+
+            PointerEventType.Leave -> {
+                onHovered(false, event.position - node.absolutePosition)
                 interactionSource.tryEmit(HoverInteraction.Empty)
             }
         }

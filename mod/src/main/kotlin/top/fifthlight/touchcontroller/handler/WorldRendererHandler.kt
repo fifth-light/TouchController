@@ -6,15 +6,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents.BeforeBlock
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderTickCounter
-import net.minecraft.item.Item
-import net.minecraft.item.ProjectileItem
-import net.minecraft.item.RangedWeaponItem
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.HitResult
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.data.Offset
-import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.event.HudRenderCallback
 import top.fifthlight.touchcontroller.model.ControllerHudModel
@@ -25,17 +21,6 @@ import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
 import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
-
-private fun Item.shouldShowCrosshair(config: TouchControllerConfig): Boolean {
-    if (this in config.showCrosshairItems.items) {
-        return true
-    } else if (config.projectileShowCrosshair && this is ProjectileItem) {
-        return true
-    } else if (config.rangedWeaponShowCrosshair && this is RangedWeaponItem) {
-        return true
-    }
-    return false
-}
 
 class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRenderCallback.CrosshairRender,
     KoinComponent {
@@ -57,7 +42,7 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
         return client.player?.let { player ->
             for (hand in Hand.entries) {
                 val stack = player.getStackInHand(hand)
-                if (stack.item.shouldShowCrosshair(config)) {
+                if (stack.item in config.showCrosshairItems) {
                     return@let true
                 }
             }

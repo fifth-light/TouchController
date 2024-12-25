@@ -1,7 +1,7 @@
 package top.fifthlight.touchcontroller.ui.state
 
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.ui.screen.config.category.ConfigCategory
+import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
 
 data class ConfigScreenState(
     val config: TouchControllerConfig,

@@ -1,22 +1,22 @@
 package top.fifthlight.touchcontroller.ui.model
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
+import net.minecraft.client.MinecraftClient
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.combine.util.CloseHandler
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
-import top.fifthlight.touchcontroller.ui.ViewModel
-import top.fifthlight.touchcontroller.ui.screen.config.category.ConfigCategory
-import top.fifthlight.touchcontroller.ui.screen.config.category.GlobalCategory
 import top.fifthlight.touchcontroller.ui.state.ConfigScreenState
-import kotlin.coroutines.CoroutineContext
+import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
+import top.fifthlight.touchcontroller.ui.view.config.category.GlobalCategory
 
-class ConfigScreenViewModel(coroutineContext: CoroutineContext) : ViewModel(coroutineContext),
-    KoinComponent {
+class ConfigScreenViewModel(scope: CoroutineScope) : ViewModel(scope), KoinComponent {
     private val configHolder: TouchControllerConfigHolder by inject()
+    private val client: MinecraftClient by inject()
 
     private val _uiState = MutableStateFlow(ConfigScreenState(
         config = configHolder.config.value,

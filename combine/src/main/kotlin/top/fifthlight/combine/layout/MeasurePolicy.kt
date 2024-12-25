@@ -27,6 +27,8 @@ object MeasureScope {
     ) = MeasureResult(
         width = width, height = height, placer = placer
     )
+
+    fun layout(size: IntSize, placer: Placer) = layout(size.width, size.height, placer)
 }
 
 @Stable

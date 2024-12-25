@@ -10,6 +10,7 @@ kotlin {
 }
 
 dependencies {
+    api(libs.kotlinx.collections.immutable)
     api(libs.compose.runtime)
     api(project(":common-data"))
 }
