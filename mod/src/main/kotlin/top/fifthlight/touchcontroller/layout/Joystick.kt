@@ -42,9 +42,12 @@ fun Context.Joystick(layout: Joystick) {
         }
     }
 
-    val normalizedOffset = currentPointer?.let { pointer ->
-        val offset = pointer.scaledOffset / size.width.toFloat() * 2f - 1f
-        val squaredLength = offset.x * offset.x + offset.y * offset.y
+    val rawOffset = currentPointer?.let { pointer ->
+        pointer.scaledOffset / size.width.toFloat() * 2f - 1f
+    }
+
+    val normalizedOffset = rawOffset?.let { offset ->
+        val squaredLength = offset.squaredLength
         if (squaredLength > 1) {
             val length = sqrt(squaredLength)
             offset / length
@@ -53,27 +56,38 @@ fun Context.Joystick(layout: Joystick) {
         }
     }
 
-    drawQueue.enqueue { drawContext, _ ->
-        val color = ((0xFF * opacity).toInt() shl 24) or 0xFFFFFF
-        drawContext.drawTexture(
-            id = Textures.JOYSTICK_PAD,
-            dstRect = Rect(size = size.toSize()),
-            color = color
-        )
-        val drawOffset = normalizedOffset ?: Offset.ZERO
-        val stickSize = layout.stickSize()
-        val actualOffset = ((drawOffset + 1f) / 2f * size) - stickSize.toSize() / 2f
-        drawContext.drawTexture(
-            id = Textures.JOYSTICK_STICK,
-            dstRect = Rect(
-                offset = actualOffset,
-                size = stickSize.toSize()
-            ),
-            color = color
-        )
+    val opacityMultiplier = if (!layout.increaseOpacityWhenActive || currentPointer == null) {
+        1f
+    } else {
+        1.5f
+    }
+
+    withOpacity(opacityMultiplier) {
+        drawQueue.enqueue { drawContext, _ ->
+            val color = ((0xFF * opacity).toInt() shl 24) or 0xFFFFFF
+            drawContext.drawTexture(
+                id = Textures.JOYSTICK_PAD,
+                dstRect = Rect(size = size.toSize()),
+                color = color
+            )
+            val drawOffset = normalizedOffset ?: Offset.ZERO
+            val stickSize = layout.stickSize()
+            val actualOffset = ((drawOffset + 1f) / 2f * size) - stickSize.toSize() / 2f
+            drawContext.drawTexture(
+                id = Textures.JOYSTICK_STICK,
+                dstRect = Rect(
+                    offset = actualOffset,
+                    size = stickSize.toSize()
+                ),
+                color = color
+            )
+        }
     }
 
     normalizedOffset?.let { (right, backward) ->
+        if (layout.triggerSprint && rawOffset.y < -1.1f) {
+            result.sprint = true
+        }
         result.left = -right
         result.forward = -backward
     }

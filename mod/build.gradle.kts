@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-version = "0.0.12"
+version = "0.0.13"
 group = "top.fifthlight.touchcontroller"
 
 var modName = "TouchController"

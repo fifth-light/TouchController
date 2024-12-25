@@ -5,14 +5,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.MinecraftClient
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import top.fifthlight.touchcontroller.TouchController
 import top.fifthlight.touchcontroller.ext.TouchControllerLayoutSerializer
-import java.nio.file.FileAlreadyExistsException
+import java.io.IOException
 import kotlin.io.path.createDirectory
+import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
@@ -41,9 +43,16 @@ class TouchControllerConfigHolder : KoinComponent {
     }
 
     private fun createConfigDirectory() {
+        if (!configDir.exists()) {
+            // Change Minecraft options
+            val options = MinecraftClient.getInstance().options
+            options.autoJump.value = true
+            options.write()
+            logger.info("First startup of TouchController, turn on auto jumping")
+        }
         try {
             configDir.createDirectory()
-        } catch (_: FileAlreadyExistsException) {
+        } catch (_: IOException) {
         }
     }
 

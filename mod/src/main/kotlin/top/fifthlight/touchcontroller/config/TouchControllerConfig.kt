@@ -51,6 +51,7 @@ data class TouchControllerConfig(
     val disableCrosshair: Boolean = true,
     val disableHotBarKey: Boolean = false,
     val vibration: Boolean = true,
+    val quickHandSwap: Boolean = false,
     val showPointers: Boolean = false,
     val enableTouchEmulation: Boolean = false,
 
@@ -70,6 +71,7 @@ data class TouchControllerConfig(
 data class CrosshairConfig(
     val radius: Int = 36,
     val outerRadius: Int = 2,
+    val initialProgress: Float = .5f
 )
 
 typealias TouchControllerLayout = PersistentList<ControllerWidget>

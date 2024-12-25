@@ -58,6 +58,15 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
         if (state != HudState.NORMAL) controllerHudModel.status.sneakLocked = false
         controllerHudModel.pendingDrawQueue = drawQueue
 
+        val status = controllerHudModel.status
+        if (result.sprint) {
+            status.wasSprinting = true
+        } else {
+            if (status.wasSprinting) {
+                status.wasSprinting = false
+                player.isSprinting = false
+            }
+        }
         if (result.cancelFlying) {
             player.abilities?.flying = false
         }

@@ -5,7 +5,7 @@ import top.fifthlight.touchcontroller.control.AscendButton
 
 fun Context.AscendButton(config: AscendButton) {
     if (designMode || state != HudState.NORMAL) {
-        val (_, clicked) = Button(id = "ascend") { clicked ->
+        val (_, clicked) = SwipeButton(id = "ascend") { clicked ->
             if (config.classic) {
                 if (clicked) {
                     Texture(id = Textures.ASCEND_CLASSIC, color = 0xFFAAAAAAu)
