@@ -24,7 +24,6 @@ modrinth {
         required.project("fabric-api")
         required.version("fabric-language-kotlin", libs.versions.fabric.language.kotlin.get())
         optional.version("modmenu", libs.versions.modmenu.get())
-        required.version("yacl", libs.versions.yacl.get())
     }
 }
 
@@ -41,7 +40,6 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.language.kotlin)
     modImplementation(libs.modmenu)
-    modImplementation(libs.yacl)
 
     includeAndImplementation(project(":common-data"))
 
@@ -66,7 +64,6 @@ tasks.withType<ProcessResources> {
         expand(mapOf(
             "version" to project.version,
             "name" to modName,
-            "version_yacl" to libs.versions.yacl.get(),
         ))
     }
 }

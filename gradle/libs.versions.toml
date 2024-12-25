@@ -25,7 +25,6 @@ androidx-collection = "1.4.5"
 fabric-api = "0.108.0+1.21.3"
 fabric-language-kotlin = "1.12.3+kotlin.2.0.21"
 modmenu = "12.0.0"
-yacl = "3.6.2+1.21.2-fabric"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
@@ -44,7 +43,6 @@ androidx-collection = { group = "androidx.collection", name = "collection", vers
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
 fabric-language-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu" }
-yacl = { group = "dev.isxander", name = "yet-another-config-lib", version.ref = "yacl" }
 
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
