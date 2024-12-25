@@ -148,6 +148,60 @@ data object GlobalCategory : ConfigCategory(
                         },
                     )
                 }
+
+                var crosshairGroupExpanded by remember { mutableStateOf(true) }
+                ConfigGroup(
+                    name = "Touch crosshair",
+                    expanded = crosshairGroupExpanded,
+                    onExpandedChanged = { crosshairGroupExpanded = it },
+                ) {
+                    IntSliderConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "Touch crosshair size",
+                        value = config.crosshair.radius,
+                        onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(radius = it)) } },
+                        range = 16..96,
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "Touch crosshair size",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                    IntSliderConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "Border width",
+                        value = config.crosshair.outerRadius,
+                        onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(outerRadius = it)) } },
+                        range = 0..8,
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "Border width",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                    FloatSliderConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "Initial progress",
+                        value = config.crosshair.initialProgress,
+                        onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(initialProgress = it)) } },
+                        range = 0f..1f,
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "Initial progress",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                }
+
                 var debugGroupExpanded by remember { mutableStateOf(true) }
                 ConfigGroup(
                     name = "Debug",
