@@ -46,8 +46,8 @@ private inline fun withShader(program: ShaderProgramKey, crossinline block: () -
 }
 
 class MinecraftCanvas(
-    private val drawContext: DrawContext,
-    private val textRenderer: TextRenderer,
+    val drawContext: DrawContext,
+    val textRenderer: TextRenderer,
 ) : Canvas {
     override fun pushState() {
         drawContext.matrices.push()

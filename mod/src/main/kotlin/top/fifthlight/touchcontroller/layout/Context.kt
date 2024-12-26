@@ -9,6 +9,7 @@ import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
+import top.fifthlight.touchcontroller.config.LayoutLayerCondition
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.ext.scaledSize
 import top.fifthlight.touchcontroller.ext.size
@@ -69,12 +70,6 @@ data class DoubleClickState(private val clickTime: Int = 15) {
     fun clear() {
         this.lastClick = -1
     }
-}
-
-enum class HudState {
-    SWIMMING,
-    FLYING,
-    NORMAL
 }
 
 data class InventorySlotStatus(
@@ -145,15 +140,13 @@ data class Context(
     val drawQueue: DrawQueue = DrawQueue(),
     val size: IntSize,
     val screenOffset: IntOffset,
-    val scale: Float,
     val opacity: Float = 1f,
     val pointers: MutableMap<Int, Pointer> = mutableMapOf(),
+    val condition: LayoutLayerCondition,
     val result: ContextResult = ContextResult(),
     val status: ContextStatus = ContextStatus(),
     val timer: ContextCounter = ContextCounter(),
-    val designMode: Boolean = false,
-    val state: HudState = HudState.NORMAL,
-    val config: TouchControllerConfig
+    val config: TouchControllerConfig,
 ) : KoinComponent {
     val client: MinecraftClient by inject()
     val window: Window

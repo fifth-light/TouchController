@@ -84,7 +84,7 @@ internal sealed class WrapperLayoutNode(
                     haveMoveChildren = true
                     return pressTarget.onPointerEvent(event)
                 }
-                for (child in node.children) {
+                for (child in node.children.asReversed()) {
                     if (!inRange(child)) {
                         continue
                     }

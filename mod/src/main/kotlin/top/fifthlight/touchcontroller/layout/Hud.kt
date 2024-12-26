@@ -1,11 +1,11 @@
 package top.fifthlight.touchcontroller.layout
 
 import com.mojang.blaze3d.platform.GlStateManager
-import top.fifthlight.touchcontroller.control.ControllerWidget
+import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.ext.withBlend
 import top.fifthlight.touchcontroller.ext.withBlendFunction
 
-fun Context.Hud(widgets: List<ControllerWidget>) {
+fun Context.Hud(layers: List<LayoutLayer>) {
     this.transformDrawQueue(
         drawTransform = { draw ->
             withBlend {
@@ -20,14 +20,19 @@ fun Context.Hud(widgets: List<ControllerWidget>) {
             }
         }
     ) {
-        widgets.forEach { widget ->
-            withOpacity(widget.opacity) {
-                withAlign(
-                    align = widget.align,
-                    offset = widget.offset,
-                    size = widget.size()
-                ) {
-                    widget.layout(this)
+        for (layer in layers) {
+            if (!layer.condition.check(condition)) {
+                continue
+            }
+            for (widget in layer.widgets) {
+                withOpacity(widget.opacity) {
+                    withAlign(
+                        align = widget.align,
+                        offset = widget.offset,
+                        size = widget.size()
+                    ) {
+                        widget.layout(this)
+                    }
                 }
             }
         }

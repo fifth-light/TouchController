@@ -5,13 +5,13 @@ import net.minecraft.entity.Entity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.data.IntOffset
+import top.fifthlight.touchcontroller.config.LayoutLayerCondition
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.event.ClientRenderEvents
 import top.fifthlight.touchcontroller.ext.scaledSize
 import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.Hud
-import top.fifthlight.touchcontroller.layout.HudState
 import top.fifthlight.touchcontroller.mixin.ClientOpenChatScreenInvoker
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerMixin
 import top.fifthlight.touchcontroller.model.ControllerHudModel
@@ -29,33 +29,28 @@ class ClientRenderHandler : ClientRenderEvents.StartRenderTick, KoinComponent {
 
     override fun onStartTick(client: MinecraftClient, tick: Boolean) {
         val player = client.player ?: return
-        val state = if (player.isSubmergedInWater) {
-            HudState.SWIMMING
-        } else if (player.abilities.flying) {
-            HudState.FLYING
-        } else {
-            HudState.NORMAL
-        }
-        if (state != HudState.NORMAL) controllerHudModel.status.sneakLocked = false
+        val swimming = player.isSubmergedInWater
+        val flying = player.abilities.flying
+        val condition = LayoutLayerCondition(swimming = swimming, flying = flying)
+        if (!swimming && !flying) controllerHudModel.status.sneakLocked = false
         val drawQueue = DrawQueue()
         val result = Context(
             drawQueue = drawQueue,
             size = client.window.scaledSize,
             screenOffset = IntOffset.ZERO,
-            scale = client.window.scaleFactor.toFloat(),
             pointers = touchStateModel.pointers,
             status = controllerHudModel.status,
             timer = controllerHudModel.timer,
-            state = state,
-            config = configHolder.config.value
+            config = configHolder.config.value,
+            condition = condition,
         ).run {
             Hud(
-                widgets = configHolder.layout.value,
+                layers = configHolder.layout.value,
             )
             result
         }
         controllerHudModel.result = result
-        if (state != HudState.NORMAL) controllerHudModel.status.sneakLocked = false
+        if (!swimming && !flying) controllerHudModel.status.sneakLocked = false
         controllerHudModel.pendingDrawQueue = drawQueue
 
         val status = controllerHudModel.status

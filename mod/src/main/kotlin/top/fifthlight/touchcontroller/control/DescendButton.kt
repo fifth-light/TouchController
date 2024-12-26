@@ -15,14 +15,20 @@ import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DescendButton
 import kotlin.math.round
 
+enum class DescendButtonTexture {
+    CLASSIC,
+    SWIMMING,
+    FLYING,
+}
+
 @Serializable
 @SerialName("descend_button")
 data class DescendButton(
     val size: Float = 2f,
-    val classic: Boolean = true,
+    val texture: DescendButtonTexture = DescendButtonTexture.CLASSIC,
     override val align: Align = Align.RIGHT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
-    override val opacity: Float = 1f
+    override val opacity: Float = 1f,
 ) : ControllerWidget() {
     companion object {
         private val _properties = persistentListOf<Property<DescendButton, *, *>>(
@@ -38,10 +44,14 @@ data class DescendButton(
                     )
                 }
             ),
-            BooleanProperty(
-                getValue = { it.classic },
-                setValue = { config, value -> config.copy(classic = value) },
-                message = Texts.OPTIONS_WIDGET_DESCEND_BUTTON_PROPERTY_CLASSIC
+            EnumProperty(
+                getValue = { it.texture },
+                setValue = { config, value -> config.copy(texture = value) },
+                items = persistentListOf(
+                    DescendButtonTexture.CLASSIC to Text.literal("Classic"),
+                    DescendButtonTexture.SWIMMING to Text.literal("Swimming"),
+                    DescendButtonTexture.FLYING to Text.literal("Flying"),
+                )
             )
         )
 
@@ -52,7 +62,7 @@ data class DescendButton(
     override val properties = super.properties + _properties as PersistentList<Property<ControllerWidget, *, *>>
 
     private val textureSize
-        get() = if (classic) 18 else 22
+        get() = if (texture == DescendButtonTexture.CLASSIC) 18 else 22
 
     override fun size(): IntSize = IntSize((size * textureSize).toInt())
 

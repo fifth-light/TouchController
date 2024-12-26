@@ -9,6 +9,7 @@ import kotlinx.serialization.descriptors.serialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.serializer
+import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.TouchControllerLayout
 import top.fifthlight.touchcontroller.control.ControllerWidget
 
@@ -18,7 +19,7 @@ class TouchControllerLayoutSerializer : KSerializer<TouchControllerLayout> {
         override val serialName: String = "top.fifthlight.touchcontroller.config.TouchControllerLayout"
     }
 
-    private val itemSerializer = serializer<ControllerWidget>()
+    private val itemSerializer = serializer<LayoutLayer>()
 
     override val descriptor: SerialDescriptor = PersistentListDescriptor()
 

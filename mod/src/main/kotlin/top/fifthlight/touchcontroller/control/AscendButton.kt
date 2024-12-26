@@ -15,11 +15,17 @@ import top.fifthlight.touchcontroller.layout.AscendButton
 import top.fifthlight.touchcontroller.layout.Context
 import kotlin.math.round
 
+enum class AscendButtonTexture {
+    CLASSIC,
+    SWIMMING,
+    FLYING,
+}
+
 @Serializable
 @SerialName("ascend_button")
 data class AscendButton(
     val size: Float = 2f,
-    val classic: Boolean = true,
+    val texture: AscendButtonTexture = AscendButtonTexture.CLASSIC,
     override val align: Align = Align.RIGHT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f
@@ -38,13 +44,16 @@ data class AscendButton(
                     )
                 }
             ),
-            BooleanProperty(
-                getValue = { it.classic },
-                setValue = { config, value -> config.copy(classic = value) },
-                message = Texts.OPTIONS_WIDGET_ASCEND_BUTTON_PROPERTY_CLASSIC
+            EnumProperty(
+                getValue = { it.texture },
+                setValue = { config, value -> config.copy(texture = value) },
+                items = persistentListOf(
+                    AscendButtonTexture.CLASSIC to Text.literal("Classic"),
+                    AscendButtonTexture.SWIMMING to Text.literal("Swimming"),
+                    AscendButtonTexture.FLYING to Text.literal("Flying"),
+                )
             )
         )
-
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -52,7 +61,7 @@ data class AscendButton(
     override val properties = super.properties + _properties as PersistentList<Property<ControllerWidget, *, *>>
 
     private val textureSize
-        get() = if (classic) 18 else 22
+        get() = if (texture == AscendButtonTexture.CLASSIC) 18 else 22
 
     override fun size(): IntSize = IntSize((size * textureSize).toInt())
 

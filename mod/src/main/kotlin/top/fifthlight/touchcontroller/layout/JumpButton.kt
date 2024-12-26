@@ -4,28 +4,21 @@ import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.asset.Textures
 import top.fifthlight.touchcontroller.control.JumpButton
 
-private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, classic: Boolean) {
+enum class JumpButtonTexture {
+    CLASSIC,
+    CLASSIC_FLYING,
+    NEW,
+}
+
+private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, texture: JumpButtonTexture) {
     withAlign(align = Align.CENTER_CENTER, size = size) {
-        if (classic) {
-            if (state == HudState.NORMAL) {
-                if (clicked) {
-                    Texture(id = Textures.JUMP_CLASSIC, color = 0xFFAAAAAAu)
-                } else {
-                    Texture(id = Textures.JUMP_CLASSIC)
-                }
-            } else {
-                if (clicked) {
-                    Texture(id = Textures.JUMP_FLYING, color = 0xFFAAAAAAu)
-                } else {
-                    Texture(id = Textures.JUMP_FLYING)
-                }
-            }
-        } else {
-            if (clicked) {
-                Texture(id = Textures.JUMP_ACTIVE)
-            } else {
-                Texture(id = Textures.JUMP)
-            }
+        when (Pair(texture, clicked)) {
+            Pair(JumpButtonTexture.CLASSIC, false) -> Texture(id = Textures.JUMP_CLASSIC)
+            Pair(JumpButtonTexture.CLASSIC, true) -> Texture(id = Textures.JUMP_CLASSIC, color = 0xFFAAAAAAu)
+            Pair(JumpButtonTexture.CLASSIC_FLYING, false) -> Texture(id = Textures.JUMP_FLYING)
+            Pair(JumpButtonTexture.CLASSIC_FLYING, true) -> Texture(id = Textures.JUMP_FLYING, color = 0xFFAAAAAAu)
+            Pair(JumpButtonTexture.NEW, false) -> Texture(id = Textures.JUMP)
+            Pair(JumpButtonTexture.NEW, true) -> Texture(id = Textures.JUMP_ACTIVE)
         }
     }
 }
@@ -35,35 +28,32 @@ fun Context.RawJumpButton(
     classic: Boolean = true,
     size: IntSize = this.size,
     swipe: Boolean = false,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    texture: JumpButtonTexture = JumpButtonTexture.CLASSIC,
 ): Boolean {
-    return if (classic || state == HudState.NORMAL) {
-        val (newPointer, clicked) = if (swipe) {
-            SwipeButton(id = "jump") { clicked ->
-                JumpButtonTexture(size, clicked, classic)
-            }
-        } else {
-            Button(id = "jump") { clicked ->
-                JumpButtonTexture(size, clicked, classic)
-            }
-        }
-        if (classic && state == HudState.FLYING) {
-            if (newPointer && status.cancelFlying.click(timer.tick)) {
-                result.cancelFlying = true
-            }
-            false
-        } else if (!enabled) {
-            if (swipe) {
-                clicked
-            } else {
-                false
-            }
-        } else {
-            status.jumping = status.jumping || clicked
-            clicked
+    val (newPointer, clicked) = if (swipe) {
+        SwipeButton(id = "jump") { clicked ->
+            JumpButtonTexture(size, clicked, texture)
         }
     } else {
+        Button(id = "jump") { clicked ->
+            JumpButtonTexture(size, clicked, texture)
+        }
+    }
+    return if (classic && condition.flying) {
+        if (newPointer && status.cancelFlying.click(timer.tick)) {
+            result.cancelFlying = true
+        }
         false
+    } else if (!enabled) {
+        if (swipe) {
+            clicked
+        } else {
+            false
+        }
+    } else {
+        status.jumping = status.jumping || clicked
+        clicked
     }
 }
 
