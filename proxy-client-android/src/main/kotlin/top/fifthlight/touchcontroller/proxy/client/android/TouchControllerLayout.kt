@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.util.SparseIntArray
 import android.view.MotionEvent
 import android.widget.FrameLayout
-import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.proxy.client.LauncherProxyClient
 
 /**
@@ -22,10 +21,8 @@ class TouchControllerLayout @JvmOverloads constructor(
     private val pointerIdMap = SparseIntArray()
     private var nextPointerId = 1
 
-    private fun MotionEvent.getOffset(index: Int) = Offset(
-        getX(index) / width,
-        getY(index) / height
-    )
+    private fun MotionEvent.getOffsetX(index: Int) = getX(index) / width
+    private fun MotionEvent.getOffsetY(index: Int) = getY(index) / height
 
     private fun handleTouchEvent(event: MotionEvent) {
         val client = client ?: return
@@ -33,20 +30,20 @@ class TouchControllerLayout @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 val pointerId = nextPointerId++
                 pointerIdMap.put(event.getPointerId(0), pointerId)
-                client.addPointer(pointerId, event.getOffset(0))
+                client.addPointer(pointerId, event.getOffsetX(0), event.getOffsetY(0))
             }
 
             MotionEvent.ACTION_POINTER_DOWN -> {
                 val pointerId = nextPointerId++
                 val i = event.actionIndex
                 pointerIdMap.put(event.getPointerId(i), pointerId)
-                client.addPointer(pointerId, event.getOffset(i))
+                client.addPointer(pointerId, event.getOffsetX(i), event.getOffsetY(i))
             }
 
             MotionEvent.ACTION_MOVE -> {
                 for (i in 0 until event.pointerCount) {
                     val pointerId = pointerIdMap.get(event.getPointerId(i))
-                    client.addPointer(pointerId, event.getOffset(i))
+                    client.addPointer(pointerId, event.getOffsetX(i), event.getOffsetY(i))
                 }
             }
 

@@ -65,7 +65,10 @@ class WorldRendererHandler : WorldRenderEvents.Start, BeforeBlockOutline, HudRen
                     is AddPointerMessage -> {
                         touchStateModel.addPointer(
                             index = message.index,
-                            position = message.position
+                            position = Offset(
+                                x = message.x,
+                                y = message.y,
+                            )
                         )
                     }
 

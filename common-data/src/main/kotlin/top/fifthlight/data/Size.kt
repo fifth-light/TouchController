@@ -3,17 +3,22 @@ package top.fifthlight.data
 import kotlinx.serialization.Serializable
 import kotlin.math.sqrt
 
+fun Size(size: Float) = Size(packFloats(size, size))
+fun Size(width: Float, height: Float) = Size(packFloats(width, height))
+
 @Serializable
-data class Size(
-    val width: Float,
-    val height: Float,
-) {
+@JvmInline
+value class Size internal constructor(private val packed: Long) {
+    val width
+        get() = unpackFloat1(packed)
+
+    val height
+        get() = unpackFloat2(packed)
+
     companion object {
         val ZERO = Size(0f, 0f)
         val ONE = Size(1f, 1f)
     }
-
-    constructor(size: Float): this(size, size)
 
     operator fun contains(offset: Offset): Boolean {
         val x = 0 <= offset.x && offset.x < width
@@ -21,13 +26,17 @@ data class Size(
         return x && y
     }
 
+    fun toIntSize() = IntSize(width = width.toInt(), height = height.toInt())
+
+    operator fun component1() = width
+    operator fun component2() = height
     operator fun plus(length: Float) = Size(width = width + length, height = height + length)
     operator fun minus(offset: Offset) = Size(width = width - offset.x, height = height - offset.y)
     operator fun times(num: Float) = Size(width = width * num, height = height * num)
     operator fun div(num: Float) = Size(width = width / num, height = height / num)
 
-    val squaredLength by lazy { width * width + height * height }
-    val length by lazy { sqrt(squaredLength) }
-
-    fun toIntSize() = IntSize(width = width.toInt(), height = height.toInt())
+    val squaredLength
+        get() = width * width + height * height
+    val length
+        get() = sqrt(squaredLength)
 }

@@ -18,7 +18,13 @@ import kotlin.math.sin
 data class CrosshairStatus(
     val position: Offset,
     val breakPercent: Float,
-)
+) {
+    val positionX
+        get() = position.x
+
+    val positionY
+        get() = position.y
+}
 
 private const val CROSSHAIR_CIRCLE_PARTS = 24
 private const val CROSSHAIR_CIRCLE_ANGLE = 2 * PI.toFloat() / CROSSHAIR_CIRCLE_PARTS

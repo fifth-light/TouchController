@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.proxy.client
 
-import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.ClearPointerMessage
 import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
@@ -62,18 +61,10 @@ class LauncherProxyClient(
      *
      * @param index 指针的序号。新指针的序号必须从一开始单调递增。
      * @param x 指针的 X 坐标，范围为相对游戏区域的 [0, 1]。
-     * @param y 指针的 X 坐标，范围为相对游戏区域的 [0, 1]。
+     * @param y 指针的 Y 坐标，范围为相对游戏区域的 [0, 1]。
      */
-    fun addPointer(index: Int, x: Float, y: Float) = addPointer(index, Offset(x, y))
-
-    /**
-     * 添加或者移动一个指针。
-     *
-     * @param index 指针的序号。新指针的序号必须从一开始单调递增。
-     * @param offset 指针的坐标，范围为相对游戏区域的 [0, 1]。
-     */
-    fun addPointer(index: Int, offset: Offset) {
-        messageClient.send(AddPointerMessage(index = index, position = offset))
+    fun addPointer(index: Int, x: Float, y: Float) {
+        messageClient.send(AddPointerMessage(index, x, y))
     }
 
     /**

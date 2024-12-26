@@ -72,7 +72,7 @@ public abstract class CrosshairTargetMixin {
         if (crosshairStatus == null) {
             ndc = new Vector4d(0, 0, -1f, 1f);
         } else {
-            var screen = new Vector2d(crosshairStatus.getPosition().getX(), crosshairStatus.getPosition().getY());
+            var screen = new Vector2d(crosshairStatus.getPositionX(), crosshairStatus.getPositionY());
             ndc = new Vector4d(2 * screen.x - 1, 1 - 2 * screen.y, -1f, 1f);
         }
         var fov = getFov(this.camera, tickDelta, true);
