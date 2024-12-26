@@ -39,4 +39,8 @@ value class Size internal constructor(private val packed: Long) {
         get() = width * width + height * height
     val length
         get() = sqrt(squaredLength)
+
+    override fun toString(): String {
+        return "Size(width=$width, height=$height)"
+    }
 }

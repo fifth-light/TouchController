@@ -47,6 +47,10 @@ value class IntSize internal constructor(private val packed: Long) {
     operator fun times(num: Int) = IntSize(width = width * num, height = height * num)
     operator fun div(num: Int) = IntSize(width = width / num, height = height / num)
     fun toSize() = Size(width = width.toFloat(), height = height.toFloat())
+
+    override fun toString(): String {
+        return "IntSize(width=$width, height=$height)"
+    }
 }
 
 private class IntSizeSerializer : KSerializer<IntSize> {

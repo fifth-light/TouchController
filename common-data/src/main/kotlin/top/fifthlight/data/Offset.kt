@@ -50,6 +50,10 @@ value class Offset internal constructor(private val packed: Long) {
         get() = x * x + y * y
     val length
         get() = sqrt(squaredLength)
+
+    override fun toString(): String {
+        return "Offset(left=$left, top=$top)"
+    }
 }
 
 private class OffsetSerializer : KSerializer<Offset> {
