@@ -52,8 +52,6 @@ data class TouchControllerConfig(
     val disableHotBarKey: Boolean = false,
     val vibration: Boolean = true,
     val quickHandSwap: Boolean = false,
-    val showPointers: Boolean = false,
-    val enableTouchEmulation: Boolean = false,
 
     // Control
     val viewMovementSensitivity: Float = 495f,
@@ -61,6 +59,10 @@ data class TouchControllerConfig(
 
     // Crosshair
     val crosshair: CrosshairConfig = CrosshairConfig(),
+
+    // Debug
+    val showPointers: Boolean = false,
+    val enableTouchEmulation: Boolean = false,
 
     // Items
     val usableItems: ItemList = defaultUsableItemList,

@@ -117,6 +117,28 @@ data object GlobalCategory : ConfigCategory(
                             }
                         },
                     )
+                    SwitchConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = "Quick hand swap",
+                        value = config.quickHandSwap,
+                        onValueChanged = { viewModel.updateConfig { copy(quickHandSwap = it) } },
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = "Quick hand swap",
+                                    description = ""
+                                )
+                            }
+                        },
+                    )
+                }
+
+                var controlGroupExpanded by remember { mutableStateOf(true) }
+                ConfigGroup(
+                    name = "Control",
+                    expanded = controlGroupExpanded,
+                    onExpandedChanged = { controlGroupExpanded = it },
+                ) {
                     FloatSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
                         name = "View movement sensitivity",
