@@ -7,6 +7,7 @@ import androidx.compose.runtime.Immutable
 interface ItemStack {
     val amount: Int
     val id: Identifier
+    val item: Item
 
     fun withAmount(amount: Int): ItemStack
 

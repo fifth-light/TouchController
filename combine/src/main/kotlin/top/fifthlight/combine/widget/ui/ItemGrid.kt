@@ -20,10 +20,12 @@ import top.fifthlight.data.IntSize
 fun ItemGrid(
     modifier: Modifier = Modifier,
     items: PersistentList<Item>,
+    onItemClicked: (Item) -> Unit = {},
 ) {
     ItemGrid(
         modifier = modifier,
-        stacks = items.map { it.toStack() }.toPersistentList()
+        stacks = items.map { it.toStack() }.toPersistentList(),
+        onStackClicked = { stack -> onItemClicked(stack.item) }
     )
 }
 
@@ -32,6 +34,7 @@ fun ItemGrid(
 fun ItemGrid(
     modifier: Modifier = Modifier,
     stacks: PersistentList<ItemStack>,
+    onStackClicked: (ItemStack) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -47,10 +50,17 @@ fun ItemGrid(
     }
 
     val scrollPosition by scrollState.progress.collectAsState()
+    var width by remember { mutableIntStateOf(0) }
     var hoverPosition by remember { mutableStateOf<IntOffset?>(null) }
     Canvas(
         modifier = modifier
-            .clickableWithOffset { }
+            .clickableWithOffset { position ->
+                val size = calculateSize(stacks.size, width)
+                val gridPosition = position.toIntOffset() / 16
+                val index = gridPosition.y * size.width + gridPosition.x
+                val stack = stacks.getOrNull(index) ?: return@clickableWithOffset
+                onStackClicked(stack)
+            }
             .hoverableWithOffset { hovered, position ->
                 hoverPosition = when (hovered) {
                     true -> position.toIntOffset() / 16
@@ -64,6 +74,7 @@ fun ItemGrid(
             }
             .verticalScroll(scrollState),
         measurePolicy = { _, constraints ->
+            width = constraints.maxWidth
             val size = if (constraints.maxWidth == Int.MAX_VALUE) {
                 IntSize(stacks.size * 16, 16)
             } else {
@@ -73,7 +84,7 @@ fun ItemGrid(
         },
     ) { node ->
         val size = calculateSize(stacks.size, node.width)
-        val rowRange = scrollPosition / 16 until ((scrollPosition + node.height) ceilDiv 16)
+        val rowRange = scrollPosition / 16 until ((scrollPosition + scrollState.viewportHeight) ceilDiv 16)
         for (y in rowRange) {
             for (x in 0 until size.width) {
                 val index = size.width * y + x

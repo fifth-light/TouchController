@@ -26,6 +26,7 @@ data class IntSize(
     }
 
     operator fun plus(length: Int) = IntSize(width = width + length, height = height + length)
+    operator fun minus(size: Int) = IntSize(width = width - size, height = height - size)
     operator fun minus(size: IntSize) = IntOffset(x = width - size.width, y = height - size.height)
     operator fun minus(offset: IntOffset) = IntSize(width = width - offset.x, height = height - offset.y)
     operator fun times(num: Int) = IntSize(width = width * num, height = height * num)

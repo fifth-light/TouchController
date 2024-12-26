@@ -21,5 +21,6 @@ fun AllItemGrid(
     ItemGrid(
         modifier = modifier,
         items = allItems,
+        onItemClicked = onItemClicked,
     )
 }
