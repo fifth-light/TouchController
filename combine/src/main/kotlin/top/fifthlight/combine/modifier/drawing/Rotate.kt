@@ -12,9 +12,9 @@ private data class RotateModifierNode(
 ) : DrawModifierNode, Modifier.Node<RotateModifierNode> {
     override fun renderBeforeContext(context: RenderContext, node: Placeable) {
         context.canvas.pushState()
-        context.canvas.transform(node.width / 2, node.height / 2)
+        context.canvas.translate(node.width / 2, node.height / 2)
         context.canvas.rotate(degrees)
-        context.canvas.transform(-node.width / 2, -node.height / 2)
+        context.canvas.translate(-node.width / 2, -node.height / 2)
     }
 
     override fun renderAfterContext(context: RenderContext, node: Placeable) {

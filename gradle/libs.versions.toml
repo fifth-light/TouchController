@@ -1,11 +1,10 @@
 [versions]
-minecraft = "1.21.3"
-yarn = "1.21.3+build.2"
 fabric-loader = "0.16.9"
-kotlin = "2.0.21"
-loom = "1.8-SNAPSHOT"
+kotlin = "2.1.0"
+kotlinpoet = "2.0.0"
+loom = "1.9-SNAPSHOT"
 coroutines = "1.9.0"
-koin = "4.0.0"
+koin = "4.0.1"
 serialization = "1.7.3"
 collections-immutable = "0.3.8"
 
@@ -22,17 +21,17 @@ compose = "1.7.1"
 androidx-collection = "1.4.5"
 
 # Minecraft Mods
-fabric-api = "0.108.0+1.21.3"
-fabric-language-kotlin = "1.12.3+kotlin.2.0.21"
-modmenu = "12.0.0"
+fabric-language-kotlin = "1.13.0+kotlin.2.1.0"
 
 [libraries]
-minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "collections-immutable" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
 koin-logger-slf4j = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
 
 # Compose
@@ -40,9 +39,7 @@ compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", v
 androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidx-collection" }
 
 # Minecraft Mods
-fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
 fabric-language-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
-modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu" }
 
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

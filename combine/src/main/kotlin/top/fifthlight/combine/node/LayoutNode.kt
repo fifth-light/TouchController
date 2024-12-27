@@ -57,7 +57,7 @@ internal sealed class WrapperLayoutNode(
 
         override fun render(context: RenderContext) {
             context.withState {
-                context.canvas.transform(x, y)
+                context.canvas.translate(x, y)
                 node.renderer.renderInContext(context, this)
                 node.children.forEach { child ->
                     child.render(context)
@@ -165,7 +165,7 @@ internal sealed class WrapperLayoutNode(
 
         override fun render(context: RenderContext) {
             context.withState {
-                context.canvas.transform(x, y)
+                context.canvas.translate(x, y)
                 children.render(context)
             }
         }
@@ -200,7 +200,7 @@ internal sealed class WrapperLayoutNode(
 
         override fun render(context: RenderContext) {
             context.withState {
-                context.canvas.transform(x, y)
+                context.canvas.translate(x, y)
                 children.render(context)
             }
         }
@@ -215,7 +215,7 @@ internal sealed class WrapperLayoutNode(
 
         override fun render(context: RenderContext) {
             context.withState {
-                context.canvas.transform(x, y)
+                context.canvas.translate(x, y)
                 modifierNode.renderBeforeContext(context, this)
                 children.render(context)
                 modifierNode.renderAfterContext(context, this)

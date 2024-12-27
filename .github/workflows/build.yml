@@ -47,8 +47,20 @@ jobs:
                     export PATH="$HOME/.llvm-mingw/bin:$PATH"
                     ./gradlew build --no-daemon
             -   name: Capture build artifacts
-                if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
+                if: ${{ matrix.java == '21' }}
                 uses: actions/upload-artifact@v4
                 with:
-                    name: Artifacts
-                    path: mod/build/libs/
+                    name: fabric-1.21.1
+                    path: mod/fabric-1.21.1/build/libs/
+            -   name: Capture build artifacts
+                if: ${{ matrix.java == '21' }}
+                uses: actions/upload-artifact@v4
+                with:
+                    name: fabric-1.21.3
+                    path: mod/fabric-1.21.3/build/libs/
+            -   name: Capture build artifacts
+                if: ${{ matrix.java == '21' }}
+                uses: actions/upload-artifact@v4
+                with:
+                    name: fabric-1.21.4
+                    path: mod/fabric-1.21.4/build/libs/

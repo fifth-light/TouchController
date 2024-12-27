@@ -43,6 +43,7 @@ value class IntOffset internal constructor(private val packed: Long) {
     operator fun minus(other: IntOffset) = IntOffset(x = x - other.x, y = y - other.y)
     operator fun times(num: Int) = IntOffset(x = x * num, y = y * num)
     operator fun div(num: Int) = IntOffset(x = x / num, y = y / num)
+    operator fun unaryMinus() = IntOffset(x = -x, y = -y)
 
     override fun toString(): String {
         return "IntOffset(left=$x, top=$y)"

@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "top.fifthlight.touchcontroller.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "ClientHandleInputEventsMixin",
+    "ClientOpenChatScreenInvoker",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "ClientRenderMixin",
+    "ControlsOptionsScreenMixin",
+    "CrosshairTargetMixin",
+    "CursorLockMixin",
+    "DisableMouseDirectionMixin",
+    "GameOptionsScreenAccessor",
+    "InGameHudMixin",
+    "KeyBindingMixin",
+    "KeyboardInputMixin"
+  ]
+}

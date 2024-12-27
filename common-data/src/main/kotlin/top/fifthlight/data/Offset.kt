@@ -45,6 +45,7 @@ value class Offset internal constructor(private val packed: Long) {
     operator fun minus(offset: Offset) = Offset(x = x - offset.x, y = y - offset.y)
     operator fun minus(size: Size) = Offset(x = x - size.width, y = y - size.height)
     operator fun times(size: IntSize) = Offset(x = x * size.width.toFloat(), y = y * size.height.toFloat())
+    operator fun unaryMinus() = Offset(x = -x, y = -y)
 
     val squaredLength
         get() = x * x + y * y

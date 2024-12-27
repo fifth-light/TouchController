@@ -105,7 +105,11 @@ private data class VerticalScrollNode(
                 IntRect(
                     offset = IntOffset(node.absoluteX, node.absoluteY),
                     size = IntSize(node.width, node.height)
-                )
+                ),
+                IntRect(
+                    offset = IntOffset(node.x, node.y),
+                    size = IntSize(node.width, node.height)
+                ),
             )
         }
     }

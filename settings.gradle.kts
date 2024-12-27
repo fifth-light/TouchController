@@ -16,7 +16,11 @@ plugins {
 
 rootProject.name = "TouchController"
 
-include("mod")
+include("mod:resource-generation")
+include("mod:common")
+include("mod:fabric-1.21.1")
+include("mod:fabric-1.21.3")
+include("mod:fabric-1.21.4")
 include("proxy-server")
 include("proxy-client")
 include("proxy-windows")

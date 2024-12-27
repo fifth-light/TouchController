@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "touchcontroller",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "Bring controlling style of bedrock version to Java version!",
+  "authors": [
+    "fifth_light",
+    "bukeyu"
+  ],
+  "contact": {
+    "homepage": "https://github.com/fifth-light/TouchController",
+    "sources": "https://github.com/fifth-light/TouchController"
+  },
+  "license": "LGPL-3.0-or-later",
+  "icon": "assets/touchcontroller/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "value": "top.fifthlight.touchcontroller.TouchController",
+        "adapter": "kotlin"
+      }
+    ],
+    "modmenu": [
+      "top.fifthlight.touchcontroller.TouchControllerModMenuApiImpl"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "touchcontroller.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*"
+  }
+}
