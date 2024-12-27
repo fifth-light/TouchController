@@ -6,11 +6,18 @@
 
 由于项目处在早期开发阶段，目前只支持 Minecraft 1.21.3。
 
-TouchController 的平台输入代码和实际的输入处理代码部分是相互隔离开的，目前支持在 Windows 和[我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher) 和[我修改后的 FoldCraftLauncher](https://github.com/fifth-light/FoldCraftLauncher) 上使用。在未来可能会添加对 Linux 上触屏的支持。
+目前支持的平台有：
+
+- Windows（v0.0.8 开始支持 x86 和 x86_64 架构，v0.0.11 添加了 ARM64 架构的支持
+- [我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher)
+- [官方版 Fold Craft Launcher](https://github.com/FCL-Team/FoldCraftLauncher)
+- [官方版 Zalith Launcher](https://github.com/ZalithLauncher/ZalithLauncher)
+
+在未来可能会添加对 Linux 上触屏的支持。
 
 ## 目前支持的功能
 
-- Minecraft 基岩版风格的触屏输入（不支持分离控制）
+- Minecraft 基岩版风格的触屏输入（暂时不支持分离控制）
 - 可自定义的控制器布局
 - 能够根据游泳、飞行等状态切换不同按键的显示
 
