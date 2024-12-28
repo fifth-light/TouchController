@@ -13,21 +13,20 @@ import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.TouchControllerLayout
 import top.fifthlight.touchcontroller.control.ControllerWidget
 
-@OptIn(ExperimentalSerializationApi::class)
 class TouchControllerLayoutSerializer : KSerializer<TouchControllerLayout> {
     private class PersistentListDescriptor : SerialDescriptor by serialDescriptor<List<ControllerWidget>>() {
+        @OptIn(ExperimentalSerializationApi::class)
         override val serialName: String = "top.fifthlight.touchcontroller.config.TouchControllerLayout"
     }
 
     private val itemSerializer = serializer<LayoutLayer>()
+    private val delegatedSerializer = ListSerializer(itemSerializer)
 
     override val descriptor: SerialDescriptor = PersistentListDescriptor()
 
-    override fun serialize(encoder: Encoder, value: TouchControllerLayout) {
-        return ListSerializer(itemSerializer).serialize(encoder, value)
-    }
+    override fun serialize(encoder: Encoder, value: TouchControllerLayout) =
+        delegatedSerializer.serialize(encoder, value)
 
-    override fun deserialize(decoder: Decoder): TouchControllerLayout {
-        return ListSerializer(itemSerializer).deserialize(decoder).toPersistentList()
-    }
+    override fun deserialize(decoder: Decoder) =
+        delegatedSerializer.deserialize(decoder).toPersistentList()
 }

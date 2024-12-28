@@ -26,9 +26,6 @@ fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE) {
     }
 }
 
-
-fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: Int) = Texture(id, textureUv, color.toUInt())
-
 fun Context.Texture(id: Identifier, textureUv: Rect = Rect.ONE, color: UInt) {
     if (opacity == 1f) {
         drawQueue.enqueue { canvas ->

@@ -11,12 +11,11 @@ import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.gal.GameAction
 import top.fifthlight.touchcontroller.gal.PlayerHandleFactory
 import top.fifthlight.touchcontroller.gal.RidingEntityType
-import top.fifthlight.touchcontroller.gal.WindowHandleFactory
+import top.fifthlight.touchcontroller.gal.WindowHandle
 import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.Hud
 import top.fifthlight.touchcontroller.model.ControllerHudModel
-import top.fifthlight.touchcontroller.model.GlobalStateModel
 import top.fifthlight.touchcontroller.model.TouchStateModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.proxy.message.AddPointerMessage
@@ -25,20 +24,15 @@ import top.fifthlight.touchcontroller.proxy.message.RemovePointerMessage
 import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
 
 object RenderEvents : KoinComponent {
-    private val windowHandle: WindowHandleFactory by inject()
+    private val window: WindowHandle by inject()
     private val gameAction: GameAction by inject()
     private val configHolder: TouchControllerConfigHolder by inject()
     private val controllerHudModel: ControllerHudModel by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val playerHandleFactory: PlayerHandleFactory by inject()
-    private val globalStateModel: GlobalStateModel by inject()
     private val platformHolder: PlatformHolder by inject()
 
     fun onRenderStart() {
-        val window = windowHandle.currentWindow
-
-        globalStateModel.update()
-
         if (controllerHudModel.status.vibrate) {
             platformHolder.platform?.sendEvent(VibrateMessage(VibrateMessage.Kind.BLOCK_BROKEN))
             controllerHudModel.status.vibrate = false

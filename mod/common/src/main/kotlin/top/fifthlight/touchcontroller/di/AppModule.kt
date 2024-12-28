@@ -15,6 +15,9 @@ val appModule = module {
             ignoreUnknownKeys = true
             allowComments = true
             allowTrailingComma = true
+            prettyPrint = true
+            prettyPrintIndent = "  "
+            isLenient = true
         }
     }
     single { TouchControllerConfigHolder() }

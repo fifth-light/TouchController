@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.config
 
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
+import top.fifthlight.combine.data.ItemFactory
 
 /*val defaultUsableItemList = ItemList(
     whitelist = persistentListOf(
@@ -72,9 +73,16 @@ data class TouchControllerConfig(
     val enableTouchEmulation: Boolean = false,
 
     // Items
-    val usableItems: ItemList = defaultUsableItemList,
-    val showCrosshairItems: ItemList = defaultShowCrosshairItemList,
-)
+    val usableItems: ItemList,
+    val showCrosshairItems: ItemList,
+) {
+    companion object {
+        fun default(itemFactory: ItemFactory) = TouchControllerConfig(
+            usableItems = ItemList(),
+            showCrosshairItems = ItemList()
+        )
+    }
+}
 
 @Serializable
 data class CrosshairConfig(

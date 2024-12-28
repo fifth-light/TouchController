@@ -87,14 +87,22 @@ class CanvasImpl(
         withShader(ShaderProgramKeys.POSITION_TEX_COLOR) {
             val matrix = drawContext.matrices.peek().positionMatrix
             val bufferBuilder =
-                Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE)
-            bufferBuilder.vertex(matrix, dstRect.left, dstRect.top, 0f).texture(uvRect.left, uvRect.top)
+                Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR)
+            bufferBuilder
+                .vertex(matrix, dstRect.left, dstRect.top, 0f)
+                .texture(uvRect.left, uvRect.top)
                 .color(tint.value)
-            bufferBuilder.vertex(matrix, dstRect.left, dstRect.bottom, 0f).texture(uvRect.left, uvRect.bottom)
+            bufferBuilder
+                .vertex(matrix, dstRect.left, dstRect.bottom, 0f)
+                .texture(uvRect.left, uvRect.bottom)
                 .color(tint.value)
-            bufferBuilder.vertex(matrix, dstRect.right, dstRect.bottom, 0f).texture(uvRect.right, uvRect.bottom)
+            bufferBuilder
+                .vertex(matrix, dstRect.right, dstRect.bottom, 0f)
+                .texture(uvRect.right, uvRect.bottom)
                 .color(tint.value)
-            bufferBuilder.vertex(matrix, dstRect.right, dstRect.top, 0f).texture(uvRect.right, uvRect.top)
+            bufferBuilder
+                .vertex(matrix, dstRect.right, dstRect.top, 0f)
+                .texture(uvRect.right, uvRect.top)
                 .color(tint.value)
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
         }

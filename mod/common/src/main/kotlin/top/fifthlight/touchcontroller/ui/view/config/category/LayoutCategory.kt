@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import kotlinx.collections.immutable.persistentMapOf
+import top.fifthlight.combine.data.LocalItemFactory
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
@@ -68,6 +70,7 @@ private fun BoxScope.ControllerWidget(config: ControllerWidget) {
             .offset(x = -config.offset.x, y = -config.offset.y)
     }
     val drawQueue = DrawQueue()
+    val itemFactory = LocalItemFactory.current
     val context = Context(
         windowSize = IntSize.ZERO,
         windowScaledSize = IntSize.ZERO,
@@ -76,7 +79,7 @@ private fun BoxScope.ControllerWidget(config: ControllerWidget) {
         screenOffset = IntOffset.ZERO,
         pointers = mutableMapOf(),
         result = ContextResult(),
-        config = TouchControllerConfig(),
+        config = TouchControllerConfig.default(itemFactory),
         condition = persistentMapOf(),
     )
     config.layout(context)
@@ -165,17 +168,17 @@ data object LayoutCategory : ConfigCategory(
                 Button(onClick = {
                     viewModel.reset()
                 }) {
-                    Text("Reset", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_RESET_TITLE), shadow = true)
                 }
                 Button(onClick = {
                     viewModel.exit(closeHandler)
                 }) {
-                    Text("Cancel", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_CANCEL_TITLE), shadow = true)
                 }
                 Button(onClick = {
                     viewModel.saveAndExit(closeHandler)
                 }) {
-                    Text("Save", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_SAVE_TITLE), shadow = true)
                 }
             }
             when (uiState.layoutPanelState) {

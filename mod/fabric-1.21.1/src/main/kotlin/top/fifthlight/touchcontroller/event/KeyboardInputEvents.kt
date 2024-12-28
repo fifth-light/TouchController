@@ -8,9 +8,9 @@ import top.fifthlight.touchcontroller.model.ControllerHudModel
 
 object KeyboardInputEvents : KoinComponent {
     private val controllerHudModel: ControllerHudModel by inject()
-    private val client: MinecraftClient by inject()
 
     fun onEndTick(input: KeyboardInput) {
+        val client = MinecraftClient.getInstance()
         if (client.currentScreen != null) {
             return
         }

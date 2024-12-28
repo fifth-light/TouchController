@@ -9,7 +9,3 @@ interface WindowHandle {
     val mouseLeftPressed: Boolean
     val mousePosition: Offset?
 }
-
-interface WindowHandleFactory {
-    val currentWindow: WindowHandle
-}

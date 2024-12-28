@@ -7,10 +7,13 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.Serializable
 import top.fifthlight.data.IntOffset
 import top.fifthlight.touchcontroller.control.*
+import top.fifthlight.touchcontroller.ext.LayoutLayerConditionSerializer
+import top.fifthlight.touchcontroller.ext.LayoutLayerSerializer
 import top.fifthlight.touchcontroller.layout.Align
 
 enum class LayoutLayerConditionValue {
     NEVER,
+    WANT,
     REQUIRE,
 }
 
@@ -32,12 +35,14 @@ enum class LayoutLayerConditionKey {
     RIDING,
 }
 
-@Serializable
+@Serializable(with = LayoutLayerConditionSerializer::class)
 @JvmInline
 value class LayoutLayerCondition(
     val conditions: PersistentMap<LayoutLayerConditionKey, LayoutLayerConditionValue> = persistentMapOf()
 ) {
     fun check(currentState: PersistentMap<LayoutLayerConditionKey, Boolean>): Boolean {
+        var haveWant = false
+        var haveFulfilledWant = false
         for (condition in conditions) {
             val current = currentState[condition.key]
             when (condition.value) {
@@ -45,10 +50,20 @@ value class LayoutLayerCondition(
                     return false
                 }
 
+                LayoutLayerConditionValue.WANT -> {
+                    haveWant = true
+                    if (current == true) {
+                        haveFulfilledWant = true
+                    }
+                }
+
                 LayoutLayerConditionValue.REQUIRE -> if (current != true) {
                     return false
                 }
             }
+        }
+        if (haveWant && !haveFulfilledWant) {
+            return false
         }
         return true
     }
@@ -59,9 +74,9 @@ value class LayoutLayerCondition(
 fun layoutLayerConditionOf(vararg pairs: Pair<LayoutLayerConditionKey, LayoutLayerConditionValue>) =
     LayoutLayerCondition(persistentMapOf(*pairs))
 
-@Serializable
+@Serializable(with = LayoutLayerSerializer::class)
 data class LayoutLayer(
-    val name: String = "",
+    val name: String = "Unnamed layer",
     val widgets: PersistentList<ControllerWidget> = persistentListOf(),
     val condition: LayoutLayerCondition = LayoutLayerCondition(),
 )
@@ -91,9 +106,6 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
         condition = layoutLayerConditionOf(
             LayoutLayerConditionKey.SWIMMING to LayoutLayerConditionValue.NEVER,
             LayoutLayerConditionKey.FLYING to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_BOAT to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_PIG to LayoutLayerConditionValue.NEVER,
             LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.NEVER,
         ),
         widgets = persistentListOf(
@@ -108,26 +120,13 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
                 offset = IntOffset(42, 68),
                 opacity = 0.6f,
             ),
-            AscendButton(
-                align = Align.RIGHT_BOTTOM,
-                offset = IntOffset(42, 116),
-                opacity = 0.6f,
-                texture = AscendButtonTexture.CLASSIC,
-            ),
-            DescendButton(
-                align = Align.RIGHT_BOTTOM,
-                offset = IntOffset(42, 20),
-                opacity = 0.6f,
-                texture = DescendButtonTexture.CLASSIC,
-            ),
         )
     ),
     LayoutLayer(
-        name = "Swimming or Flying",
+        name = "Swimming or flying",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_BOAT to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_PIG to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.SWIMMING to LayoutLayerConditionValue.WANT,
+            LayoutLayerConditionKey.FLYING to LayoutLayerConditionValue.WANT,
             LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.NEVER,
         ),
         widgets = persistentListOf(
@@ -152,6 +151,20 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
                 align = Align.RIGHT_BOTTOM,
                 offset = IntOffset(42, 20),
                 opacity = 0.6f,
+            ),
+        )
+    ),
+    LayoutLayer(
+        name = "On minecart",
+        condition = layoutLayerConditionOf(
+            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.REQUIRE,
+        ),
+        widgets = persistentListOf(
+            DPad(
+                align = Align.LEFT_BOTTOM,
+                offset = IntOffset(8, 8),
+                opacity = 0.6f,
+                extraButton = DPadExtraButton.SNEAK,
             ),
         )
     )
