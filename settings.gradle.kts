@@ -16,7 +16,7 @@ plugins {
 
 rootProject.name = "TouchController"
 
-include("mod:resource-generation")
+include("mod:resources")
 include("mod:common")
 include("mod:fabric-1.21.1")
 include("mod:fabric-1.21.3")

@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import kotlinx.collections.immutable.PersistentList
 import org.koin.compose.KoinContext
-import top.fifthlight.combine.data.DataComponentType
-import top.fifthlight.combine.data.LocalItemFactory
-import top.fifthlight.combine.data.LocalTextFactory
+import top.fifthlight.combine.data.*
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
@@ -32,14 +30,14 @@ import top.fifthlight.combine.data.Item as CombineItem
 import top.fifthlight.combine.widget.ui.Item as CombineItem
 
 data class HoverData(
-    val name: String,
-    val description: String,
+    val name: Identifier,
+    val description: Identifier,
 )
 
 @Composable
 fun SwitchConfigItem(
     modifier: Modifier,
-    name: String,
+    name: Text,
     value: Boolean,
     onValueChanged: (Boolean) -> Unit,
     onHovered: (Boolean) -> Unit,
@@ -62,7 +60,7 @@ fun SwitchConfigItem(
 @Composable
 fun FloatSliderConfigItem(
     modifier: Modifier,
-    name: String,
+    name: Text,
     value: Float,
     range: ClosedFloatingPointRange<Float>,
     onValueChanged: (Float) -> Unit,
@@ -92,7 +90,7 @@ fun FloatSliderConfigItem(
 @Composable
 fun IntSliderConfigItem(
     modifier: Modifier,
-    name: String,
+    name: Text,
     value: Int,
     range: IntRange,
     onValueChanged: (Int) -> Unit,
@@ -206,7 +204,7 @@ private fun ComponentListRow(
 @Composable
 fun ItemListConfigItem(
     modifier: Modifier = Modifier,
-    name: String,
+    name: Text,
     value: ItemList,
     onValueChanged: (ItemList) -> Unit,
     onHovered: (Boolean) -> Unit,

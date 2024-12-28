@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.ui.view.config.category
 
 import androidx.compose.runtime.*
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.fillMaxHeight
@@ -11,12 +12,13 @@ import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.component.config.DescriptionPanel
 import top.fifthlight.touchcontroller.ui.component.config.HoverData
 import top.fifthlight.touchcontroller.ui.component.config.ItemListConfigItem
 
 data object ItemsCategory : ConfigCategory(
-    title = "Items",
+    title = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_TITLE,
     content = { modifier, viewModel ->
         Row(modifier = modifier) {
             var hoverData by remember { mutableStateOf<HoverData?>(null) }
@@ -31,28 +33,28 @@ data object ItemsCategory : ConfigCategory(
             ) {
                 ItemListConfigItem(
                     modifier = Modifier.fillMaxWidth(),
-                    name = "Usable items",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_TITLE),
                     value = uiState.config.usableItems,
                     onValueChanged = { viewModel.updateConfig { copy(usableItems = it) } },
                     onHovered = {
                         if (it) {
                             hoverData = HoverData(
-                                name = "Usable items",
-                                description = "Usable items by long-clicking screen in game",
+                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_TITLE,
+                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_DESCRIPTION,
                             )
                         }
                     },
                 )
                 ItemListConfigItem(
                     modifier = Modifier.fillMaxWidth(),
-                    name = "Show crosshair items",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE),
                     value = uiState.config.showCrosshairItems,
                     onValueChanged = { viewModel.updateConfig { copy(showCrosshairItems = it) } },
                     onHovered = {
                         if (it) {
                             hoverData = HoverData(
-                                name = "Show crosshair items",
-                                description = "Show crosshair when holding these items",
+                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE,
+                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_DESCRIPTION,
                             )
                         }
                     },
@@ -64,8 +66,8 @@ data object ItemsCategory : ConfigCategory(
                 modifier = Modifier
                     .width(160)
                     .fillMaxHeight(),
-                title = hoverData?.name,
-                description = hoverData?.description,
+                title = hoverData?.name?.let { Text.translatable(it) },
+                description = hoverData?.description?.let { Text.translatable(it) },
                 onSave = {
                     viewModel.saveAndExit(closeHandler)
                 },

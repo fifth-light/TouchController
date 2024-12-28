@@ -19,6 +19,6 @@ public abstract class KeyboardInputMixin {
             method = "tick"
     )
     private void tick(boolean slowDown, float slowDownFactor, CallbackInfo info) {
-        KeyboardInputEvents.INSTANCE.getEND_INPUT_TICK().invoker().onEndTick((KeyboardInput) (Object) this);
+        KeyboardInputEvents.INSTANCE.onEndTick((KeyboardInput) (Object) this);
     }
 }

@@ -1,22 +1,39 @@
 package top.fifthlight.touchcontroller.event
 
-import net.fabricmc.fabric.api.event.Event
-import net.fabricmc.fabric.api.event.EventFactory
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.input.KeyboardInput
-import top.fifthlight.touchcontroller.event.KeyboardInputEvents.EndInputTick
+import net.minecraft.util.PlayerInput
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import top.fifthlight.touchcontroller.model.ControllerHudModel
 
-object KeyboardInputEvents {
-    val END_INPUT_TICK: Event<EndInputTick> = EventFactory.createArrayBacked(
-        EndInputTick::class.java
-    ) { callbacks: Array<EndInputTick> ->
-        EndInputTick { input ->
-            for (event in callbacks) {
-                event.onEndTick(input)
-            }
+object KeyboardInputEvents : KoinComponent {
+    private val controllerHudModel: ControllerHudModel by inject()
+    private val client: MinecraftClient by inject()
+
+    fun onEndTick(input: KeyboardInput) {
+        if (client.currentScreen != null) {
+            return
         }
-    }
 
-    fun interface EndInputTick {
-        fun onEndTick(input: KeyboardInput)
+        val result = controllerHudModel.result
+        val status = controllerHudModel.status
+
+        input.movementForward += result.forward
+        input.movementSideways += result.left
+        input.movementForward = input.movementForward.coerceIn(-1f, 1f)
+        input.movementSideways = input.movementSideways.coerceIn(-1f, 1f)
+        input.playerInput = PlayerInput(
+            input.playerInput.forward() || result.forward > 0.5f,
+            input.playerInput.backward() || result.forward < -0.5f,
+            input.playerInput.left() || result.left > 0.5f,
+            input.playerInput.right() || result.left < -0.5f,
+            input.playerInput.jump() || status.jumping,
+            input.playerInput.sneak() || status.sneakLocked || result.sneak,
+            input.playerInput.sprint() || result.sprint
+        )
+        status.jumping = false
+
+        TickEvents.inputTick()
     }
 }

@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.fifthlight.touchcontroller.assets.Texts;
 import top.fifthlight.touchcontroller.ui.screen.config.ConfigScreenGetter;
 
 @Mixin(ControlsOptionsScreen.class)
@@ -22,10 +21,8 @@ public abstract class ControlsOptionsScreenMixin {
         var getter = ConfigScreenGetter.INSTANCE;
         body.addWidgetEntry(
                 ButtonWidget.builder(
-                        Text.of(Texts.INSTANCE.getSCREEN_OPTIONS().toString()),
-                        btn -> {
-                            client.setScreen((Screen) getter.getScreen(screen));
-                        }
+                        (Text) getter.getText(),
+                        btn -> client.setScreen((Screen) getter.getScreen(screen))
                 ).build(), null
         );
     }

@@ -3,6 +3,7 @@ package top.fifthlight.touchcontroller.layout
 import org.koin.core.component.get
 import top.fifthlight.combine.paint.*
 import top.fifthlight.data.Offset
+import top.fifthlight.touchcontroller.gal.CrosshairRenderer
 
 data class CrosshairStatus(
     val position: Offset,

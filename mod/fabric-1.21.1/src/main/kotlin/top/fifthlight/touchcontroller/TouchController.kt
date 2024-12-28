@@ -8,21 +8,27 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents
-import org.koin.core.Koin
+import net.minecraft.client.MinecraftClient
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
+import top.fifthlight.combine.platform.CanvasImpl
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
-import top.fifthlight.touchcontroller.event.ClientRenderEvents
-import top.fifthlight.touchcontroller.event.KeyboardInputEvents
+import top.fifthlight.touchcontroller.event.BlockBreakEvents
+import top.fifthlight.touchcontroller.event.ConnectionEvents
+import top.fifthlight.touchcontroller.event.RenderEvents
+import top.fifthlight.touchcontroller.event.WindowCreateEvents
+import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
+import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback as FabricHudRenderCallback
-import top.fifthlight.touchcontroller.event.HudRenderCallback as TouchControllerHudRenderCallback
 
-object TouchController : ClientModInitializer {
+object TouchController : ClientModInitializer, KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 
     override fun onInitializeClient() {
@@ -37,7 +43,7 @@ object TouchController : ClientModInitializer {
             single { PlatformHolder(platform) }
         }
 
-        val app = startKoin {
+        startKoin {
             slf4jLogger()
             modules(
                 platformHolderModule,
@@ -45,19 +51,36 @@ object TouchController : ClientModInitializer {
                 appModule,
             )
         }
-        app.koin.initialize()
+
+        initialize()
     }
 
-    private fun Koin.initialize() {
-        get<TouchControllerConfigHolder>().load()
-        FabricHudRenderCallback.EVENT.register(get())
-        TouchControllerHudRenderCallback.CROSSHAIR.register(get())
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(get())
-        WorldRenderEvents.START.register(get())
-        KeyboardInputEvents.END_INPUT_TICK.register(get())
-        ClientRenderEvents.START_TICK.register(get())
-        ClientPlayConnectionEvents.JOIN.register(get())
-        ClientLifecycleEvents.CLIENT_STARTED.register(get())
-        ClientPlayerBlockBreakEvents.AFTER.register(get())
+    private fun initialize() {
+        val configHolder: TouchControllerConfigHolder = get()
+        configHolder.load()
+
+        FabricHudRenderCallback.EVENT.register { drawContext, _ ->
+            val client = MinecraftClient.getInstance()
+            val canvas = CanvasImpl(drawContext, client.textRenderer)
+            RenderEvents.onHudRender(canvas)
+        }
+
+        val controllerHudModel: ControllerHudModel = get()
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register { _, _ ->
+            controllerHudModel.result.crosshairStatus != null
+        }
+        WorldRenderEvents.START.register {
+            RenderEvents.onRenderStart()
+        }
+        ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            ConnectionEvents.onJoinedWorld()
+        }
+        ClientLifecycleEvents.CLIENT_STARTED.register {
+            val client = MinecraftClient.getInstance()
+            WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl(client.window))
+        }
+        ClientPlayerBlockBreakEvents.AFTER.register { _, _, _, _ ->
+            BlockBreakEvents.afterBlockBreak()
+        }
     }
 }

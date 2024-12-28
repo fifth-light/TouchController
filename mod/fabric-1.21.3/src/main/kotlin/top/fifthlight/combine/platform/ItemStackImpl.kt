@@ -19,5 +19,8 @@ value class ItemStackImpl(
     override val item: Item
         get() = ItemImpl(inner.item)
 
+    override val isEmpty: Boolean
+        get() = inner.isEmpty
+
     override fun withAmount(amount: Int) = ItemStackImpl(inner.copyWithCount(amount))
 }

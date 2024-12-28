@@ -8,11 +8,11 @@ version = "0.0.13"
 group = "top.fifthlight.touchcontroller"
 
 sourceSets.main {
-    kotlin.srcDir(project(":mod:resource-generation").layout.buildDirectory.dir("generated"))
+    kotlin.srcDir(project(":mod:resources").layout.buildDirectory.dir("generated"))
 }
 
 tasks.compileKotlin {
-    dependsOn(":mod:resource-generation:generate")
+    dependsOn(":mod:resources:generate")
 }
 
 dependencies {

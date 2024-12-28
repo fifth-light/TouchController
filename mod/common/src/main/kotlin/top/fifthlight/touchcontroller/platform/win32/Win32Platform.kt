@@ -1,8 +1,8 @@
 package top.fifthlight.touchcontroller.platform.win32
 
 import org.slf4j.LoggerFactory
+import top.fifthlight.touchcontroller.gal.PlatformWindow
 import top.fifthlight.touchcontroller.platform.Platform
-import top.fifthlight.touchcontroller.platform.PlatformWindow
 import top.fifthlight.touchcontroller.proxy.message.MessageDecodeException
 import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
 import java.nio.ByteBuffer

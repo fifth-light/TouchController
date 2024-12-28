@@ -2,15 +2,16 @@ package top.fifthlight.touchcontroller.layout
 
 import org.koin.core.component.get
 import top.fifthlight.data.IntSize
+import top.fifthlight.touchcontroller.gal.GameFeatures
+import top.fifthlight.touchcontroller.gal.PlayerHandleFactory
 import top.fifthlight.touchcontroller.state.PointerState
 
 private const val INVENTORY_SLOT_HOLD_DROP_TIME = 40
 
 private fun Context.InventorySlot(index: Int) {
-    val inventoryActionProvider: InventoryActionProvider = get()
-    if (!inventoryActionProvider.hasPlayer()) {
-        return
-    }
+    val gameFeatures: GameFeatures = get()
+    val playerHandleFactory: PlayerHandleFactory = get()
+    val player = playerHandleFactory.getPlayerHandle() ?: return
 
     val pointers = getPointersInRect(size)
     val slot = result.inventory.slots[index]
@@ -35,8 +36,8 @@ private fun Context.InventorySlot(index: Int) {
                 val previousState = state.previousState
                 if (previousState is PointerState.InventorySlot && previousState.index == index) {
                     slot.select = true
-                    if (config.quickHandSwap) {
-                        if (inventoryActionProvider.currentSelectedSlot() == index) {
+                    if (gameFeatures.dualWield || config.quickHandSwap) {
+                        if (player.currentSelectedSlot == index) {
                             if (status.quickHandSwap.click(timer.tick)) {
                                 status.swapHands.click()
                             }

@@ -2,6 +2,9 @@ package top.fifthlight.touchcontroller.layout
 
 import org.koin.core.component.get
 import top.fifthlight.data.Offset
+import top.fifthlight.touchcontroller.gal.CrosshairTarget
+import top.fifthlight.touchcontroller.gal.PlayerHandleFactory
+import top.fifthlight.touchcontroller.gal.ViewActionProvider
 import top.fifthlight.touchcontroller.state.PointerState
 import top.fifthlight.touchcontroller.state.PointerState.View.ViewPointerState.*
 
@@ -108,7 +111,7 @@ fun Context.View() {
         val pressTime = timer.tick - state.pressTime
         var viewState = state.viewState
         val crosshairTarget = viewActionProvider.getCrosshairTarget()
-        val itemUsable = player.haveUsableItemsOnHand(config)
+        val itemUsable = player.hasItemsOnHand(config.usableItems)
 
         // If pointer kept still and held for 5 tick
         if (pressTime == 5 && !moving) {

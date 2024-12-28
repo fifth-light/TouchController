@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android).apply(false)
     alias(libs.plugins.modrinth.minotaur).apply(false)
     alias(libs.plugins.maven.publish).apply(false)
+    alias(libs.plugins.compose.compiler).apply(false)
 }
 
 subprojects {

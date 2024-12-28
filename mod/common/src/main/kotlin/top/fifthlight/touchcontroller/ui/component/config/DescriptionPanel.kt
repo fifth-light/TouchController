@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.ui.component.config
 
 import androidx.compose.runtime.Composable
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.drawing.background
@@ -16,8 +17,8 @@ import top.fifthlight.combine.widget.ui.Button
 @Composable
 fun DescriptionPanel(
     modifier: Modifier = Modifier,
-    title: String? = null,
-    description: String? = null,
+    title: Text? = null,
+    description: Text? = null,
     onReset: () -> Unit = {},
     onCancel: () -> Unit = {},
     onSave: () -> Unit = {}

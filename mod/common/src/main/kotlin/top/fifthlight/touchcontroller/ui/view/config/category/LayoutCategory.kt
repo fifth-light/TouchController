@@ -17,6 +17,7 @@ import top.fifthlight.combine.widget.base.layout.*
 import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntSize
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.control.ControllerWidget
@@ -128,7 +129,7 @@ private fun LayoutEditorPanel(
 }
 
 data object LayoutCategory : ConfigCategory(
-    title = "Layout",
+    title = Texts.SCREEN_OPTIONS_CATEGORY_CUSTOM_TITLE,
     content = { modifier, viewModel ->
         val uiState by viewModel.uiState.collectAsState()
 

@@ -5,8 +5,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.fillMaxWidth
+import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.ui.Tab
 import top.fifthlight.combine.widget.ui.TabItem
@@ -26,12 +28,16 @@ private fun TabNavigationBar(
     Tab(modifier = modifier) {
         for (category in categories) {
             TabItem(
-                text = category.title,
                 selected = selectedCategory == category,
                 onSelected = {
                     onCategorySelected(category)
                 }
-            )
+            ) {
+                Text(
+                    text = Text.translatable(category.title),
+                    color = it
+                )
+            }
         }
     }
 }

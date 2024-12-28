@@ -3,6 +3,7 @@ package top.fifthlight.touchcontroller.platform
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
+import top.fifthlight.touchcontroller.gal.NativeLibraryPathGetter
 import top.fifthlight.touchcontroller.platform.android.AndroidPlatform
 import top.fifthlight.touchcontroller.platform.proxy.ProxyPlatform
 import top.fifthlight.touchcontroller.platform.win32.Win32Platform

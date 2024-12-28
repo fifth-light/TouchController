@@ -18,12 +18,17 @@ enum class LayoutLayerConditionKey {
     SWIMMING,
     FLYING,
     SNEAKING,
+    SPRINTING,
     ON_GROUND,
     NOT_ON_GROUND,
     USING_ITEM,
     ON_MINECART,
     ON_BOAT,
     ON_PIG,
+    ON_HORSE,
+    ON_DONKEY,
+    ON_LLAMA,
+    ON_STRIDER,
     RIDING,
 }
 

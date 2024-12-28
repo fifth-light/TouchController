@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.fifthlight.touchcontroller.event.HudRenderCallback;
+import top.fifthlight.touchcontroller.event.RenderEvents;
 import top.fifthlight.touchcontroller.model.ControllerHudModel;
 
 @Mixin(InGameHud.class)
@@ -43,7 +43,7 @@ public abstract class InGameHudMixin {
             cancellable = true
     )
     public void renderCrosshair(DrawContext context, RenderTickCounter tickCounter, CallbackInfo callbackInfo) {
-        boolean shouldRender = HudRenderCallback.INSTANCE.getCROSSHAIR().invoker().onCrosshairRender(context, tickCounter);
+        boolean shouldRender = RenderEvents.INSTANCE.shouldRenderCrosshair();
         if (!shouldRender) {
             if (this.client.options.getAttackIndicator().getValue() == AttackIndicator.CROSSHAIR) {
                 float attackCooldownProgress = this.client.player.getAttackCooldownProgress(0.0f);

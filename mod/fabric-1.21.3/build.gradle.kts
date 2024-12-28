@@ -65,15 +65,17 @@ tasks.withType<ProcessResources> {
     inputs.property("version", project.version)
 
     filesMatching("fabric.mod.json") {
-        expand(mapOf(
-            "version" to project.version,
-            "name" to modName,
-        ))
+        expand(
+            mapOf(
+                "version" to project.version,
+                "name" to modName,
+            )
+        )
     }
 }
 
 sourceSets.main {
-    resources.srcDirs += File(project(":mod:common").projectDir, "src/main/resources")
+    resources.srcDir("../resources/src/main/resources")
 }
 
 kotlin {
@@ -91,6 +93,6 @@ java {
 
 tasks.withType<Jar> {
     from(File(rootDir, "LICENSE")) {
-        rename { "${it}_${modName}"}
+        rename { "${it}_${modName}" }
     }
 }

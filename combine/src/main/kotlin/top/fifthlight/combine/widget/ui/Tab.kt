@@ -11,8 +11,8 @@ import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.modifier.placement.height
 import top.fifthlight.combine.modifier.placement.padding
 import top.fifthlight.combine.modifier.pointer.clickable
+import top.fifthlight.combine.paint.Color
 import top.fifthlight.combine.paint.Colors
-import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Box
 import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.base.layout.RowScope
@@ -32,9 +32,9 @@ fun Tab(modifier: Modifier, content: @Composable RowScope.() -> Unit) {
 @Composable
 fun RowScope.TabItem(
     modifier: Modifier = Modifier,
-    text: String,
     selected: Boolean = false,
-    onSelected: () -> Unit = {}
+    onSelected: () -> Unit = {},
+    content: @Composable (Color) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -54,10 +54,7 @@ fun RowScope.TabItem(
                 .fillMaxWidth(),
             alignment = Alignment.Center
         ) {
-            Text(
-                text = text,
-                color = borderColor
-            )
+            content(borderColor)
         }
     }
 }

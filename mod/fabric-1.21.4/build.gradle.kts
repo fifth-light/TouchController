@@ -74,7 +74,7 @@ tasks.withType<ProcessResources> {
 }
 
 sourceSets.main {
-    resources.srcDirs += File(project(":mod:common").projectDir, "src/main/resources")
+    resources.srcDir("../resources/src/main/resources")
 }
 
 kotlin {

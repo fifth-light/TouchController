@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.ui.component.config
 
 import androidx.compose.runtime.Composable
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
@@ -15,7 +16,7 @@ import top.fifthlight.combine.widget.ui.Button
 @Composable
 fun ConfigGroup(
     modifier: Modifier = Modifier,
-    name: String,
+    name: Text,
     expanded: Boolean = true,
     onExpandedChanged: (Boolean) -> Unit = {},
     content: @Composable ColumnScope.() -> Unit = {},

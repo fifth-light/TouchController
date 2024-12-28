@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.ui.view.config.category
 
 import androidx.compose.runtime.*
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.fillMaxHeight
@@ -11,10 +12,11 @@ import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.component.config.*
 
 data object GlobalCategory : ConfigCategory(
-    title = "Global",
+    title = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_TITLE,
     content = { modifier, viewModel ->
         val uiState by viewModel.uiState.collectAsState()
         val config = uiState.config
@@ -29,104 +31,104 @@ data object GlobalCategory : ConfigCategory(
             ) {
                 var globalGroupExpanded by remember { mutableStateOf(true) }
                 ConfigGroup(
-                    name = "Global",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_TITLE),
                     expanded = globalGroupExpanded,
                     onExpandedChanged = { globalGroupExpanded = it },
                 ) {
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Disable mouse movement",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_TITLE),
                         value = config.disableMouseMove,
                         onValueChanged = { viewModel.updateConfig { copy(disableMouseMove = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Disable mouse movement",
-                                    description = "Disable mouse movement in game. Enable this option when your system maps touch input to mouse input.",
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_MOVE_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Disable mouse click",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_TITLE),
                         value = config.disableMouseClick,
                         onValueChanged = { viewModel.updateConfig { copy(disableMouseClick = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Disable mouse click",
-                                    description = "Disable mouse clicking in game. Enable this option when your system maps touch input to mouse input.",
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_MOUSE_CLICK_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Disable mouse lock",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CURSOR_LOCK_TITLE),
                         value = config.disableMouseLock,
                         onValueChanged = { viewModel.updateConfig { copy(disableMouseLock = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Disable mouse lock",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CURSOR_LOCK_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CURSOR_LOCK_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Disable crosshair",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE),
                         value = config.disableCrosshair,
                         onValueChanged = { viewModel.updateConfig { copy(disableCrosshair = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Disable crosshair",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_CROSSHAIR_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Disable hotbar key",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_TITLE),
                         value = config.disableHotBarKey,
                         onValueChanged = { viewModel.updateConfig { copy(disableHotBarKey = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Disable hotbar key",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_HOT_BAR_KEY_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Vibration",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_TITLE),
                         value = config.vibration,
                         onValueChanged = { viewModel.updateConfig { copy(vibration = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Vibration",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_VIBRATION_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Quick hand swap",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE),
                         value = config.quickHandSwap,
                         onValueChanged = { viewModel.updateConfig { copy(quickHandSwap = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Quick hand swap",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_QUICK_HAND_SWAP_DESCRIPTION,
                                 )
                             }
                         },
@@ -135,36 +137,36 @@ data object GlobalCategory : ConfigCategory(
 
                 var controlGroupExpanded by remember { mutableStateOf(true) }
                 ConfigGroup(
-                    name = "Control",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_TITLE),
                     expanded = controlGroupExpanded,
                     onExpandedChanged = { controlGroupExpanded = it },
                 ) {
                     FloatSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "View movement sensitivity",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE),
                         value = config.viewMovementSensitivity,
                         onValueChanged = { viewModel.updateConfig { copy(viewMovementSensitivity = it) } },
                         range = 0f..900f,
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "View movement sensitivity",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_MOVEMENT_SENSITIVITY_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_MOVEMENT_SENSITIVITY_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     IntSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "View hold detect threshold",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_TITLE),
                         value = config.viewHoldDetectThreshold,
                         onValueChanged = { viewModel.updateConfig { copy(viewHoldDetectThreshold = it) } },
                         range = 0..10,
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "View hold detect threshold",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_CONTROL_VIEW_HOLD_DETECT_THRESHOLD_DESCRIPTION,
                                 )
                             }
                         },
@@ -173,51 +175,51 @@ data object GlobalCategory : ConfigCategory(
 
                 var crosshairGroupExpanded by remember { mutableStateOf(true) }
                 ConfigGroup(
-                    name = "Touch crosshair",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_TITLE),
                     expanded = crosshairGroupExpanded,
                     onExpandedChanged = { crosshairGroupExpanded = it },
                 ) {
                     IntSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Touch crosshair size",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_RADIUS_TITLE),
                         value = config.crosshair.radius,
                         onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(radius = it)) } },
                         range = 16..96,
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Touch crosshair size",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_RADIUS_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_RADIUS_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     IntSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Border width",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_BORDER_WIDTH_TITLE),
                         value = config.crosshair.outerRadius,
                         onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(outerRadius = it)) } },
                         range = 0..8,
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Border width",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_BORDER_WIDTH_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_BORDER_WIDTH_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     FloatSliderConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Initial progress",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_INITIAL_PROGRESS_TITLE),
                         value = config.crosshair.initialProgress,
                         onValueChanged = { viewModel.updateConfig { copy(crosshair = crosshair.copy(initialProgress = it)) } },
                         range = 0f..1f,
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Initial progress",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_INITIAL_PROGRESS_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_CROSSHAIR_INITIAL_PROGRESS_DESCRIPTION,
                                 )
                             }
                         },
@@ -226,34 +228,34 @@ data object GlobalCategory : ConfigCategory(
 
                 var debugGroupExpanded by remember { mutableStateOf(true) }
                 ConfigGroup(
-                    name = "Debug",
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE),
                     expanded = debugGroupExpanded,
                     onExpandedChanged = { debugGroupExpanded = it },
                 ) {
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Show pointers",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE),
                         value = config.showPointers,
                         onValueChanged = { viewModel.updateConfig { copy(showPointers = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Show pointers",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_SHOW_POINTERS_DESCRIPTION,
                                 )
                             }
                         },
                     )
                     SwitchConfigItem(
                         modifier = Modifier.fillMaxWidth(),
-                        name = "Enable touch emulation",
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_TITLE),
                         value = config.enableTouchEmulation,
                         onValueChanged = { viewModel.updateConfig { copy(enableTouchEmulation = it) } },
                         onHovered = {
                             if (it) {
                                 hoverData = HoverData(
-                                    name = "Enable touch emulation",
-                                    description = ""
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_ENABLE_TOUCH_EMULATION_DESCRIPTION,
                                 )
                             }
                         },
@@ -266,8 +268,8 @@ data object GlobalCategory : ConfigCategory(
                 modifier = Modifier
                     .width(160)
                     .fillMaxHeight(),
-                title = hoverData?.name,
-                description = hoverData?.description,
+                title = hoverData?.name?.let { Text.translatable(it) },
+                description = hoverData?.description?.let { Text.translatable(it) },
                 onSave = {
                     viewModel.saveAndExit(closeHandler)
                 },
