@@ -10,18 +10,19 @@ jobs:
     build:
         strategy:
             matrix:
-                # Use these Java versions
-                java: [
-                    21,    # Current Java LTS
+                module: [
+                    "fabric-1.21.1",
+                    "fabric-1.21.3",
+                    "fabric-1.21.4",
                 ]
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout repository
                 uses: actions/checkout@v4
-            -   name: Setup JDK ${{ matrix.java }}
+            -   name: Setup JDK 21
                 uses: actions/setup-java@v4
                 with:
-                    java-version: ${{ matrix.java }}
+                    java-version: 21
                     distribution: 'temurin'
                     cache: 'gradle'
             -   name: Setup Rust
@@ -38,29 +39,16 @@ jobs:
             -   name: Setup Gradle
                 uses: gradle/actions/setup-gradle@v4
             -   name: Install cargo-ndk
-                run: cargo install cargo-ndk
+                run: '[[ ! "which cargo-ndk" ]] && cargo install cargo-ndk'
             -   name: Build
                 run: |
                     wget -qO ~/llvm-mingw.tar.xz https://github.com/mstorsjo/llvm-mingw/releases/download/20241217/llvm-mingw-20241217-ucrt-ubuntu-20.04-x86_64.tar.xz
                     mkdir ~/.llvm-mingw
                     (cd ~/.llvm-mingw && tar --strip-components=1 -xJf ~/llvm-mingw.tar.xz)
                     export PATH="$HOME/.llvm-mingw/bin:$PATH"
-                    ./gradlew build --no-daemon
+                    ./gradlew :mod:${{ matrix.module }}:build --no-daemon
             -   name: Capture build artifacts
-                if: ${{ matrix.java == '21' }}
                 uses: actions/upload-artifact@v4
                 with:
-                    name: fabric-1.21.1
-                    path: mod/fabric-1.21.1/build/libs/
-            -   name: Capture build artifacts
-                if: ${{ matrix.java == '21' }}
-                uses: actions/upload-artifact@v4
-                with:
-                    name: fabric-1.21.3
-                    path: mod/fabric-1.21.3/build/libs/
-            -   name: Capture build artifacts
-                if: ${{ matrix.java == '21' }}
-                uses: actions/upload-artifact@v4
-                with:
-                    name: fabric-1.21.4
-                    path: mod/fabric-1.21.4/build/libs/
+                    name: ${{ matrix.module }}
+                    path: mod/${{ matrix.module }}/build/libs/
