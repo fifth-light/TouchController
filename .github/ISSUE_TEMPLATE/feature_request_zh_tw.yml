@@ -1,0 +1,37 @@
+name: 📖 | 新功能提交-zh_tw
+description: 📎 | 寫下您對於新增功能的一些建議
+title: "[新功能]: "
+labels: ["新功能建議"]
+body:
+- type: markdown
+  attributes:
+    value: "# 🎁 | 您正在填寫TouchController的新功能建議！"
+- type: checkboxes
+  id: Prefeedback
+  attributes:
+    label: 檢查項目
+    description: 在提交前，請確認以下內容：
+    options:
+      - label: 此功能尚未被提出過（可以在[這裡](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)進行搜尋）
+        required: true
+      - label: 此功能不在[PR](https://github.com/fifth-light/TouchController/pulls)中
+        required: true
+      - label: 模組的最新版本並未新增此功能
+        required: true
+- type: input
+  id: FeatureRequest_Summary
+  attributes:
+    label: 簡述
+    description: 請簡要敘述您希望新增的功能
+    placeholder: |
+      <對此功能的簡要描述>
+- type: textarea
+  id: FeatureRequest_Steps
+  attributes:
+    label: 詳細內容
+    description: 請詳細描述新功能的內容，以及需要此功能的原因
+    placeholder: |
+      <此功能的詳細內容>
+- type: markdown
+  attributes:
+    value: "### 🎉 | 感謝您對TouchController的支持！" 
