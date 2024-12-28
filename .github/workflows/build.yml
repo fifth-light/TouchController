@@ -39,7 +39,7 @@ jobs:
             -   name: Setup Gradle
                 uses: gradle/actions/setup-gradle@v4
             -   name: Install cargo-ndk
-                run: '[[ ! "which cargo-ndk" ]] && cargo install cargo-ndk'
+                run: cargo install --force cargo-ndk
             -   name: Build
                 run: |
                     wget -qO ~/llvm-mingw.tar.xz https://github.com/mstorsjo/llvm-mingw/releases/download/20241217/llvm-mingw-20241217-ucrt-ubuntu-20.04-x86_64.tar.xz
