@@ -10,7 +10,7 @@ body:
   id: BUG_Prefeedback
   attributes:
     label: Checklist
-    description: Before submitting, please confirm the following:
+    description: "Before submitting, please confirm the following:"
     options:
       - label: This BUG has not been submitted before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)).
         required: true
@@ -41,7 +41,7 @@ body:
   attributes:
     label: Version
     description: The mod version, Minecraft version, and loader when you found this BUG.
-    placeholder: Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***
+    placeholder: "Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***"
   validations:
     required: true
 - type: textarea

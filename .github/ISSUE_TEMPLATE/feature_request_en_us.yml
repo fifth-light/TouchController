@@ -10,7 +10,7 @@ body:
   id: Prefeedback
   attributes:
     label: Checklist
-    description: Before submitting, please confirm the following:
+    description: "Before submitting, please confirm the following:"
     options:
       - label: This feature has not been proposed before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)).
         required: true
