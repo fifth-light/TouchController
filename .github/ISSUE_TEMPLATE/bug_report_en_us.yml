@@ -41,7 +41,7 @@ body:
   attributes:
     label: Version
     description: The mod version, Minecraft version, and loader when you found this BUG.
-    placeholder: Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***
+    placeholder: "Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***"
   validations:
     required: true
 - type: textarea
