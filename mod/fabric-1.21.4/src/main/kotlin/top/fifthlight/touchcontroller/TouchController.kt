@@ -34,13 +34,9 @@ object TouchController : ClientModInitializer, KoinComponent {
     override fun onInitializeClient() {
         logger.info("Loading TouchController…")
 
-        val platform = PlatformProvider.platform
-        runBlocking {
-            @OptIn(DelicateCoroutinesApi::class)
-            platform?.init(GlobalScope)
-        }
+        val platformHolder = PlatformHolder(null)
         val platformHolderModule = module {
-            single { PlatformHolder(platform) }
+            single { platformHolder }
         }
 
         startKoin {
@@ -50,6 +46,14 @@ object TouchController : ClientModInitializer, KoinComponent {
                 platformModule,
                 appModule,
             )
+        }
+
+        PlatformProvider.platform?.let { platform ->
+            runBlocking {
+                @OptIn(DelicateCoroutinesApi::class)
+                platform.init(GlobalScope)
+            }
+            platformHolder.platform = platform
         }
 
         initialize()

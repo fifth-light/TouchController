@@ -6,7 +6,7 @@ import top.fifthlight.touchcontroller.proxy.message.ProxyMessage
 
 // Workaround for Koin to pass nullable values
 data class PlatformHolder(
-    val platform: Platform?
+    var platform: Platform?
 )
 
 interface Platform {
