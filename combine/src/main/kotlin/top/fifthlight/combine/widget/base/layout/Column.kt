@@ -9,24 +9,33 @@ import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.ParentDataModifierNode
 
 interface ColumnScope {
-    fun Modifier.weight(weight: Float) = then(ColumnWeightModifier(weight))
+    fun Modifier.weight(weight: Float) = then(ColumnModifier(weight = weight))
+    fun Modifier.alignment(alignment: Alignment.Horizontal) = then(ColumnModifier(alignment = alignment))
 
     companion object : ColumnScope
 }
 
 private data class ColumnParentData(
-    val weight: Float
+    val weight: Float? = null,
+    val alignment: Alignment.Horizontal? = null,
 )
 
-private data class ColumnWeightModifier(
-    val weight: Float
-) : ParentDataModifierNode, Modifier.Node<ColumnWeightModifier> {
+private data class ColumnModifier(
+    val weight: Float? = null,
+    val alignment: Alignment.Horizontal? = null,
+) : ParentDataModifierNode, Modifier.Node<ColumnModifier> {
     override fun modifierParentData(parentData: Any?): ColumnParentData {
         val data = parentData as? ColumnParentData
         if (data != null) {
-            return data
+            return data.copy(
+                weight = weight ?: data.weight,
+                alignment = alignment ?: data.alignment,
+            )
         }
-        return ColumnParentData(weight)
+        return ColumnParentData(
+            weight = weight,
+            alignment = alignment,
+        )
     }
 }
 
@@ -59,7 +68,7 @@ fun Column(
             val placeables = Array<Placeable?>(measurables.size) { null }
             measurables.forEachIndexed { index, measurable ->
                 val parentData = measurable.parentData as? ColumnParentData
-                if (parentData != null) {
+                if (parentData?.weight != null) {
                     heights[index] = -1
                     totalWeight += parentData.weight
                 } else {
@@ -82,7 +91,7 @@ fun Column(
 
             for (i in heights.indices) {
                 if (heights[i] == -1) {
-                    val weight = (measurables[i].parentData as ColumnParentData).weight
+                    val weight = (measurables[i].parentData as ColumnParentData).weight!!
                     heights[i] = (weightUnitSpace * weight).toInt()
                     val placeable = measurables[i].measure(
                         constraints = childConstraint.copy(
@@ -106,7 +115,9 @@ fun Column(
 
             layout(width, height) {
                 placeables.forEachIndexed { index, placeable ->
-                    placeable!!.placeAt(horizontalAlignment.align(placeable.width, width), yPositions[index])
+                    val parentData = measurables[index].parentData as? ColumnParentData
+                    val alignment = parentData?.alignment ?: horizontalAlignment
+                    placeable!!.placeAt(alignment.align(placeable.width, width), yPositions[index])
                 }
             }
         }

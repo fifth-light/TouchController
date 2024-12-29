@@ -15,8 +15,8 @@ fun openComponentListScreen(
 ) {
     screenFactory.openScreen(
         title = textFactory.empty(),
-        viewModelFactory = {
-            ComponentListScreenViewModel(it, initialList, onListChanged)
+        viewModelFactory = { scope, _ ->
+            ComponentListScreenViewModel(scope, initialList, onListChanged)
         },
         content = {
             ComponentListScreen(it)

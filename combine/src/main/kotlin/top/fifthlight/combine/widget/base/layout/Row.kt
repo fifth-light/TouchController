@@ -9,24 +9,33 @@ import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.ParentDataModifierNode
 
 interface RowScope {
-    fun Modifier.weight(weight: Float) = then(RowWeightModifier(weight))
+    fun Modifier.weight(weight: Float) = then(RowModifier(weight))
+    fun Modifier.alignment(alignment: Alignment.Vertical) = then(RowModifier(alignment = alignment))
 
     companion object : RowScope
 }
 
-private data class RowWeightParentData(
-    val weight: Float,
+private data class RowParentData(
+    val weight: Float? = null,
+    val alignment: Alignment.Vertical? = null,
 )
 
-private data class RowWeightModifier(
-    val weight: Float,
-) : ParentDataModifierNode, Modifier.Node<RowWeightModifier> {
-    override fun modifierParentData(parentData: Any?): RowWeightParentData {
-        val data = parentData as? RowWeightParentData
+private data class RowModifier(
+    val weight: Float? = null,
+    val alignment: Alignment.Vertical? = null,
+) : ParentDataModifierNode, Modifier.Node<RowModifier> {
+    override fun modifierParentData(parentData: Any?): RowParentData {
+        val data = parentData as? RowParentData
         if (data != null) {
-            return data
+            return data.copy(
+                weight = weight ?: data.weight,
+                alignment = alignment ?: data.alignment,
+            )
         }
-        return RowWeightParentData(weight)
+        return RowParentData(
+            weight = weight,
+            alignment = alignment,
+        )
     }
 }
 
@@ -58,8 +67,8 @@ fun Row(
 
             val placeables = Array<Placeable?>(measurables.size) { null }
             measurables.forEachIndexed { index, measurable ->
-                val parentData = measurable.parentData as? RowWeightParentData
-                if (parentData != null) {
+                val parentData = measurable.parentData as? RowParentData
+                if (parentData?.weight != null) {
                     widths[index] = -1
                     totalWeight += parentData.weight
                 } else {
@@ -82,7 +91,7 @@ fun Row(
 
             for (i in widths.indices) {
                 if (widths[i] == -1) {
-                    val weight = (measurables[i].parentData as RowWeightParentData).weight
+                    val weight = (measurables[i].parentData as RowParentData).weight!!
                     widths[i] = (weightUnitSpace * weight).toInt()
                     val placeable = measurables[i].measure(
                         constraints = childConstraint.copy(
@@ -106,7 +115,9 @@ fun Row(
 
             layout(width, height) {
                 placeables.forEachIndexed { index, placeable ->
-                    placeable!!.placeAt(xPositions[index], verticalAlignment.align(placeable.height, height))
+                    val parentData = measurables[index].parentData as? RowParentData
+                    val alignment = parentData?.alignment ?: verticalAlignment
+                    placeable!!.placeAt(xPositions[index], alignment.align(placeable.height, height))
                 }
             }
         }

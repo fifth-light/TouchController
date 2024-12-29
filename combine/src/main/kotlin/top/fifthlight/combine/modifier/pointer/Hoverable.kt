@@ -27,7 +27,7 @@ private data class HoverableModifierNode(
     val onHovered: (Boolean) -> Unit,
 ) : Modifier.Node<HoverableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
         when (event.type) {
             PointerEventType.Enter -> {
                 onHovered(true)
@@ -54,7 +54,7 @@ private data class HoverableWithOffsetModifierNode(
     val onHovered: (Boolean?, Offset) -> Unit,
 ) : Modifier.Node<HoverableWithOffsetModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
         when (event.type) {
             PointerEventType.Enter -> {
                 onHovered(true, event.position - node.absolutePosition)

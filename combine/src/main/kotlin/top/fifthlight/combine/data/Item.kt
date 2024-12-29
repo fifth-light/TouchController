@@ -19,7 +19,7 @@ interface ItemFactory {
 @Immutable
 interface Item {
     val id: Identifier
-    val name: String
+    val name: Text
     val isProjectile: Boolean
     val isRangedWeapon: Boolean
     fun containComponents(component: DataComponentType): Boolean

@@ -10,6 +10,8 @@ import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Column
+import top.fifthlight.combine.widget.ui.AlertDialog
+import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.combine.widget.ui.Tab
 import top.fifthlight.combine.widget.ui.TabItem
 import top.fifthlight.touchcontroller.ui.model.ConfigScreenViewModel
@@ -45,6 +47,30 @@ private fun TabNavigationBar(
 @Composable
 fun ConfigScreen(viewModel: ConfigScreenViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    if (uiState.showExitDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                viewModel.dismissExitDialog()
+            },
+            title = {
+                Text("Warning")
+            },
+            action = {
+                Button(onClick = {
+                    viewModel.exit()
+                }) {
+                    Text("Yes", shadow = true)
+                }
+                Button(onClick = {
+                    viewModel.dismissExitDialog()
+                }) {
+                    Text("No", shadow = true)
+                }
+            },
+        ) {
+            Text("You have unsaved changes. Do you really want to exit? All unsaved changed will be lost.")
+        }
+    }
     Column {
         TabNavigationBar(
             modifier = Modifier.fillMaxWidth(),

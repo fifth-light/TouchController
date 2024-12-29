@@ -16,6 +16,10 @@ data class IntRect(
     val bottom
         get() = offset.y + size.height
 
+    companion object {
+        val ZERO = IntRect(offset = IntOffset.ZERO, size = IntSize.ZERO)
+    }
+
     fun toRect() = Rect(
         offset = offset.toOffset(),
         size = size.toSize()

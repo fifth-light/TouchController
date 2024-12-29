@@ -6,8 +6,11 @@ import top.fifthlight.combine.layout.MeasureScope
 import top.fifthlight.combine.modifier.Constraints
 import top.fifthlight.combine.modifier.LayoutModifierNode
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.data.IntOffset
 
 fun Modifier.offset(size: Int = 0): Modifier = offset(size, size)
+
+fun Modifier.offset(size: IntOffset = IntOffset.ZERO): Modifier = offset(size.x, size.y)
 
 fun Modifier.offset(x: Int = 0, y: Int = 0): Modifier = then(OffsetNode(x, y))
 

@@ -15,7 +15,8 @@ enum class LayoutPanelState {
 data class ConfigScreenState(
     val config: TouchControllerConfig,
     val layout: TouchControllerLayout,
-    val selectedLayer: Int,
+    val showExitDialog: Boolean = false,
+    val selectedLayer: Int = 0,
     val selectedCategory: ConfigCategory = GlobalCategory,
     val layoutPanelState: LayoutPanelState = LayoutPanelState.LAYOUT,
 )

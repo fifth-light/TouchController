@@ -15,8 +15,8 @@ fun openItemListScreen(
 ) {
     screenFactory.openScreen(
         title = textFactory.empty(),
-        viewModelFactory = {
-            ItemListScreenViewModel(it, initialList, onListChanged)
+        viewModelFactory = { scope, _ ->
+            ItemListScreenViewModel(scope, initialList, onListChanged)
         },
         content = {
             ItemListScreen(it)

@@ -12,5 +12,6 @@ private class PointerInputReceiverModifierNode(
     private val receiver: Placeable.(PointerEvent) -> Boolean
 ) : Modifier.Node<PointerInputReceiverModifierNode>,
     PointerInputModifierNode {
-    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean = receiver.invoke(node, event)
+    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean =
+        receiver.invoke(node, event)
 }

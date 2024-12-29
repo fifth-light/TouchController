@@ -17,7 +17,10 @@ import top.fifthlight.touchcontroller.ui.state.ConfigScreenState
 import top.fifthlight.touchcontroller.ui.state.LayoutPanelState
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
 
-class ConfigScreenViewModel(scope: CoroutineScope) : ViewModel(scope), KoinComponent {
+class ConfigScreenViewModel(
+    scope: CoroutineScope,
+    private val closeHandler: CloseHandler
+) : ViewModel(scope), KoinComponent {
     private val configHolder: TouchControllerConfigHolder by inject()
     private val itemFactory: ItemFactory by inject()
 
@@ -25,7 +28,6 @@ class ConfigScreenViewModel(scope: CoroutineScope) : ViewModel(scope), KoinCompo
         ConfigScreenState(
             config = configHolder.config.value,
             layout = configHolder.layout.value,
-            selectedLayer = 0,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -46,15 +48,20 @@ class ConfigScreenViewModel(scope: CoroutineScope) : ViewModel(scope), KoinCompo
         }
     }
 
+    fun setLayer(index: Int) {
+        _uiState.getAndUpdate {
+            require(index in it.layout.indices)
+            it.copy(
+                selectedLayer = index
+            )
+        }
+    }
+
     fun updateLayer(index: Int, layer: LayoutLayer) {
         _uiState.getAndUpdate {
-            if (index in it.layout.indices) {
-                it.copy(
-                    layout = it.layout.set(index, layer)
-                )
-            } else {
-                it
-            }
+            it.copy(
+                layout = it.layout.set(index, layer)
+            )
         }
     }
 
@@ -103,11 +110,31 @@ class ConfigScreenViewModel(scope: CoroutineScope) : ViewModel(scope), KoinCompo
         }
     }
 
-    fun exit(closeHandler: CloseHandler) {
+    fun dismissExitDialog() {
+        _uiState.getAndUpdate {
+            it.copy(
+                showExitDialog = false,
+            )
+        }
+    }
+
+    fun tryExit() {
+        if (uiState.value.config != configHolder.config.value || uiState.value.layout != uiState.value.layout) {
+            _uiState.getAndUpdate {
+                it.copy(
+                    showExitDialog = true,
+                )
+            }
+            return
+        }
+        exit()
+    }
+
+    fun exit() {
         closeHandler.close()
     }
 
-    fun saveAndExit(closeHandler: CloseHandler) {
+    fun saveAndExit() {
         configHolder.saveConfig(uiState.value.config)
         configHolder.saveLayout(uiState.value.layout)
         closeHandler.close()

@@ -42,7 +42,7 @@ private data class ClickableModifierNode(
     val onClick: (Offset) -> Unit,
 ) : Modifier.Node<ClickableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
         when (event.type) {
             PointerEventType.Press -> clickState.pressed = true
             PointerEventType.Move -> {}

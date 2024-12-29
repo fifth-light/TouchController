@@ -45,6 +45,7 @@ private class CombineScreen(
     private val textMeasurer = TextMeasurerImpl(currentClient.textRenderer)
     private val dispatcher = GameDispatcherImpl(currentClient)
     private val soundManager = SoundManagerImpl(currentClient.soundManager)
+    val closeHandler = ScreenCloseHandler(this@CombineScreen)
     private val owner = CombineOwner(dispatcher = dispatcher, textMeasurer = textMeasurer)
     override val coroutineContext: CoroutineContext
         get() = owner.coroutineContext
@@ -54,7 +55,7 @@ private class CombineScreen(
             CompositionLocalProvider(
                 LocalSoundManager provides soundManager,
                 LocalScreen provides this,
-                LocalCloseHandler provides ScreenCloseHandler(this@CombineScreen),
+                LocalCloseHandler provides closeHandler,
                 LocalItemFactory provides ItemFactoryImpl,
                 LocalTextFactory provides TextFactoryImpl,
                 LocalDataComponentTypeFactory provides DataComponentTypeFactoryImpl,
@@ -172,6 +173,10 @@ private class CombineScreen(
         owner.render(size, context)
     }
 
+    var onDismissRequest: () -> Boolean = { false }
+
+    override fun shouldCloseOnEsc(): Boolean = !onDismissRequest()
+
     override fun close() {
         owner.close()
         client?.setScreen(parent)
@@ -181,22 +186,27 @@ private class CombineScreen(
 object ScreenFactoryImpl : ScreenFactory {
     override fun <M : ViewModel> openScreen(
         title: CombineText,
-        viewModelFactory: (CoroutineScope) -> M,
+        viewModelFactory: (CoroutineScope, CloseHandler) -> M,
+        onDismissRequest: (M) -> Boolean,
         content: @Composable (M) -> Unit
     ) {
         val client = MinecraftClient.getInstance()
-        val screen = getScreen(client.currentScreen, title, viewModelFactory, content)
+        val screen = getScreen(client.currentScreen, title, viewModelFactory, onDismissRequest, content)
         client.setScreen(screen as Screen)
     }
 
     override fun <M : ViewModel> getScreen(
         parent: Any?,
         title: CombineText,
-        viewModelFactory: (CoroutineScope) -> M,
+        viewModelFactory: (CoroutineScope, CloseHandler) -> M,
+        onDismissRequest: (M) -> Boolean,
         content: @Composable (M) -> Unit
     ): Any {
         val screen = CombineScreen(title.toMinecraft(), parent as Screen)
-        val viewModel = viewModelFactory(screen)
+        val viewModel = viewModelFactory(screen, screen.closeHandler)
+        screen.onDismissRequest = {
+            onDismissRequest(viewModel)
+        }
         screen.setContent {
             content(viewModel)
         }

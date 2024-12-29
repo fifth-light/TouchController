@@ -5,17 +5,24 @@ import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.*
 import top.fifthlight.combine.input.PointerEvent
 import top.fifthlight.combine.input.PointerEventReceiver
+import top.fifthlight.combine.input.PointerEventType
 import top.fifthlight.combine.modifier.Constraints
 import top.fifthlight.combine.paint.RenderContext
 import top.fifthlight.combine.paint.TextMeasurer
 import top.fifthlight.data.IntSize
 import kotlin.coroutines.CoroutineContext
 
-val LocalCombineOwner: ProvidableCompositionLocal<CombineOwner> = staticCompositionLocalOf { error("No CombineOwner in context") }
-val LocalTextMeasurer: ProvidableCompositionLocal<TextMeasurer> = staticCompositionLocalOf { error("No TextMeasurer in context") }
+val LocalCombineOwner: ProvidableCompositionLocal<CombineOwner> =
+    staticCompositionLocalOf { error("No CombineOwner in context") }
+val LocalTextMeasurer: ProvidableCompositionLocal<TextMeasurer> =
+    staticCompositionLocalOf { error("No TextMeasurer in context") }
 
-abstract class CombineCoroutineDispatcher: CoroutineDispatcher() {
+abstract class CombineCoroutineDispatcher : CoroutineDispatcher() {
     abstract fun execute()
+}
+
+interface DisposableLayer {
+    fun dispose()
 }
 
 class CombineOwner(
@@ -27,12 +34,32 @@ class CombineOwner(
     override val coroutineContext: CoroutineContext = composeScope.coroutineContext
 
     private var running = false
-    private val rootNode = LayoutNode()
     private val recomposer = Recomposer(coroutineContext)
-    private val composition = Composition(UiApplier(rootNode), recomposer)
+    private val layers = mutableListOf(LayoutNode().let { rootNode ->
+        Layer(
+            owner = this,
+            rootNode = rootNode,
+            composition = Composition(UiApplier(rootNode), recomposer),
+        )
+    })
+    private val rootLayer
+        get() = layers.first()
 
-    var applyScheduled = false
-    val snapshotHandle = Snapshot.registerGlobalWriteObserver {
+    private data class Layer(
+        val owner: CombineOwner,
+        val rootNode: LayoutNode,
+        val composition: Composition,
+        val parentContext: CompositionContext? = null,
+        val onDismissRequest: (() -> Unit)? = null,
+    ) : DisposableLayer {
+        override fun dispose() {
+            owner.layers.remove(this)
+            composition.dispose()
+        }
+    }
+
+    private var applyScheduled = false
+    private val snapshotHandle = Snapshot.registerGlobalWriteObserver {
         if (!applyScheduled) {
             applyScheduled = true
             composeScope.launch {
@@ -53,29 +80,68 @@ class CombineOwner(
     }
 
     fun setContent(content: @Composable () -> Unit) {
-        composition.setContent {
-            CompositionLocalProvider(LocalTextMeasurer provides textMeasurer) {
+        rootLayer.composition.setContent {
+            CompositionLocalProvider(
+                LocalCombineOwner provides this,
+                LocalTextMeasurer provides textMeasurer,
+            ) {
                 content()
             }
         }
     }
 
-    override fun onPointerEvent(event: PointerEvent) = rootNode.onPointerEvent(event)
+    fun addLayer(
+        parentContext: CompositionContext,
+        onDismissRequest: (() -> Unit)? = null,
+        content: @Composable () -> Unit,
+    ): DisposableLayer {
+        val rootNode = LayoutNode()
+        val composition = Composition(UiApplier(rootNode), parentContext)
+        composition.setContent(content)
+        val layer = Layer(
+            owner = this,
+            rootNode = rootNode,
+            composition = composition,
+            parentContext = parentContext,
+            onDismissRequest = onDismissRequest,
+        )
+        layers.add(layer)
+        return layer
+    }
+
+    override fun onPointerEvent(event: PointerEvent): Boolean {
+        val layer = layers.last()
+        if (layer.rootNode.onPointerEvent(event)) {
+            return true
+        }
+        if (layers.size == 1) {
+            return false
+        } else if (event.type == PointerEventType.Press) {
+            layer.onDismissRequest?.let { it() }
+        }
+        return false
+    }
 
     fun render(size: IntSize, context: RenderContext) {
         clock.sendFrame(System.nanoTime())
         dispatcher.execute()
-        rootNode.measure(Constraints(
-            maxWidth = size.width,
-            maxHeight = size.height
-        ))
-        rootNode.render(context)
+        for (layer in layers) {
+            layer.rootNode.measure(
+                Constraints(
+                    maxWidth = size.width,
+                    maxHeight = size.height
+                )
+            )
+            layer.rootNode.render(context)
+        }
     }
 
     fun close() {
         recomposer.close()
         snapshotHandle.dispose()
-        composition.dispose()
+        for (layer in layers) {
+            layer.composition.dispose()
+        }
         composeScope.cancel()
     }
 }

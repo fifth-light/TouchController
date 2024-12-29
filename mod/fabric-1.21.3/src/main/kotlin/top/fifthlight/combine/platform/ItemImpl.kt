@@ -15,8 +15,8 @@ value class ItemImpl(
     override val id: Identifier
         get() = Registries.ITEM.getKey(inner).get().value.toCombine()
 
-    override val name: String
-        get() = inner.name.string
+    override val name: TextImpl
+        get() = TextImpl(inner.name)
 
     override val isProjectile: Boolean
         get() = inner is ProjectileItem

@@ -69,6 +69,13 @@ value class LayoutLayerCondition(
     }
 
     operator fun get(key: LayoutLayerConditionKey): LayoutLayerConditionValue? = conditions[key]
+    fun set(key: LayoutLayerConditionKey, value: LayoutLayerConditionValue?) = LayoutLayerCondition(
+        if (value == null) {
+            conditions.remove(key)
+        } else {
+            conditions.put(key, value)
+        }
+    )
 }
 
 fun layoutLayerConditionOf(vararg pairs: Pair<LayoutLayerConditionKey, LayoutLayerConditionValue>) =

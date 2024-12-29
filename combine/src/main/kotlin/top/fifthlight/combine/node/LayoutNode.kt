@@ -248,7 +248,9 @@ internal sealed class WrapperLayoutNode(
     ) : PositionWrapper(node, children) {
 
         override fun onPointerEvent(event: PointerEvent): Boolean =
-            modifierNode.onPointerEvent(event, this) || children.onPointerEvent(event)
+            modifierNode.onPointerEvent(event, this, {
+                children.onPointerEvent(event)
+            }) || children.onPointerEvent(event)
     }
 }
 

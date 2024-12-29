@@ -1,12 +1,13 @@
 package top.fifthlight.touchcontroller.ui.view.config
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.plus
+import kotlinx.collections.immutable.toPersistentList
 import top.fifthlight.combine.data.Item
+import top.fifthlight.combine.data.LocalItemFactory
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
@@ -23,8 +24,9 @@ import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.base.layout.Spacer
 import top.fifthlight.combine.widget.ui.Button
+import top.fifthlight.combine.widget.ui.EditText
 import top.fifthlight.combine.widget.ui.Item
-import top.fifthlight.touchcontroller.ui.component.AllItemGrid
+import top.fifthlight.combine.widget.ui.ItemGrid
 import top.fifthlight.touchcontroller.ui.model.ItemListScreenViewModel
 
 @Composable
@@ -86,24 +88,33 @@ fun ItemListScreen(viewModel: ItemListScreenViewModel) {
             )
 
             Column(modifier = Modifier.weight(1f)) {
-                Box(
+                var searchText by remember { mutableStateOf("") }
+                EditText(
                     modifier = Modifier
-                        .height(32)
+                        .padding(8)
                         .fillMaxWidth(),
-                    alignment = Alignment.Center
-                ) {
-                    Text("TODO search box")
-                }
+                    placeholder = Text.literal("Filter"),
+                    value = searchText,
+                    onValueChanged = { searchText = it }
+                )
 
-                AllItemGrid(
+                val itemFactory = LocalItemFactory.current
+                ItemGrid(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
+                    items = if (searchText.isEmpty()) {
+                        itemFactory.allItems
+                    } else {
+                        itemFactory.allItems.filter {
+                            it.name.string.contains(searchText, ignoreCase = true)
+                        }.toPersistentList()
+                    },
                     onItemClicked = {
                         if (it !in uiState.list) {
                             viewModel.update(uiState.list + it)
                         }
-                    }
+                    },
                 )
             }
         }

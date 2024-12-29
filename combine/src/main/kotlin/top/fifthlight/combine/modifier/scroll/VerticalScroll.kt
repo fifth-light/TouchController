@@ -24,7 +24,7 @@ fun Modifier.verticalScroll(
 private data class VerticalScrollNode(
     val scrollState: ScrollState,
 ) : LayoutModifierNode, DrawModifierNode, PointerInputModifierNode, Modifier.Node<VerticalScrollNode> {
-    override fun onPointerEvent(event: PointerEvent, node: Placeable): Boolean {
+    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
         return when (event.type) {
             PointerEventType.Scroll -> {
                 scrollState.updateProgress((scrollState.progress.value - event.scrollDelta.y * 12).toInt())

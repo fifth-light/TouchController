@@ -9,7 +9,6 @@ import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.modifier.placement.padding
 import top.fifthlight.combine.modifier.placement.width
 import top.fifthlight.combine.modifier.scroll.verticalScroll
-import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.touchcontroller.assets.Texts
@@ -61,7 +60,6 @@ data object ItemsCategory : ConfigCategory(
                 )
             }
 
-            val closeHandler = LocalCloseHandler.current
             DescriptionPanel(
                 modifier = Modifier
                     .width(160)
@@ -69,10 +67,10 @@ data object ItemsCategory : ConfigCategory(
                 title = hoverData?.name?.let { Text.translatable(it) },
                 description = hoverData?.description?.let { Text.translatable(it) },
                 onSave = {
-                    viewModel.saveAndExit(closeHandler)
+                    viewModel.saveAndExit()
                 },
                 onCancel = {
-                    viewModel.exit(closeHandler)
+                    viewModel.tryExit()
                 },
                 onReset = {
                     viewModel.reset()
