@@ -1,13 +1,12 @@
 package top.fifthlight.touchcontroller.config
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.serialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -24,23 +23,21 @@ class ItemList private constructor(
     private val _whitelist: ItemsList = ItemsList(),
     @SerialName("blacklist")
     private val _blacklist: ItemsList = ItemsList(),
+    @SerialName("subclasses")
+    private val _subclasses: ItemSubclassSet = ItemSubclassSet(),
     @SerialName("components")
     private val _components: ComponentTypesList = ComponentTypesList(),
-    val projectile: Boolean = false,
-    val rangedWeapon: Boolean = false,
 ) {
     constructor(
         whitelist: PersistentList<Item> = persistentListOf(),
         blacklist: PersistentList<Item> = persistentListOf(),
-        projectile: Boolean = false,
-        rangedWeapon: Boolean = false,
         components: PersistentList<DataComponentType> = persistentListOf(),
+        subclasses: PersistentSet<ItemSubclass> = persistentSetOf(),
     ) : this(
         _whitelist = ItemsList(whitelist),
         _blacklist = ItemsList(blacklist),
-        projectile = projectile,
-        rangedWeapon = rangedWeapon,
-        _components = ComponentTypesList(components)
+        _components = ComponentTypesList(components),
+        _subclasses = ItemSubclassSet(subclasses),
     )
 
     val whitelist: PersistentList<Item>
@@ -49,54 +46,29 @@ class ItemList private constructor(
         get() = _blacklist.items
     val components: PersistentList<DataComponentType>
         get() = _components.items
+    val subclasses: PersistentSet<ItemSubclass>
+        get() = _subclasses.items
 
     fun copy(
         whitelist: PersistentList<Item> = this.whitelist,
         blacklist: PersistentList<Item> = this.blacklist,
-        projectile: Boolean = this.projectile,
-        rangedWeapon: Boolean = this.rangedWeapon,
         components: PersistentList<DataComponentType> = this.components,
+        subclasses: PersistentSet<ItemSubclass> = this.subclasses,
     ) = ItemList(
         _whitelist = ItemsList(whitelist),
         _blacklist = ItemsList(blacklist),
-        projectile = projectile,
-        rangedWeapon = rangedWeapon,
         _components = ComponentTypesList(components),
+        _subclasses = ItemSubclassSet(subclasses),
     )
 
     operator fun contains(item: Item): Boolean {
         return when {
             item in blacklist -> false
             item in whitelist -> true
-            projectile && item.isProjectile -> true
-            rangedWeapon && item.isRangedWeapon -> true
             components.any { item.containComponents(it) } -> true
+            subclasses.any { item.isSubclassOf(it) } -> true
             else -> false
         }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as ItemList
-
-        if (projectile != other.projectile) return false
-        if (rangedWeapon != other.rangedWeapon) return false
-        if (_whitelist != other._whitelist) return false
-        if (_blacklist != other._blacklist) return false
-        if (_components != other._components) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = projectile.hashCode()
-        result = 31 * result + rangedWeapon.hashCode()
-        result = 31 * result + _whitelist.hashCode()
-        result = 31 * result + _blacklist.hashCode()
-        result = 31 * result + _components.hashCode()
-        return result
     }
 }
 
@@ -148,5 +120,30 @@ private class ComponentTypeSerializer : KSerializer<ComponentTypesList>, KoinCom
         return ComponentTypesList(ListSerializer(itemSerializer).deserialize(decoder).mapNotNull {
             dataComponentTypeFactory.of(Identifier(it))
         }.toPersistentList())
+    }
+}
+
+@JvmInline
+@Serializable(with = ItemSubclassSetSerializer::class)
+value class ItemSubclassSet(val items: PersistentSet<ItemSubclass> = persistentSetOf())
+
+private class ItemSubclassSetSerializer : KSerializer<ItemSubclassSet>, KoinComponent {
+    private val itemFactory: ItemFactory by inject()
+
+    private class PersistentSetDescriptor : SerialDescriptor by serialDescriptor<PersistentSet<Item>>()
+
+    private val itemSerializer = serializer<String>()
+
+    override val descriptor: SerialDescriptor = PersistentSetDescriptor()
+
+    override fun serialize(encoder: Encoder, value: ItemSubclassSet) {
+        val ids = value.items.map { it.configId }.toSet()
+        SetSerializer(itemSerializer).serialize(encoder, ids)
+    }
+
+    override fun deserialize(decoder: Decoder): ItemSubclassSet {
+        return ItemSubclassSet(SetSerializer(itemSerializer).deserialize(decoder).mapNotNull { id ->
+            itemFactory.subclasses.firstOrNull { it.configId == id }
+        }.toPersistentSet())
     }
 }

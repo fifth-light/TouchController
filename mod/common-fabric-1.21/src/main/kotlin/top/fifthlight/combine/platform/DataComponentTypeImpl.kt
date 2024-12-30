@@ -11,6 +11,8 @@ import top.fifthlight.combine.data.Item
 import kotlin.jvm.optionals.getOrNull
 
 object DataComponentTypeFactoryImpl : DataComponentTypeFactory {
+    override val supportDataComponents: Boolean = true
+
     override fun of(id: Identifier): DataComponentType? =
         Registries.DATA_COMPONENT_TYPE.get(id.toMinecraft())?.let { DataComponentTypeImpl(it) }
 

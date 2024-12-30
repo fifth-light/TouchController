@@ -276,25 +276,30 @@ fun ItemListConfigItem(
                 }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text("Subclasses")
+            Text(
+                modifier = Modifier.padding(bottom = 4),
+                text = "Subclasses",
+            )
 
-                val itemFactory = LocalItemFactory.current
-                ItemShower(items = itemFactory.rangedWeaponItems)
-                Switch(
-                    checked = value.rangedWeapon,
-                    onChanged = { onValueChanged(value.copy(rangedWeapon = it)) }
-                )
-
-                ItemShower(items = itemFactory.projectileItems)
-                Switch(
-                    checked = value.projectile,
-                    onChanged = { onValueChanged(value.copy(projectile = it)) }
-                )
+            val itemFactory = LocalItemFactory.current
+            for (subclass in itemFactory.subclasses) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(subclass.name)
+                    ItemShower(items = subclass.items)
+                    Switch(
+                        checked = value.subclasses.contains(subclass),
+                        onChanged = {
+                            if (it) {
+                                onValueChanged(value.copy(subclasses = value.subclasses.add(subclass)))
+                            } else {
+                                onValueChanged(value.copy(subclasses = value.subclasses.remove(subclass)))
+                            }
+                        }
+                    )
+                }
             }
 
             Row(

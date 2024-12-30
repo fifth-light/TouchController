@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.config
 
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import top.fifthlight.combine.data.ItemFactory
 
@@ -36,19 +35,6 @@ val defaultShowCrosshairItemList = ItemList(
     projectile = true,
     rangedWeapon = true,
 )*/
-val defaultUsableItemList = ItemList(
-    whitelist = persistentListOf(),
-    components = persistentListOf(),
-    projectile = true,
-    rangedWeapon = true,
-)
-
-val defaultShowCrosshairItemList = ItemList(
-    whitelist = persistentListOf(),
-    blacklist = persistentListOf(),
-    projectile = true,
-    rangedWeapon = true,
-)
 
 @Serializable
 data class TouchControllerConfig(

@@ -1,11 +1,10 @@
 package top.fifthlight.combine.platform
 
 import net.minecraft.item.Item
-import net.minecraft.item.ProjectileItem
-import net.minecraft.item.RangedWeaponItem
 import net.minecraft.registry.Registries
 import top.fifthlight.combine.data.DataComponentType
 import top.fifthlight.combine.data.Identifier
+import top.fifthlight.combine.data.ItemSubclass
 import top.fifthlight.combine.data.Item as CombineItem
 
 @JvmInline
@@ -18,11 +17,11 @@ value class ItemImpl(
     override val name: TextImpl
         get() = TextImpl(inner.name)
 
-    override val isProjectile: Boolean
-        get() = inner is ProjectileItem
-
-    override val isRangedWeapon: Boolean
-        get() = inner is RangedWeaponItem
+    override fun isSubclassOf(subclass: ItemSubclass): Boolean {
+        val targetClazz = (subclass as ItemSubclassImpl<*>).clazz
+        val itemClazz = inner.javaClass
+        return itemClazz.superclass == targetClazz || itemClazz.interfaces.contains(targetClazz)
+    }
 
     override fun containComponents(component: DataComponentType) =
         inner.components.contains((component as DataComponentTypeImpl).inner)

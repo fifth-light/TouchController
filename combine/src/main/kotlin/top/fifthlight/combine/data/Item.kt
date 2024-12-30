@@ -12,16 +12,21 @@ interface ItemFactory {
     fun createItemStack(item: Item, amount: Int): ItemStack
     fun createItemStack(id: Identifier, amount: Int): ItemStack?
     val allItems: PersistentList<Item>
-    val rangedWeaponItems: PersistentList<Item>
-    val projectileItems: PersistentList<Item>
+    val subclasses: PersistentList<ItemSubclass>
+}
+
+interface ItemSubclass {
+    val id: String
+    val configId: String
+    val name: Text
+    val items: PersistentList<Item>
 }
 
 @Immutable
 interface Item {
     val id: Identifier
     val name: Text
-    val isProjectile: Boolean
-    val isRangedWeapon: Boolean
+    fun isSubclassOf(subclass: ItemSubclass): Boolean
     fun containComponents(component: DataComponentType): Boolean
 
     @Composable

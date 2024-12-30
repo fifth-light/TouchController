@@ -1,14 +1,17 @@
 package top.fifthlight.combine.platform
 
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ProjectileItem
 import net.minecraft.item.RangedWeaponItem
 import net.minecraft.registry.Registries
+import net.minecraft.text.Text
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.ItemFactory
+import top.fifthlight.combine.data.ItemSubclass
 import kotlin.jvm.optionals.getOrNull
 import top.fifthlight.combine.data.Item as CombineItem
 import top.fifthlight.combine.data.ItemStack as CombineItemStack
@@ -38,13 +41,16 @@ object ItemFactoryImpl : ItemFactory {
         Registries.ITEM.map(Item::toCombine).toPersistentList()
     }
 
-    override val rangedWeaponItems: PersistentList<CombineItem> by lazy {
-        allItems.filter { it.toVanilla() is RangedWeaponItem }.toPersistentList()
-    }
-
-    override val projectileItems: PersistentList<CombineItem> by lazy {
-        allItems.filter { it.toVanilla() is ProjectileItem }.toPersistentList()
-    }
+    override val subclasses: PersistentList<ItemSubclass> = persistentListOf(
+        ItemSubclassImpl(
+            name = TextImpl(Text.literal("Ranged weapon")),
+            clazz = RangedWeaponItem::class.java
+        ),
+        ItemSubclassImpl(
+            name = TextImpl(Text.literal("Projectile")),
+            clazz = ProjectileItem::class.java
+        ),
+    )
 }
 
 fun Item.toCombine() = ItemImpl(this)
