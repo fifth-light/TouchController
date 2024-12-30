@@ -74,6 +74,9 @@ tasks.withType<ProcessResources> {
 }
 
 sourceSets.main {
+    kotlin.srcDir("../common-fabric/src/main/kotlin")
+    kotlin.srcDir("../common-fabric-1.21/src/main/kotlin")
+    java.srcDir("../common-fabric-1.21/src/main/java")
     resources.srcDir("../resources/src/main/resources")
 }
 
