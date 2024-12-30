@@ -4,7 +4,12 @@
 
 ## 支持的平台
 
-由于项目处在早期开发阶段，目前只支持 Minecraft 1.21.1、1.21.3 和 1.21.4。
+目前 TouchController 支持的 Minecraft 版本和 mod 加载器有：
+
+- 1.20.1 (Fabric)
+- 1.21.1 (Fabric)
+- 1.21.3 (Fabric)
+- 1.21.4 (Fabric)
 
 TouchController 的平台输入代码和实际的输入处理代码部分是相互隔离开的，目前支持在 Windows 和[我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher) 和[我修改后的 FoldCraftLauncher](https://github.com/fifth-light/FoldCraftLauncher) 上使用。在未来可能会添加对 Linux 上触屏的支持。
 
