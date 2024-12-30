@@ -13,21 +13,21 @@ fun Context.RawSneakButton(
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (Triple(dpad, classic, status.sneakLocked)) {
                 Triple(false, true, false), Triple(true, true, false) -> if (clicked) {
-                    Texture(id = Textures.GUI_SNEAK_SNEAK_CLASSIC, color = 0xFFAAAAAAu)
+                    Texture(texture = Textures.GUI_SNEAK_SNEAK_CLASSIC, color = 0xFFAAAAAAu)
                 } else {
-                    Texture(id = Textures.GUI_SNEAK_SNEAK_CLASSIC)
+                    Texture(texture = Textures.GUI_SNEAK_SNEAK_CLASSIC)
                 }
 
                 Triple(false, true, true), Triple(true, true, true) -> if (clicked) {
-                    Texture(id = Textures.GUI_SNEAK_SNEAK_CLASSIC_ACTIVE, color = 0xFFAAAAAAu)
+                    Texture(texture = Textures.GUI_SNEAK_SNEAK_CLASSIC_ACTIVE, color = 0xFFAAAAAAu)
                 } else {
-                    Texture(id = Textures.GUI_SNEAK_SNEAK_CLASSIC_ACTIVE)
+                    Texture(texture = Textures.GUI_SNEAK_SNEAK_CLASSIC_ACTIVE)
                 }
 
-                Triple(true, false, false) -> Texture(id = Textures.GUI_SNEAK_SNEAK_DPAD)
-                Triple(true, false, true) -> Texture(id = Textures.GUI_SNEAK_SNEAK_DPAD_ACTIVE)
-                Triple(false, false, false) -> Texture(id = Textures.GUI_SNEAK_SNEAK)
-                Triple(false, false, true) -> Texture(id = Textures.GUI_SNEAK_SNEAK_ACTIVE)
+                Triple(true, false, false) -> Texture(texture = Textures.GUI_SNEAK_SNEAK_DPAD)
+                Triple(true, false, true) -> Texture(texture = Textures.GUI_SNEAK_SNEAK_DPAD_ACTIVE)
+                Triple(false, false, false) -> Texture(texture = Textures.GUI_SNEAK_SNEAK)
+                Triple(false, false, true) -> Texture(texture = Textures.GUI_SNEAK_SNEAK_ACTIVE)
             }
         }
     }

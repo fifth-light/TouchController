@@ -9,12 +9,9 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
 import net.minecraft.text.Text
 import org.joml.Quaternionf
-import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.ItemStack
-import top.fifthlight.combine.paint.BlendFactor
-import top.fifthlight.combine.paint.BlendFunction
-import top.fifthlight.combine.paint.Canvas
-import top.fifthlight.combine.paint.Color
+import top.fifthlight.combine.data.Texture
+import top.fifthlight.combine.paint.*
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
@@ -82,8 +79,8 @@ class CanvasImpl(
         drawContext.drawWrappedTextWithShadow(textRenderer, text.toMinecraft(), offset.x, offset.y, width, color.value)
     }
 
-    override fun drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect, tint: Color) {
-        RenderSystem.setShaderTexture(0, id.toMinecraft())
+    override fun drawTexture(texture: Texture, dstRect: Rect, uvRect: Rect, tint: Color) {
+        RenderSystem.setShaderTexture(0, texture.identifier.toMinecraft())
         withShader(ShaderProgramKeys.POSITION_TEX_COLOR) {
             val matrix = drawContext.matrices.peek().positionMatrix
             val bufferBuilder =
@@ -108,10 +105,10 @@ class CanvasImpl(
         }
     }
 
-    override fun drawGuiTexture(sprite: Identifier, dstRect: IntRect) {
+    override fun drawGuiTexture(texture: GuiTexture, dstRect: IntRect) {
         drawContext.drawGuiTexture(
             RenderLayer::getGuiTextured,
-            sprite.toMinecraft(),
+            texture.toIdentifier(),
             dstRect.left,
             dstRect.top,
             dstRect.size.width,

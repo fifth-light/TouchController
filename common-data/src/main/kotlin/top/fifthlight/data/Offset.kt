@@ -5,10 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.encoding.*
 import kotlin.math.sqrt
 
 fun Offset(offset: Float) = Offset(packFloats(offset, offset))
@@ -70,8 +67,18 @@ private class OffsetSerializer : KSerializer<Offset> {
     }
 
     override fun deserialize(decoder: Decoder): Offset = decoder.decodeStructure(descriptor) {
-        val x = decodeFloatElement(descriptor, 0)
-        val y = decodeFloatElement(descriptor, 1)
+        var x: Float? = null
+        var y: Float? = null
+        while (true) {
+            when (val index = decodeElementIndex(descriptor)) {
+                0 -> x = decodeFloatElement(descriptor, 0)
+                1 -> y = decodeFloatElement(descriptor, 1)
+                CompositeDecoder.DECODE_DONE -> break
+                else -> error("Unexpected index: $index")
+            }
+        }
+        require(x != null) { "Missing x in Offset" }
+        require(y != null) { "Missing y in Offset" }
         Offset(x, y)
     }
 }

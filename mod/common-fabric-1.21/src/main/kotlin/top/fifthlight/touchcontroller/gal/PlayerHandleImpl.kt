@@ -74,11 +74,8 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
             inner.isSprinting = value
         }
 
-    override var isSneaking: Boolean
+    override val isSneaking: Boolean
         get() = inner.isSneaking
-        set(value) {
-            inner.isSneaking = value
-        }
 
     override val ridingEntityType: RidingEntityType?
         get() = when (inner.vehicle) {

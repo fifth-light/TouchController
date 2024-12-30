@@ -158,7 +158,7 @@ private fun Component(
     component: DataComponentType,
 ) {
     val items = remember(component) {
-        component.listItems()
+        component.allItems
     }
     ItemShower(
         modifier = modifier,

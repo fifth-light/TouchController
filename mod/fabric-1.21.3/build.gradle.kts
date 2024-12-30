@@ -78,7 +78,9 @@ sourceSets.main {
     kotlin.srcDir("../common-fabric/src/main/kotlin")
     kotlin.srcDir("../common-fabric-1.21/src/main/kotlin")
     java.srcDir("../common-fabric-1.21/src/main/java")
-    resources.srcDir("../resources/src/main/resources")
+    resources.srcDir("../resources/src/main/resources/lang")
+    resources.srcDir("../resources/src/main/resources/icon")
+    resources.srcDir("../resources/src/main/resources/textures")
 }
 
 kotlin {

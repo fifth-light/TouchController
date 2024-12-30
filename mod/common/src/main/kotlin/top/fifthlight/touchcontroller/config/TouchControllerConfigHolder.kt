@@ -33,6 +33,7 @@ class TouchControllerConfigHolder : KoinComponent {
 
     fun load() {
         try {
+            createConfigDirectory()
             logger.info("Reading TouchController config file")
             _config.value = json.decodeFromString(configFile.readText())
             logger.info("Reading TouchController layout file")

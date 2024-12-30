@@ -1,16 +1,16 @@
 package top.fifthlight.combine.widget.base
 
 import androidx.compose.runtime.Composable
-import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.layout.Layout
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.combine.paint.GuiTexture
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
 
 @Composable
 fun GuiTexture(
-    sprite: Identifier,
+    texture: GuiTexture,
     size: IntSize,
     modifier: Modifier = Modifier,
 ) {
@@ -24,7 +24,7 @@ fun GuiTexture(
         },
         renderer = {
             canvas.drawGuiTexture(
-                sprite = sprite,
+                texture = texture,
                 dstRect = IntRect(offset = IntOffset.ZERO, size = size),
             )
         }

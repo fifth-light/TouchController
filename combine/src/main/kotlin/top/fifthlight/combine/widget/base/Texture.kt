@@ -1,7 +1,7 @@
 package top.fifthlight.combine.widget.base
 
 import androidx.compose.runtime.Composable
-import top.fifthlight.combine.data.Identifier
+import top.fifthlight.combine.data.Texture
 import top.fifthlight.combine.layout.Layout
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.data.IntSize
@@ -10,7 +10,7 @@ import top.fifthlight.data.Rect
 
 @Composable
 fun Texture(
-    id: Identifier,
+    texture: Texture,
     uvRect: Rect = Rect.ONE,
     size: IntSize,
     modifier: Modifier = Modifier,
@@ -25,7 +25,7 @@ fun Texture(
         },
         renderer = {
             canvas.drawTexture(
-                id = id,
+                texture = texture,
                 dstRect = Rect(offset = Offset.ZERO, size = size.toSize()),
                 uvRect = uvRect
             )

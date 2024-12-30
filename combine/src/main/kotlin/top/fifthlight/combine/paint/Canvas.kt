@@ -1,8 +1,8 @@
 package top.fifthlight.combine.paint
 
-import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.ItemStack
 import top.fifthlight.combine.data.Text
+import top.fifthlight.combine.data.Texture
 import top.fifthlight.data.*
 
 enum class BlendFactor {
@@ -46,6 +46,13 @@ inline fun Canvas.withBlendFunction(
     }
 }
 
+enum class GuiTexture {
+    BUTTON,
+    BUTTON_HOVER,
+    BUTTON_ACTIVE,
+    BUTTON_DISABLED,
+}
+
 interface Canvas {
     fun pushState()
     fun popState()
@@ -57,8 +64,8 @@ interface Canvas {
     fun drawTextWithShadow(offset: IntOffset, width: Int, text: String, color: Color)
     fun drawText(offset: IntOffset, width: Int, text: Text, color: Color)
     fun drawTextWithShadow(offset: IntOffset, width: Int, text: Text, color: Color)
-    fun drawTexture(id: Identifier, dstRect: Rect, uvRect: Rect = Rect.ONE, tint: Color = Colors.WHITE)
-    fun drawGuiTexture(sprite: Identifier, dstRect: IntRect)
+    fun drawTexture(texture: Texture, dstRect: Rect, uvRect: Rect = Rect.ONE, tint: Color = Colors.WHITE)
+    fun drawGuiTexture(texture: GuiTexture, dstRect: IntRect)
     fun drawItemStack(offset: IntOffset, size: IntSize = IntSize(16), stack: ItemStack)
     fun enableBlend()
     fun disableBlend()

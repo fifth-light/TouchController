@@ -5,10 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.encoding.*
 
 fun IntSize(size: Int) = IntSize(packInts(size, size))
 fun IntSize(width: Int, height: Int) = IntSize(packInts(width, height))
@@ -33,8 +30,8 @@ value class IntSize internal constructor(private val packed: Long) {
     }
 
     operator fun contains(offset: IntOffset): Boolean {
-        val x = offset.x in 0..<width
-        val y = offset.y in 0..<height
+        val x = offset.x in 0 until width
+        val y = offset.y in 0 until height
         return x && y
     }
 
@@ -65,8 +62,18 @@ private class IntSizeSerializer : KSerializer<IntSize> {
     }
 
     override fun deserialize(decoder: Decoder): IntSize = decoder.decodeStructure(descriptor) {
-        val x = decodeIntElement(descriptor, 0)
-        val y = decodeIntElement(descriptor, 1)
-        IntSize(x, y)
+        var width: Int? = null
+        var height: Int? = null
+        while (true) {
+            when (val index = decodeElementIndex(descriptor)) {
+                0 -> width = decodeIntElement(descriptor, 0)
+                1 -> height = decodeIntElement(descriptor, 1)
+                CompositeDecoder.DECODE_DONE -> break
+                else -> error("Unexpected index: $index")
+            }
+        }
+        require(width != null) { "Missing width in IntSize" }
+        require(height != null) { "Missing height in IntSize" }
+        IntSize(width, height)
     }
 }

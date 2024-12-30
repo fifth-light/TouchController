@@ -21,16 +21,16 @@ object DataComponentTypeFactoryImpl : DataComponentTypeFactory {
     }
 }
 
-@JvmInline
-value class DataComponentTypeImpl(
+data class DataComponentTypeImpl(
     val inner: ComponentType<*>,
 ) : DataComponentType {
     override val id: Identifier?
         get() = Registries.DATA_COMPONENT_TYPE.getKey(inner).getOrNull()?.value?.toCombine()
 
-    override fun listItems(): PersistentList<Item> =
+    override val allItems: PersistentList<Item> by lazy {
         Registries.ITEM
             .filter { this.inner in it.components }
             .map { it.toCombine() }
             .toPersistentList()
+    }
 }

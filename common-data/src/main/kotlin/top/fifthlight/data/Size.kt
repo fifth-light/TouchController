@@ -1,6 +1,11 @@
 package top.fifthlight.data
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.descriptors.element
+import kotlinx.serialization.encoding.*
 import kotlin.math.sqrt
 
 fun Size(size: Float) = Size(packFloats(size, size))
@@ -42,5 +47,33 @@ value class Size internal constructor(private val packed: Long) {
 
     override fun toString(): String {
         return "Size(width=$width, height=$height)"
+    }
+}
+
+private class SizeSerializer : KSerializer<Size> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("top.fifthlight.data.Size") {
+        element<Int>("width")
+        element<Int>("height")
+    }
+
+    override fun serialize(encoder: Encoder, value: Size) = encoder.encodeStructure(descriptor) {
+        encodeFloatElement(descriptor, 0, value.width)
+        encodeFloatElement(descriptor, 1, value.height)
+    }
+
+    override fun deserialize(decoder: Decoder): Size = decoder.decodeStructure(descriptor) {
+        var width: Float? = null
+        var height: Float? = null
+        while (true) {
+            when (val index = decodeElementIndex(descriptor)) {
+                0 -> width = decodeFloatElement(descriptor, 0)
+                1 -> height = decodeFloatElement(descriptor, 1)
+                CompositeDecoder.DECODE_DONE -> break
+                else -> error("Unexpected index: $index")
+            }
+        }
+        require(width != null) { "Missing width in Size" }
+        require(height != null) { "Missing height in Size" }
+        Size(width, height)
     }
 }

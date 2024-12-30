@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.jetbrains.kotlin.serialization)
@@ -8,7 +10,7 @@ version = "0.0.13"
 group = "top.fifthlight.touchcontroller"
 
 sourceSets.main {
-    kotlin.srcDir(project(":mod:resources").layout.buildDirectory.dir("generated"))
+    kotlin.srcDir(project(":mod:resources").layout.buildDirectory.dir("generated/kotlin"))
 }
 
 tasks.compileKotlin {
@@ -33,4 +35,8 @@ dependencies {
 
 kotlin {
     jvmToolchain(8)
+
+    compilerOptions {
+        apiVersion.set(KotlinVersion.KOTLIN_1_8)
+    }
 }

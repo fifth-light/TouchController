@@ -11,6 +11,7 @@ jobs:
         strategy:
             matrix:
                 module: [
+                    "fabric-1.20.1",
                     "fabric-1.21.1",
                     "fabric-1.21.3",
                     "fabric-1.21.4",

@@ -5,10 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.encoding.*
 
 fun IntOffset(offset: Int) = IntOffset(packInts(offset, offset))
 fun IntOffset(x: Int, y: Int) = IntOffset(packInts(x, y))
@@ -62,8 +59,18 @@ private class IntOffsetSerializer : KSerializer<IntOffset> {
     }
 
     override fun deserialize(decoder: Decoder): IntOffset = decoder.decodeStructure(descriptor) {
-        val x = decodeIntElement(descriptor, 0)
-        val y = decodeIntElement(descriptor, 1)
+        var x: Int? = null
+        var y: Int? = null
+        while (true) {
+            when (val index = decodeElementIndex(descriptor)) {
+                0 -> x = decodeIntElement(descriptor, 0)
+                1 -> y = decodeIntElement(descriptor, 1)
+                CompositeDecoder.DECODE_DONE -> break
+                else -> error("Unexpected index: $index")
+            }
+        }
+        require(x != null) { "Missing x in IntOffset" }
+        require(y != null) { "Missing y in IntOffset" }
         IntOffset(x, y)
     }
 }

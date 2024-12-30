@@ -27,5 +27,5 @@ interface DataComponentTypeFactory {
 interface DataComponentType {
     val id: Identifier?
 
-    fun listItems(): PersistentList<Item>
+    val allItems: PersistentList<Item>
 }
