@@ -7,6 +7,7 @@ val androidSdkDir by lazy {
     val path = properties.get("sdk.dir")?.toString()?.takeIf { it.isNotEmpty() }
         ?: System.getenv("ANDROID_HOME").takeIf { it.isNotEmpty() }
         ?: System.getenv("ANDROID_SDK").takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_SDK_HOME").takeIf { it.isNotEmpty() }
         ?: error("No android SDK")
     File(path)
 }
@@ -21,6 +22,7 @@ fun findNdk(sdkDir: File): File? {
 
 val androidNdkDir by lazy {
     val path = properties.get("ndk.dir")?.toString()?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_NDK")
         ?: System.getenv("ANDROID_NDK_HOME")
         ?: findNdk(androidSdkDir)?.toString()
         ?: error("No android NDK")
