@@ -302,27 +302,30 @@ fun ItemListConfigItem(
                 }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text("Components")
-                ComponentListRow(
-                    modifier = Modifier.weight(1f),
-                    items = value.components,
-                )
-                Button(onClick = {
-                    openComponentListScreen(
-                        screenFactory = screenFactory,
-                        textFactory = textFactory,
-                        initialList = value.components,
-                        onListChanged = {
-                            onValueChanged(value.copy(components = it))
-                        }
+            val dataComponentTypeFactory: DataComponentTypeFactory = LocalDataComponentTypeFactory.current
+            if (dataComponentTypeFactory.supportDataComponents) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("Components")
+                    ComponentListRow(
+                        modifier = Modifier.weight(1f),
+                        items = value.components,
                     )
-                }) {
-                    Text(text = "Edit", shadow = true)
+                    Button(onClick = {
+                        openComponentListScreen(
+                            screenFactory = screenFactory,
+                            textFactory = textFactory,
+                            initialList = value.components,
+                            onListChanged = {
+                                onValueChanged(value.copy(components = it))
+                            }
+                        )
+                    }) {
+                        Text(text = "Edit", shadow = true)
+                    }
                 }
             }
         }

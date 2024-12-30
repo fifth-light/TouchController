@@ -44,10 +44,12 @@ object ItemFactoryImpl : ItemFactory {
     override val subclasses: PersistentList<ItemSubclass> = persistentListOf(
         ItemSubclassImpl(
             name = TextImpl(Text.literal("Ranged weapon")),
+            configId = "RangedWeaponItem",
             clazz = RangedWeaponItem::class.java
         ),
         ItemSubclassImpl(
             name = TextImpl(Text.literal("Projectile")),
+            configId = "ProjectileItem",
             clazz = ProjectileItem::class.java
         ),
     )
