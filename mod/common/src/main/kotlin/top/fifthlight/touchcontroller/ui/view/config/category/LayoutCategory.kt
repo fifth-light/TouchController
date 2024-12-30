@@ -187,7 +187,9 @@ private fun LayersPanel(
     currentLayer: Pair<Int, LayoutLayer>? = null,
     layers: PersistentList<LayoutLayer> = persistentListOf(),
     onLayerSelected: (Int) -> Unit = {},
-    onLayerChanged: (Int, LayoutLayer) -> Unit = { _, _ -> }
+    onLayerChanged: (Int, LayoutLayer) -> Unit = { _, _ -> },
+    onLayerRemoved: (Int, LayoutLayer) -> Unit = { _, _ -> },
+    onLayerAdded: () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -195,44 +197,72 @@ private fun LayersPanel(
         Column(
             modifier = Modifier
                 .width(128)
-                .verticalScroll(),
+                .fillMaxHeight(),
         ) {
-            for ((index, layer) in layers.withIndex()) {
-                val soundManager = LocalSoundManager.current
-                if (currentLayer?.first == index) {
-                    Text(
-                        modifier = Modifier
-                            .padding(8)
-                            .fillMaxWidth()
-                            .background(color = Colors.WHITE)
-                            .border(bottom = 1, color = Colors.WHITE)
-                            .clickable {
-                                soundManager.play(SoundKind.BUTTON_PRESS, 1f)
-                            },
-                        text = layer.name,
-                        color = Colors.BLACK
-                    )
-                } else {
-                    Text(
-                        modifier = Modifier
-                            .padding(8)
-                            .fillMaxWidth()
-                            .border(bottom = 1, color = Colors.WHITE)
-                            .clickable {
-                                soundManager.play(SoundKind.BUTTON_PRESS, 1f)
-                                onLayerSelected(index)
-                            },
-                        text = layer.name,
-                    )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll()
+                    .weight(1f),
+            ) {
+                for ((index, layer) in layers.withIndex()) {
+                    val soundManager = LocalSoundManager.current
+                    if (currentLayer?.first == index) {
+                        Text(
+                            modifier = Modifier
+                                .padding(8)
+                                .fillMaxWidth()
+                                .background(color = Colors.WHITE)
+                                .border(bottom = 1, color = Colors.WHITE)
+                                .clickable {
+                                    soundManager.play(SoundKind.BUTTON_PRESS, 1f)
+                                },
+                            text = layer.name,
+                            color = Colors.BLACK
+                        )
+                    } else {
+                        Text(
+                            modifier = Modifier
+                                .padding(8)
+                                .fillMaxWidth()
+                                .border(bottom = 1, color = Colors.WHITE)
+                                .clickable {
+                                    soundManager.play(SoundKind.BUTTON_PRESS, 1f)
+                                    onLayerSelected(index)
+                                },
+                            text = layer.name,
+                        )
+                    }
+                }
+            }
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    onLayerAdded()
+                },
+            ) {
+                Text("Add", shadow = true)
+            }
+            if (currentLayer != null) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        onLayerRemoved(currentLayer.first, currentLayer.second)
+                    },
+                ) {
+                    Text("Remove", shadow = true)
                 }
             }
         }
+
         Spacer(
             modifier = Modifier
                 .width(1)
                 .fillMaxHeight()
                 .background(Colors.WHITE)
         )
+
         if (currentLayer == null) {
             Box(
                 modifier = Modifier
@@ -415,6 +445,12 @@ data object LayoutCategory : ConfigCategory(
                     onLayerSelected = { viewModel.setLayer(it) },
                     onLayerChanged = { index, layer ->
                         viewModel.updateLayer(index, layer)
+                    },
+                    onLayerAdded = {
+                        viewModel.addLayer()
+                    },
+                    onLayerRemoved = { index, _ ->
+                        viewModel.removeLayer(index)
                     },
                 )
 

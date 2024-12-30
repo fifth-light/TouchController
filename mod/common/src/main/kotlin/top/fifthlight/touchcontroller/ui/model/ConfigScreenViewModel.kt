@@ -65,6 +65,22 @@ class ConfigScreenViewModel(
         }
     }
 
+    fun addLayer() {
+        _uiState.getAndUpdate {
+            it.copy(
+                layout = it.layout.add(LayoutLayer())
+            )
+        }
+    }
+
+    fun removeLayer(index: Int) {
+        _uiState.getAndUpdate {
+            it.copy(
+                layout = it.layout.removeAt(index)
+            )
+        }
+    }
+
     fun toggleLayersPanel() {
         _uiState.getAndUpdate {
             it.copy(
