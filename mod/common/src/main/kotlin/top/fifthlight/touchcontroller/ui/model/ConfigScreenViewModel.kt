@@ -48,12 +48,30 @@ class ConfigScreenViewModel(
         }
     }
 
-    fun setLayer(index: Int) {
+    fun selectLayer(index: Int) {
         _uiState.getAndUpdate {
             require(index in it.layout.indices)
             it.copy(
-                selectedLayer = index
+                selectedLayer = index,
+                selectedWidget = -1,
             )
+        }
+    }
+
+    fun selectWidget(index: Int) {
+        _uiState.getAndUpdate {
+            if (index == -1) {
+                it.copy(selectedWidget = -1)
+            } else {
+                val layer = it.layout.getOrNull(it.selectedLayer) ?: return@getAndUpdate it
+                if (index in layer.widgets.indices) {
+                    it.copy(
+                        selectedWidget = index,
+                    )
+                } else {
+                    it
+                }
+            }
         }
     }
 
@@ -67,17 +85,33 @@ class ConfigScreenViewModel(
 
     fun addLayer() {
         _uiState.getAndUpdate {
-            it.copy(
-                layout = it.layout.add(LayoutLayer())
-            )
+            if (it.selectedLayer in it.layout.indices) {
+                it.copy(
+                    layout = it.layout.add(LayoutLayer())
+                )
+            } else {
+                val newLayout = it.layout.add(LayoutLayer())
+                it.copy(
+                    layout = newLayout,
+                    selectedLayer = newLayout.lastIndex,
+                )
+            }
         }
     }
 
     fun removeLayer(index: Int) {
         _uiState.getAndUpdate {
-            it.copy(
-                layout = it.layout.removeAt(index)
-            )
+            if (index == it.selectedLayer) {
+                it.copy(
+                    layout = it.layout.removeAt(index),
+                    selectedLayer = -1,
+                    selectedWidget = -1,
+                )
+            } else {
+                it.copy(
+                    layout = it.layout.removeAt(index),
+                )
+            }
         }
     }
 
@@ -117,6 +151,14 @@ class ConfigScreenViewModel(
         }
     }
 
+    fun closePanel() {
+        _uiState.getAndUpdate {
+            it.copy(
+                layoutPanelState = LayoutPanelState.LAYOUT
+            )
+        }
+    }
+
     fun reset() {
         _uiState.getAndUpdate {
             it.copy(
@@ -135,7 +177,7 @@ class ConfigScreenViewModel(
     }
 
     fun tryExit() {
-        if (uiState.value.config != configHolder.config.value || uiState.value.layout != uiState.value.layout) {
+        if (uiState.value.config != configHolder.config.value || uiState.value.layout != configHolder.layout.value) {
             _uiState.getAndUpdate {
                 it.copy(
                     showExitDialog = true,

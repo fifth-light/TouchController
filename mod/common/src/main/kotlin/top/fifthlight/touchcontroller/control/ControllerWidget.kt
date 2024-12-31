@@ -24,7 +24,11 @@ sealed class ControllerWidget {
 
     interface Property<Config : ControllerWidget, Value> {
         @Composable
-        fun controller(modifier: Modifier = Modifier, config: Config, onConfigChanged: (Config) -> Unit)
+        fun controller(
+            modifier: Modifier = Modifier,
+            config: ControllerWidget,
+            onConfigChanged: (ControllerWidget) -> Unit
+        )
     }
 
     companion object : KoinComponent {
@@ -34,16 +38,17 @@ sealed class ControllerWidget {
             EnumProperty(
                 getValue = { it.align },
                 setValue = { config, value -> config.cloneBase(align = value) },
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_NAME),
                 items = listOf(
-                    Align.LEFT_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_TOP_LEFT),
-                    Align.LEFT_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_CENTER_LEFT),
-                    Align.LEFT_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_BOTTOM_LEFT),
-                    Align.CENTER_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_TOP_CENTER),
-                    Align.CENTER_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_CENTER_CENTER),
-                    Align.CENTER_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_BOTTOM_CENTER),
-                    Align.RIGHT_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_TOP_RIGHT),
-                    Align.RIGHT_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_CENTER_RIGHT),
-                    Align.RIGHT_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_BOTTOM_RIGHT),
+                    Align.LEFT_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_TOP_LEFT),
+                    Align.LEFT_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_CENTER_LEFT),
+                    Align.LEFT_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_BOTTOM_LEFT),
+                    Align.CENTER_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_TOP_CENTER),
+                    Align.CENTER_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_CENTER_CENTER),
+                    Align.CENTER_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_BOTTOM_CENTER),
+                    Align.RIGHT_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_TOP_RIGHT),
+                    Align.RIGHT_CENTER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_CENTER_RIGHT),
+                    Align.RIGHT_BOTTOM to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_BOTTOM_RIGHT),
                 ),
             ),
             FloatProperty(
@@ -60,7 +65,7 @@ sealed class ControllerWidget {
     }
 
     @Transient
-    open val properties: PersistentList<Property<out ControllerWidget, *>> = baseProperties
+    open val properties: PersistentList<Property<ControllerWidget, *>> = baseProperties
 
     abstract fun size(): IntSize
 

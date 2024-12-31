@@ -19,4 +19,5 @@ data class ConfigScreenState(
     val selectedLayer: Int = 0,
     val selectedCategory: ConfigCategory = GlobalCategory,
     val layoutPanelState: LayoutPanelState = LayoutPanelState.LAYOUT,
+    val selectedWidget: Int = -1,
 )

@@ -1,20 +1,23 @@
 package top.fifthlight.touchcontroller.control
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.data.TextFactory
+import top.fifthlight.combine.layout.Alignment
+import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.combine.modifier.placement.fillMaxWidth
+import top.fifthlight.combine.modifier.placement.padding
 import top.fifthlight.combine.modifier.placement.width
+import top.fifthlight.combine.modifier.pointer.clickable
+import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.widget.base.Text
+import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.base.layout.Spacer
-import top.fifthlight.combine.widget.ui.Button
-import top.fifthlight.combine.widget.ui.IntSlider
-import top.fifthlight.combine.widget.ui.Slider
-import top.fifthlight.combine.widget.ui.Switch
+import top.fifthlight.combine.widget.ui.*
 import top.fifthlight.touchcontroller.annoations.DontTranslate
 
 @Immutable
@@ -24,14 +27,19 @@ class BooleanProperty<Config : ControllerWidget>(
     private val message: Text
 ) : ControllerWidget.Property<Config, Boolean>, KoinComponent {
     @Composable
-    override fun controller(modifier: Modifier, config: Config, onConfigChanged: (Config) -> Unit) {
-        Row(modifier) {
+    override fun controller(modifier: Modifier, config: ControllerWidget, onConfigChanged: (ControllerWidget) -> Unit) {
+        @Suppress("UNCHECKED_CAST")
+        val widgetConfig = config as Config
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Text(message)
             Spacer(modifier.weight(1f))
             Switch(
-                checked = getValue(config),
+                checked = getValue(widgetConfig),
                 onChanged = {
-                    onConfigChanged(setValue(config, it))
+                    onConfigChanged(setValue(widgetConfig, it))
                 }
             )
         }
@@ -42,6 +50,7 @@ class BooleanProperty<Config : ControllerWidget>(
 class EnumProperty<Config : ControllerWidget, T>(
     private val getValue: (Config) -> T,
     private val setValue: (Config, T) -> Config,
+    private val name: Text,
     private val items: List<Pair<T, Text>>,
 ) : ControllerWidget.Property<Config, T>, KoinComponent {
     private val textFactory: TextFactory by inject()
@@ -50,19 +59,42 @@ class EnumProperty<Config : ControllerWidget, T>(
         items.firstOrNull { it.first == item }?.second ?: @DontTranslate textFactory.literal(item.toString())
 
     @Composable
-    override fun controller(modifier: Modifier, config: Config, onConfigChanged: (Config) -> Unit) {
-        Button(
+    override fun controller(modifier: Modifier, config: ControllerWidget, onConfigChanged: (ControllerWidget) -> Unit) {
+        @Suppress("UNCHECKED_CAST")
+        val widgetConfig = config as Config
+        Row(
             modifier = modifier,
-            onClick = {
-                if (items.isEmpty()) {
-                    return@Button
-                }
-                val current = getValue(config)
-                val index = (items.indexOfFirst { it.first == current } + 1) % items.size
-                onConfigChanged(setValue(config, items[index].first))
-            }
+            horizontalArrangement = Arrangement.spacedBy(4),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(getItemText(getValue(config)), shadow = true)
+            Text(name)
+
+            var expanded by remember { mutableStateOf(false) }
+            DropdownMenuBox(
+                modifier = Modifier.weight(1f),
+                expanded = expanded,
+                onExpandedChanged = { expanded = it },
+                dropDownContent = { rect ->
+                    Column(Modifier.verticalScroll()) {
+                        for ((item, text) in items) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(4)
+                                    .width(rect.size.width - 2)
+                                    .clickable {
+                                        expanded = false
+                                        onConfigChanged(setValue(widgetConfig, item))
+                                    },
+                                text = text,
+                            )
+                        }
+                    }
+                }
+            ) {
+                Text(getItemText(getValue(widgetConfig)))
+                Spacer(modifier = Modifier.weight(1f))
+                DropdownMenuIcon(expanded)
+            }
         }
     }
 }
@@ -76,17 +108,18 @@ class FloatProperty<Config : ControllerWidget>(
 ) : ControllerWidget.Property<Config, Float> {
 
     @Composable
-    override fun controller(modifier: Modifier, config: Config, onConfigChanged: (Config) -> Unit) {
-        Row(modifier) {
-            val value = getValue(config)
+    override fun controller(modifier: Modifier, config: ControllerWidget, onConfigChanged: (ControllerWidget) -> Unit) {
+        @Suppress("UNCHECKED_CAST")
+        val widgetConfig = config as Config
+        Column(modifier) {
+            val value = getValue(widgetConfig)
             Text(messageFormatter(value))
-            Spacer(modifier.width(16))
             Slider(
-                modifier = modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 value = value,
                 range = range,
                 onValueChanged = {
-                    onConfigChanged(setValue(config, it))
+                    onConfigChanged(setValue(widgetConfig, it))
                 }
             )
         }
@@ -102,17 +135,18 @@ class IntProperty<Config : ControllerWidget>(
 ) : ControllerWidget.Property<Config, Int> {
 
     @Composable
-    override fun controller(modifier: Modifier, config: Config, onConfigChanged: (Config) -> Unit) {
-        Row(modifier) {
-            val value = getValue(config)
+    override fun controller(modifier: Modifier, config: ControllerWidget, onConfigChanged: (ControllerWidget) -> Unit) {
+        @Suppress("UNCHECKED_CAST")
+        val widgetConfig = config as Config
+        Column(modifier) {
+            val value = getValue(widgetConfig)
             Text(messageFormatter(value))
-            Spacer(modifier.width(16))
             IntSlider(
-                modifier = modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 value = value,
                 range = range,
                 onValueChanged = {
-                    onConfigChanged(setValue(config, it))
+                    onConfigChanged(setValue(widgetConfig, it))
                 }
             )
         }

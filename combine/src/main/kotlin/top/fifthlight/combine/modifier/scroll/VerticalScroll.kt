@@ -72,8 +72,8 @@ private data class VerticalScrollNode(
     }
 
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
-        val viewportHeight = constraints.maxHeight
-        if (viewportHeight == Int.MAX_VALUE) {
+        val viewportMaxHeight = constraints.maxHeight
+        if (viewportMaxHeight == Int.MAX_VALUE) {
             error("Bad maxHeight of verticalScroll(): check whether you nested two verticalScroll() modifier")
         }
 
@@ -86,6 +86,7 @@ private data class VerticalScrollNode(
             )
         )
 
+        val viewportHeight = placeable.height.coerceAtMost(viewportMaxHeight)
         scrollState.contentHeight = placeable.height
         scrollState.viewportHeight = viewportHeight
 

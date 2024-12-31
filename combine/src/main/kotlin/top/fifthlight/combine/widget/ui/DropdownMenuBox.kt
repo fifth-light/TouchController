@@ -15,10 +15,16 @@ import top.fifthlight.combine.widget.base.Popup
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Box
 import top.fifthlight.combine.widget.base.layout.Row
-import top.fifthlight.combine.widget.base.layout.RowScope
-import top.fifthlight.combine.widget.base.layout.Spacer
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
+
+@Composable
+fun DropdownMenuIcon(expanded: Boolean) {
+    Text(
+        text = "▶",
+        modifier = Modifier.rotate(if (expanded) -90f else 90f)
+    )
+}
 
 @Composable
 fun DropdownMenuBox(
@@ -26,7 +32,7 @@ fun DropdownMenuBox(
     expanded: Boolean = false,
     onExpandedChanged: (Boolean) -> Unit,
     dropDownContent: @Composable (IntRect) -> Unit,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     var anchor by remember { mutableStateOf<IntRect?>(null) }
     Row(
@@ -43,11 +49,6 @@ fun DropdownMenuBox(
             .then(modifier),
     ) {
         content()
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "▶",
-            modifier = Modifier.rotate(if (expanded) -90f else 90f)
-        )
     }
     val currentAnchor = anchor
     if (expanded && currentAnchor != null) {
@@ -83,10 +84,12 @@ fun DropdownMenuBox(
                     }
                 }
             ) {
-                if (screenSize != null) {
+                val realScreenSize = screenSize
+                if (realScreenSize != null) {
                     Box(
                         modifier = Modifier
                             .minWidth(currentAnchor.size.width - 2)
+                            .maxHeight(realScreenSize.height / 2)
                             .background(Colors.BLACK)
                             .border(1, Colors.WHITE)
                             .onPlaced { contentSize = it.size }

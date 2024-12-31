@@ -8,17 +8,17 @@ import top.fifthlight.combine.data.Text as CombineText
 object TextFactoryImpl : TextFactory {
     override fun literal(string: String) = TextImpl(Text.literal(string))
 
-    override fun of(identifier: Identifier) = TextImpl(
-        when (identifier) {
-            is Identifier.Namespaced -> Text.translatable("${identifier.namespace}.${identifier.id}")
-            is Identifier.Vanilla -> Text.translatable(identifier.id)
-        }
-    )
+    private fun transformIdentifier(identifier: Identifier) = when (identifier) {
+        is Identifier.Namespaced -> "${identifier.namespace}.${identifier.id}"
+        is Identifier.Vanilla -> identifier.id
+    }
+
+    override fun of(identifier: Identifier) = TextImpl(Text.translatable(transformIdentifier(identifier)))
 
     override fun empty() = TextImpl.EMPTY
 
     override fun format(identifier: Identifier, vararg arguments: Any) =
-        TextImpl(Text.translatable(identifier.toString(), *arguments))
+        TextImpl(Text.translatable(transformIdentifier(identifier), *arguments))
 
     override fun toNative(text: CombineText): Any = (text as TextImpl).inner
 }

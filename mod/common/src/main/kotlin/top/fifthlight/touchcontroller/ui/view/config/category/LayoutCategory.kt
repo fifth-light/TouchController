@@ -4,19 +4,28 @@ import androidx.compose.runtime.*
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.plus
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
+import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.LocalItemFactory
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
+import top.fifthlight.combine.layout.Layout
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.combine.modifier.ParentDataModifierNode
 import top.fifthlight.combine.modifier.drawing.background
 import top.fifthlight.combine.modifier.drawing.border
+import top.fifthlight.combine.modifier.drawing.innerLine
 import top.fifthlight.combine.modifier.placement.*
 import top.fifthlight.combine.modifier.pointer.clickable
+import top.fifthlight.combine.modifier.pointer.consumePress
+import top.fifthlight.combine.modifier.pointer.draggable
 import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.paint.Colors
+import top.fifthlight.combine.paint.withScale
+import top.fifthlight.combine.paint.withTranslate
 import top.fifthlight.combine.sound.LocalSoundManager
 import top.fifthlight.combine.sound.SoundKind
 import top.fifthlight.combine.widget.base.Canvas
@@ -24,15 +33,17 @@ import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.*
 import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.combine.widget.ui.DropdownMenuBox
+import top.fifthlight.combine.widget.ui.DropdownMenuIcon
 import top.fifthlight.combine.widget.ui.EditText
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntSize
+import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
 import top.fifthlight.touchcontroller.config.LayoutLayerConditionValue
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.control.ControllerWidget
+import top.fifthlight.touchcontroller.control.*
 import top.fifthlight.touchcontroller.gal.GameFeatures
 import top.fifthlight.touchcontroller.layout.Align
 import top.fifthlight.touchcontroller.layout.Context
@@ -41,45 +52,10 @@ import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.ui.state.LayoutPanelState
 
 @Composable
-private fun BoxScope.ControllerWidget(config: ControllerWidget) {
-    var modifier: Modifier = Modifier.size(config.size())
-    modifier = when (config.align) {
-        Align.LEFT_TOP -> modifier
-            .alignment(Alignment.TopLeft)
-            .offset(x = config.offset.x, y = config.offset.y)
-
-        Align.CENTER_TOP -> modifier
-            .alignment(Alignment.TopCenter)
-            .offset(x = config.offset.x, y = config.offset.y)
-
-        Align.RIGHT_TOP -> modifier
-            .alignment(Alignment.TopRight)
-            .offset(x = -config.offset.x, y = config.offset.y)
-
-        Align.LEFT_CENTER -> modifier
-            .alignment(Alignment.CenterLeft)
-            .offset(x = config.offset.x, y = config.offset.y)
-
-        Align.CENTER_CENTER -> modifier
-            .alignment(Alignment.Center)
-            .offset(x = config.offset.x, y = config.offset.y)
-
-        Align.RIGHT_CENTER -> modifier
-            .alignment(Alignment.CenterRight)
-            .offset(x = -config.offset.x, y = config.offset.y)
-
-        Align.LEFT_BOTTOM -> modifier
-            .alignment(Alignment.BottomLeft)
-            .offset(x = config.offset.x, y = -config.offset.y)
-
-        Align.CENTER_BOTTOM -> modifier
-            .alignment(Alignment.BottomCenter)
-            .offset(x = config.offset.x, y = -config.offset.y)
-
-        Align.RIGHT_BOTTOM -> modifier
-            .alignment(Alignment.BottomRight)
-            .offset(x = -config.offset.x, y = -config.offset.y)
-    }
+private fun ControllerWidget(
+    modifier: Modifier = Modifier,
+    config: ControllerWidget,
+) {
     val drawQueue = DrawQueue()
     val itemFactory = LocalItemFactory.current
     val context = Context(
@@ -94,18 +70,130 @@ private fun BoxScope.ControllerWidget(config: ControllerWidget) {
         condition = persistentMapOf(),
     )
     config.layout(context)
-    Canvas(modifier) {
+    Canvas(
+        modifier = Modifier
+            .size(config.size())
+            .then(modifier)
+    ) {
         drawQueue.execute(canvas)
     }
 }
 
 @Composable
-private fun WidgetsPanel(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier,
-        alignment = Alignment.Center,
+private fun ScaledControllerWidget(
+    modifier: Modifier = Modifier,
+    config: ControllerWidget,
+) {
+    var entrySize by remember { mutableStateOf(IntSize.ZERO) }
+    val itemFactory = LocalItemFactory.current
+    val (drawQueue, componentScaleFactor, offset) = remember(entrySize) {
+        val queue = DrawQueue()
+
+        val widgetSize = config.size()
+        val widthFactor = if (widgetSize.width > entrySize.width) {
+            entrySize.width.toFloat() / widgetSize.width.toFloat()
+        } else 1f
+        val heightFactor = if (widgetSize.height > entrySize.height) {
+            entrySize.height.toFloat() / widgetSize.height.toFloat()
+        } else 1f
+        val componentScaleFactor = widthFactor.coerceAtMost(heightFactor)
+        val displaySize = (widgetSize.toSize() * componentScaleFactor).toIntSize()
+        val offset = (entrySize - displaySize) / 2
+
+        val context = Context(
+            windowSize = IntSize.ZERO,
+            windowScaledSize = IntSize.ZERO,
+            drawQueue = queue,
+            size = config.size(),
+            screenOffset = IntOffset.ZERO,
+            pointers = mutableMapOf(),
+            result = ContextResult(),
+            config = TouchControllerConfig.default(itemFactory),
+            condition = persistentMapOf(),
+        )
+        config.layout(context)
+        Triple(queue, componentScaleFactor, offset)
+    }
+    Canvas(
+        modifier = Modifier
+            .onPlaced { entrySize = it.size }
+            .then(modifier),
     ) {
-        Text("TODO")
+        canvas.withTranslate(offset) {
+            canvas.withScale(componentScaleFactor) {
+                drawQueue.execute(canvas)
+            }
+        }
+    }
+}
+
+private data class WidgetItem(
+    val name: Identifier,
+    val config: ControllerWidget,
+)
+
+private val DEFAULT_CONFIGS = persistentListOf(
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_DPAD_NAME,
+        config = DPad(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_JOYSTICK_NAME,
+        config = Joystick(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_NAME,
+        config = SneakButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_NAME,
+        config = JumpButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_PAUSE_BUTTON_NAME,
+        config = PauseButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_CHAT_BUTTON_NAME,
+        config = ChatButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_ASCEND_BUTTON_NAME,
+        config = AscendButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_DESCEND_BUTTON_NAME,
+        config = DescendButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_INVENTORY_BUTTON_NAME,
+        config = InventoryButton(),
+    ),
+)
+
+@Composable
+private fun WidgetsPanel(
+    modifier: Modifier = Modifier,
+    onWidgetAdded: (ControllerWidget) -> Unit = {},
+) {
+    FlowRow(
+        modifier = modifier
+            .padding(4)
+            .verticalScroll(),
+    ) {
+        for (config in DEFAULT_CONFIGS) {
+            Column(
+                modifier = Modifier.clickable { onWidgetAdded(config.config) },
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4),
+            ) {
+                ScaledControllerWidget(
+                    modifier = Modifier.size(96, 72),
+                    config = config.config,
+                )
+                Text(Text.translatable(config.name))
+            }
+        }
     }
 }
 
@@ -177,6 +265,8 @@ private fun ConditionItem(
             }
         ) {
             Text(valueText)
+            Spacer(modifier = Modifier.weight(1f))
+            DropdownMenuIcon(expanded)
         }
     }
 }
@@ -353,24 +443,204 @@ private fun PresetsPanel(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LayoutEditorPanel(
+private fun WidgetProperties(
     modifier: Modifier = Modifier,
-    layer: LayoutLayer? = null,
-    onLayerChanged: (LayoutLayer) -> Unit = {},
+    widget: ControllerWidget,
+    onWidgetRemoved: () -> Unit = {},
+    onPropertyChanged: (ControllerWidget) -> Unit = {}
 ) {
-    if (layer == null) {
-        Box(
-            modifier = modifier,
-            alignment = Alignment.Center,
+    Box(modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(),
+            verticalArrangement = Arrangement.spacedBy(4),
         ) {
-            Text("No layer selected")
-        }
-    } else {
-        Box(modifier) {
-            for (widget in layer.widgets) {
-                ControllerWidget(widget)
+            Button(
+                onClick = onWidgetRemoved,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(Text.translatable(Texts.SCREEN_ITEMS_REMOVE_TITLE))
+            }
+            for (property in widget.properties) {
+                property.controller(
+                    modifier = Modifier.fillMaxWidth(),
+                    config = widget,
+                    onConfigChanged = onPropertyChanged
+                )
             }
         }
+    }
+}
+
+private data class ControllerWidgetParentData(
+    val align: Align,
+    val offset: IntOffset,
+    val size: IntSize,
+)
+
+private data class ControllerWidgetModifierNode(
+    val align: Align,
+    val offset: IntOffset,
+    val size: IntSize,
+) : ParentDataModifierNode, Modifier.Node<ControllerWidgetModifierNode> {
+    constructor(widget: ControllerWidget) : this(widget.align, widget.offset, widget.size())
+
+    override fun modifierParentData(parentData: Any?): ControllerWidgetParentData {
+        return ControllerWidgetParentData(
+            align = align,
+            offset = offset,
+            size = size
+        )
+    }
+}
+
+@Composable
+private fun LayoutEditorPanel(
+    modifier: Modifier = Modifier,
+    selectedWidgetIndex: Int = -1,
+    onSelectedWidgetChanged: (Int, ControllerWidget?) -> Unit = { _, _ -> },
+    layer: LayoutLayer,
+    layerIndex: Int,
+    onLayerChanged: (LayoutLayer) -> Unit = {},
+) {
+    val selectedWidget = layer.widgets.getOrNull(selectedWidgetIndex)
+    Row(modifier) {
+        Layout(
+            modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f)
+                .consumePress {
+                    onSelectedWidgetChanged(-1, null)
+                },
+            measurePolicy = { measurables, constraints ->
+                val childConstraint = constraints.copy(minWidth = 0, minHeight = 0)
+                val placeables = measurables.map { it.measure(childConstraint) }
+
+                val width = constraints.maxWidth
+                val height = constraints.maxHeight
+                layout(width, height) {
+                    placeables.forEachIndexed { index, placeable ->
+                        val parentData = measurables[index].parentData as ControllerWidgetParentData
+                        placeable.placeAt(
+                            parentData.align.alignOffset(
+                                windowSize = IntSize(width, height),
+                                size = parentData.size,
+                                offset = parentData.offset
+                            )
+                        )
+                    }
+                }
+            }
+        ) {
+            var dragTotalOffset by remember { mutableStateOf(Offset.ZERO) }
+            var widgetInitialOffset by remember { mutableStateOf(IntOffset.ZERO) }
+            LaunchedEffect(selectedWidgetIndex, layerIndex, selectedWidget?.align) {
+                widgetInitialOffset = layer.widgets.getOrNull(selectedWidgetIndex)?.offset ?: IntOffset.ZERO
+                dragTotalOffset = Offset.ZERO
+            }
+
+            for ((index, widget) in layer.widgets.withIndex()) {
+                if (selectedWidgetIndex == index) {
+                    ControllerWidget(
+                        modifier = Modifier
+                            .then(ControllerWidgetModifierNode(widget))
+                            .innerLine(Colors.WHITE)
+                            .draggable { offset ->
+                                dragTotalOffset += offset
+                                val intOffset = dragTotalOffset.toIntOffset()
+                                val appliedOffset = when (widget.align) {
+                                    Align.LEFT_TOP, Align.CENTER_TOP, Align.LEFT_CENTER, Align.CENTER_CENTER -> intOffset
+                                    Align.RIGHT_TOP, Align.RIGHT_CENTER -> IntOffset(-intOffset.x, intOffset.y)
+                                    Align.LEFT_BOTTOM, Align.CENTER_BOTTOM -> IntOffset(intOffset.x, -intOffset.y)
+                                    Align.RIGHT_BOTTOM -> -intOffset
+                                }
+                                val newWidget = widget.cloneBase(
+                                    offset = widgetInitialOffset + appliedOffset,
+                                )
+                                onLayerChanged(
+                                    layer.copy(
+                                        widgets = layer.widgets.set(index, newWidget)
+                                    )
+                                )
+                            },
+                        config = widget
+                    )
+                } else {
+                    ControllerWidget(
+                        modifier = Modifier
+                            .then(ControllerWidgetModifierNode(widget))
+                            .clickable {
+                                onSelectedWidgetChanged(index, widget)
+                            },
+                        config = widget
+                    )
+                }
+            }
+        }
+        if (selectedWidget != null) {
+            WidgetProperties(
+                modifier = Modifier
+                    .padding(4)
+                    .fillMaxHeight()
+                    .border(left = 1, color = Colors.WHITE)
+                    .width(128),
+                widget = selectedWidget,
+                onWidgetRemoved = {
+                    onSelectedWidgetChanged(-1, null)
+                    onLayerChanged(
+                        layer.copy(
+                            widgets = layer.widgets.removeAt(selectedWidgetIndex),
+                        )
+                    )
+                },
+                onPropertyChanged = {
+                    onLayerChanged(
+                        layer.copy(
+                            widgets = layer.widgets.set(selectedWidgetIndex, it)
+                        )
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun LayerDropdown(
+    modifier: Modifier = Modifier,
+    currentLayer: LayoutLayer? = null,
+    allLayers: PersistentList<LayoutLayer> = persistentListOf(),
+    onLayerSelected: (Int, LayoutLayer) -> Unit = { _, _ -> },
+) {
+    var expanded by remember { mutableStateOf(false) }
+    DropdownMenuBox(
+        modifier = modifier,
+        expanded = expanded,
+        onExpandedChanged = { expanded = it },
+        dropDownContent = { rect ->
+            Column(Modifier.verticalScroll()) {
+                for ((index, layer) in allLayers.withIndex()) {
+                    Text(
+                        modifier = Modifier
+                            .padding(4)
+                            .minWidth(rect.size.width - 2)
+                            .clickable {
+                                onLayerSelected(index, layer)
+                                expanded = false
+                            },
+                        text = layer.name,
+                    )
+                }
+            }
+        }
+    ) {
+        if (currentLayer == null) {
+            Text(text = "No layer selected")
+        } else {
+            Text(text = currentLayer.name)
+        }
+        DropdownMenuIcon(expanded)
     }
 }
 
@@ -394,23 +664,28 @@ data object LayoutCategory : ConfigCategory(
                 }) {
                     Text("Add widget", shadow = true)
                 }
+
+                val currentLayer = uiState.layout.getOrNull(uiState.selectedLayer)
+                LayerDropdown(
+                    currentLayer = currentLayer,
+                    allLayers = uiState.layout,
+                    onLayerSelected = { index, _ ->
+                        viewModel.selectLayer(index)
+                    }
+                )
+
                 Button(onClick = {
                     viewModel.toggleLayersPanel()
                 }) {
-                    Text("Layers", shadow = true)
-                }
-                Button(onClick = {
-                    viewModel.togglePresetsPanel()
-                }) {
-                    Text("Presets", shadow = true)
+                    Text("Properties", shadow = true)
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 Button(onClick = {
-                    viewModel.reset()
+                    viewModel.togglePresetsPanel()
                 }) {
-                    Text(Text.translatable(Texts.SCREEN_OPTIONS_RESET_TITLE), shadow = true)
+                    Text("Presets", shadow = true)
                 }
                 Button(onClick = {
                     viewModel.tryExit()
@@ -426,15 +701,31 @@ data object LayoutCategory : ConfigCategory(
             val selectedLayer = uiState.selectedLayer
             val currentLayer = uiState.layout.getOrNull(selectedLayer)
             when (uiState.layoutPanelState) {
-                LayoutPanelState.LAYOUT -> LayoutEditorPanel(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    layer = currentLayer,
-                    onLayerChanged = {
-                        viewModel.updateLayer(selectedLayer, it)
+                LayoutPanelState.LAYOUT -> if (currentLayer != null) {
+                    LayoutEditorPanel(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        layer = currentLayer,
+                        layerIndex = uiState.selectedLayer,
+                        onLayerChanged = {
+                            viewModel.updateLayer(selectedLayer, it)
+                        },
+                        selectedWidgetIndex = uiState.selectedWidget,
+                        onSelectedWidgetChanged = { index, _ ->
+                            viewModel.selectWidget(index)
+                        },
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        alignment = Alignment.Center,
+                    ) {
+                        Text("No layer selected")
                     }
-                )
+                }
 
                 LayoutPanelState.LAYERS -> LayersPanel(
                     modifier = Modifier
@@ -442,7 +733,7 @@ data object LayoutCategory : ConfigCategory(
                         .fillMaxWidth(),
                     currentLayer = currentLayer?.let { Pair(selectedLayer, it) },
                     layers = uiState.layout,
-                    onLayerSelected = { viewModel.setLayer(it) },
+                    onLayerSelected = { viewModel.selectLayer(it) },
                     onLayerChanged = { index, layer ->
                         viewModel.updateLayer(index, layer)
                     },
@@ -454,11 +745,30 @@ data object LayoutCategory : ConfigCategory(
                     },
                 )
 
-                LayoutPanelState.WIDGETS -> WidgetsPanel(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                )
+                LayoutPanelState.WIDGETS -> if (currentLayer == null) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        alignment = Alignment.Center
+                    ) {
+                        Text("Select a layer to add widget")
+                    }
+                } else {
+                    WidgetsPanel(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        onWidgetAdded = {
+                            viewModel.updateLayer(
+                                selectedLayer, currentLayer.copy(
+                                    widgets = currentLayer.widgets + it
+                                )
+                            )
+                            viewModel.closePanel()
+                        }
+                    )
+                }
 
                 LayoutPanelState.PRESETS -> PresetsPanel(
                     modifier = Modifier

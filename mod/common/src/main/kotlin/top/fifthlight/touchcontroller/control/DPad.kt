@@ -1,5 +1,6 @@
 package top.fifthlight.touchcontroller.control
 
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.plus
 import kotlinx.serialization.SerialName
@@ -36,14 +37,16 @@ data class DPad(
     companion object : KoinComponent {
         private val textFactory: TextFactory by inject()
 
+        @Suppress("UNCHECKED_CAST")
         private val _properties = baseProperties + persistentListOf<Property<DPad, *>>(
             EnumProperty(
                 getValue = { it.extraButton },
                 setValue = { config, value -> config.copy(extraButton = value) },
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_NAME),
                 items = listOf(
-                    DPadExtraButton.NONE to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_NONE),
-                    DPadExtraButton.SNEAK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_SNEAK),
-                    DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_JUMP),
+                    DPadExtraButton.NONE to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_NONE),
+                    DPadExtraButton.SNEAK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK),
+                    DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP),
                 ),
             ),
             FloatProperty(
@@ -79,7 +82,7 @@ data class DPad(
                 setValue = { config, value -> config.copy(classic = value) },
                 message = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_CLASSIC),
             )
-        )
+        ) as PersistentList<Property<ControllerWidget, *>>
     }
 
     override val properties

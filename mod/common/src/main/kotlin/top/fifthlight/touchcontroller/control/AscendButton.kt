@@ -1,5 +1,6 @@
 package top.fifthlight.touchcontroller.control
 
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.plus
 import kotlinx.serialization.SerialName
@@ -33,6 +34,7 @@ data class AscendButton(
     companion object : KoinComponent {
         private val textFactory: TextFactory by inject()
 
+        @Suppress("UNCHECKED_CAST")
         private val _properties = baseProperties + persistentListOf<Property<AscendButton, *>>(
             FloatProperty(
                 getValue = { it.size },
@@ -48,13 +50,14 @@ data class AscendButton(
             EnumProperty(
                 getValue = { it.texture },
                 setValue = { config, value -> config.copy(texture = value) },
+                name = textFactory.literal("Style"),
                 items = persistentListOf(
                     AscendButtonTexture.CLASSIC to textFactory.literal("Classic"),
                     AscendButtonTexture.SWIMMING to textFactory.literal("Swimming"),
                     AscendButtonTexture.FLYING to textFactory.literal("Flying"),
                 )
             )
-        )
+        ) as PersistentList<Property<ControllerWidget, *>>
     }
 
     override val properties

@@ -57,6 +57,10 @@ class CanvasImpl(
         }
     }
 
+    override fun scale(x: Float, y: Float) {
+        drawContext.matrices.scale(x, y, 1f)
+    }
+
     override fun fillRect(offset: IntOffset, size: IntSize, color: Color) {
         drawContext.fill(offset.x, offset.y, offset.x + size.width, offset.y + size.height, color.value)
     }

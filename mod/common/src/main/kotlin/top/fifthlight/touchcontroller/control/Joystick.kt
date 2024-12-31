@@ -1,5 +1,6 @@
 package top.fifthlight.touchcontroller.control
 
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.plus
 import kotlinx.serialization.SerialName
@@ -29,6 +30,7 @@ data class Joystick(
     companion object : KoinComponent {
         private val textFactory: TextFactory by inject()
 
+        @Suppress("UNCHECKED_CAST")
         private val _properties = baseProperties + persistentListOf<Property<Joystick, *>>(
             FloatProperty(
                 getValue = { it.size },
@@ -62,7 +64,7 @@ data class Joystick(
                 setValue = { config, value -> config.copy(increaseOpacityWhenActive = value) },
                 message = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JOYSTICK_PROPERTY_INCREASE_OPACITY_WHEN_ACTIVE),
             )
-        )
+        ) as PersistentList<Property<ControllerWidget, *>>
     }
 
     override val properties

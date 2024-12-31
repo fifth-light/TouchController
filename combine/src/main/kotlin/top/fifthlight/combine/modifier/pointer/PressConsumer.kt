@@ -8,12 +8,16 @@ import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
 
 @Composable
-fun Modifier.consumePress() = then(PressConsumerModifierNode)
+fun Modifier.consumePress(onPress: () -> Unit = {}) = then(PressConsumerModifierNode(onPress))
 
-private data object PressConsumerModifierNode : Modifier.Node<PressConsumerModifierNode>, PointerInputModifierNode {
+private data class PressConsumerModifierNode(
+    val onPress: () -> Unit
+) : Modifier.Node<PressConsumerModifierNode>, PointerInputModifierNode {
     override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
         if (event.type == PointerEventType.Press) {
-            children(event)
+            if (!children(event)) {
+                onPress()
+            }
             return true
         } else {
             return false

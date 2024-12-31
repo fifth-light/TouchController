@@ -61,6 +61,7 @@ interface Canvas {
     fun translate(x: Int, y: Int)
     fun translate(x: Float, y: Float)
     fun rotate(degrees: Float)
+    fun scale(x: Float, y: Float)
     fun fillRect(offset: IntOffset = IntOffset.ZERO, size: IntSize = IntSize.ZERO, color: Color)
     fun drawRect(offset: IntOffset = IntOffset.ZERO, size: IntSize = IntSize.ZERO, color: Color)
     fun drawText(offset: IntOffset, text: String, color: Color)
@@ -118,6 +119,28 @@ inline fun Canvas.withTranslate(offset: Offset, crossinline block: Canvas.() -> 
         block()
     } finally {
         translate(-offset)
+    }
+}
+
+fun Canvas.scale(scale: Float) = scale(scale, scale)
+
+inline fun Canvas.withScale(scale: Float, crossinline block: Canvas.() -> Unit) {
+    pushState()
+    scale(scale)
+    try {
+        block()
+    } finally {
+        popState()
+    }
+}
+
+inline fun Canvas.withScale(x: Float, y: Float, crossinline block: Canvas.() -> Unit) {
+    pushState()
+    scale(x, y)
+    try {
+        block()
+    } finally {
+        popState()
     }
 }
 
