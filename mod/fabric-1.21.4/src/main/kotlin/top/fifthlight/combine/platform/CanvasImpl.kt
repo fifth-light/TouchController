@@ -31,6 +31,8 @@ class CanvasImpl(
     val drawContext: DrawContext,
     val textRenderer: TextRenderer,
 ) : Canvas {
+    override val textMeasurer: TextMeasurer = TextMeasurerImpl(textRenderer)
+
     override fun pushState() {
         drawContext.matrices.push()
     }
@@ -58,24 +60,39 @@ class CanvasImpl(
         drawContext.fill(offset.x, offset.y, offset.x + size.width, offset.y + size.height, color.value)
     }
 
+    override fun drawRect(offset: IntOffset, size: IntSize, color: Color) {
+        drawContext.drawBorder(offset.x, offset.y, size.width, size.height, color.value)
+    }
+
+    override fun drawText(offset: IntOffset, text: String, color: Color) {
+        drawContext.drawText(textRenderer, text, offset.x, offset.y, color.value, false)
+    }
+
     override fun drawText(offset: IntOffset, width: Int, text: String, color: Color) {
         drawContext.drawWrappedText(textRenderer, Text.literal(text), offset.x, offset.y, width, color.value, false)
+    }
+
+    override fun drawText(offset: IntOffset, text: CombineText, color: Color) {
+        drawContext.drawText(textRenderer, text.toMinecraft(), offset.x, offset.y, color.value, false)
     }
 
     override fun drawText(offset: IntOffset, width: Int, text: CombineText, color: Color) {
         drawContext.drawWrappedText(textRenderer, text.toMinecraft(), offset.x, offset.y, width, color.value, false)
     }
 
+    override fun drawTextWithShadow(offset: IntOffset, text: String, color: Color) {
+        drawContext.drawText(textRenderer, text, offset.x, offset.y, color.value, true)
+    }
+
     override fun drawTextWithShadow(offset: IntOffset, width: Int, text: String, color: Color) {
         drawContext.drawWrappedTextWithShadow(textRenderer, Text.literal(text), offset.x, offset.y, width, color.value)
     }
 
-    override fun drawTextWithShadow(
-        offset: IntOffset,
-        width: Int,
-        text: top.fifthlight.combine.data.Text,
-        color: Color
-    ) {
+    override fun drawTextWithShadow(offset: IntOffset, text: CombineText, color: Color) {
+        drawContext.drawText(textRenderer, text.toMinecraft(), offset.x, offset.y, color.value, true)
+    }
+
+    override fun drawTextWithShadow(offset: IntOffset, width: Int, text: CombineText, color: Color) {
         drawContext.drawWrappedTextWithShadow(textRenderer, text.toMinecraft(), offset.x, offset.y, width, color.value)
     }
 

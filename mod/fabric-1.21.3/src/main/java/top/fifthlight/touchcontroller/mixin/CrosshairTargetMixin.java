@@ -59,12 +59,8 @@ public abstract class CrosshairTargetMixin {
     @Shadow
     public abstract Matrix4f getBasicProjectionMatrix(float fov);
 
-    /**
-     * @author fifth_light
-     * @reason Overwrite the findCrosshairTarget to change the crosshair target to touch crosshair
-     */
-    @Overwrite
-    private HitResult findCrosshairTarget(Entity camera, double blockInteractionRange, double entityInteractionRange, float tickDelta) {
+    @Unique
+    private Vec3d getCrosshairDirection(float fov, double cameraPitchRadians, double cameraYawRadians) {
         var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
         var crosshairStatus = controllerHudModel.getResult().getCrosshairStatus();
 
@@ -75,17 +71,27 @@ public abstract class CrosshairTargetMixin {
             var screen = new Vector2d(crosshairStatus.getPositionX(), crosshairStatus.getPositionY());
             ndc = new Vector4d(2 * screen.x - 1, 1 - 2 * screen.y, -1f, 1f);
         }
-        var fov = getFov(this.camera, tickDelta, true);
 
         var inverseProjectionMatrix = getBasicProjectionMatrix(fov).invert();
         var pointerDirection = ndc.mul(inverseProjectionMatrix);
         var direction = new Vector3d(-pointerDirection.x, pointerDirection.y, 1f).normalize();
 
-        var cameraPitch = camera.getPitch(tickDelta) * 0.017453293;
-        var cameraYaw = camera.getYaw(tickDelta) * 0.017453293;
-        var normalizedDirection = direction.rotateX(cameraPitch).rotateY(-cameraYaw);
+        var normalizedDirection = direction.rotateX(cameraPitchRadians).rotateY(-cameraYawRadians);
 
-        var finalDirection = new Vec3d(normalizedDirection.x, normalizedDirection.y, normalizedDirection.z);
-        return findTargetWithDirection(camera, finalDirection, blockInteractionRange, entityInteractionRange, tickDelta);
+        return new Vec3d(normalizedDirection.x, normalizedDirection.y, normalizedDirection.z);
+    }
+
+    /**
+     * @author fifth_light
+     * @reason Overwrite the findCrosshairTarget to change the crosshair target to touch crosshair
+     */
+    @Overwrite
+    private HitResult findCrosshairTarget(Entity camera, double blockInteractionRange, double entityInteractionRange, float tickDelta) {
+        var fov = getFov(this.camera, tickDelta, true);
+        var cameraPitch = Math.toRadians(camera.getPitch(tickDelta));
+        var cameraYaw = Math.toRadians(camera.getYaw(tickDelta));
+        var direction = getCrosshairDirection(fov, cameraPitch, cameraYaw);
+
+        return findTargetWithDirection(camera, direction, blockInteractionRange, entityInteractionRange, tickDelta);
     }
 }

@@ -38,5 +38,6 @@ kotlin {
 
     compilerOptions {
         apiVersion.set(KotlinVersion.KOTLIN_1_8)
+        freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
     }
 }

@@ -17,6 +17,10 @@ public abstract class ControlsOptionsScreenMixin {
     protected void init(CallbackInfo ci) {
         var client = MinecraftClient.getInstance();
         var screen = (ControlsOptionsScreen) (Object) this;
+
+        var doneButton = (ButtonWidget) screen.children().get(screen.children().size() - 1);
+        doneButton.setPosition(doneButton.getX(), doneButton.getY() + 24);
+
         var invoker = (ScreenInvoker) screen;
         var getter = ConfigScreenGetter.INSTANCE;
         invoker.invokeAddDrawableChild(
@@ -25,7 +29,7 @@ public abstract class ControlsOptionsScreenMixin {
                                 (Text) getter.getText(),
                                 btn -> client.setScreen((Screen) getter.getScreen(screen))
                         )
-                        .dimensions(0, 0, 150, 20)
+                        .dimensions(screen.width / 2 - 155, screen.height / 6 + 60, 150, 20)
                         .build()
         );
     }

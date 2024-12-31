@@ -18,7 +18,7 @@ import top.fifthlight.combine.data.*
 
 @Immutable
 @Serializable
-class ItemList private constructor(
+data class ItemList private constructor(
     @SerialName("whitelist")
     private val _whitelist: ItemsList = ItemsList(),
     @SerialName("blacklist")
