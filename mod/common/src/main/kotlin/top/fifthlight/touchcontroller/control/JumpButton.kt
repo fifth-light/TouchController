@@ -50,11 +50,11 @@ data class JumpButton(
             EnumProperty(
                 getValue = { it.texture },
                 setValue = { config, value -> config.copy(texture = value) },
-                name = textFactory.literal("Style"),
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE),
                 items = persistentListOf(
-                    JumpButtonTexture.CLASSIC to textFactory.literal("Classic"),
-                    JumpButtonTexture.CLASSIC_FLYING to textFactory.literal("Classic flying"),
-                    JumpButtonTexture.NEW to textFactory.literal("New"),
+                    JumpButtonTexture.CLASSIC to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_CLASSIC),
+                    JumpButtonTexture.CLASSIC_FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_CLASSIC_FLYING),
+                    JumpButtonTexture.NEW to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_NEW),
                 )
             )
         ) as PersistentList<Property<ControllerWidget, *>>

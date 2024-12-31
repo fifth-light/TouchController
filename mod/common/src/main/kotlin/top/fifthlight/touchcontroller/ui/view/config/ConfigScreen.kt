@@ -14,6 +14,7 @@ import top.fifthlight.combine.widget.ui.AlertDialog
 import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.combine.widget.ui.Tab
 import top.fifthlight.combine.widget.ui.TabItem
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.model.ConfigScreenViewModel
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
 import top.fifthlight.touchcontroller.ui.view.config.category.GlobalCategory
@@ -53,22 +54,22 @@ fun ConfigScreen(viewModel: ConfigScreenViewModel) {
                 viewModel.dismissExitDialog()
             },
             title = {
-                Text("Warning")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_UNSAVED_WARNING_TITLE))
             },
             action = {
                 Button(onClick = {
                     viewModel.exit()
                 }) {
-                    Text("Yes", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_UNSAVED_WARNING_YES_TITLE), shadow = true)
                 }
                 Button(onClick = {
                     viewModel.dismissExitDialog()
                 }) {
-                    Text("No", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_UNSAVED_WARNING_NO_TITLE), shadow = true)
                 }
             },
         ) {
-            Text("You have unsaved changes. Do you really want to exit? All unsaved changed will be lost.")
+            Text(Text.translatable(Texts.SCREEN_OPTIONS_UNSAVED_WARNING_MESSAGE))
         }
     }
     Column {

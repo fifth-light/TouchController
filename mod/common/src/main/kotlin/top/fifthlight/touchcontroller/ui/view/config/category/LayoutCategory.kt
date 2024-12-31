@@ -210,29 +210,29 @@ private fun ConditionItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val keyText = when (key) {
-            LayoutLayerConditionKey.SWIMMING -> "Swimming"
-            LayoutLayerConditionKey.FLYING -> "Flying"
-            LayoutLayerConditionKey.SNEAKING -> "Sneaking"
-            LayoutLayerConditionKey.SPRINTING -> "Sprinting"
-            LayoutLayerConditionKey.ON_GROUND -> "On ground"
-            LayoutLayerConditionKey.NOT_ON_GROUND -> "Not on ground"
-            LayoutLayerConditionKey.USING_ITEM -> "Using item"
-            LayoutLayerConditionKey.ON_MINECART -> "On minecart"
-            LayoutLayerConditionKey.ON_BOAT -> "On boat"
-            LayoutLayerConditionKey.ON_PIG -> "On pig"
-            LayoutLayerConditionKey.ON_HORSE -> "On horse"
-            LayoutLayerConditionKey.ON_DONKEY -> "On donkey"
-            LayoutLayerConditionKey.ON_LLAMA -> "On llama"
-            LayoutLayerConditionKey.ON_STRIDER -> "On strider"
-            LayoutLayerConditionKey.RIDING -> "Riding entity"
+            LayoutLayerConditionKey.SWIMMING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SWIMMING_TITLE
+            LayoutLayerConditionKey.FLYING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_FLYING_TITLE
+            LayoutLayerConditionKey.SNEAKING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SNEAKING_TITLE
+            LayoutLayerConditionKey.SPRINTING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SPRINTING_TITLE
+            LayoutLayerConditionKey.ON_GROUND -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_GROUND_TITLE
+            LayoutLayerConditionKey.NOT_ON_GROUND -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_NOT_ON_GROUND_TITLE
+            LayoutLayerConditionKey.USING_ITEM -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_USING_ITEM_TITLE
+            LayoutLayerConditionKey.ON_MINECART -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_MINECART_TITLE
+            LayoutLayerConditionKey.ON_BOAT -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_BOAT_TITLE
+            LayoutLayerConditionKey.ON_PIG -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_PIG_TITLE
+            LayoutLayerConditionKey.ON_HORSE -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_HORSE_TITLE
+            LayoutLayerConditionKey.ON_DONKEY -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_DONKEY_TITLE
+            LayoutLayerConditionKey.ON_LLAMA -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_LLAMA_TITLE
+            LayoutLayerConditionKey.ON_STRIDER -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_ON_STRIDER_TITLE
+            LayoutLayerConditionKey.RIDING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_RIDING_TITLE
         }
-        Text(keyText)
+        Text(Text.translatable(keyText))
 
         fun valueToText(value: LayoutLayerConditionValue?) = when (value) {
-            LayoutLayerConditionValue.NEVER -> "Never"
-            LayoutLayerConditionValue.WANT -> "Want"
-            LayoutLayerConditionValue.REQUIRE -> "Requires"
-            null -> "Ignore"
+            LayoutLayerConditionValue.NEVER -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_NEVER_TITLE
+            LayoutLayerConditionValue.WANT -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_WANT_TITLE
+            LayoutLayerConditionValue.REQUIRE -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_REQUIRE_TITLE
+            null -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_IGNORE_TITLE
         }
 
         val valueText = valueToText(value)
@@ -258,13 +258,13 @@ private fun ConditionItem(
                                     onValueChanged(showValue)
                                     expanded = false
                                 },
-                            text = valueToText(showValue),
+                            text = Text.translatable(valueToText(showValue)),
                         )
                     }
                 }
             }
         ) {
-            Text(valueText)
+            Text(Text.translatable(valueText))
             Spacer(modifier = Modifier.weight(1f))
             DropdownMenuIcon(expanded)
         }
@@ -332,7 +332,7 @@ private fun LayersPanel(
                     onLayerAdded()
                 },
             ) {
-                Text("Add", shadow = true)
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_ADD_TITLE), shadow = true)
             }
             if (currentLayer != null) {
                 Button(
@@ -341,7 +341,7 @@ private fun LayersPanel(
                         onLayerRemoved(currentLayer.first, currentLayer.second)
                     },
                 ) {
-                    Text("Remove", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_REMOVE_TITLE), shadow = true)
                 }
             }
         }
@@ -360,7 +360,7 @@ private fun LayersPanel(
                     .weight(1f),
                 alignment = Alignment.Center
             ) {
-                Text("Select a layer")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_SELECT_A_LAYER_TITLE))
             }
         } else {
             val (index, layer) = currentLayer
@@ -376,7 +376,7 @@ private fun LayersPanel(
                     horizontalArrangement = Arrangement.spacedBy(8),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Name")
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_NAME_TITLE))
                     EditText(
                         modifier = Modifier.weight(1f),
                         value = layer.name,
@@ -388,8 +388,9 @@ private fun LayersPanel(
 
 
                 KoinContext {
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TITLE))
+
                     val gameFeatures: GameFeatures = koinInject()
-                    Text("Conditions")
                     val conditionsList = listOfNotNull(
                         LayoutLayerConditionKey.SWIMMING,
                         LayoutLayerConditionKey.FLYING,
@@ -460,7 +461,7 @@ private fun WidgetProperties(
                 onClick = onWidgetRemoved,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(Text.translatable(Texts.SCREEN_ITEMS_REMOVE_TITLE))
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_REMOVE_TITLE))
             }
             for (property in widget.properties) {
                 property.controller(
@@ -636,7 +637,7 @@ private fun LayerDropdown(
         }
     ) {
         if (currentLayer == null) {
-            Text(text = "No layer selected")
+            Text(text = Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_NO_LAYER_SELECTED_TITLE))
         } else {
             Text(text = currentLayer.name)
         }
@@ -662,7 +663,7 @@ data object LayoutCategory : ConfigCategory(
                 Button(onClick = {
                     viewModel.toggleWidgetsPanel()
                 }) {
-                    Text("Add widget", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_ADD_TITLE), shadow = true)
                 }
 
                 val currentLayer = uiState.layout.getOrNull(uiState.selectedLayer)
@@ -677,7 +678,7 @@ data object LayoutCategory : ConfigCategory(
                 Button(onClick = {
                     viewModel.toggleLayersPanel()
                 }) {
-                    Text("Properties", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_PROPERTIES_TITLE), shadow = true)
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -685,7 +686,7 @@ data object LayoutCategory : ConfigCategory(
                 Button(onClick = {
                     viewModel.togglePresetsPanel()
                 }) {
-                    Text("Presets", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_PRESETS_TITLE), shadow = true)
                 }
                 Button(onClick = {
                     viewModel.tryExit()
@@ -723,7 +724,7 @@ data object LayoutCategory : ConfigCategory(
                             .fillMaxWidth(),
                         alignment = Alignment.Center,
                     ) {
-                        Text("No layer selected")
+                        Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_NO_LAYER_SELECTED_TITLE))
                     }
                 }
 
@@ -752,7 +753,7 @@ data object LayoutCategory : ConfigCategory(
                             .fillMaxWidth(),
                         alignment = Alignment.Center
                     ) {
-                        Text("Select a layer to add widget")
+                        Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_SELECT_LAYER_TO_ADD_TITLE))
                     }
                 } else {
                     WidgetsPanel(

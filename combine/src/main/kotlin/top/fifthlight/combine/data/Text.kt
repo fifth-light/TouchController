@@ -9,7 +9,7 @@ interface TextFactory {
     fun literal(string: String): Text
     fun of(identifier: Identifier): Text
     fun empty(): Text
-    fun format(identifier: Identifier, vararg arguments: Any): Text
+    fun format(identifier: Identifier, vararg arguments: Any?): Text
     fun toNative(text: Text): Any
 }
 
@@ -19,6 +19,10 @@ interface Text {
     companion object {
         @Composable
         fun translatable(identifier: Identifier) = LocalTextFactory.current.of(identifier)
+
+        @Composable
+        fun format(identifier: Identifier, vararg arguments: Any?) =
+            LocalTextFactory.current.format(identifier, *arguments)
 
         @Composable
         fun empty() = LocalTextFactory.current.empty()

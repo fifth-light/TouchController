@@ -32,28 +32,28 @@ data object ItemsCategory : ConfigCategory(
             ) {
                 ItemListConfigItem(
                     modifier = Modifier.fillMaxWidth(),
-                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_TITLE),
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_TITLE),
                     value = uiState.config.usableItems,
                     onValueChanged = { viewModel.updateConfig { copy(usableItems = it) } },
                     onHovered = {
                         if (it) {
                             hoverData = HoverData(
-                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_TITLE,
-                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_ITEMS_DESCRIPTION,
+                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_TITLE,
+                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_USABLE_ITEMS_DESCRIPTION,
                             )
                         }
                     },
                 )
                 ItemListConfigItem(
                     modifier = Modifier.fillMaxWidth(),
-                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE),
+                    name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_TITLE),
                     value = uiState.config.showCrosshairItems,
                     onValueChanged = { viewModel.updateConfig { copy(showCrosshairItems = it) } },
                     onHovered = {
                         if (it) {
                             hoverData = HoverData(
-                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_TITLE,
-                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_ITEMS_DESCRIPTION,
+                                name = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_TITLE,
+                                description = Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SHOW_CROSSHAIR_ITEMS_DESCRIPTION,
                             )
                         }
                     },

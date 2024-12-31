@@ -7,10 +7,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import top.fifthlight.combine.data.DataComponentType
-import top.fifthlight.combine.data.DataComponentTypeFactory
-import top.fifthlight.combine.data.ItemFactory
-import top.fifthlight.combine.data.LocalDataComponentTypeFactory
+import top.fifthlight.combine.data.*
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
@@ -27,6 +24,7 @@ import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.base.layout.Spacer
 import top.fifthlight.combine.widget.ui.Button
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.component.ItemShower
 import top.fifthlight.touchcontroller.ui.model.ComponentListScreenViewModel
 
@@ -71,7 +69,7 @@ fun ComponentListScreen(viewModel: ComponentListScreenViewModel) {
                 .border(bottom = 1, color = Colors.WHITE),
             alignment = Alignment.Center,
         ) {
-            Text("Component list")
+            Text(Text.translatable(Texts.SCREEN_COMPONENT_TITLE))
         }
 
         Column(
@@ -92,7 +90,7 @@ fun ComponentListScreen(viewModel: ComponentListScreenViewModel) {
                     Button(onClick = {
                         viewModel.update(uiState.list.remove(component))
                     }) {
-                        Text("Remove", shadow = true)
+                        Text(Text.translatable(Texts.SCREEN_COMPONENT_REMOVE_TITLE), shadow = true)
                     }
                 }
             }
@@ -108,7 +106,7 @@ fun ComponentListScreen(viewModel: ComponentListScreenViewModel) {
                     Button(onClick = {
                         viewModel.update(uiState.list.add(component))
                     }) {
-                        Text("Add", shadow = true)
+                        Text(Text.translatable(Texts.SCREEN_COMPONENT_ADD_TITLE), shadow = true)
                     }
                 }
             }
@@ -126,7 +124,7 @@ fun ComponentListScreen(viewModel: ComponentListScreenViewModel) {
                 modifier = Modifier.fillMaxWidth(.25f),
                 onClick = { viewModel.done(closeHandler) }
             ) {
-                Text("Done", shadow = true)
+                Text(Text.translatable(Texts.SCREEN_COMPONENT_DONE_TITLE), shadow = true)
             }
         }
     }

@@ -3,39 +3,6 @@ package top.fifthlight.touchcontroller.config
 import kotlinx.serialization.Serializable
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 
-/*val defaultUsableItemList = ItemList(
-    whitelist = persistentListOf(
-        Items.FISHING_ROD,
-        Items.SPYGLASS,
-        Items.MAP,
-        Items.SHIELD,
-        Items.KNOWLEDGE_BOOK,
-        Items.WRITABLE_BOOK,
-        Items.WRITTEN_BOOK,
-        Items.ENDER_EYE,
-        Items.ENDER_PEARL,
-    ),
-    components = persistentListOf(
-        DataComponentTypes.EQUIPPABLE,
-        DataComponentTypes.BUNDLE_CONTENTS,
-        DataComponentTypes.CONSUMABLE,
-        DataComponentTypes.FOOD,
-    ),
-    projectile = true,
-    rangedWeapon = true,
-)
-
-val defaultShowCrosshairItemList = ItemList(
-    whitelist = persistentListOf(
-        Items.ENDER_PEARL,
-    ),
-    blacklist = persistentListOf(
-        Items.FIREWORK_ROCKET,
-    ),
-    projectile = true,
-    rangedWeapon = true,
-)*/
-
 @Serializable
 data class TouchControllerConfig(
     // Global

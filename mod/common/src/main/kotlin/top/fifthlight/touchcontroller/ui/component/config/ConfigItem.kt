@@ -22,6 +22,7 @@ import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.combine.widget.ui.IntSlider
 import top.fifthlight.combine.widget.ui.Slider
 import top.fifthlight.combine.widget.ui.Switch
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.config.ItemList
 import top.fifthlight.touchcontroller.ui.component.ItemShower
 import top.fifthlight.touchcontroller.ui.screen.config.openComponentListScreen
@@ -132,7 +133,7 @@ private fun ItemListRow(
     ) {
         when (items.size) {
             0 -> {
-                Text("No item")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_ITEM_EMPTY))
             }
 
             in 1..maxItems -> {
@@ -146,7 +147,7 @@ private fun ItemListRow(
                     val item = items[i]
                     CombineItem(itemStack = item.toStack())
                 }
-                Text("and ${items.size - maxItems} items")
+                Text(Text.format(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_ITEM_AND_MORE_ITEMS, items.size - maxItems))
             }
         }
     }
@@ -181,7 +182,7 @@ private fun ComponentListRow(
     ) {
         when (items.size) {
             0 -> {
-                Text("No component")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_COMPONENT_EMPTY))
             }
 
             in 1..maxItems -> {
@@ -195,7 +196,12 @@ private fun ComponentListRow(
                     val item = items[i]
                     Component(component = item)
                 }
-                Text("and ${items.size - maxItems} components")
+                Text(
+                    Text.format(
+                        Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_COMPONENT_AND_MORE_COMPONENTS,
+                        items.size - maxItems
+                    )
+                )
             }
         }
     }
@@ -233,7 +239,7 @@ fun ItemListConfigItem(
                 horizontalArrangement = Arrangement.spacedBy(4),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Whitelist")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_WHITELIST_TITLE))
                 ItemListRow(
                     modifier = Modifier.weight(1f),
                     items = value.whitelist,
@@ -248,7 +254,7 @@ fun ItemListConfigItem(
                         }
                     )
                 }) {
-                    Text(text = "Edit", shadow = true)
+                    Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
                 }
             }
 
@@ -257,7 +263,7 @@ fun ItemListConfigItem(
                 horizontalArrangement = Arrangement.spacedBy(4),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("Blacklist")
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_BLACKLIST_TITLE))
                 ItemListRow(
                     modifier = Modifier.weight(1f),
                     items = value.blacklist,
@@ -272,13 +278,13 @@ fun ItemListConfigItem(
                         }
                     )
                 }) {
-                    Text(text = "Edit", shadow = true)
+                    Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
                 }
             }
 
             Text(
                 modifier = Modifier.padding(bottom = 4),
-                text = "Subclasses",
+                text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SUBCLASSES_TITLE),
             )
 
             val itemFactory = LocalItemFactory.current
@@ -309,7 +315,7 @@ fun ItemListConfigItem(
                     horizontalArrangement = Arrangement.spacedBy(4),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Components")
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_COMPONENT_TITLE))
                     ComponentListRow(
                         modifier = Modifier.weight(1f),
                         items = value.components,
@@ -324,7 +330,7 @@ fun ItemListConfigItem(
                             }
                         )
                     }) {
-                        Text(text = "Edit", shadow = true)
+                        Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
                     }
                 }
             }

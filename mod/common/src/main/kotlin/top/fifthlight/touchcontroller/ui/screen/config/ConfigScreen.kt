@@ -22,7 +22,7 @@ fun KoinComponent.getConfigScreen(parent: Any?): Any {
 
     return screenFactory.getScreen(
         parent = parent,
-        title = textFactory.empty(),
+        title = textFactory.of(Texts.SCREEN_OPTIONS_TITLE),
         viewModelFactory = { scope, closeHandler ->
             ConfigScreenViewModel(scope, closeHandler)
         },

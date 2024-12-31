@@ -17,7 +17,7 @@ object TextFactoryImpl : TextFactory {
 
     override fun empty() = TextImpl.EMPTY
 
-    override fun format(identifier: Identifier, vararg arguments: Any) =
+    override fun format(identifier: Identifier, vararg arguments: Any?) =
         TextImpl(Text.translatable(transformIdentifier(identifier), *arguments))
 
     override fun toNative(text: CombineText): Any = (text as TextImpl).inner

@@ -50,11 +50,11 @@ data class AscendButton(
             EnumProperty(
                 getValue = { it.texture },
                 setValue = { config, value -> config.copy(texture = value) },
-                name = textFactory.literal("Style"),
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_ASCEND_BUTTON_PROPERTY_STYLE),
                 items = persistentListOf(
-                    AscendButtonTexture.CLASSIC to textFactory.literal("Classic"),
-                    AscendButtonTexture.SWIMMING to textFactory.literal("Swimming"),
-                    AscendButtonTexture.FLYING to textFactory.literal("Flying"),
+                    AscendButtonTexture.CLASSIC to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_ASCEND_BUTTON_PROPERTY_STYLE_CLASSIC),
+                    AscendButtonTexture.SWIMMING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_ASCEND_BUTTON_PROPERTY_STYLE_SWIMMING),
+                    AscendButtonTexture.FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_ASCEND_BUTTON_PROPERTY_STYLE_FLYING),
                 )
             )
         ) as PersistentList<Property<ControllerWidget, *>>

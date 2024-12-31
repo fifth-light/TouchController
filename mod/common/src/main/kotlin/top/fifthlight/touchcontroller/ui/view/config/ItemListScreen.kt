@@ -27,6 +27,7 @@ import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.combine.widget.ui.EditText
 import top.fifthlight.combine.widget.ui.Item
 import top.fifthlight.combine.widget.ui.ItemGrid
+import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.model.ItemListScreenViewModel
 
 @Composable
@@ -52,7 +53,7 @@ private fun ItemList(
                 Button(onClick = {
                     onValueChanged(value.removeAt(index))
                 }) {
-                    Text("Remove", shadow = true)
+                    Text(Text.translatable(Texts.SCREEN_ITEMS_REMOVE_TITLE), shadow = true)
                 }
             }
         }
@@ -69,7 +70,7 @@ fun ItemListScreen(viewModel: ItemListScreenViewModel) {
                 .border(bottom = 1, color = Colors.WHITE),
             alignment = Alignment.Center,
         ) {
-            Text("Item list")
+            Text(Text.translatable(Texts.SCREEN_ITEMS_TITLE))
         }
 
         Row(
@@ -93,7 +94,7 @@ fun ItemListScreen(viewModel: ItemListScreenViewModel) {
                     modifier = Modifier
                         .padding(8)
                         .fillMaxWidth(),
-                    placeholder = Text.literal("Filter"),
+                    placeholder = Text.translatable(Texts.SCREEN_ITEMS_FILTER_PLACEHOLDER),
                     value = searchText,
                     onValueChanged = { searchText = it }
                 )
@@ -131,7 +132,7 @@ fun ItemListScreen(viewModel: ItemListScreenViewModel) {
                 modifier = Modifier.fillMaxWidth(.25f),
                 onClick = { viewModel.done(closeHandler) }
             ) {
-                Text("Done", shadow = true)
+                Text(Text.translatable(Texts.SCREEN_ITEMS_DONE_TITLE), shadow = true)
             }
         }
     }
