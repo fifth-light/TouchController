@@ -5,7 +5,6 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.plus
-import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.Text
@@ -386,46 +385,43 @@ private fun LayersPanel(
                     )
                 }
 
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TITLE))
 
-                KoinContext {
-                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TITLE))
+                val gameFeatures: GameFeatures = koinInject()
+                val conditionsList = listOfNotNull(
+                    LayoutLayerConditionKey.SWIMMING,
+                    LayoutLayerConditionKey.FLYING,
+                    LayoutLayerConditionKey.SNEAKING,
+                    LayoutLayerConditionKey.SPRINTING,
+                    LayoutLayerConditionKey.ON_GROUND,
+                    LayoutLayerConditionKey.NOT_ON_GROUND,
+                    LayoutLayerConditionKey.USING_ITEM,
+                    LayoutLayerConditionKey.ON_MINECART,
+                    LayoutLayerConditionKey.ON_BOAT,
+                    LayoutLayerConditionKey.ON_PIG,
+                    LayoutLayerConditionKey.ON_HORSE,
+                    LayoutLayerConditionKey.ON_DONKEY,
+                    LayoutLayerConditionKey.ON_LLAMA.takeIf { gameFeatures.entity.haveLlama },
+                    LayoutLayerConditionKey.ON_STRIDER.takeIf { gameFeatures.entity.haveStrider },
+                    LayoutLayerConditionKey.RIDING,
+                )
 
-                    val gameFeatures: GameFeatures = koinInject()
-                    val conditionsList = listOfNotNull(
-                        LayoutLayerConditionKey.SWIMMING,
-                        LayoutLayerConditionKey.FLYING,
-                        LayoutLayerConditionKey.SNEAKING,
-                        LayoutLayerConditionKey.SPRINTING,
-                        LayoutLayerConditionKey.ON_GROUND,
-                        LayoutLayerConditionKey.NOT_ON_GROUND,
-                        LayoutLayerConditionKey.USING_ITEM,
-                        LayoutLayerConditionKey.ON_MINECART,
-                        LayoutLayerConditionKey.ON_BOAT,
-                        LayoutLayerConditionKey.ON_PIG,
-                        LayoutLayerConditionKey.ON_HORSE,
-                        LayoutLayerConditionKey.ON_DONKEY,
-                        LayoutLayerConditionKey.ON_LLAMA.takeIf { gameFeatures.entity.haveLlama },
-                        LayoutLayerConditionKey.ON_STRIDER.takeIf { gameFeatures.entity.haveStrider },
-                        LayoutLayerConditionKey.RIDING,
-                    )
-
-                    for (condition in conditionsList) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8)
-                        ) {
-                            ConditionItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                key = condition,
-                                value = layer.condition[condition],
-                                onValueChanged = { newValue ->
-                                    onLayerChanged(
-                                        index, layer.copy(
-                                            condition = layer.condition.set(condition, newValue)
-                                        )
+                for (condition in conditionsList) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8)
+                    ) {
+                        ConditionItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            key = condition,
+                            value = layer.condition[condition],
+                            onValueChanged = { newValue ->
+                                onLayerChanged(
+                                    index, layer.copy(
+                                        condition = layer.condition.set(condition, newValue)
                                     )
-                                }
-                            )
-                        }
+                                )
+                            }
+                        )
                     }
                 }
             }

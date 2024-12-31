@@ -1,8 +1,5 @@
 package top.fifthlight.touchcontroller
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
@@ -23,7 +20,6 @@ import top.fifthlight.touchcontroller.event.WindowCreateEvents
 import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
-import top.fifthlight.touchcontroller.platform.PlatformProvider
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback as FabricHudRenderCallback
 
 object TouchController : ClientModInitializer, KoinComponent {
@@ -32,13 +28,9 @@ object TouchController : ClientModInitializer, KoinComponent {
     override fun onInitializeClient() {
         logger.info("Loading TouchController…")
 
-        val platform = PlatformProvider.platform
-        runBlocking {
-            @OptIn(DelicateCoroutinesApi::class)
-            platform?.init(GlobalScope)
-        }
+        val platformHolder = PlatformHolder(null)
         val platformHolderModule = module {
-            single { PlatformHolder(platform) }
+            single { platformHolder }
         }
 
         startKoin {

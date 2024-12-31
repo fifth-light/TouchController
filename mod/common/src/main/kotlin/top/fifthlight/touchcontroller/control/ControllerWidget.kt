@@ -25,7 +25,7 @@ sealed class ControllerWidget {
     interface Property<Config : ControllerWidget, Value> {
         @Composable
         fun controller(
-            modifier: Modifier = Modifier,
+            modifier: Modifier,
             config: ControllerWidget,
             onConfigChanged: (ControllerWidget) -> Unit
         )

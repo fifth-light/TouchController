@@ -13,7 +13,6 @@ val appModule = module {
         Json {
             encodeDefaults = false
             ignoreUnknownKeys = true
-            allowComments = true
             allowTrailingComma = true
             prettyPrint = true
             prettyPrintIndent = "  "

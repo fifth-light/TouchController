@@ -9,9 +9,9 @@ enum class SoundKind {
 }
 
 interface SoundManager {
-    fun play(kind: SoundKind, volume: Float)
+    fun play(kind: SoundKind, pitch: Float)
 }
 
 private object EmptySoundManager : SoundManager {
-    override fun play(kind: SoundKind, volume: Float) {}
+    override fun play(kind: SoundKind, pitch: Float) {}
 }

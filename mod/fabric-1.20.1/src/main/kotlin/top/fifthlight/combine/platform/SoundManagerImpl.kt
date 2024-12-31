@@ -8,10 +8,10 @@ import top.fifthlight.combine.sound.SoundManager
 class SoundManagerImpl(
     private val soundManager: net.minecraft.client.sound.SoundManager
 ) : SoundManager {
-    override fun play(kind: SoundKind, volume: Float) {
+    override fun play(kind: SoundKind, pitch: Float) {
         val soundEvent = when (kind) {
             SoundKind.BUTTON_PRESS -> SoundEvents.UI_BUTTON_CLICK
         }
-        soundManager.play(PositionedSoundInstance.master(soundEvent, volume))
+        soundManager.play(PositionedSoundInstance.master(soundEvent, pitch))
     }
 }

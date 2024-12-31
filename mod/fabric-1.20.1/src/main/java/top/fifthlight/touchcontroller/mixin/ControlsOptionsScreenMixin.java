@@ -12,7 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.fifthlight.touchcontroller.ui.screen.config.ConfigScreenGetter;
 
 @Mixin(ControlsOptionsScreen.class)
-public abstract class ControlsOptionsScreenMixin {
+public abstract class ControlsOptionsScreenMixin extends Screen {
+    protected ControlsOptionsScreenMixin(Text title) {
+        super(title);
+    }
+
     @Inject(at = @At("TAIL"), method = "init")
     protected void init(CallbackInfo ci) {
         var client = MinecraftClient.getInstance();
@@ -21,9 +25,8 @@ public abstract class ControlsOptionsScreenMixin {
         var doneButton = (ButtonWidget) screen.children().get(screen.children().size() - 1);
         doneButton.setPosition(doneButton.getX(), doneButton.getY() + 24);
 
-        var invoker = (ScreenInvoker) screen;
         var getter = ConfigScreenGetter.INSTANCE;
-        invoker.invokeAddDrawableChild(
+        addDrawableChild(
                 ButtonWidget
                         .builder(
                                 (Text) getter.getText(),

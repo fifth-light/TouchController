@@ -4,6 +4,14 @@ pluginManagement {
 			name = "Fabric"
 			url = uri("https://maven.fabricmc.net/")
 		}
+		maven {
+			name = "Forge"
+			url = uri("https://maven.minecraftforge.net/")
+		}
+		maven {
+			name = "Parchment"
+			url = uri("https://maven.parchmentmc.org")
+		}
 		mavenCentral()
         google()
 		gradlePluginPortal()
@@ -18,6 +26,7 @@ rootProject.name = "TouchController"
 
 include("mod:resources")
 include("mod:common")
+include("mod:forge-1.20.1")
 include("mod:fabric-1.20.1")
 include("mod:fabric-1.21.1")
 include("mod:fabric-1.21.3")

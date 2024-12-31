@@ -3,7 +3,6 @@ package top.fifthlight.touchcontroller.ui.component.config
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import kotlinx.collections.immutable.PersistentList
-import org.koin.compose.KoinContext
 import top.fifthlight.combine.data.*
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
@@ -215,123 +214,121 @@ fun ItemListConfigItem(
     onValueChanged: (ItemList) -> Unit,
     onHovered: (Boolean) -> Unit,
 ) {
-    KoinContext {
-        Column(
-            modifier = Modifier
-                .then(modifier)
-                .hoverable(onHovered = onHovered),
-            verticalArrangement = Arrangement.spacedBy(4),
+    Column(
+        modifier = Modifier
+            .then(modifier)
+            .hoverable(onHovered = onHovered),
+        verticalArrangement = Arrangement.spacedBy(4),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    modifier = Modifier.padding(height = 4),
-                    text = name,
-                )
-            }
-
-            val screenFactory = LocalScreenFactory.current
-            val textFactory = LocalTextFactory.current
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_WHITELIST_TITLE))
-                ItemListRow(
-                    modifier = Modifier.weight(1f),
-                    items = value.whitelist,
-                )
-                Button(onClick = {
-                    openItemListScreen(
-                        screenFactory = screenFactory,
-                        textFactory = textFactory,
-                        initialList = value.whitelist,
-                        onListChanged = {
-                            onValueChanged(value.copy(whitelist = it))
-                        }
-                    )
-                }) {
-                    Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_BLACKLIST_TITLE))
-                ItemListRow(
-                    modifier = Modifier.weight(1f),
-                    items = value.blacklist,
-                )
-                Button(onClick = {
-                    openItemListScreen(
-                        screenFactory = screenFactory,
-                        textFactory = textFactory,
-                        initialList = value.blacklist,
-                        onListChanged = {
-                            onValueChanged(value.copy(blacklist = it))
-                        }
-                    )
-                }) {
-                    Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
-                }
-            }
-
             Text(
-                modifier = Modifier.padding(bottom = 4),
-                text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SUBCLASSES_TITLE),
+                modifier = Modifier.padding(height = 4),
+                text = name,
             )
+        }
 
-            val itemFactory = LocalItemFactory.current
-            for (subclass in itemFactory.subclasses) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(subclass.name)
-                    ItemShower(items = subclass.items)
-                    Switch(
-                        checked = value.subclasses.contains(subclass),
-                        onChanged = {
-                            if (it) {
-                                onValueChanged(value.copy(subclasses = value.subclasses.add(subclass)))
-                            } else {
-                                onValueChanged(value.copy(subclasses = value.subclasses.remove(subclass)))
-                            }
+        val screenFactory = LocalScreenFactory.current
+        val textFactory = LocalTextFactory.current
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_WHITELIST_TITLE))
+            ItemListRow(
+                modifier = Modifier.weight(1f),
+                items = value.whitelist,
+            )
+            Button(onClick = {
+                openItemListScreen(
+                    screenFactory = screenFactory,
+                    textFactory = textFactory,
+                    initialList = value.whitelist,
+                    onListChanged = {
+                        onValueChanged(value.copy(whitelist = it))
+                    }
+                )
+            }) {
+                Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_BLACKLIST_TITLE))
+            ItemListRow(
+                modifier = Modifier.weight(1f),
+                items = value.blacklist,
+            )
+            Button(onClick = {
+                openItemListScreen(
+                    screenFactory = screenFactory,
+                    textFactory = textFactory,
+                    initialList = value.blacklist,
+                    onListChanged = {
+                        onValueChanged(value.copy(blacklist = it))
+                    }
+                )
+            }) {
+                Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
+            }
+        }
+
+        Text(
+            modifier = Modifier.padding(bottom = 4),
+            text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_SUBCLASSES_TITLE),
+        )
+
+        val itemFactory = LocalItemFactory.current
+        for (subclass in itemFactory.subclasses) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(subclass.name)
+                ItemShower(items = subclass.items)
+                Switch(
+                    checked = value.subclasses.contains(subclass),
+                    onChanged = {
+                        if (it) {
+                            onValueChanged(value.copy(subclasses = value.subclasses.add(subclass)))
+                        } else {
+                            onValueChanged(value.copy(subclasses = value.subclasses.remove(subclass)))
+                        }
+                    }
+                )
+            }
+        }
+
+        val dataComponentTypeFactory: DataComponentTypeFactory = LocalDataComponentTypeFactory.current
+        if (dataComponentTypeFactory.supportDataComponents) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_COMPONENT_TITLE))
+                ComponentListRow(
+                    modifier = Modifier.weight(1f),
+                    items = value.components,
+                )
+                Button(onClick = {
+                    openComponentListScreen(
+                        screenFactory = screenFactory,
+                        textFactory = textFactory,
+                        initialList = value.components,
+                        onListChanged = {
+                            onValueChanged(value.copy(components = it))
                         }
                     )
-                }
-            }
-
-            val dataComponentTypeFactory: DataComponentTypeFactory = LocalDataComponentTypeFactory.current
-            if (dataComponentTypeFactory.supportDataComponents) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(4),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_COMPONENT_TITLE))
-                    ComponentListRow(
-                        modifier = Modifier.weight(1f),
-                        items = value.components,
-                    )
-                    Button(onClick = {
-                        openComponentListScreen(
-                            screenFactory = screenFactory,
-                            textFactory = textFactory,
-                            initialList = value.components,
-                            onListChanged = {
-                                onValueChanged(value.copy(components = it))
-                            }
-                        )
-                    }) {
-                        Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
-                    }
+                }) {
+                    Text(text = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_ITEMS_EDIT_TITLE), shadow = true)
                 }
             }
         }

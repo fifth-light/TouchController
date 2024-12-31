@@ -10,6 +10,7 @@ import kotlinx.serialization.json.decodeFromStream
 import java.io.File
 import java.nio.file.FileVisitResult
 import java.nio.file.Path
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.inputStream
 import kotlin.io.path.relativeTo
 import kotlin.io.path.visitFileTree
@@ -27,6 +28,7 @@ fun main(args: Array<String>) {
 
     val texturesBuilder = TypeSpec.objectBuilder("Textures")
     val texturesDir = Path.of(texturesDirPath)
+    @OptIn(ExperimentalPathApi::class)
     texturesDir.visitFileTree {
         onVisitFile { file, _ ->
             if (file.fileName.toString().endsWith(".png", true)) {

@@ -11,6 +11,7 @@ import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.outputStream
 import kotlin.io.path.relativeTo
 import kotlin.io.path.visitFileTree
@@ -45,6 +46,7 @@ fun main(args: Array<String>) {
     val outputGuiTextureAtlasJsonFile = Path.of(outputGuiTextureAtlasJsonPath)
 
     val textures = arrayListOf<Texture>()
+    @OptIn(ExperimentalPathApi::class)
     textureDir.visitFileTree {
         onVisitFile { file, _ ->
             if (file.fileName.toString().endsWith(".png", true)) {
