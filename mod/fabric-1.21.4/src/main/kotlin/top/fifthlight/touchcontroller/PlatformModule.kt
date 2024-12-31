@@ -29,4 +29,5 @@ val platformModule = module {
     single<GameFeatures> { gameFeatures }
     single<GameStateProvider> { GameStateProviderImpl }
     single<WindowHandle> { WindowHandleImpl }
+    single<DefaultItemListProvider> { DefaultItemListProviderImpl }
 }

@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import top.fifthlight.combine.data.ItemFactory
 import top.fifthlight.combine.screen.ViewModel
 import top.fifthlight.combine.util.CloseHandler
 import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.config.defaultTouchControllerLayout
+import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 import top.fifthlight.touchcontroller.ui.state.ConfigScreenState
 import top.fifthlight.touchcontroller.ui.state.LayoutPanelState
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
@@ -22,7 +22,7 @@ class ConfigScreenViewModel(
     private val closeHandler: CloseHandler
 ) : ViewModel(scope), KoinComponent {
     private val configHolder: TouchControllerConfigHolder by inject()
-    private val itemFactory: ItemFactory by inject()
+    private val defaultItemListProvider: DefaultItemListProvider by inject()
 
     private val _uiState = MutableStateFlow(
         ConfigScreenState(
@@ -162,7 +162,7 @@ class ConfigScreenViewModel(
     fun reset() {
         _uiState.getAndUpdate {
             it.copy(
-                config = TouchControllerConfig.default(itemFactory),
+                config = TouchControllerConfig.default(defaultItemListProvider),
                 layout = defaultTouchControllerLayout,
             )
         }

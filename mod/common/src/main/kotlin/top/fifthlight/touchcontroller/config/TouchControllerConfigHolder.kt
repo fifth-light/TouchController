@@ -8,8 +8,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
-import top.fifthlight.combine.data.ItemFactory
 import top.fifthlight.touchcontroller.ext.TouchControllerLayoutSerializer
+import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 import java.io.IOException
 import kotlin.io.path.createDirectory
 import kotlin.io.path.exists
@@ -19,14 +19,14 @@ import kotlin.io.path.writeText
 class TouchControllerConfigHolder : KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchControllerConfig::class.java)
     private val gameConfigEditor: GameConfigEditor by inject()
-    private val itemFactory: ItemFactory = get()
+    private val defaultItemListProvider: DefaultItemListProvider = get()
     private val configDirectoryProvider: ConfigDirectoryProvider = get()
     private val configDir = configDirectoryProvider.getConfigDirectory()
     private val configFile = configDir.resolve("config.json")
     private val layoutFile = configDir.resolve("layout.json")
 
     private val json: Json by inject()
-    private val _config = MutableStateFlow(TouchControllerConfig.default(itemFactory))
+    private val _config = MutableStateFlow(TouchControllerConfig.default(defaultItemListProvider))
     val config = _config.asStateFlow()
     private val _layout = MutableStateFlow(defaultTouchControllerLayout)
     val layout = _layout.asStateFlow()

@@ -43,27 +43,35 @@ object ItemFactoryImpl : ItemFactory {
         Registries.ITEM.map(Item::toCombine).toPersistentList()
     }
 
+    val rangedWeaponSubclass = ItemSubclassImpl(
+        name = TextImpl(Text.literal("Ranged weapon")),
+        configId = "RangedWeaponItem",
+        clazz = RangedWeaponItem::class.java
+    )
+
+    val armorSubclass = ItemSubclassImpl(
+        name = TextImpl(Text.literal("Armor")),
+        configId = "ArmorItem",
+        clazz = ArmorItem::class.java
+    )
+
+    val equipmentSubclass = ItemSubclassImpl(
+        name = TextImpl(Text.literal("Equipment")),
+        configId = "Equipment",
+        clazz = Equipment::class.java
+    )
+
+    val bundleSubclass = ItemSubclassImpl(
+        name = TextImpl(Text.literal("Bundle")),
+        configId = "BundleItem",
+        clazz = BundleItem::class.java
+    )
+
     override val subclasses: PersistentList<ItemSubclass> = persistentListOf(
-        ItemSubclassImpl(
-            name = TextImpl(Text.literal("Ranged weapon")),
-            configId = "RangedWeaponItem",
-            clazz = RangedWeaponItem::class.java
-        ),
-        ItemSubclassImpl(
-            name = TextImpl(Text.literal("Armor")),
-            configId = "ArmorItem",
-            clazz = ArmorItem::class.java
-        ),
-        ItemSubclassImpl(
-            name = TextImpl(Text.literal("Equipment")),
-            configId = "Equipment",
-            clazz = Equipment::class.java
-        ),
-        ItemSubclassImpl(
-            name = TextImpl(Text.literal("Bundle")),
-            configId = "BundleItem",
-            clazz = BundleItem::class.java
-        ),
+        rangedWeaponSubclass,
+        armorSubclass,
+        equipmentSubclass,
+        bundleSubclass,
     )
 }
 

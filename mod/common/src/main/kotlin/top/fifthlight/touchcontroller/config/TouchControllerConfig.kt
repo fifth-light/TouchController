@@ -1,7 +1,7 @@
 package top.fifthlight.touchcontroller.config
 
 import kotlinx.serialization.Serializable
-import top.fifthlight.combine.data.ItemFactory
+import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 
 /*val defaultUsableItemList = ItemList(
     whitelist = persistentListOf(
@@ -63,9 +63,9 @@ data class TouchControllerConfig(
     val showCrosshairItems: ItemList,
 ) {
     companion object {
-        fun default(itemFactory: ItemFactory) = TouchControllerConfig(
-            usableItems = ItemList(),
-            showCrosshairItems = ItemList()
+        fun default(itemListProvider: DefaultItemListProvider) = TouchControllerConfig(
+            usableItems = itemListProvider.usableItems,
+            showCrosshairItems = itemListProvider.showCrosshairItems,
         )
     }
 }

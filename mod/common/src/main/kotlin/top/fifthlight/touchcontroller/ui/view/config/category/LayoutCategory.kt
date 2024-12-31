@@ -8,7 +8,6 @@ import kotlinx.collections.immutable.plus
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import top.fifthlight.combine.data.Identifier
-import top.fifthlight.combine.data.LocalItemFactory
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
@@ -44,6 +43,7 @@ import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
 import top.fifthlight.touchcontroller.config.LayoutLayerConditionValue
 import top.fifthlight.touchcontroller.config.TouchControllerConfig
 import top.fifthlight.touchcontroller.control.*
+import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 import top.fifthlight.touchcontroller.gal.GameFeatures
 import top.fifthlight.touchcontroller.layout.Align
 import top.fifthlight.touchcontroller.layout.Context
@@ -57,7 +57,7 @@ private fun ControllerWidget(
     config: ControllerWidget,
 ) {
     val drawQueue = DrawQueue()
-    val itemFactory = LocalItemFactory.current
+    val itemListProvider: DefaultItemListProvider = koinInject()
     val context = Context(
         windowSize = IntSize.ZERO,
         windowScaledSize = IntSize.ZERO,
@@ -66,7 +66,7 @@ private fun ControllerWidget(
         screenOffset = IntOffset.ZERO,
         pointers = mutableMapOf(),
         result = ContextResult(),
-        config = TouchControllerConfig.default(itemFactory),
+        config = TouchControllerConfig.default(itemListProvider),
         condition = persistentMapOf(),
     )
     config.layout(context)
@@ -85,7 +85,7 @@ private fun ScaledControllerWidget(
     config: ControllerWidget,
 ) {
     var entrySize by remember { mutableStateOf(IntSize.ZERO) }
-    val itemFactory = LocalItemFactory.current
+    val itemListProvider: DefaultItemListProvider = koinInject()
     val (drawQueue, componentScaleFactor, offset) = remember(entrySize) {
         val queue = DrawQueue()
 
@@ -108,7 +108,7 @@ private fun ScaledControllerWidget(
             screenOffset = IntOffset.ZERO,
             pointers = mutableMapOf(),
             result = ContextResult(),
-            config = TouchControllerConfig.default(itemFactory),
+            config = TouchControllerConfig.default(itemListProvider),
             condition = persistentMapOf(),
         )
         config.layout(context)
