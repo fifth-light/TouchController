@@ -8,10 +8,7 @@ import top.fifthlight.data.IntOffset
 import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
-import top.fifthlight.touchcontroller.gal.GameAction
-import top.fifthlight.touchcontroller.gal.PlayerHandleFactory
-import top.fifthlight.touchcontroller.gal.RidingEntityType
-import top.fifthlight.touchcontroller.gal.WindowHandle
+import top.fifthlight.touchcontroller.gal.*
 import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.Hud
@@ -31,6 +28,7 @@ object RenderEvents : KoinComponent {
     private val touchStateModel: TouchStateModel by inject()
     private val playerHandleFactory: PlayerHandleFactory by inject()
     private val platformHolder: PlatformHolder by inject()
+    private val gameStateProvider: GameStateProvider by inject()
 
     fun onRenderStart() {
         if (controllerHudModel.status.vibrate) {
@@ -38,42 +36,48 @@ object RenderEvents : KoinComponent {
             controllerHudModel.status.vibrate = false
         }
 
-        platformHolder.platform?.let { platform ->
-            while (true) {
-                val message = platform.pollEvent() ?: break
-                when (message) {
-                    is AddPointerMessage -> {
-                        touchStateModel.addPointer(
-                            index = message.index,
-                            position = Offset(
-                                x = message.x,
-                                y = message.y,
+        val gameState = gameStateProvider.currentState()
+        if (gameState.inGame && !gameState.inGui) {
+            val platform = platformHolder.platform
+            if (platform != null) {
+                while (true) {
+                    val message = platform.pollEvent() ?: break
+                    when (message) {
+                        is AddPointerMessage -> {
+                            touchStateModel.addPointer(
+                                index = message.index,
+                                position = Offset(
+                                    x = message.x,
+                                    y = message.y,
+                                )
                             )
-                        )
+                        }
+
+                        is RemovePointerMessage -> {
+                            touchStateModel.removePointer(message.index)
+                        }
+
+                        ClearPointerMessage -> touchStateModel.clearPointer()
+
+                        else -> {}
                     }
-
-                    is RemovePointerMessage -> {
-                        touchStateModel.removePointer(message.index)
-                    }
-
-                    ClearPointerMessage -> touchStateModel.clearPointer()
-
-                    else -> {}
                 }
             }
-        }
 
-        val config = configHolder.config.value
-        if (config.enableTouchEmulation) {
-            val mousePosition = window.mousePosition
-            if (window.mouseLeftPressed && mousePosition != null) {
-                touchStateModel.addPointer(
-                    index = 0,
-                    position = mousePosition / window.size.toSize()
-                )
-            } else {
-                touchStateModel.clearPointer()
+            val config = configHolder.config.value
+            if (config.enableTouchEmulation) {
+                val mousePosition = window.mousePosition
+                if (window.mouseLeftPressed && mousePosition != null) {
+                    touchStateModel.addPointer(
+                        index = 0,
+                        position = mousePosition / window.size.toSize()
+                    )
+                } else {
+                    touchStateModel.clearPointer()
+                }
             }
+        } else {
+            touchStateModel.clearPointer()
         }
 
         val player = playerHandleFactory.getPlayerHandle() ?: return

@@ -174,5 +174,84 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
                 extraButton = DPadExtraButton.SNEAK,
             ),
         )
-    )
+    ),
+    LayoutLayer(
+        name = "On pig or strider",
+        condition = layoutLayerConditionOf(
+            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.WANT,
+            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.WANT,
+        ),
+        widgets = persistentListOf(
+            SneakButton(
+                align = Align.RIGHT_BOTTOM,
+                offset = IntOffset(68, 68),
+                opacity = 0.6f,
+            ),
+        )
+    ),
+    LayoutLayer(
+        name = "On horse or donkey",
+        condition = layoutLayerConditionOf(
+            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.WANT,
+            LayoutLayerConditionKey.ON_DONKEY to LayoutLayerConditionValue.WANT,
+        ),
+        widgets = persistentListOf(
+            DPad(
+                align = Align.LEFT_BOTTOM,
+                offset = IntOffset(8, 8),
+                opacity = 0.6f,
+                extraButton = DPadExtraButton.SNEAK,
+            ),
+            JumpButton(
+                align = Align.RIGHT_BOTTOM,
+                offset = IntOffset(42, 68),
+                opacity = 0.6f,
+            ),
+        )
+    ),
+    LayoutLayer(
+        name = "On llama",
+        condition = layoutLayerConditionOf(
+            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.REQUIRE,
+        ),
+        widgets = persistentListOf(
+            DPad(
+                align = Align.LEFT_BOTTOM,
+                offset = IntOffset(8, 8),
+                opacity = 0.6f,
+                extraButton = DPadExtraButton.SNEAK,
+            ),
+            JumpButton(
+                align = Align.RIGHT_BOTTOM,
+                offset = IntOffset(42, 68),
+                opacity = 0.6f,
+            ),
+        )
+    ),
+    LayoutLayer(
+        name = "Riding on entity",
+        condition = layoutLayerConditionOf(
+            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_BOAT to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_PIG to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_DONKEY to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_LLAMA to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.NEVER,
+            LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.REQUIRE,
+        ),
+        widgets = persistentListOf(
+            DPad(
+                align = Align.LEFT_BOTTOM,
+                offset = IntOffset(8, 8),
+                opacity = 0.6f,
+                extraButton = DPadExtraButton.SNEAK,
+            ),
+            JumpButton(
+                align = Align.RIGHT_BOTTOM,
+                offset = IntOffset(42, 68),
+                opacity = 0.6f,
+            ),
+        )
+    ),
 )
