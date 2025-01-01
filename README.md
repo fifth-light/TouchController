@@ -2,24 +2,26 @@
 
 一个为 Minecraft Java 版添加触控支持的 Mod。目前处于早期开发中，如果遇到 Bug 或者其他问题，欢迎积极报告！
 
-## 支持的平台
+## 支持的游戏版本和平台
 
-由于项目处在早期开发阶段，目前只支持 Minecraft 1.21.3。
+目前 TouchController 只支持 Minecraft 1.21.3，更多游戏版本、mod 加载器的支持正在开发中。
 
 目前支持的平台有：
 
 - Windows（v0.0.8 开始支持 x86 和 x86_64 架构，v0.0.11 添加了 ARM64 架构的支持）
-- [我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher)
 - [官方版 Fold Craft Launcher](https://github.com/FCL-Team/FoldCraftLauncher)
 - [官方版 Zalith Launcher](https://github.com/ZalithLauncher/ZalithLauncher)
+- [官方版 Pojav Glow·Worm](https://github.com/Vera-Firefly/Pojav-Glow-Worm)
+- [我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher)
 
-在未来可能会添加对 Linux 上触屏的支持。
+在未来可能会添加 Linux 上 X11 和 Wayland 触屏的支持。macOS 由于没有相应环境和设备，不会提供支持，但是接受 macOS 支持的 Pull Request。
 
 ## 目前支持的功能
 
 - Minecraft 基岩版风格的触屏输入（暂时不支持分离控制）
 - 可自定义的控制器布局
 - 能够根据游泳、飞行等状态切换不同按键的显示
+- 破坏方块时进行震动反馈（目前只支持 Android 平台）
 
 ## 编译
 
@@ -45,9 +47,9 @@ sdk.dir=<Android SDK 目录>
 
 默认 Android Studio 会帮你做这件事情，如果你用 Android Studio 打开过这个项目，则不需要配置这个选项。
 
-接下来你还需要安装一份 Android NDK，同样也可以在 Android Studio 内安装，安装完后使用 `cargo install cargo-ndk` 安装 `cargo-ndk`。
+接下来你还需要安装一份 Android NDK，同样也可以在 Android Studio 内安装，安装完后使用 `cargo install cargo-ndk` 安装 `cargo-ndk` 工具。
 
-然后你还需要 LLVM MinGW，在 [mstorsjo/llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases) 获取工具链，并将其中的
+然后你还需要 LLVM MinGW 工具链，在 [mstorsjo/llvm-mingw](https://github.com/mstorsjo/llvm-mingw/releases) 获取工具链，并将其中的
 bin 目录加入 PATH 环境变量即可。
 
 最后运行 `./gradlew build` 就可以编译了，编译好的 mod 文件在 `mod/build/libs` 下。
@@ -144,3 +146,13 @@ client.run();
 如果不想手动做消息处理，库内也提供了一个基于 FrameLayout 的 TouchControllerLayout 类，只要将游戏相关的 View 包含在内，然后将 LauncherProxyClient 设置到 TouchControllerLayout 中即可发送处理触摸消息并发送。
 
 要注意的是消息中的 index 必须是单调递增的（与 Android 中可以复用 ID 的行为相反），并且所有坐标的范围是相对于游戏显示区域的 [0.0, 1.0]，而不是屏幕坐标。
+
+## Star 历史
+
+<a href="https://star-history.com/#fifth-light/TouchController&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=fifth-light/TouchController&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=fifth-light/TouchController&type=Date" />
+   <img alt="Star 历史图表" src="https://api.star-history.com/svg?repos=fifth-light/TouchController&type=Date" />
+ </picture>
+</a>
