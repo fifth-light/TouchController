@@ -11,6 +11,7 @@ jobs:
         strategy:
             matrix:
                 module: [
+                    "forge-1.20.1",
                     "fabric-1.20.1",
                     "fabric-1.21.1",
                     "fabric-1.21.3",
@@ -41,11 +42,13 @@ jobs:
                 uses: gradle/actions/setup-gradle@v4
             -   name: Install cargo-ndk
                 run: cargo install --force cargo-ndk
-            -   name: Build
+            -   name: Install llvm-mingw
                 run: |
                     wget -qO ~/llvm-mingw.tar.xz https://github.com/mstorsjo/llvm-mingw/releases/download/20241217/llvm-mingw-20241217-ucrt-ubuntu-20.04-x86_64.tar.xz
                     mkdir ~/.llvm-mingw
                     (cd ~/.llvm-mingw && tar --strip-components=1 -xJf ~/llvm-mingw.tar.xz)
+            -   name: Build
+                run: |
                     export PATH="$HOME/.llvm-mingw/bin:$PATH"
                     ./gradlew :mod:${{ matrix.module }}:build --no-daemon
             -   name: Capture build artifacts

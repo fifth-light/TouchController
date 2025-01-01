@@ -1,4 +1,3 @@
-import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
@@ -9,7 +8,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.shadow)
+    alias(libs.plugins.gr8)
 }
 
 version = "0.0.13"
@@ -17,9 +16,6 @@ group = "top.fifthlight.touchcontroller"
 
 val modName = "TouchController"
 val modId = "touchcontroller"
-base {
-    archivesName = modName
-}
 
 minecraft {
     mappings("parchment", "2023.09.03-1.20.1")
@@ -50,28 +46,33 @@ mixin {
     config("${modId}.mixins.json")
 }
 
-configurations.shadow {
-    isTransitive = false
+configurations.create("shadow")
+
+tasks.jar {
+    archiveBaseName = "$modName-slim"
+}
+
+fun DependencyHandlerScope.shade(dependency: Any) {
+    add("shadow", dependency)
 }
 
 fun DependencyHandlerScope.shadeAndImplementation(dependency: Any) {
-    shadow(dependency)
+    shade(dependency)
     implementation(dependency)
+    minecraftLibrary(dependency)
 }
 
 dependencies {
     minecraft("net.minecraftforge:forge:1.20.1-47.3.0")
-    implementation("thedarkcolour:kotlinforforge:4.11.0")
 
     shadeAndImplementation(project(":common-data"))
     shadeAndImplementation(project(":mod:common"))
 
-    shadeAndImplementation(project(":proxy-windows"))
-    shadeAndImplementation(project(":proxy-server-android"))
+    shade(project(":proxy-windows"))
+    shade(project(":proxy-server-android"))
     shadeAndImplementation(project(":proxy-client"))
     shadeAndImplementation(project(":proxy-server"))
 
-    shadeAndImplementation(libs.androidx.collection)
     shadeAndImplementation(libs.compose.runtime)
     shadeAndImplementation(project(":combine"))
 
@@ -125,16 +126,59 @@ tasks.withType<Jar> {
     }
 }
 
-tasks.shadowJar {
-    archiveClassifier = ""
-    configurations.set(setOf(project.configurations.shadow.get()))
+tasks.compileJava {
+    dependsOn("createMcpToSrg")
+    dependsOn("extractSrg")
+}
+
+gr8 {
+    val shadowedJar = create("gr8") {
+        addProgramJarsFrom(configurations.getByName("shadow"))
+        addProgramJarsFrom(tasks.getByName("jar"))
+
+        addClassPathJarsFrom(configurations.getByName("runtimeClasspath"))
+
+        r8Version("8.8.20")
+        proguardFile("rules.pro")
+    }
+
+    replaceOutgoingJar(shadowedJar)
+}
+
+tasks.register<Jar>("gr8Jar") {
+    dependsOn("reobfJar")
+
+    inputs.files(tasks.getByName("gr8Gr8ShadowedJar").outputs.files)
+    archiveBaseName = "$modName-noreobf"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    val jarFile =
+        tasks.getByName("gr8Gr8ShadowedJar").outputs.files.first { it.extension.equals("jar", ignoreCase = true) }
+    from(zipTree(jarFile))
+}
+
+tasks.getByName("gr8Gr8ShadowedJar") {
+    dependsOn("addMixinsToJar")
 }
 
 reobf {
-    create("shadowJar")
+    create("gr8Jar") {
+        // Use mapping from compileJava, to avoid problems of @Shadow
+        extraMappings.from("build/tmp/compileJava/compileJava-mappings.tsrg")
+    }
 }
 
-tasks.jar {
-    finalizedBy("reobfShadowJar")
+tasks.register<Copy>("renameOutputJar") {
+    dependsOn("reobfGr8Jar")
+    from("build/reobfGr8Jar/output.jar") {
+        rename {
+            "$modName-$version.jar"
+        }
+    }
+    destinationDir = layout.buildDirectory.dir("libs").get().asFile
 }
-tasks.create<RenameJarInPlace>("reobfJar").dependsOn("shadowJar")
+
+tasks.assemble {
+    dependsOn("reobfGr8Jar")
+    dependsOn("renameOutputJar")
+}

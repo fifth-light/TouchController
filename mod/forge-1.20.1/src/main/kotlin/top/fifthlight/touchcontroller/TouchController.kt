@@ -4,22 +4,23 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent
 import net.minecraftforge.client.event.RenderGuiEvent
 import net.minecraftforge.client.event.RenderHighlightEvent
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.TickEvent.RenderTickEvent
+import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import top.fifthlight.combine.platform.CanvasImpl
 import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
@@ -31,13 +32,14 @@ import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
+import top.fifthlight.touchcontroller.ui.screen.config.getConfigScreen
 
 @Mod("touchcontroller")
-object TouchController : KoinComponent {
+class TouchController : KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 
     init {
-        MOD_BUS.addListener(::onClientSetup)
+        FMLJavaModLoadingContext.get().modEventBus.addListener(::onClientSetup)
     }
 
     @Suppress("unused", "UNUSED_PARAMETER")
@@ -76,6 +78,10 @@ object TouchController : KoinComponent {
         val configHolder: TouchControllerConfigHolder = get()
         configHolder.load()
 
+        MinecraftForge.registerConfigScreen { parent ->
+            getConfigScreen(parent) as Screen
+        }
+
         val controllerHudModel: ControllerHudModel = get()
         MinecraftForge.EVENT_BUS.register(object {
             @SubscribeEvent
@@ -98,7 +104,7 @@ object TouchController : KoinComponent {
             }
 
             @SubscribeEvent
-            fun worldRender(event: RenderTickEvent) {
+            fun worldRender(event: TickEvent.RenderTickEvent) {
                 RenderEvents.onRenderStart()
             }
 
