@@ -183,7 +183,7 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
         ),
         widgets = persistentListOf(
             SneakButton(
-                align = Align.RIGHT_BOTTOM,
+                align = Align.LEFT_BOTTOM,
                 offset = IntOffset(68, 68),
                 opacity = 0.6f,
             ),
