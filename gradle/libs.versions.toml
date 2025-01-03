@@ -28,7 +28,6 @@ androidx-collection = "1.4.5"
 fabric-language-kotlin = "1.11.0+kotlin.2.0.0"
 
 [libraries]
-fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "serialization" }
@@ -37,6 +36,19 @@ kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotli
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
 koin-logger-slf4j = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
+gr8 = { group = "com.gradleup.gr8", name = "com.gradleup.gr8.gradle.plugin", version.ref = "gr8" }
+
+# Fabric
+fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
+fabric-loom = { group = "net.fabricmc", name = "fabric-loom", version.ref = "loom" }
+
+# Forge
+forge-gradle = { group = "net.minecraftforge.gradle", name = "ForgeGradle", version.ref = "forge-gradle" }
+parchmentmc-librarian-forgegradle = { group = "org.parchmentmc.librarian.forgegradle", name = "org.parchmentmc.librarian.forgegradle.gradle.plugin", version.ref = "parchmentmc-librarian-forgegradle" }
+mixin = { group = "org.spongepowered.mixin", name = "org.spongepowered.mixin.gradle.plugin", version.ref = "mixin" }
+
+# Publish
+modrinth-minotaur = { group = "com.modrinth.minotaur", name = "Minotaur", version.ref = "minotaur" }
 
 # Compose
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
@@ -48,11 +60,6 @@ fabric-language-kotlin = { group = "net.fabricmc", name = "fabric-language-kotli
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-fabric-loom = { id = "fabric-loom", version.ref = "loom" }
-forge-gradle = { id = "net.minecraftforge.gradle", version.ref = "forge-gradle" }
-parchmentmc-librarian-forgegradle = { id = "org.parchmentmc.librarian.forgegradle", version.ref = "parchmentmc-librarian-forgegradle" }
-mixin = { id = "org.spongepowered.mixin", version.ref = "mixin" }
-gr8 = { id = "com.gradleup.gr8", version.ref = "gr8" }
 
 # Android
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -60,7 +67,6 @@ rust-android-gradle = { id = "org.mozilla.rust-android-gradle.rust-android", ver
 android-library = { id = "com.android.library", version.ref = "agp" }
 
 # Publish
-modrinth-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 
 # Compose

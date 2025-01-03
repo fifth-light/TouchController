@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     signing
@@ -63,8 +62,4 @@ dependencies {
 
 kotlin {
     jvmToolchain(8)
-
-    compilerOptions {
-        apiVersion.set(KotlinVersion.KOTLIN_1_8)
-    }
 }

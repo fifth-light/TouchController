@@ -1,12 +1,12 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
 }
 
-version = "0.0.13"
+val modVersion: String by extra.properties
+
+version = modVersion
 group = "top.fifthlight.touchcontroller"
 
 sourceSets.main {
@@ -18,25 +18,21 @@ tasks.compileKotlin {
 }
 
 dependencies {
-    implementation(project(":common-data"))
+    api(project(":common-data"))
     implementation(project(":proxy-client"))
     implementation(project(":proxy-server"))
 
-    implementation(libs.compose.runtime)
-    implementation(project(":combine"))
+    api(libs.compose.runtime)
+    api(project(":combine"))
 
-    implementation(libs.koin.core)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.logger.slf4j)
-    implementation(libs.kotlinx.collections.immutable)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.coroutines.core)
+    api(libs.koin.core)
+    api(libs.koin.compose)
+    api(libs.koin.logger.slf4j)
+    api(libs.kotlinx.collections.immutable)
+    api(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.coroutines.core)
 }
 
 kotlin {
     jvmToolchain(8)
-
-    compilerOptions {
-        apiVersion.set(KotlinVersion.KOTLIN_1_8)
-    }
 }

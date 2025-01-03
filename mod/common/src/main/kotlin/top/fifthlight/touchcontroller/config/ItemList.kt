@@ -18,6 +18,7 @@ import top.fifthlight.combine.data.*
 
 @Immutable
 @Serializable
+@ConsistentCopyVisibility
 data class ItemList private constructor(
     @SerialName("whitelist")
     private val _whitelist: ItemsList = ItemsList(),

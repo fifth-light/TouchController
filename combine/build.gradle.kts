@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.compose.compiler)
@@ -15,8 +13,4 @@ dependencies {
 
 kotlin {
     jvmToolchain(8)
-
-    compilerOptions {
-        apiVersion.set(KotlinVersion.KOTLIN_1_8)
-    }
 }

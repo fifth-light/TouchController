@@ -12,7 +12,6 @@ pluginManagement {
 			name = "Parchment"
 			url = uri("https://maven.parchmentmc.org")
 		}
-		mavenCentral()
         google()
 		gradlePluginPortal()
 	}

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "touchcontroller",
-  "version": "${version}",
-  "name": "${name}",
-  "description": "Bring controlling style of bedrock version to Java version!",
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
   "authors": [
     "fifth_light",
     "bukeyu"
@@ -33,10 +33,10 @@
     }
   ],
   "depends": {
-    "fabricloader": ">=0.14.22",
-    "minecraft": "~1.20.1",
-    "java": ">=17",
-    "fabric-api": "*",
-    "fabric-language-kotlin": "*"
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "~${game_version}",
+    "java": ">=${java_version}",
+    "fabric-api": ">=${fabric_api_version}",
+    "fabric-language-kotlin": ">=${fabric_language_kotlin_version}"
   }
 }
