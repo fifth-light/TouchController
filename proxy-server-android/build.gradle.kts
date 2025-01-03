@@ -1,11 +1,14 @@
 import org.gradle.internal.extensions.stdlib.capitalized
 import java.io.FileFilter
+import java.io.FileNotFoundException
 import java.util.*
 
 version = "0.0.1"
 
 val localProperties = Properties().apply {
-    rootProject.file("local.properties").reader().use(::load)
+    try {
+        rootProject.file("local.properties").reader().use(::load)
+    } catch (_: FileNotFoundException) {}
 }
 
 val androidSdkDir by lazy {
