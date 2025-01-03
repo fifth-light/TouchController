@@ -37,7 +37,12 @@ sealed class ControllerWidget {
         val baseProperties = persistentListOf<Property<ControllerWidget, *>>(
             EnumProperty(
                 getValue = { it.align },
-                setValue = { config, value -> config.cloneBase(align = value) },
+                setValue = { config, value ->
+                    config.cloneBase(
+                        align = value,
+                        offset = IntOffset.ZERO,
+                    )
+                },
                 name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_NAME),
                 items = listOf(
                     Align.LEFT_TOP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_GENERAL_PROPERTY_ANCHOR_TOP_LEFT),
