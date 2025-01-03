@@ -81,9 +81,11 @@ value class LayoutLayerCondition(
 fun layoutLayerConditionOf(vararg pairs: Pair<LayoutLayerConditionKey, LayoutLayerConditionValue>) =
     LayoutLayerCondition(persistentMapOf(*pairs))
 
+const val DEFAULT_LAYER_NAME = "Unnamed layer"
+
 @Serializable(with = LayoutLayerSerializer::class)
 data class LayoutLayer(
-    val name: String = "Unnamed layer",
+    val name: String = DEFAULT_LAYER_NAME,
     val widgets: PersistentList<ControllerWidget> = persistentListOf(),
     val condition: LayoutLayerCondition = LayoutLayerCondition(),
 )
