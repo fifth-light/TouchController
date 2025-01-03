@@ -71,8 +71,12 @@ class TouchController : KoinComponent {
         initialize()
 
         val client = Minecraft.getInstance()
+        // MUST RUN ON RENDER THREAD
+        // Because Forge load mods in parallel, mods don't load on main render thread,
+        // which is ok for most cases, but RegisterTouchWindow() and other Win32 API
+        // requires caller on the thread created window. We post an event to render
+        // thread here, to solve this problem.
         client.tell {
-            // MUST RUN ON RENDER THREAD
             WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl(client.window))
         }
     }
