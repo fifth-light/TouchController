@@ -1,67 +1,68 @@
-name: 🐛 | BUG 提交
-description: 🎤 | 提交您发现的 TouchController 中的 BUG
-title: "[BUG]: "
-labels: ["BUG"]
+name: Bug 报告
+description: 报告您发现的 TouchController 中的 BUG
+title: "[Bug]: "
+labels: [ "bug" ]
 body:
-- type: markdown
-  attributes:
-    value: "# 🎁 | 欢迎您来填写TouchController BUG反馈!"
-- type: checkboxes
-  id: BUG_Prefeedback
-  attributes:
-    label: 检查项
-    description: 在提交前，请确认以下内容：
-    options:
-      - label: 此 BUG 未被提交过（可以在[这里](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)进行搜索）
-        required: true
-      - label: 此 BUG 的修复不在[PR](https://github.com/fifth-light/TouchController/pulls)中
-        required: true
-      - label: 我已将模组更新到最新版本
-        required: true
-      - label: 我使用了修改版安卓启动器，并且为最新版本
-        required: false
-      - label: 我已了解：如果使用未受支持的操作系统所产生的任何问题均不能在此提交（对某操作系统的支持请前往提交新功能）
-        required: true
-- type: dropdown
-  id: BUGInTouchController_OS
-  attributes:
-    label: 操作系统
-    description: 您使用的操作系统，如果选择other，请在下文中说明
-    options:
-      - Android
-      - Windows
-      - Mac OS
-      - Linux
-      - other
-    default: 1
-  validations:
-    required: true
-- type: input
-  id: Verison
-  attributes:
-    label: 版本
-    description: 您发现此 BUG 使用的模组版本、Minecraft 版本以及加载器
-    placeholder: 模组版本：vx.x.x；Minecraft版本：x.x.x；模组加载器：***
-  validations:
-    required: true
-- type: textarea
-  id: BUGInMSS3_Retry
-  attributes:
-    label: 复现流程
-    description: 请简要陈述如何触发这一个BUG
-    placeholder: |
-      1. xxx
-      2. xxx
-      3. xxx
-  validations:
-    required: true
-- type: textarea
-  id: UploadLog
-  attributes:
-    label: 日志
-    description: 上传您的启动器日志以及您的游戏日志（一般存在于`.minecraft\versions\<版本文件夹>\logs`中）
-  validations:
-    required: true
-- type: markdown
-  attributes:
-    value: "### 🎉 | 感谢您对TouchController的支持!"
+    -   type: markdown
+        attributes:
+            value: "# TouchController bug 报告"
+    -   type: checkboxes
+        id: bug_check
+        attributes:
+            label: 检查项
+            description: 在报告前，请确认以下内容：
+            options:
+                -   label: 此 Bug 未被报告过（可以在[这里](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)进行搜索）
+                    required: true
+                -   label: 此 Bug 的修复不在 [Pull Requests](https://github.com/fifth-light/TouchController/pulls) 中
+                    required: true
+                -   label: 我已将 TouchController 模组更新到最新版本
+                    required: true
+                -   label: 在手机上我使用了最新版本的支持 TouchController 的安卓启动器；在电脑或者其它平台上使用的是 Windows 系统
+                    required: false
+                -   label: 我已了解：如果使用未受支持的操作系统（例如 iOS、macOS）所产生的任何问题均不能在此报告（对某操作系统的支持请前往报告新功能）
+                    required: true
+    -   type: dropdown
+        id: bug_os
+        attributes:
+            label: 操作系统
+            description: 您使用的操作系统，如果选择其它，请在下文中说明
+            options:
+                - Android
+                - Windows
+                - macOS
+                - iOS
+                - Linux
+                - 其它
+            default: 1
+        validations:
+            required: true
+    -   type: input
+        id: bug_version
+        attributes:
+            label: 版本
+            description: 您发现此 Bug 使用的 TouchController 模组版本、Minecraft 版本以及模组加载器（Fabric、Forge、NeoForge）及其版本
+            placeholder: 模组版本：vx.x.x；Minecraft版本：x.x.x；模组加载器：***，版本：***
+        validations:
+            required: true
+    -   type: textarea
+        id: bug_reproducer
+        attributes:
+            label: 复现流程
+            description: 请简要陈述如何触发这一个 Bug
+            placeholder: |
+                1. xxx
+                2. xxx
+                3. xxx
+        validations:
+            required: true
+    -   type: textarea
+        id: bug_log
+        attributes:
+            label: 日志
+            description: 上传您的游戏日志（一般存在于 `.minecraft/versions/<版本文件夹>/logs` 中）为文件。请不要直接以文本形式粘贴游戏日志！
+        validations:
+            required: true
+    -   type: markdown
+        attributes:
+            value: "### 感谢您对 TouchController 的支持！"

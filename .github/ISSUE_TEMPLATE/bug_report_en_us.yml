@@ -1,67 +1,68 @@
-name: 🐛 | BUG Submission
-description: 🎤 | Submit the BUGs you found in the TouchController.
-title: "[BUG]: "
-labels: ["BUG"]
+name: Bug report
+description: Report bugs you found in TouchController!
+title: "[Bug]: "
+labels: [ "bug" ]
 body:
-- type: markdown
-  attributes:
-    value: "# 🎁 | Welcome to fill out the TouchController BUG feedback!"
-- type: checkboxes
-  id: BUG_Prefeedback
-  attributes:
-    label: Checklist
-    description: "Before submitting, please confirm the following:"
-    options:
-      - label: This BUG has not been submitted before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)).
-        required: true
-      - label: The fix for this BUG is not in the [PR](https://github.com/fifth-light/TouchController/pulls).
-        required: true
-      - label: I have updated the mod to the latest version.
-        required: true
-      - label: I am using a modified Android launcher, and it is the latest version.
-        required: false
-      - label: I understand that any issues arising from the use of an unsupported operating system cannot be submitted here (for support of a certain operating system, please go to submit new features).
-        required: true
-- type: dropdown
-  id: BUGInTouchController_OS
-  attributes:
-    label: Operating System
-    description: The operating system you are using. If you choose "other", please explain in the following text.
-    options:
-      - Android
-      - Windows
-      - Mac OS
-      - Linux
-      - other
-    default: 1
-  validations:
-    required: true
-- type: input
-  id: Verison
-  attributes:
-    label: Version
-    description: The mod version, Minecraft version, and loader when you found this BUG.
-    placeholder: "Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***"
-  validations:
-    required: true
-- type: textarea
-  id: BUGInMSS3_Retry
-  attributes:
-    label: Reproduction Steps
-    description: Please briefly describe how to trigger this BUG.
-    placeholder: |
-      1. xxx
-      2. xxx
-      3. xxx
-  validations:
-    required: true
-- type: textarea
-  id: UploadLog
-  attributes:
-    label: Logs
-    description: Upload your launcher logs and your game logs (usually in `.minecraft\versions\<version folder>\logs`).
-  validations:
-    required: true
-- type: markdown
-  attributes:
-    value: "### 🎉 | Thank you for your support of TouchController!" 
+    -   type: markdown
+        attributes:
+            value: "# TouchController bug report"
+    -   type: checkboxes
+        id: bug_check
+        attributes:
+            label: Checklist
+            description: "Before reporting, please confirm the following:"
+            options:
+                -   label: This bug has not been reported before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue))
+                    required: true
+                -   label: The fix for this bug is not in [Pull Requests](https://github.com/fifth-light/TouchController/pulls)
+                    required: true
+                -   label: I have updated the TouchController mod to the latest version
+                    required: true
+                -   label: I am using the latest version Android launcher supporting TouchController, or using Windows on desktop.
+                    required: false
+                -   label: I understand that any issues on unsupported operating system (for example iOS, macOS) cannot be reported here (for support of a certain operating system, please go to submit new features).
+                    required: true
+    -   type: dropdown
+        id: bug_os
+        attributes:
+            label: Operating System
+            description: The operating system you are using. If you choose "other", please explain below.
+            options:
+                - Android
+                - Windows
+                - macOS
+                - iOS
+                - Linux
+                - other
+            default: 1
+        validations:
+            required: true
+    -   type: input
+        id: bug_version
+        attributes:
+            label: Version
+            description: The TouchController mod version, Minecraft version and mod loader (Fabric、Forge、NeoForge) with its version
+            placeholder: "Mod version: vx.x.x; Minecraft version: x.x.x; Mod loader: ***, version: ***"
+        validations:
+            required: true
+    -   type: textarea
+        id: bug_reproducer
+        attributes:
+            label: Reproduction Steps
+            description: Please briefly describe how to trigger this bug.
+            placeholder: |
+                1. xxx
+                2. xxx
+                3. xxx
+        validations:
+            required: true
+    -   type: textarea
+        id: bug_log
+        attributes:
+            label: Log
+            description: Upload your game logs (usually in `.minecraft\versions\<version folder>\logs`) as file. Do not paste logs text as text!
+        validations:
+            required: true
+    -   type: markdown
+        attributes:
+            value: "### Thank you for supporting TouchController!"

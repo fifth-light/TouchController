@@ -1,38 +1,39 @@
-name: 📖 | 新功能 提交
-description: 📎 | 写下您对添加新功能的一些建议
-title: "[新功能]: "
-labels: ["新功能建议"]
+name: 新功能提交
+description: 写下您对添加新功能的一些建议
+title: "[Feat]: "
+labels: [ "enhancement" ]
 body:
-- type: markdown
-  attributes:
-    value: "# 🎁 | 您正在填写 TouchController 的新功能建议!"
-- type: checkboxes
-  id: Prefeedback
-  attributes:
-    label: 检查项
-    description: 在提交前，请确认以下内容：
-    options:
-      - label: 此功能未被提出过（可以在[这里](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)进行搜索）
-        required: true
-      - label: 此功能不在[PR](https://github.com/fifth-light/TouchController/pulls)中
-        required: true
-      - label: 模组的最新版本并未添加此功能
-        required: true
-- type: input
-  id: FeatureRequest_Summary
-  attributes:
-    label: 简述
-    description: 请简要叙述您所希望添加的新功能
-    placeholder: |
-      <对此功能的简要描述>
-- type: textarea
-  id: FeatureRequest_Steps
-  attributes:
-    label: 详细内容
-    description: 请详细描述新功能的内容，以及需要此功能的原因
-    placeholder: |
-      <此功能的详细内容>
-- type: markdown
-  attributes:
-    value: "### 🎉 | 感谢您对 TouchController 的支持!"
-  
+    -   type: markdown
+        attributes:
+            value: "# TouchController 新功能请求"
+    -   type: checkboxes
+        id: feature_check
+        attributes:
+            label: 检查项
+            description: 在提交前，请确认以下内容：
+            options:
+                -   label: 此功能未被提出过（可以在[这里](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)进行搜索）
+                    required: true
+                -   label: 如果只是有一些想法，而不是具体的新功能，请在 [Discussions](https://github.com/fifth-light/TouchController/discussions) 中提交
+                    required: true
+                -   label: 此功能不在 [Pull Requests](https://github.com/fifth-light/TouchController/pulls) 中
+                    required: true
+                -   label: TouchController 模组的最新版本并未添加此功能
+                    required: true
+    -   type: input
+        id: feature_summary
+        attributes:
+            label: 简述
+            description: 请简要叙述您所希望添加的新功能
+            placeholder: |
+                <对此功能的简要描述>
+    -   type: textarea
+        id: feature_details
+        attributes:
+            label: 详细内容
+            description: 请详细描述需要此功能的原因，以及此功能的内容
+            placeholder: |
+                <需要此功能的原因，以及此功能的详细内容>
+    -   type: markdown
+        attributes:
+            value: "### 感谢您对 TouchController 的支持！"
