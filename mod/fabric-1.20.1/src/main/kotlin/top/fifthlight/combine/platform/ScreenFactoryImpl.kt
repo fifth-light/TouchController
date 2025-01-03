@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
+import org.koin.compose.KoinContext
 import top.fifthlight.combine.data.LocalDataComponentTypeFactory
 import top.fifthlight.combine.data.LocalItemFactory
 import top.fifthlight.combine.data.LocalTextFactory
@@ -52,16 +53,18 @@ private class CombineScreen(
 
     fun setContent(content: @Composable () -> Unit) {
         owner.setContent {
-            CompositionLocalProvider(
-                LocalSoundManager provides soundManager,
-                LocalScreen provides this,
-                LocalCloseHandler provides closeHandler,
-                LocalItemFactory provides ItemFactoryImpl,
-                LocalTextFactory provides TextFactoryImpl,
-                LocalDataComponentTypeFactory provides FoodComponentTypeFactoryImpl,
-                LocalScreenFactory provides ScreenFactoryImpl,
-            ) {
-                content()
+            KoinContext {
+                CompositionLocalProvider(
+                    LocalSoundManager provides soundManager,
+                    LocalScreen provides this,
+                    LocalCloseHandler provides closeHandler,
+                    LocalItemFactory provides ItemFactoryImpl,
+                    LocalTextFactory provides TextFactoryImpl,
+                    LocalDataComponentTypeFactory provides FoodComponentTypeFactoryImpl,
+                    LocalScreenFactory provides ScreenFactoryImpl,
+                ) {
+                    content()
+                }
             }
         }
     }
