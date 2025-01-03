@@ -1,13 +1,19 @@
 import org.gradle.internal.extensions.stdlib.capitalized
 import java.io.FileFilter
+import java.util.*
 
 version = "0.0.1"
 
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").reader().use(::load)
+}
+
 val androidSdkDir by lazy {
-    val path = properties.get("sdk.dir")?.toString()?.takeIf { it.isNotEmpty() }
-        ?: System.getenv("ANDROID_HOME").takeIf { it.isNotEmpty() }
-        ?: System.getenv("ANDROID_SDK").takeIf { it.isNotEmpty() }
-        ?: System.getenv("ANDROID_SDK_HOME").takeIf { it.isNotEmpty() }
+    val path = localProperties.get("sdk.dir")?.toString()?.takeIf { it.isNotEmpty() }
+        ?: properties.get("sdk.dir")?.toString()?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_HOME")?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_SDK")?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_SDK_HOME")?.takeIf { it.isNotEmpty() }
         ?: error("No android SDK")
     File(path)
 }
@@ -21,9 +27,10 @@ fun findNdk(sdkDir: File): File? {
 }
 
 val androidNdkDir by lazy {
-    val path = properties.get("ndk.dir")?.toString()?.takeIf { it.isNotEmpty() }
-        ?: System.getenv("ANDROID_NDK")
-        ?: System.getenv("ANDROID_NDK_HOME")
+    val path = localProperties.get("ndk.dir")?.toString()?.takeIf { it.isNotEmpty() }
+        ?: properties.get("ndk.dir")?.toString()?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_NDK")?.takeIf { it.isNotEmpty() }
+        ?: System.getenv("ANDROID_NDK_HOME")?.takeIf { it.isNotEmpty() }
         ?: findNdk(androidSdkDir)?.toString()
         ?: error("No android NDK")
     File(path)

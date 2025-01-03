@@ -1,9 +1,4 @@
-import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.*
-import kotlin.collections.first
-import kotlin.collections.getValue
-import kotlin.collections.listOf
-import kotlin.collections.mapOf
 import kotlin.collections.set
 
 plugins {
@@ -16,14 +11,10 @@ plugins {
     id("org.spongepowered.mixin")
 }
 
-val libs = the<LibrariesForLibs>()
-
 val modId: String by extra.properties
 val modName: String by extra.properties
 val modVersion: String by extra.properties
 val modDescription: String by extra.properties
-val javaVersion: String by extra.properties
-val javaVersionNum = javaVersion.toInt()
 val gameVersion: String by extra.properties
 val forgeVersion: String by extra.properties
 val parchmentVersion: String by extra.properties
@@ -76,24 +67,32 @@ fun DependencyHandlerScope.shadeAndImplementation(dependency: Any) {
     minecraftLibrary(dependency)
 }
 
+fun<T : ModuleDependency> DependencyHandlerScope.shade(
+    dependency: T,
+    dependencyConfiguration: T.() -> Unit,
+) {
+    add("shadow", dependency, dependencyConfiguration)
+}
+
+fun<T : ModuleDependency> DependencyHandlerScope.shadeAndImplementation(
+    dependency: T,
+    dependencyConfiguration: T.() -> Unit,
+) {
+    shade(dependency, dependencyConfiguration)
+    implementation(dependency, dependencyConfiguration)
+    minecraftLibrary(dependency, dependencyConfiguration)
+}
+
 dependencies {
     minecraft("net.minecraftforge:forge:$gameVersion-$forgeVersion")
 
-    shadeAndImplementation(project(":common-data"))
-    shadeAndImplementation(project(":mod:common"))
+    shadeAndImplementation(project(":mod:common")) {
+        exclude("org.slf4j")
+    }
+    shadeAndImplementation(project(":combine"))
 
     shade(project(":proxy-windows"))
     shade(project(":proxy-server-android"))
-    shadeAndImplementation(project(":proxy-client"))
-    shadeAndImplementation(project(":proxy-server"))
-
-    shadeAndImplementation(libs.compose.runtime)
-    shadeAndImplementation(project(":combine"))
-
-    shadeAndImplementation(libs.koin.core)
-    shadeAndImplementation(libs.koin.compose)
-    shadeAndImplementation(libs.koin.logger.slf4j)
-    shadeAndImplementation(libs.kotlinx.collections.immutable)
 
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 }
