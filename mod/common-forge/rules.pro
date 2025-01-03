@@ -5,9 +5,11 @@
 -keepclassmembers class * {
     @net.minecraftforge.eventbus.api.SubscribeEvent *;
 }
+-keep class top.fifthlight.touchcontroller.platform.win32.Interface { *; }
+-keep class top.fifthlight.touchcontroller.platform.android.Transport { *; }
 
--keeppackagenames top.fifthlight.touchcontroller
--keeppackagenames top.fifthlight.combine
+-keeppackagenames top.fifthlight.touchcontroller.*
+-keeppackagenames top.fifthlight.combine.*
 -repackageclasses top.fifthlight.touchcontroller.relocated
 
 -allowaccessmodification

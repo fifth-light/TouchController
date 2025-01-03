@@ -71,7 +71,10 @@ class TouchController : KoinComponent {
         initialize()
 
         val client = Minecraft.getInstance()
-        WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl(client.window))
+        client.tell {
+            // MUST RUN ON RENDER THREAD
+            WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl(client.window))
+        }
     }
 
     private fun initialize() {

@@ -149,11 +149,18 @@ object PlatformProvider : KoinComponent {
             return null
         }
 
+        logger.info("Native library info:")
+        logger.info("containerName: ${info.modContainerName}")
+        logger.info("containerPath: ${info.modContainerPath}")
         val nativeLibrary = nativeLibraryPathGetter.getNativeLibraryPath(
             containerName = info.modContainerName,
             containerPath = info.modContainerPath,
             debugPath = info.debugPath
-        ) ?: return null
+        ) ?: run {
+            logger.warn("Failed to get native library path")
+            return null
+        }
+        logger.info("Native library path: $nativeLibrary")
 
         val destinationFile = try {
             extractNativeLibrary(info.extractPrefix, info.extractSuffix, nativeLibrary)
