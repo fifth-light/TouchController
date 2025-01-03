@@ -387,6 +387,8 @@ private fun LayersPanel(
 
                 Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TITLE))
 
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP))
+
                 val gameFeatures: GameFeatures = koinInject()
                 val conditionsList = listOfNotNull(
                     LayoutLayerConditionKey.SWIMMING,

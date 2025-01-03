@@ -225,7 +225,7 @@ data object GlobalCategory : ConfigCategory(
                     )
                 }
 
-                var debugGroupExpanded by remember { mutableStateOf(true) }
+                var debugGroupExpanded by remember { mutableStateOf(false) }
                 ConfigGroup(
                     name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_DEBUG_TITLE),
                     expanded = debugGroupExpanded,
