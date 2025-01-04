@@ -97,16 +97,18 @@ fun ComponentListScreen(viewModel: ComponentListScreenViewModel) {
 
             val componentFactory = LocalDataComponentTypeFactory.current
             for (component in componentFactory.allComponents) {
-                ComponentRow(
-                    modifier = Modifier
-                        .padding(4)
-                        .fillMaxWidth(),
-                    component = component,
-                ) {
-                    Button(onClick = {
-                        viewModel.update(uiState.list.add(component))
-                    }) {
-                        Text(Text.translatable(Texts.SCREEN_COMPONENT_ADD_TITLE), shadow = true)
+                if (component !in uiState.list) {
+                    ComponentRow(
+                        modifier = Modifier
+                            .padding(4)
+                            .fillMaxWidth(),
+                        component = component,
+                    ) {
+                        Button(onClick = {
+                            viewModel.update(uiState.list.add(component))
+                        }) {
+                            Text(Text.translatable(Texts.SCREEN_COMPONENT_ADD_TITLE), shadow = true)
+                        }
                     }
                 }
             }

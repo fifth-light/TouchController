@@ -29,7 +29,8 @@ modrinth {
         else -> error("Bad modType: $modType")
     }
     gameVersions.add(gameVersion)
-    versionNumber.set(modVersion)
+    versionNumber.set("$modVersion-$modType")
+    versionName.set(modVersion)
 
     dependencies {
         when (modType) {

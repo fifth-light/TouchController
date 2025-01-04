@@ -67,6 +67,7 @@
   "touchcontroller.screen.options.layer.condition.never.title": "Never",
   "touchcontroller.screen.options.layer.condition.want.title": "Want",
   "touchcontroller.screen.options.layer.condition.require.title": "Require",
+  "touchcontroller.screen.options.layer.condition.tip": "Ignore: ignore this condition\nNever: the layer will not show when the condition fulfilled\nWant: the layer will only show when one or more of \"Want\" condition fulfilled\nRequire: the layer will only show when all \"Require\" condition fulfilled",
   "touchcontroller.screen.options.layer.condition.swimming.title": "Swimming",
   "touchcontroller.screen.options.layer.condition.flying.title": "Flying",
   "touchcontroller.screen.options.layer.condition.sneaking.title": "Sneaking",

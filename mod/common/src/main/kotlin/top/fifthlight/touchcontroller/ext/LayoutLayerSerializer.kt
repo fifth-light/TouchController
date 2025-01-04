@@ -1,17 +1,16 @@
 package top.fifthlight.touchcontroller.ext
 
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.encoding.*
 import kotlinx.serialization.serializer
+import top.fifthlight.touchcontroller.config.DEFAULT_LAYER_NAME
 import top.fifthlight.touchcontroller.config.LayoutLayer
 import top.fifthlight.touchcontroller.config.LayoutLayerCondition
 import top.fifthlight.touchcontroller.control.ControllerWidget
@@ -36,15 +35,21 @@ class LayoutLayerSerializer : KSerializer<LayoutLayer> {
     }
 
     override fun deserialize(decoder: Decoder): LayoutLayer {
-        var name: String
-        var widgets: PersistentList<ControllerWidget>
-        var condition: LayoutLayerCondition
+        var name: String? = null
+        var widgets: PersistentList<ControllerWidget> = persistentListOf()
+        var condition = LayoutLayerCondition()
         return decoder.decodeStructure(descriptor) {
-            name = decodeStringElement(descriptor, 0)
-            widgets = decodeSerializableElement(descriptor, 1, widgetListSerializer).toPersistentList()
-            condition = decodeSerializableElement(descriptor, 2, serializer())
+            while (true) {
+                when (val index = decodeElementIndex(descriptor)) {
+                    0 -> name = decodeStringElement(descriptor, 0)
+                    1 -> widgets = decodeSerializableElement(descriptor, 1, widgetListSerializer).toPersistentList()
+                    2 -> condition = decodeSerializableElement(descriptor, 2, serializer())
+                    CompositeDecoder.DECODE_DONE -> break
+                    else -> error("Unexpected index: $index")
+                }
+            }
             LayoutLayer(
-                name = name,
+                name = name ?: DEFAULT_LAYER_NAME,
                 widgets = widgets,
                 condition = condition
             )
