@@ -8,7 +8,7 @@ val libs = the<LibrariesForLibs>()
 
 val modId: String by extra.properties
 val modVersion: String by extra.properties
-val publishFile: String by extra.properties
+val modState: String by extra.properties
 val gameVersion: String by extra.properties
 val fabricApiVersion: String? by extra.properties
 val modmenuVersion: String? by extra.properties
@@ -17,8 +17,8 @@ modrinth {
     val modType: String by extra.properties
 
     token.set(System.getenv("MODRINTH_TOKEN"))
-    projectId.set("touchcontroller")
-    versionType.set("alpha")
+    projectId.set(modId)
+    versionType.set(modState)
     when (modType) {
         "forge" -> {
             uploadFile.set(tasks.getByName("renameOutputJar"))
@@ -29,7 +29,7 @@ modrinth {
         else -> error("Bad modType: $modType")
     }
     gameVersions.add(gameVersion)
-    versionNumber.set("$modVersion-$modType")
+    versionNumber.set(version.toString())
     versionName.set(modVersion)
 
     dependencies {
