@@ -1,4 +1,6 @@
+import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.compileClasspath
 import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.processResources
+import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.runtimeClasspath
 import org.gradle.kotlin.dsl.*
 import kotlin.collections.set
 
@@ -148,7 +150,8 @@ gr8 {
         addProgramJarsFrom(configurations.getByName("shadow"))
         addProgramJarsFrom(tasks.getByName("jar"))
 
-        addClassPathJarsFrom(configurations.getByName("runtimeClasspath"))
+        addClassPathJarsFrom(configurations.compileClasspath)
+        addClassPathJarsFrom(configurations.runtimeClasspath)
 
         r8Version("8.8.20")
         proguardFile(rootProject.file("mod/common-forge/rules.pro"))
@@ -170,8 +173,6 @@ tasks.register<Jar>("gr8Jar") {
         tasks.getByName("gr8Gr8ShadowedJar").outputs.files.first { it.extension.equals("jar", ignoreCase = true) }
 
     from(zipTree(jarFile)) {
-        exclude("DebugProbesKt.bin")
-        exclude("kotlin")
         exclude {
             it.path.startsWith("META-INF") && !it.path.endsWith("mods.toml")
         }
