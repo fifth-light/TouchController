@@ -11,8 +11,9 @@ class ScrollState {
     val progress = _progress.asStateFlow()
     internal var contentHeight = 0
     internal var viewportHeight = 0
-    internal var initialProgress = 0
     internal var initialPointerPosition: Offset? = null
+    internal var startProgress = 0
+    internal var startPointerPosition: Offset? = null
     internal var scrolling: Boolean = false
 
     internal fun updateProgress(progress: Int) {

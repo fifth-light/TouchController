@@ -8,10 +8,7 @@ import top.fifthlight.combine.input.key.KeyEventReceiver
 import top.fifthlight.combine.input.pointer.PointerEvent
 import top.fifthlight.combine.input.pointer.PointerEventReceiver
 import top.fifthlight.combine.input.pointer.PointerEventType
-import top.fifthlight.combine.layout.Measurable
-import top.fifthlight.combine.layout.MeasurePolicy
-import top.fifthlight.combine.layout.MeasureResult
-import top.fifthlight.combine.layout.Placeable
+import top.fifthlight.combine.layout.*
 import top.fifthlight.combine.modifier.*
 import top.fifthlight.combine.paint.NodeRenderer
 import top.fifthlight.combine.paint.RenderContext
@@ -70,17 +67,9 @@ internal sealed class WrapperLayoutNode(
             }
         }
 
-        private var pressEventTarget: LayoutNode? = null
-        private var moveEventTarget: LayoutNode? = null
+        var pressEventTarget: LayoutNode? = null
+        var moveEventTarget: LayoutNode? = null
         override fun onPointerEvent(event: PointerEvent): Boolean {
-            fun inRange(placeable: Placeable): Boolean {
-                val xInRange =
-                    placeable.absoluteX <= event.position.x && event.position.x < placeable.absoluteX + placeable.width
-                val yInRange =
-                    placeable.absoluteY <= event.position.y && event.position.y < placeable.absoluteY + placeable.height
-                return xInRange && yInRange
-            }
-
             val pressTarget = pressEventTarget
             val moveTarget = moveEventTarget
             var haveMoveChildren = false
@@ -90,7 +79,7 @@ internal sealed class WrapperLayoutNode(
                     return pressTarget.onPointerEvent(event)
                 }
                 for (child in node.children.asReversed()) {
-                    if (!inRange(child)) {
+                    if (event.position !in child) {
                         continue
                     }
                     if (event.type == PointerEventType.Move && !haveMoveChildren) {
@@ -115,7 +104,7 @@ internal sealed class WrapperLayoutNode(
             }
 
             val result = process()
-            if (event.type == PointerEventType.Release) {
+            if (event.type == PointerEventType.Release || event.type == PointerEventType.Cancel) {
                 pressEventTarget = null
             }
             if (pressTarget == null) {
@@ -127,7 +116,7 @@ internal sealed class WrapperLayoutNode(
                     moveTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
                     moveEventTarget = null
                 }
-            } else if (pressTarget == moveTarget && !inRange(pressTarget)) {
+            } else if (pressTarget == moveTarget && event.position !in pressTarget) {
                 pressTarget.onPointerEvent(event.copy(type = PointerEventType.Leave))
                 moveEventTarget = null
             }
@@ -269,10 +258,17 @@ internal sealed class WrapperLayoutNode(
         TextInputReceiver by children,
         KeyEventReceiver by children {
 
-        override fun onPointerEvent(event: PointerEvent): Boolean =
-            modifierNode.onPointerEvent(event, this, node) {
+        override fun onPointerEvent(event: PointerEvent): Boolean {
+            val accepted = modifierNode.onPointerEvent(event, this, node) {
+                children.onPointerEvent(it)
+            }
+            return if (accepted) {
+                node.initialWrapper.pressEventTarget = null
+                true
+            } else {
                 children.onPointerEvent(event)
-            } || children.onPointerEvent(event)
+            }
+        }
     }
 
     class FocusState(

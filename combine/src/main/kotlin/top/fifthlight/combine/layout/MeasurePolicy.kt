@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import top.fifthlight.combine.modifier.Constraints
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntSize
+import top.fifthlight.data.Offset
 
 data class MeasureResult(
     val width: Int,
@@ -55,4 +56,10 @@ interface Placeable {
     val position get() = IntOffset(x, y)
     val absolutePosition get() = IntOffset(absoluteX, absoluteY)
     val size get() = IntSize(width, height)
+}
+
+operator fun Placeable.contains(offset: Offset): Boolean {
+    val xInRange = absoluteX <= offset.x && offset.x < absoluteX + width
+    val yInRange = absoluteY <= offset.y && offset.y < absoluteY + height
+    return xInRange && yInRange
 }

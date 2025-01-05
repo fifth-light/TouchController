@@ -7,6 +7,7 @@ import top.fifthlight.combine.input.MutableInteractionSource
 import top.fifthlight.combine.input.pointer.PointerEvent
 import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Placeable
+import top.fifthlight.combine.layout.contains
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
 import top.fifthlight.combine.node.LayoutNode
@@ -50,11 +51,18 @@ private data class ClickableModifierNode(
         children: (PointerEvent) -> Boolean
     ): Boolean {
         when (event.type) {
-            PointerEventType.Press -> clickState.pressed = true
             PointerEventType.Move -> {}
             PointerEventType.Enter -> clickState.entered = true
             PointerEventType.Leave -> clickState.entered = false
-            PointerEventType.Cancel -> clickState.pressed = false
+            PointerEventType.Cancel -> {
+                println("CLICKABLE CANCELED")
+                clickState.pressed = false
+            }
+
+            PointerEventType.Press -> if (event.position in node) {
+                clickState.entered = true
+                clickState.pressed = true
+            }
             PointerEventType.Release -> {
                 if (clickState.pressed && clickState.entered) {
                     onClick(event.position - node.absolutePosition)

@@ -39,11 +39,13 @@ private data class VerticalScrollNode(
 
             PointerEventType.Press -> {
                 scrollState.initialPointerPosition = event.position
+                scrollState.startPointerPosition = null
                 false
             }
 
             PointerEventType.Cancel, PointerEventType.Release -> {
                 scrollState.initialPointerPosition = null
+                scrollState.startPointerPosition = null
                 if (scrollState.scrolling) {
                     scrollState.scrolling = false
                     true
@@ -55,14 +57,15 @@ private data class VerticalScrollNode(
             PointerEventType.Move -> {
                 val initialPosition = scrollState.initialPointerPosition
                 if (scrollState.scrolling) {
-                    val distance = (scrollState.initialPointerPosition!!.y - event.position.y).roundToInt()
-                    scrollState.updateProgress(distance + scrollState.initialProgress)
+                    val distance = (scrollState.startPointerPosition!!.y - event.position.y).roundToInt()
+                    scrollState.updateProgress(distance + scrollState.startProgress)
                     true
                 } else if (initialPosition != null) {
                     val distance = (initialPosition.y - event.position.y)
                     if (distance.absoluteValue > 8) {
                         scrollState.scrolling = true
-                        scrollState.initialProgress = scrollState.progress.value
+                        scrollState.startProgress = scrollState.progress.value
+                        scrollState.startPointerPosition = event.position
                         children(event.copy(type = PointerEventType.Cancel))
                         true
                     } else {
