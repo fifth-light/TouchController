@@ -19,7 +19,7 @@ body:
                 -   label: I have updated the TouchController mod to the latest version
                     required: true
                 -   label: I am using the latest version Android launcher supporting TouchController, or using Windows on desktop.
-                    required: false
+                    required: true
                 -   label: I understand that any issues on unsupported operating system (for example iOS, macOS) cannot be reported here (for support of a certain operating system, please go to submit new features).
                     required: true
     -   type: dropdown

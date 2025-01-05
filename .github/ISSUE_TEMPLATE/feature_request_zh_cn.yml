@@ -14,7 +14,7 @@ body:
             options:
                 -   label: 此功能未被提出过（可以在[这里](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)进行搜索）
                     required: true
-                -   label: 如果只是有一些想法，而不是具体的新功能，请在 [Discussions](https://github.com/fifth-light/TouchController/discussions) 中提交
+                -   label: 如果只是有一些想法，而不是具体的新功能，请在 [Discussions](https://github.com/fifth-light/TouchController/discussions/new?category=%E6%83%B3%E6%B3%95) 中提交
                     required: true
                 -   label: 此功能不在 [Pull Requests](https://github.com/fifth-light/TouchController/pulls) 中
                     required: true
