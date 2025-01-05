@@ -70,7 +70,20 @@ fun EditText(
                     return@onKeyEvent
                 }
                 when (event.key) {
+                    Key.DELETE -> updateInputState { doDelete() }
                     Key.BACKSPACE -> updateInputState { doBackspace() }
+
+                    Key.HOME -> if (event.modifier.onlyShift) {
+                        updateInputState { doShiftHome() }
+                    } else if (event.modifier.empty) {
+                        updateInputState { doHome() }
+                    }
+
+                    Key.END -> if (event.modifier.onlyShift) {
+                        updateInputState { doShiftEnd() }
+                    } else if (event.modifier.empty) {
+                        updateInputState { doEnd() }
+                    }
 
                     Key.ARROW_LEFT -> if (event.modifier.onlyShift) {
                         updateInputState { doShiftLeft() }
@@ -142,9 +155,18 @@ fun EditText(
                     text = selectionText,
                     color = Colors.WHITE
                 )
+
+                if (cursorShow && textInputState.selectionLeft) {
+                    fillRect(
+                        offset = textOffset + IntOffset(textCursor, 0),
+                        size = IntSize(1, 9),
+                        color = Colors.WHITE,
+                    )
+                }
+
                 textCursor += selectionWidth
 
-                if (cursorShow) {
+                if (cursorShow && !textInputState.selectionLeft) {
                     fillRect(
                         offset = textOffset + IntOffset(textCursor, 0),
                         size = IntSize(1, 9),

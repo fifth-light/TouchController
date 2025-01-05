@@ -54,10 +54,7 @@ private data class ClickableModifierNode(
             PointerEventType.Move -> {}
             PointerEventType.Enter -> clickState.entered = true
             PointerEventType.Leave -> clickState.entered = false
-            PointerEventType.Cancel -> {
-                println("CLICKABLE CANCELED")
-                clickState.pressed = false
-            }
+            PointerEventType.Cancel -> clickState.pressed = false
 
             PointerEventType.Press -> if (event.position in node) {
                 clickState.entered = true
