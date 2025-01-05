@@ -5,7 +5,16 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 val LocalTextFactory = staticCompositionLocalOf<TextFactory> { error("No TextFactory in context") }
 
+interface TextBuilder {
+    fun bold(bold: Boolean = true, block: TextBuilder.() -> Unit)
+    fun underline(underline: Boolean = true, block: TextBuilder.() -> Unit)
+    fun italic(italic: Boolean = true, block: TextBuilder.() -> Unit)
+    fun append(string: String)
+    fun appendWithoutStyle(text: Text)
+}
+
 interface TextFactory {
+    fun build(block: TextBuilder.() -> Unit): Text
     fun literal(string: String): Text
     fun of(identifier: Identifier): Text
     fun empty(): Text
@@ -15,6 +24,12 @@ interface TextFactory {
 
 interface Text {
     val string: String
+
+    fun bold(): Text
+    fun underline(): Text
+    fun italic(): Text
+    fun copy(): Text
+    operator fun plus(other: Text): Text
 
     companion object {
         @Composable

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package top.fifthlight.data
 
 import kotlinx.serialization.KSerializer
@@ -8,12 +10,12 @@ import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.*
 import kotlin.math.sqrt
 
-fun Size(size: Float) = Size(packFloats(size, size))
-fun Size(width: Float, height: Float) = Size(packFloats(width, height))
+inline fun Size(size: Float) = Size(packFloats(size, size))
+inline fun Size(width: Float, height: Float) = Size(packFloats(width, height))
 
-@Serializable
+@Serializable(with = SizeSerializer::class)
 @JvmInline
-value class Size internal constructor(private val packed: Long) {
+value class Size(private val packed: Long) {
     val width
         get() = unpackFloat1(packed)
 

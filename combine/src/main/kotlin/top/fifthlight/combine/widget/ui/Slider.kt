@@ -1,7 +1,7 @@
 package top.fifthlight.combine.widget.ui
 
 import androidx.compose.runtime.*
-import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.height
 import top.fifthlight.combine.modifier.pointer.onPointerInput

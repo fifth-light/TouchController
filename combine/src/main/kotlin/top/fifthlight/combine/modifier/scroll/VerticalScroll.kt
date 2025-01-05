@@ -1,13 +1,14 @@
 package top.fifthlight.combine.modifier.scroll
 
 import androidx.compose.runtime.Composable
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Measurable
 import top.fifthlight.combine.layout.MeasureResult
 import top.fifthlight.combine.layout.MeasureScope
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.*
+import top.fifthlight.combine.node.LayoutNode
 import top.fifthlight.combine.paint.Colors
 import top.fifthlight.combine.paint.RenderContext
 import top.fifthlight.data.IntOffset
@@ -24,7 +25,12 @@ fun Modifier.verticalScroll(
 private data class VerticalScrollNode(
     val scrollState: ScrollState,
 ) : LayoutModifierNode, DrawModifierNode, PointerInputModifierNode, Modifier.Node<VerticalScrollNode> {
-    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
+    override fun onPointerEvent(
+        event: PointerEvent,
+        node: Placeable,
+        layoutNode: LayoutNode,
+        children: (PointerEvent) -> Boolean
+    ): Boolean {
         return when (event.type) {
             PointerEventType.Scroll -> {
                 scrollState.updateProgress((scrollState.progress.value - event.scrollDelta.y * 12).toInt())
@@ -57,7 +63,7 @@ private data class VerticalScrollNode(
                     if (distance.absoluteValue > 8) {
                         scrollState.scrolling = true
                         scrollState.initialProgress = scrollState.progress.value
-                        // Send CANCEL pointer
+                        children(event.copy(type = PointerEventType.Cancel))
                         true
                     } else {
                         false

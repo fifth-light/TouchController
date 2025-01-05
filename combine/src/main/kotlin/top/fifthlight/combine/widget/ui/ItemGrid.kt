@@ -43,6 +43,8 @@ fun ItemGrid(
 
         return if (itemCount < columns) {
             IntSize(itemCount, 1)
+        } else if (columns <= 0) {
+            IntSize(0, 0)
         } else {
             val rows = itemCount ceilDiv columns
             IntSize(columns, rows)

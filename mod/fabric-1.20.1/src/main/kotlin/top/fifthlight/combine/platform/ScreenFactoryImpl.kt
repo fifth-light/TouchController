@@ -12,10 +12,12 @@ import org.koin.compose.KoinContext
 import top.fifthlight.combine.data.LocalDataComponentTypeFactory
 import top.fifthlight.combine.data.LocalItemFactory
 import top.fifthlight.combine.data.LocalTextFactory
-import top.fifthlight.combine.input.PointerButton
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventType
-import top.fifthlight.combine.input.PointerType
+import top.fifthlight.combine.input.input.LocalClipboard
+import top.fifthlight.combine.input.key.KeyEvent
+import top.fifthlight.combine.input.pointer.PointerButton
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerType
 import top.fifthlight.combine.node.CombineOwner
 import top.fifthlight.combine.paint.RenderContext
 import top.fifthlight.combine.screen.LocalScreenFactory
@@ -61,6 +63,7 @@ private class CombineScreen(
                     LocalItemFactory provides ItemFactoryImpl,
                     LocalTextFactory provides TextFactoryImpl,
                     LocalDataComponentTypeFactory provides FoodComponentTypeFactoryImpl,
+                    LocalClipboard provides ClipboardHandlerImpl,
                     LocalScreenFactory provides ScreenFactoryImpl,
                 ) {
                     content()
@@ -77,8 +80,6 @@ private class CombineScreen(
         }
     }
 
-    private val pendingInputEvents = ArrayDeque<PointerEvent>()
-
     private fun mapMouseButton(button: Int) = when (button) {
         0 -> PointerButton.Left
         1 -> PointerButton.Middle
@@ -88,7 +89,7 @@ private class CombineScreen(
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val mouseButton = mapMouseButton(button) ?: return true
-        pendingInputEvents.add(
+        owner.onPointerEvent(
             PointerEvent(
                 id = 0,
                 position = Offset(
@@ -105,7 +106,7 @@ private class CombineScreen(
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val mouseButton = mapMouseButton(button) ?: return true
-        pendingInputEvents.add(
+        owner.onPointerEvent(
             PointerEvent(
                 id = 0,
                 position = Offset(
@@ -121,7 +122,7 @@ private class CombineScreen(
     }
 
     override fun mouseMoved(mouseX: Double, mouseY: Double) {
-        pendingInputEvents.add(
+        owner.onPointerEvent(
             PointerEvent(
                 id = 0,
                 position = Offset(
@@ -140,7 +141,7 @@ private class CombineScreen(
         mouseY: Double,
         amount: Double,
     ): Boolean {
-        pendingInputEvents.add(
+        owner.onPointerEvent(
             PointerEvent(
                 id = 0,
                 position = Offset(
@@ -159,13 +160,36 @@ private class CombineScreen(
         return true
     }
 
+    override fun charTyped(char: Char, modifiers: Int): Boolean {
+        owner.onTextInput(char.toString())
+        return true
+    }
+
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        owner.onKeyEvent(
+            KeyEvent(
+                key = mapKeyCode(keyCode),
+                modifier = mapModifier(modifiers),
+                pressed = true
+            )
+        )
+        return true
+    }
+
+    override fun keyReleased(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        owner.onKeyEvent(
+            KeyEvent(
+                key = mapKeyCode(keyCode),
+                modifier = mapModifier(modifiers),
+                pressed = false
+            )
+        )
+        return true
+    }
+
     override fun render(drawContext: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         this.renderBackground(drawContext)
-
-        while (true) {
-            val event = pendingInputEvents.removeFirstOrNull() ?: break
-            owner.onPointerEvent(event)
-        }
 
         val client = client!!
         val canvas = CanvasImpl(drawContext, client.textRenderer)

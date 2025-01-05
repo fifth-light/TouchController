@@ -2,10 +2,13 @@ package top.fifthlight.combine.platform
 
 import net.minecraft.text.Text
 import top.fifthlight.combine.data.Identifier
+import top.fifthlight.combine.data.TextBuilder
 import top.fifthlight.combine.data.TextFactory
 import top.fifthlight.combine.data.Text as CombineText
 
 object TextFactoryImpl : TextFactory {
+    override fun build(block: TextBuilder.() -> Unit) = TextBuilderImpl().apply(block).build()
+
     override fun literal(string: String) = TextImpl(Text.literal(string))
 
     private fun transformIdentifier(identifier: Identifier) = when (identifier) {

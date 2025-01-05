@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import top.fifthlight.combine.input.Interaction
 import top.fifthlight.combine.input.MutableInteractionSource
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
+import top.fifthlight.combine.node.LayoutNode
 import top.fifthlight.data.Offset
 
 sealed class HoverInteraction : Interaction {
@@ -27,7 +28,12 @@ private data class HoverableModifierNode(
     val onHovered: (Boolean) -> Unit,
 ) : Modifier.Node<HoverableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
+    override fun onPointerEvent(
+        event: PointerEvent,
+        node: Placeable,
+        layoutNode: LayoutNode,
+        children: (PointerEvent) -> Boolean
+    ): Boolean {
         when (event.type) {
             PointerEventType.Enter -> {
                 onHovered(true)
@@ -54,7 +60,12 @@ private data class HoverableWithOffsetModifierNode(
     val onHovered: (Boolean?, Offset) -> Unit,
 ) : Modifier.Node<HoverableWithOffsetModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
+    override fun onPointerEvent(
+        event: PointerEvent,
+        node: Placeable,
+        layoutNode: LayoutNode,
+        children: (PointerEvent) -> Boolean
+    ): Boolean {
         when (event.type) {
             PointerEventType.Enter -> {
                 onHovered(true, event.position - node.absolutePosition)

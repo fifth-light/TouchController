@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import top.fifthlight.combine.input.Interaction
 import top.fifthlight.combine.input.MutableInteractionSource
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
+import top.fifthlight.combine.node.LayoutNode
 import top.fifthlight.data.Offset
 
 sealed class ClickInteraction : Interaction {
@@ -24,25 +25,30 @@ class ClickState internal constructor(
 
 @Composable
 fun Modifier.clickable(
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    interactionSource: MutableInteractionSource? = null,
     clickState: ClickState = remember { ClickState() },
     onClick: () -> Unit
 ) = then(ClickableModifierNode(interactionSource, clickState, onClick = { onClick() }))
 
 @Composable
 fun Modifier.clickableWithOffset(
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    interactionSource: MutableInteractionSource? = null,
     clickState: ClickState = remember { ClickState() },
     onClick: (Offset) -> Unit
 ) = then(ClickableModifierNode(interactionSource, clickState, onClick))
 
 private data class ClickableModifierNode(
-    val interactionSource: MutableInteractionSource,
+    val interactionSource: MutableInteractionSource?,
     val clickState: ClickState,
     val onClick: (Offset) -> Unit,
 ) : Modifier.Node<ClickableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
+    override fun onPointerEvent(
+        event: PointerEvent,
+        node: Placeable,
+        layoutNode: LayoutNode,
+        children: (PointerEvent) -> Boolean
+    ): Boolean {
         when (event.type) {
             PointerEventType.Press -> clickState.pressed = true
             PointerEventType.Move -> {}
@@ -58,17 +64,19 @@ private data class ClickableModifierNode(
 
             else -> return false
         }
-        if (clickState.pressed) {
-            if (clickState.entered) {
-                interactionSource.tryEmit(ClickInteraction.Active)
+        if (interactionSource != null) {
+            if (clickState.pressed) {
+                if (clickState.entered) {
+                    interactionSource.tryEmit(ClickInteraction.Active)
+                } else {
+                    interactionSource.tryEmit(ClickInteraction.Empty)
+                }
             } else {
-                interactionSource.tryEmit(ClickInteraction.Empty)
-            }
-        } else {
-            if (clickState.entered) {
-                interactionSource.tryEmit(ClickInteraction.Hover)
-            } else {
-                interactionSource.tryEmit(ClickInteraction.Empty)
+                if (clickState.entered) {
+                    interactionSource.tryEmit(ClickInteraction.Hover)
+                } else {
+                    interactionSource.tryEmit(ClickInteraction.Empty)
+                }
             }
         }
         return true

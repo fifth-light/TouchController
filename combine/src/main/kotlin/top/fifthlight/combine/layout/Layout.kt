@@ -3,6 +3,7 @@ package top.fifthlight.combine.layout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.currentComposer
 import top.fifthlight.combine.modifier.Constraints
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.node.LayoutNode
@@ -16,12 +17,15 @@ inline fun Layout(
     renderer: NodeRenderer = NodeRenderer.EmptyRenderer,
     content: @Composable () -> Unit = {}
 ) {
+    val localMap = currentComposer.currentCompositionLocalMap
+
     ComposeNode<LayoutNode, UiApplier>(
         factory = ::LayoutNode,
         update = {
             set(measurePolicy) { this.measurePolicy = it }
             set(renderer) { this.renderer = it }
             set(modifier) { this.modifier = it }
+            set(localMap) { this.compositionLocalMap = it }
         },
         content = content,
     )

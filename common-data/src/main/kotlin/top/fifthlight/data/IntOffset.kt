@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package top.fifthlight.data
 
 import kotlinx.serialization.KSerializer
@@ -7,12 +9,12 @@ import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.*
 
-fun IntOffset(offset: Int) = IntOffset(packInts(offset, offset))
-fun IntOffset(x: Int, y: Int) = IntOffset(packInts(x, y))
+inline fun IntOffset(offset: Int) = IntOffset(packInts(offset, offset))
+inline fun IntOffset(x: Int, y: Int) = IntOffset(packInts(x, y))
 
 @Serializable(with = IntOffsetSerializer::class)
 @JvmInline
-value class IntOffset internal constructor(private val packed: Long) {
+value class IntOffset(private val packed: Long) {
     val x
         get() = unpackInt1(packed)
 

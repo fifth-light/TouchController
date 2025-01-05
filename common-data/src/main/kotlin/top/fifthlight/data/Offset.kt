@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package top.fifthlight.data
 
 import kotlinx.serialization.KSerializer
@@ -8,12 +10,12 @@ import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.*
 import kotlin.math.sqrt
 
-fun Offset(offset: Float) = Offset(packFloats(offset, offset))
-fun Offset(x: Float, y: Float) = Offset(packFloats(x, y))
+inline fun Offset(offset: Float) = Offset(packFloats(offset, offset))
+inline fun Offset(x: Float, y: Float) = Offset(packFloats(x, y))
 
 @Serializable(with = OffsetSerializer::class)
 @JvmInline
-value class Offset internal constructor(private val packed: Long) {
+value class Offset(private val packed: Long) {
     val x
         get() = unpackFloat1(packed)
 

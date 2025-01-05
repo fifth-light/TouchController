@@ -1,8 +1,13 @@
 package top.fifthlight.combine.node
 
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventReceiver
-import top.fifthlight.combine.input.PointerEventType
+import androidx.compose.runtime.CompositionLocalMap
+import top.fifthlight.combine.input.focus.FocusStateListener
+import top.fifthlight.combine.input.input.TextInputReceiver
+import top.fifthlight.combine.input.key.KeyEvent
+import top.fifthlight.combine.input.key.KeyEventReceiver
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventReceiver
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Measurable
 import top.fifthlight.combine.layout.MeasurePolicy
 import top.fifthlight.combine.layout.MeasureResult
@@ -17,7 +22,7 @@ private fun interface Renderable {
 
 internal sealed class WrapperLayoutNode(
     val node: LayoutNode,
-) : Measurable, Placeable, Renderable, PointerEventReceiver {
+) : Measurable, Placeable, Renderable, PointerEventReceiver, FocusStateListener, TextInputReceiver, KeyEventReceiver {
     var parent: WrapperLayoutNode? = null
 
     val parentPlaceable: Placeable?
@@ -28,7 +33,7 @@ internal sealed class WrapperLayoutNode(
         override var height: Int = parent.height.coerceIn(constraints.minHeight..constraints.maxHeight)
     }
 
-    class Node(node: LayoutNode) : WrapperLayoutNode(node) {
+    class Node(node: LayoutNode) : WrapperLayoutNode(node), FocusStateListener, TextInputReceiver, KeyEventReceiver {
         override val parentData: Any? = node.parentData
 
         override var width: Int = 0
@@ -128,6 +133,10 @@ internal sealed class WrapperLayoutNode(
             }
             return result
         }
+
+        override fun onFocusStateChanged(focused: Boolean) {}
+        override fun onTextInput(string: String) {}
+        override fun onKeyEvent(event: KeyEvent) {}
     }
 
     class Layout(
@@ -135,7 +144,10 @@ internal sealed class WrapperLayoutNode(
         val children: WrapperLayoutNode,
         val modifierNode: LayoutModifierNode
     ) : WrapperLayoutNode(node),
-        PointerEventReceiver by children {
+        PointerEventReceiver by children,
+        FocusStateListener by children,
+        TextInputReceiver by children,
+        KeyEventReceiver by children {
         override val parentData: Any? = children.parentData
 
         override var width: Int = 0
@@ -174,7 +186,8 @@ internal sealed class WrapperLayoutNode(
     abstract class PositionWrapper(
         node: LayoutNode,
         val children: WrapperLayoutNode,
-    ) : WrapperLayoutNode(node), Measurable, Placeable, Renderable {
+    ) : WrapperLayoutNode(node),
+        Measurable, Placeable, Renderable {
         override val parentData: Any? = children.parentData
 
         override val width: Int
@@ -211,7 +224,10 @@ internal sealed class WrapperLayoutNode(
         children: WrapperLayoutNode,
         val modifierNode: DrawModifierNode
     ) : PositionWrapper(node, children),
-        PointerEventReceiver by children {
+        PointerEventReceiver by children,
+        FocusStateListener by children,
+        TextInputReceiver by children,
+        KeyEventReceiver by children {
 
         override fun render(context: RenderContext) {
             context.withState {
@@ -226,9 +242,12 @@ internal sealed class WrapperLayoutNode(
     class OnPlaced(
         node: LayoutNode,
         children: WrapperLayoutNode,
-        private val modifierNode: PlaceListeningModifierNode
+        private val modifierNode: PlaceListeningModifierNode,
     ) : PositionWrapper(node, children),
-        PointerEventReceiver by children {
+        PointerEventReceiver by children,
+        FocusStateListener by children,
+        TextInputReceiver by children,
+        KeyEventReceiver by children {
 
         override fun measure(constraints: Constraints): Placeable {
             val result = super.measure(constraints)
@@ -244,22 +263,76 @@ internal sealed class WrapperLayoutNode(
     class PointerInput(
         node: LayoutNode,
         children: WrapperLayoutNode,
-        private val modifierNode: PointerInputModifierNode
-    ) : PositionWrapper(node, children) {
+        private val modifierNode: PointerInputModifierNode,
+    ) : PositionWrapper(node, children),
+        FocusStateListener by children,
+        TextInputReceiver by children,
+        KeyEventReceiver by children {
 
         override fun onPointerEvent(event: PointerEvent): Boolean =
-            modifierNode.onPointerEvent(event, this) {
+            modifierNode.onPointerEvent(event, this, node) {
                 children.onPointerEvent(event)
             } || children.onPointerEvent(event)
     }
+
+    class FocusState(
+        node: LayoutNode,
+        children: WrapperLayoutNode,
+        private val modifierNode: FocusStateListenerModifierNode,
+    ) : PositionWrapper(node, children),
+        PointerEventReceiver by children,
+        TextInputReceiver by children,
+        KeyEventReceiver by children {
+
+        override fun onFocusStateChanged(focused: Boolean) {
+            modifierNode.onFocusStateChanged(focused)
+            children.onFocusStateChanged(focused)
+        }
+    }
+
+    class TextInput(
+        node: LayoutNode,
+        children: WrapperLayoutNode,
+        private val modifierNode: TextInputModifierNode,
+    ) : PositionWrapper(node, children),
+        PointerEventReceiver by children,
+        FocusStateListener by children,
+        KeyEventReceiver by children {
+
+        override fun onTextInput(string: String) = modifierNode.onTextInput(string)
+    }
+
+    class KeyInput(
+        node: LayoutNode,
+        children: WrapperLayoutNode,
+        private val modifierNode: KeyInputModifierNode,
+    ) : PositionWrapper(node, children),
+        PointerEventReceiver by children,
+        FocusStateListener by children,
+        TextInputReceiver by children {
+
+        override fun onKeyEvent(event: KeyEvent) = modifierNode.onKeyEvent(event)
+    }
 }
 
-class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
+class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver,
+    FocusStateListener, TextInputReceiver, KeyEventReceiver {
     var parent: LayoutNode? = null
     val children = mutableListOf<LayoutNode>()
-
     var measurePolicy: MeasurePolicy = DefaultMeasurePolicy
     var renderer: NodeRenderer = NodeRenderer.EmptyRenderer
+    var focusable: Boolean = false
+    var compositionLocalMap: CompositionLocalMap = CompositionLocalMap.Empty
+    override var parentData: Any? = null
+    internal val initialWrapper = WrapperLayoutNode.Node(this)
+    private var wrappedNode: WrapperLayoutNode = initialWrapper
+    var modifier: Modifier = Modifier
+        set(value) {
+            field = value
+            parentData = null
+            focusable = false
+            wrappedNode = buildWrapperLayoutNode(value)
+        }
 
     private fun buildWrapperLayoutNode(modifier: Modifier): WrapperLayoutNode =
         modifier.foldIn<WrapperLayoutNode>(initialWrapper) { wrapper, node ->
@@ -284,20 +357,27 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
                 currentWrapper.parent = newWrapper
                 currentWrapper = newWrapper
             }
+            if (node is FocusStateListenerModifierNode) {
+                node.onAttachedToNode(this)
+                val newWrapper = WrapperLayoutNode.FocusState(this, currentWrapper, node)
+                currentWrapper.parent = newWrapper
+                currentWrapper = newWrapper
+                focusable = true
+            }
+            if (node is TextInputModifierNode) {
+                val newWrapper = WrapperLayoutNode.TextInput(this, currentWrapper, node)
+                currentWrapper.parent = newWrapper
+                currentWrapper = newWrapper
+            }
+            if (node is KeyInputModifierNode) {
+                val newWrapper = WrapperLayoutNode.KeyInput(this, currentWrapper, node)
+                currentWrapper.parent = newWrapper
+                currentWrapper = newWrapper
+            }
             if (node is ParentDataModifierNode) {
                 parentData = node.modifierParentData(parentData)
             }
             currentWrapper
-        }
-
-    override var parentData: Any? = null
-    internal val initialWrapper = WrapperLayoutNode.Node(this)
-    private var wrappedNode: WrapperLayoutNode = initialWrapper
-    var modifier: Modifier = Modifier
-        set(value) {
-            field = value
-            parentData = null
-            wrappedNode = buildWrapperLayoutNode(value)
         }
 
     override fun measure(constraints: Constraints) = wrappedNode.measure(constraints)
@@ -320,6 +400,12 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver {
     override fun render(context: RenderContext) = wrappedNode.render(context)
 
     override fun onPointerEvent(event: PointerEvent) = wrappedNode.onPointerEvent(event)
+
+    override fun onFocusStateChanged(focused: Boolean) = wrappedNode.onFocusStateChanged(focused)
+
+    override fun onTextInput(string: String) = wrappedNode.onTextInput(string)
+
+    override fun onKeyEvent(event: KeyEvent) = wrappedNode.onKeyEvent(event)
 
     internal companion object {
         val DefaultMeasurePolicy = MeasurePolicy { measurables, constraints ->

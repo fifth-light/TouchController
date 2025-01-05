@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package top.fifthlight.data
 
 import kotlinx.serialization.KSerializer
@@ -7,12 +9,12 @@ import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.*
 
-fun IntSize(size: Int) = IntSize(packInts(size, size))
-fun IntSize(width: Int, height: Int) = IntSize(packInts(width, height))
+inline fun IntSize(size: Int) = IntSize(packInts(size, size))
+inline fun IntSize(width: Int, height: Int) = IntSize(packInts(width, height))
 
 @Serializable(with = IntSizeSerializer::class)
 @JvmInline
-value class IntSize internal constructor(private val packed: Long) {
+value class IntSize(private val packed: Long) {
     val width
         get() = unpackInt1(packed)
 

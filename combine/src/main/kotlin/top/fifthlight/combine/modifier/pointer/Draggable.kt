@@ -4,16 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import top.fifthlight.combine.input.Interaction
 import top.fifthlight.combine.input.MutableInteractionSource
-import top.fifthlight.combine.input.PointerEvent
-import top.fifthlight.combine.input.PointerEventType
+import top.fifthlight.combine.input.pointer.PointerEvent
+import top.fifthlight.combine.input.pointer.PointerEventType
 import top.fifthlight.combine.layout.Placeable
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.PointerInputModifierNode
+import top.fifthlight.combine.node.LayoutNode
 import top.fifthlight.data.Offset
 
 sealed class DragInteraction : Interaction {
-    data object Empty : ClickInteraction()
-    data object Active : ClickInteraction()
+    data object Empty : DragInteraction()
+    data object Active : DragInteraction()
 }
 
 class DragState internal constructor(
@@ -34,7 +35,12 @@ private data class DraggableModifierNode(
     val onDrag: (Offset) -> Unit,
 ) : Modifier.Node<DraggableModifierNode>, PointerInputModifierNode {
 
-    override fun onPointerEvent(event: PointerEvent, node: Placeable, children: (PointerEvent) -> Boolean): Boolean {
+    override fun onPointerEvent(
+        event: PointerEvent,
+        node: Placeable,
+        layoutNode: LayoutNode,
+        children: (PointerEvent) -> Boolean
+    ): Boolean {
         when (event.type) {
             PointerEventType.Press -> {
                 dragState.pressed = true
