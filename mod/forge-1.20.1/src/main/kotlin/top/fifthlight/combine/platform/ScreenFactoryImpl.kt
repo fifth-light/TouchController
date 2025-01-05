@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import org.koin.compose.KoinContext
+import org.lwjgl.glfw.GLFW
 import top.fifthlight.combine.data.LocalDataComponentTypeFactory
 import top.fifthlight.combine.data.LocalItemFactory
 import top.fifthlight.combine.data.LocalTextFactory
@@ -165,7 +166,15 @@ private class CombineScreen(
         return true
     }
 
+    var onDismissRequest: () -> Boolean = { false }
+
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            if (!onDismissRequest()) {
+                onClose()
+            }
+            return true
+        }
         owner.onKeyEvent(
             KeyEvent(
                 key = mapKeyCode(keyCode),
@@ -196,10 +205,6 @@ private class CombineScreen(
         val size = IntSize(width, height)
         owner.render(size, context)
     }
-
-    var onDismissRequest: () -> Boolean = { false }
-
-    override fun shouldCloseOnEsc(): Boolean = !onDismissRequest()
 
     override fun onClose() {
         owner.close()
