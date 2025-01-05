@@ -20,7 +20,7 @@ body:
                     required: true
                 -   label: 如果是在手机上，我使用的是最新版本的支持 TouchController 的安卓启动器；如果是在电脑或者其它平台上，我使用的是 Windows 系统
                     required: true
-                -   label: 我已了解：如果使用未受支持的操作系统（例如 iOS、macOS）所产生的任何问题均不能在此报告（对某操作系统的支持请前往报告新功能）
+                -   label: 我已了解：如果使用未受支持的操作系统所产生的任何问题均不能在此报告（对除了 iOS 和 macOS 以外的操作系统的支持请前往报告新功能）
                     required: true
     -   type: dropdown
         id: bug_os
@@ -30,9 +30,6 @@ body:
             options:
                 - Android
                 - Windows
-                - macOS
-                - iOS
-                - Linux
                 - 其它
             default: 1
         validations:

@@ -20,7 +20,7 @@ body:
                     required: true
                 -   label: I am using the latest version Android launcher supporting TouchController, or using Windows on desktop.
                     required: true
-                -   label: I understand that any issues on unsupported operating system (for example iOS, macOS) cannot be reported here (for support of a certain operating system, please go to submit new features).
+                -   label: I understand that any issues on unsupported operating system cannot be reported here (for support of operating system other than iOS and macOS, please go to submit new features).
                     required: true
     -   type: dropdown
         id: bug_os
@@ -30,10 +30,7 @@ body:
             options:
                 - Android
                 - Windows
-                - macOS
-                - iOS
-                - Linux
-                - other
+                - Other
             default: 1
         validations:
             required: true
