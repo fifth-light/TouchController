@@ -21,7 +21,7 @@
 - [官方版 Pojav Glow·Worm](https://github.com/Vera-Firefly/Pojav-Glow-Worm)
 - [我修改后的 PojavLauncher](https://github.com/fifth-light/PojavLauncher)
 
-在未来可能会添加 Linux 上 X11 和 Wayland 触屏的支持。macOS 由于没有相应环境和设备，不会提供支持，但是接受 macOS 支持的 Pull
+在未来可能会添加 Linux 上 X11 和 Wayland 触屏的支持。iOS 和 macOS 由于没有相应环境和设备，不会提供支持，但是接受 iOS 和 macOS 支持的 Pull
 Request。
 
 ## 目前支持的功能
