@@ -658,25 +658,33 @@ data object LayoutCategory : ConfigCategory(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4),
             ) {
-                Button(onClick = {
-                    viewModel.toggleWidgetsPanel()
-                }) {
-                    Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_ADD_TITLE), shadow = true)
-                }
-
-                val currentLayer = uiState.layout.getOrNull(uiState.selectedLayer)
-                LayerDropdown(
-                    currentLayer = currentLayer,
-                    allLayers = uiState.layout,
-                    onLayerSelected = { index, _ ->
-                        viewModel.selectLayer(index)
+                if (uiState.layoutPanelState == LayoutPanelState.LAYOUT) {
+                    Button(onClick = {
+                        viewModel.toggleWidgetsPanel()
+                    }) {
+                        Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_ADD_TITLE), shadow = true)
                     }
-                )
 
-                Button(onClick = {
-                    viewModel.toggleLayersPanel()
-                }) {
-                    Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_PROPERTIES_TITLE), shadow = true)
+                    val currentLayer = uiState.layout.getOrNull(uiState.selectedLayer)
+                    LayerDropdown(
+                        currentLayer = currentLayer,
+                        allLayers = uiState.layout,
+                        onLayerSelected = { index, _ ->
+                            viewModel.selectLayer(index)
+                        }
+                    )
+
+                    Button(onClick = {
+                        viewModel.toggleLayersPanel()
+                    }) {
+                        Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_PROPERTIES_TITLE), shadow = true)
+                    }
+                } else {
+                    Button(onClick = {
+                        viewModel.closePanel()
+                    }) {
+                        Text(Text.translatable(Texts.SCREEN_OPTIONS_BACK_TITLE), shadow = true)
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))

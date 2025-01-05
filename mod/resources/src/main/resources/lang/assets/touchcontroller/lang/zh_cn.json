@@ -53,6 +53,7 @@
   "touchcontroller.screen.options.reset.title": "重置",
   "touchcontroller.screen.options.undo.title": "撤销",
   "touchcontroller.screen.options.cancel.title": "取消",
+  "touchcontroller.screen.options.back.title": "返回",
   "touchcontroller.screen.options.widget.remove.title": "移除",
   "touchcontroller.screen.options.widget.no_layer_selected.title": "没有选中图层",
   "touchcontroller.screen.options.widget.select_layer_to_add.title": "选中一个图层以添加组件",
