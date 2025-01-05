@@ -106,6 +106,7 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.name": "附加按钮功能",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.none": "无",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump": "跳跃",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.flying": "飞行",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak": "潜行",
 
   "touchcontroller.screen.options.widget.sneak_button.name": "潜行按键",

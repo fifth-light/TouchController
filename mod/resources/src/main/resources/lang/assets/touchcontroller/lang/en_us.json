@@ -107,6 +107,7 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.none": "None",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump": "Jump",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak": "Sneak",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.flying": "Flying",
 
   "touchcontroller.screen.options.widget.sneak_button.name": "Sneak button",
   "touchcontroller.screen.options.widget.sneak_button.property.size": "Button size: %s%%",

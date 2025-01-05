@@ -3,6 +3,7 @@ package top.fifthlight.touchcontroller.layout
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.DPad
 import top.fifthlight.touchcontroller.control.DPadExtraButton
+import top.fifthlight.touchcontroller.control.JumpButtonTexture
 import top.fifthlight.touchcontroller.state.PointerState
 
 private const val ID_FORWARD = "dpad_forward"
@@ -240,12 +241,21 @@ fun Context.DPad(config: DPad) {
         when (config.extraButton) {
             DPadExtraButton.NONE -> {}
             DPadExtraButton.SNEAK -> RawSneakButton(dpad = true, classic = config.classic, size = extraButtonDisplaySize)
-            DPadExtraButton.JUMP -> {
+            DPadExtraButton.JUMP, DPadExtraButton.FLYING -> {
                 val hasForward = pointers.values.any {
                     (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD
                 }
                 val jumpClicked = DPadJumpButton(
                     size = extraButtonDisplaySize,
+                    texture = if (!config.classic) {
+                        JumpButtonTexture.NEW
+                    } else {
+                        when (config.extraButton) {
+                            DPadExtraButton.JUMP -> JumpButtonTexture.CLASSIC
+                            DPadExtraButton.FLYING -> JumpButtonTexture.CLASSIC_FLYING
+                            else -> error("Unreachable")
+                        }
+                    }
                 )
                 if (jumpClicked) {
                     if (hasForward) {

@@ -19,7 +19,8 @@ import kotlin.math.round
 enum class DPadExtraButton {
     NONE,
     SNEAK,
-    JUMP
+    JUMP,
+    FLYING,
 }
 
 @Serializable
@@ -47,6 +48,7 @@ data class DPad(
                     DPadExtraButton.NONE to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_NONE),
                     DPadExtraButton.SNEAK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK),
                     DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP),
+                    DPadExtraButton.FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_FLYING),
                 ),
             ),
             FloatProperty(
