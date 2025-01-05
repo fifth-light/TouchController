@@ -1,14 +1,17 @@
 modLoader = "javafml"
-loaderVersion = "[4.11,)"
-license = "LGPL-3.0-or-later"
+loaderVersion = "[${loader_version},)"
+license = "${mod_license}, ${mod_license_link}"
+issueTrackerURL = "${mod_issue_tracker}"
 
 [[mods]]
 modId = "${mod_id}"
-version = "${mod_version}"
+version = "${mod_version_full}"
 displayName = "${mod_name}"
+displayURL = "${mod_homepage}"
 authors = "fifth_light, bukeyu"
 description = "${mod_description}"
-displayTest="IGNORE_ALL_VERSION"
+displayTest = "IGNORE_ALL_VERSION"
+logoFile = "icon.png"
 
 [[dependencies.${ mod_id }]]
 modId = "forge"

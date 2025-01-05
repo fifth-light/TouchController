@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.processResources
 import org.gradle.kotlin.dsl.*
 import kotlin.collections.set
 
@@ -15,11 +16,15 @@ val modId: String by extra.properties
 val modName: String by extra.properties
 val modVersion: String by extra.properties
 val modDescription: String by extra.properties
+val modLicense: String by extra.properties
+val modLicenseLink: String by extra.properties
+val modIssueTracker: String by extra.properties
+val modHomepage: String by extra.properties
 val gameVersion: String by extra.properties
 val forgeVersion: String by extra.properties
 val parchmentVersion: String by extra.properties
 
-version = modVersion
+version = "$modVersion+forge-$gameVersion"
 group = "top.fifthlight.touchcontroller"
 
 minecraft {
@@ -54,7 +59,7 @@ mixin {
 configurations.create("shadow")
 
 tasks.jar {
-    archiveBaseName = "$modName-slim"
+    archiveBaseName = "$modName-$version-slim"
 }
 
 fun DependencyHandlerScope.shade(dependency: Any) {
@@ -99,18 +104,25 @@ dependencies {
 
 sourceSets.main {
     resources.srcDir("../resources/src/main/resources/lang")
-    resources.srcDir("../resources/src/main/resources/icon")
     resources.srcDir("../resources/src/main/resources/textures")
 }
 
 tasks.processResources {
+    from("../resources/src/main/resources/icon/assets/touchcontroller/icon.png")
+
+    val loaderVersion = forgeVersion.substringBefore('.')
     val properties = mapOf(
         "mod_id" to modId,
         "mod_name" to modName,
-        "mod_version" to version,
+        "mod_version_full" to version,
+        "mod_license" to modLicense,
+        "mod_license_link" to modLicenseLink,
+        "mod_issue_tracker" to modIssueTracker,
+        "mod_homepage" to modHomepage,
         "forge_version" to forgeVersion,
         "mod_description" to modDescription,
         "game_version" to gameVersion,
+        "loader_version" to loaderVersion,
     )
 
     inputs.properties(properties)
@@ -151,7 +163,7 @@ tasks.register<Jar>("gr8Jar") {
     dependsOn("reobfJar")
 
     inputs.files(tasks.getByName("gr8Gr8ShadowedJar").outputs.files)
-    archiveBaseName = "$modName-noreobf"
+    archiveBaseName = "$modName-$version-noreobf"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     val jarFile =

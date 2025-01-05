@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${mod_version}",
+  "version": "${mod_version_full}",
   "name": "${mod_name}",
   "description": "${mod_description}",
   "authors": [
@@ -9,10 +9,10 @@
     "bukeyu"
   ],
   "contact": {
-    "homepage": "https://github.com/fifth-light/TouchController",
-    "sources": "https://github.com/fifth-light/TouchController"
+    "homepage": "${mod_homepage}",
+    "sources": "${mod_source}"
   },
-  "license": "LGPL-3.0-or-later",
+  "license": "${mod_license}",
   "icon": "assets/touchcontroller/icon.png",
   "environment": "client",
   "entrypoints": {

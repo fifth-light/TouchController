@@ -1,5 +1,4 @@
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.kotlin.dsl.the
 
 plugins {
     idea
@@ -19,13 +18,16 @@ val modId: String by extra.properties
 val modName: String by extra.properties
 val modVersion: String by extra.properties
 val modDescription: String by extra.properties
+val modLicense: String by extra.properties
+val modHomepage: String by extra.properties
+val modSource: String by extra.properties
 val javaVersion: String by extra.properties
 val gameVersion: String by extra.properties
 val yarnVersion: String by extra.properties
 val fabricApiVersion: String by extra.properties
 val modmenuVersion: String by extra.properties
 
-version = modVersion
+version = "$modVersion+fabric-$gameVersion"
 group = "top.fifthlight.touchcontroller"
 
 base {
@@ -59,12 +61,15 @@ dependencies {
     include(libs.kotlinx.collections.immutable)
 }
 
-tasks.withType<ProcessResources> {
+tasks.processResources {
     val properties = mapOf(
         "mod_id" to modId,
-        "mod_version" to modVersion,
+        "mod_version_full" to version,
         "mod_name" to modName,
         "mod_description" to modDescription,
+        "mod_license" to modLicense,
+        "mod_homepage" to modHomepage,
+        "mod_source" to modSource,
         "fabric_loader_version" to libs.versions.fabric.loader.get(),
         "game_version" to gameVersion,
         "java_version" to javaVersion,
