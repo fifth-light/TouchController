@@ -1,0 +1,39 @@
+name: New feature submissions
+description: Write down your suggestions for new features.
+title: "[Feat]: "
+labels: [ "enhancement" ]
+body:
+    -   type: markdown
+        attributes:
+            value: "# TouchController feature request"
+    -   type: checkboxes
+        id: feature_check
+        attributes:
+            label: Checklist
+            description: "Before reporting, please confirm the following:"
+            options:
+                -   label: This feature has not been requested before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)).
+                    required: true
+                -   label: If you only have some ideas instead of particular new features, please submit them in [Discussions](https://github.com/fifth-light/TouchController/discussions)
+                    required: true
+                -   label: This feature is not in [Pull Requests](https://github.com/fifth-light/TouchController/pulls)
+                    required: true
+                -   label: This feature has not been added in the latest version of the TouchController mod.
+                    required: true
+    -   type: input
+        id: feature_summary
+        attributes:
+            label: Summary
+            description: Please briefly describe the new feature you'd like to add.
+            placeholder: |
+                <Summary of this feature>
+    -   type: textarea
+        id: feature_details
+        attributes:
+            label: Details
+            description: Please describe the reasons why this feature is needed, as well as the content of the new feature in detail.
+            placeholder: |
+                <the reasons why this feature is needed and the content of the new feature in detail>
+    -   type: markdown
+        attributes:
+            value: "### Thank you for supporting TouchController!"
