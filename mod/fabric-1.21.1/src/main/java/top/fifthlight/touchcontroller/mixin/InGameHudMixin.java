@@ -1,5 +1,6 @@
 package top.fifthlight.touchcontroller.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -55,6 +56,7 @@ public abstract class InGameHudMixin {
                     context.drawGuiTexture(CROSSHAIR_ATTACK_INDICATOR_PROGRESS_TEXTURE, 16, 4, 0, 0, x - 8, y - 2, progress, 4);
                 }
             }
+            RenderSystem.defaultBlendFunc();
             callbackInfo.cancel();
         }
     }
