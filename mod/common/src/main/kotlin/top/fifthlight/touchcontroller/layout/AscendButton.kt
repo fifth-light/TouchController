@@ -13,10 +13,10 @@ fun Context.AscendButton(config: AscendButton) {
                 color = 0xFFAAAAAAu
             )
 
-            Pair(AscendButtonTexture.SWIMMING, false) -> Texture(texture = Textures.GUI_ASCEND_WATERASCEND)
-            Pair(AscendButtonTexture.SWIMMING, true) -> Texture(texture = Textures.GUI_ASCEND_WATERASCEND_ACTIVE)
-            Pair(AscendButtonTexture.FLYING, false) -> Texture(texture = Textures.GUI_ASCEND_FLYINGASCEND)
-            Pair(AscendButtonTexture.FLYING, true) -> Texture(texture = Textures.GUI_ASCEND_FLYINGASCEND_ACTIVE)
+            Pair(AscendButtonTexture.SWIMMING, false) -> Texture(texture = Textures.GUI_ASCEND_ASCEND_SWIMMING)
+            Pair(AscendButtonTexture.SWIMMING, true) -> Texture(texture = Textures.GUI_ASCEND_ASCEND_SWIMMING_ACTIVE)
+            Pair(AscendButtonTexture.FLYING, false) -> Texture(texture = Textures.GUI_ASCEND_ASCEND_FLYING)
+            Pair(AscendButtonTexture.FLYING, true) -> Texture(texture = Textures.GUI_ASCEND_ASCEND_FLYING_ACTIVE)
         }
     }
     status.jumping = status.jumping || clicked

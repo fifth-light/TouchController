@@ -13,10 +13,10 @@ fun Context.DescendButton(config: DescendButton) {
                 color = 0xFFAAAAAAu
             )
 
-            Pair(DescendButtonTexture.SWIMMING, false) -> Texture(texture = Textures.GUI_DESCEND_WATERDESCEND)
-            Pair(DescendButtonTexture.SWIMMING, true) -> Texture(texture = Textures.GUI_DESCEND_WATERDESCEND_ACTIVE)
-            Pair(DescendButtonTexture.FLYING, false) -> Texture(texture = Textures.GUI_DESCEND_FLYINGDESCEND)
-            Pair(DescendButtonTexture.FLYING, true) -> Texture(texture = Textures.GUI_DESCEND_FLYINGDESCEND_ACTIVE)
+            Pair(DescendButtonTexture.SWIMMING, false) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_SWIMMING)
+            Pair(DescendButtonTexture.SWIMMING, true) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_SWIMMING_ACTIVE)
+            Pair(DescendButtonTexture.FLYING, false) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_FLYING)
+            Pair(DescendButtonTexture.FLYING, true) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_FLYING_ACTIVE)
         }
     }
     result.sneak = result.sneak || clicked
