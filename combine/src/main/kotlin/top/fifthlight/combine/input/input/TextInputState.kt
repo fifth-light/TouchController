@@ -49,21 +49,27 @@ data class TextInputState(
         }
     }
 
-    fun commitText(commitText: String): TextInputState = if (composition.length == 0) {
+    fun appendText(appendText: String): TextInputState = if (composition.length == 0) {
         // Insert at selection end
         TextInputState(
-            text = text.substring(0, selection.start) + commitText + text.substring(selection.end),
-            selection = TextRange(selection.start + commitText.length),
+            text = text.substring(0, selection.start) + appendText + text.substring(selection.end),
+            selection = TextRange(selection.start + appendText.length),
             composition = TextRange.EMPTY,
         )
     } else {
         // Insert at composition start
         TextInputState(
-            text = text.substring(0, composition.start) + commitText + text.substring(composition.end),
-            selection = TextRange(composition.start + commitText.length),
+            text = text.substring(0, composition.start) + appendText + text.substring(composition.end),
+            selection = TextRange(composition.start + appendText.length),
             composition = TextRange.EMPTY,
         )
     }
+
+    companion object {
+        private val rejectedChar = charArrayOf('\b', '\u0000', '\r', '\n', '\u007f')
+    }
+
+    fun commitText(commitText: String): TextInputState = appendText(commitText.filterNot { it in rejectedChar })
 
     fun removeSelection(): TextInputState = copy(
         text = text.removeRange(selection),
