@@ -9,19 +9,19 @@ import kotlinx.serialization.descriptors.serialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.serializer
+import top.fifthlight.touchcontroller.config.LayerConditionKey
+import top.fifthlight.touchcontroller.config.LayerConditionValue
 import top.fifthlight.touchcontroller.config.LayoutLayerCondition
-import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
-import top.fifthlight.touchcontroller.config.LayoutLayerConditionValue
 
-class LayoutLayerConditionSerializer : KSerializer<LayoutLayerCondition> {
+class LayerConditionSerializer : KSerializer<LayoutLayerCondition> {
     private class PersistentMapDescriptor :
-        SerialDescriptor by serialDescriptor<Map<LayoutLayerConditionKey, LayoutLayerConditionValue>>() {
+        SerialDescriptor by serialDescriptor<Map<LayerConditionKey, LayerConditionValue>>() {
         @ExperimentalSerializationApi
-        override val serialName: String = "top.fifthlight.touchcontroller.config.LayoutLayerCondition"
+        override val serialName: String = "top.fifthlight.touchcontroller.config.LayerConditionSerializer"
     }
 
-    private val keySerializer = serializer<LayoutLayerConditionKey>()
-    private val valueSerializer = serializer<LayoutLayerConditionValue>()
+    private val keySerializer = serializer<LayerConditionKey>()
+    private val valueSerializer = serializer<LayerConditionValue>()
     private val mapSerializer = MapSerializer(keySerializer, valueSerializer)
 
     override val descriptor: SerialDescriptor = PersistentMapDescriptor()

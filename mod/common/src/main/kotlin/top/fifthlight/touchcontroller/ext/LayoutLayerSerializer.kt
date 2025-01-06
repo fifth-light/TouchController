@@ -20,7 +20,7 @@ class LayoutLayerSerializer : KSerializer<LayoutLayer> {
     private val widgetListSerializer = ListSerializer(widgetSerializer)
 
     override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("top.fifthlight.touchcontroller.config.TouchControllerLayout") {
+        buildClassSerialDescriptor("top.fifthlight.touchcontroller.config.LayoutLayer") {
             element<String>("name")
             element<List<ControllerWidget>>("widgets")
             element<LayoutLayerCondition>("condition")

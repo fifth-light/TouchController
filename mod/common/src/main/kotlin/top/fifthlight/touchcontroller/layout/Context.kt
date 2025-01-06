@@ -8,8 +8,8 @@ import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
-import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
-import top.fifthlight.touchcontroller.config.TouchControllerConfig
+import top.fifthlight.touchcontroller.config.GlobalConfig
+import top.fifthlight.touchcontroller.config.LayerConditionKey
 import top.fifthlight.touchcontroller.state.Pointer
 
 data class KeyBindingResult(
@@ -141,11 +141,11 @@ data class Context(
     val screenOffset: IntOffset,
     val opacity: Float = 1f,
     val pointers: MutableMap<Int, Pointer> = mutableMapOf(),
-    val condition: PersistentMap<LayoutLayerConditionKey, Boolean>,
+    val condition: PersistentMap<LayerConditionKey, Boolean>,
     val result: ContextResult = ContextResult(),
     val status: ContextStatus = ContextStatus(),
     val timer: ContextCounter = ContextCounter(),
-    val config: TouchControllerConfig,
+    val config: GlobalConfig,
 ) : KoinComponent {
     inline fun <reified T> transformDrawQueue(
         crossinline drawTransform: Canvas.(block: () -> Unit) -> Unit = { it() },

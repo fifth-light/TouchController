@@ -1,98 +1,16 @@
 package top.fifthlight.touchcontroller.config
 
+import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import top.fifthlight.data.IntOffset
 import top.fifthlight.touchcontroller.control.*
-import top.fifthlight.touchcontroller.ext.LayoutLayerConditionSerializer
-import top.fifthlight.touchcontroller.ext.LayoutLayerSerializer
+import top.fifthlight.touchcontroller.ext.LayoutPresetsSerializer
 import top.fifthlight.touchcontroller.layout.Align
 
-enum class LayoutLayerConditionValue {
-    NEVER,
-    WANT,
-    REQUIRE,
-}
-
-enum class LayoutLayerConditionKey {
-    SWIMMING,
-    FLYING,
-    SNEAKING,
-    SPRINTING,
-    ON_GROUND,
-    NOT_ON_GROUND,
-    USING_ITEM,
-    ON_MINECART,
-    ON_BOAT,
-    ON_PIG,
-    ON_HORSE,
-    ON_DONKEY,
-    ON_LLAMA,
-    ON_STRIDER,
-    RIDING,
-}
-
-@Serializable(with = LayoutLayerConditionSerializer::class)
-@JvmInline
-value class LayoutLayerCondition(
-    val conditions: PersistentMap<LayoutLayerConditionKey, LayoutLayerConditionValue> = persistentMapOf()
-) {
-    fun check(currentState: PersistentMap<LayoutLayerConditionKey, Boolean>): Boolean {
-        var haveWant = false
-        var haveFulfilledWant = false
-        for (condition in conditions) {
-            val current = currentState[condition.key]
-            when (condition.value) {
-                LayoutLayerConditionValue.NEVER -> if (current == true) {
-                    return false
-                }
-
-                LayoutLayerConditionValue.WANT -> {
-                    haveWant = true
-                    if (current == true) {
-                        haveFulfilledWant = true
-                    }
-                }
-
-                LayoutLayerConditionValue.REQUIRE -> if (current != true) {
-                    return false
-                }
-            }
-        }
-        if (haveWant && !haveFulfilledWant) {
-            return false
-        }
-        return true
-    }
-
-    operator fun get(key: LayoutLayerConditionKey): LayoutLayerConditionValue? = conditions[key]
-    fun set(key: LayoutLayerConditionKey, value: LayoutLayerConditionValue?) = LayoutLayerCondition(
-        if (value == null) {
-            conditions.remove(key)
-        } else {
-            conditions.put(key, value)
-        }
-    )
-}
-
-fun layoutLayerConditionOf(vararg pairs: Pair<LayoutLayerConditionKey, LayoutLayerConditionValue>) =
-    LayoutLayerCondition(persistentMapOf(*pairs))
-
-const val DEFAULT_LAYER_NAME = "Unnamed layer"
-
-@Serializable(with = LayoutLayerSerializer::class)
-data class LayoutLayer(
-    val name: String = DEFAULT_LAYER_NAME,
-    val widgets: PersistentList<ControllerWidget> = persistentListOf(),
-    val condition: LayoutLayerCondition = LayoutLayerCondition(),
-)
-
-typealias TouchControllerLayout = PersistentList<LayoutLayer>
-
-val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
+val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
     LayoutLayer(
         name = "Control",
         condition = layoutLayerConditionOf(),
@@ -113,9 +31,9 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "Normal",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.SWIMMING to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.FLYING to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.NEVER,
+            LayerConditionKey.SWIMMING to LayerConditionValue.NEVER,
+            LayerConditionKey.FLYING to LayerConditionValue.NEVER,
+            LayerConditionKey.RIDING to LayerConditionValue.NEVER,
         ),
         widgets = persistentListOf(
             DPad(
@@ -134,9 +52,9 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "Swimming or flying",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.SWIMMING to LayoutLayerConditionValue.WANT,
-            LayoutLayerConditionKey.FLYING to LayoutLayerConditionValue.WANT,
-            LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.NEVER,
+            LayerConditionKey.SWIMMING to LayerConditionValue.WANT,
+            LayerConditionKey.FLYING to LayerConditionValue.WANT,
+            LayerConditionKey.RIDING to LayerConditionValue.NEVER,
         ),
         widgets = persistentListOf(
             DPad(
@@ -166,7 +84,7 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "On minecart",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.REQUIRE,
+            LayerConditionKey.ON_MINECART to LayerConditionValue.REQUIRE,
         ),
         widgets = persistentListOf(
             DPad(
@@ -180,8 +98,8 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "On pig or strider",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.WANT,
-            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.WANT,
+            LayerConditionKey.ON_STRIDER to LayerConditionValue.WANT,
+            LayerConditionKey.ON_STRIDER to LayerConditionValue.WANT,
         ),
         widgets = persistentListOf(
             SneakButton(
@@ -194,8 +112,8 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "On horse or donkey",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.WANT,
-            LayoutLayerConditionKey.ON_DONKEY to LayoutLayerConditionValue.WANT,
+            LayerConditionKey.ON_HORSE to LayerConditionValue.WANT,
+            LayerConditionKey.ON_DONKEY to LayerConditionValue.WANT,
         ),
         widgets = persistentListOf(
             DPad(
@@ -214,7 +132,7 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "On llama",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.REQUIRE,
+            LayerConditionKey.ON_HORSE to LayerConditionValue.REQUIRE,
         ),
         widgets = persistentListOf(
             DPad(
@@ -233,14 +151,14 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
     LayoutLayer(
         name = "Riding on entity",
         condition = layoutLayerConditionOf(
-            LayoutLayerConditionKey.ON_MINECART to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_BOAT to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_PIG to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_HORSE to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_DONKEY to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_LLAMA to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.ON_STRIDER to LayoutLayerConditionValue.NEVER,
-            LayoutLayerConditionKey.RIDING to LayoutLayerConditionValue.REQUIRE,
+            LayerConditionKey.ON_MINECART to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_BOAT to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_PIG to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_HORSE to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_DONKEY to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_LLAMA to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_STRIDER to LayerConditionValue.NEVER,
+            LayerConditionKey.RIDING to LayerConditionValue.REQUIRE,
         ),
         widgets = persistentListOf(
             DPad(
@@ -255,5 +173,30 @@ val defaultTouchControllerLayout: TouchControllerLayout = persistentListOf(
                 opacity = 0.6f,
             ),
         )
+    ),
+)
+
+@Immutable
+@Serializable
+data class LayoutPreset(
+    val name: String = "Unnamed preset",
+    val layout: ControllerLayout = ControllerLayout(),
+    @Transient
+    val default: Boolean = false,
+)
+
+@JvmInline
+@Serializable(with = LayoutPresetsSerializer::class)
+value class LayoutPresets(
+    val presets: PersistentList<LayoutPreset> = persistentListOf(),
+)
+
+fun layoutPresetsOf(vararg pairs: LayoutPreset) = LayoutPresets(persistentListOf(*pairs))
+
+val defaultPresets = layoutPresetsOf(
+    LayoutPreset(
+        name = "Default",
+        layout = defaultControllerLayout,
+        default = true,
     ),
 )

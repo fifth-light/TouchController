@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
 
     val textsBuilder = TypeSpec.objectBuilder("Texts")
 
-    for (key in map.keys) {
+    for ((key, value) in map) {
         if (!key.startsWith("touchcontroller.")) {
             System.err.println("Key $key don't start with touchcontroller, skip it.")
             continue
@@ -31,6 +31,7 @@ fun main(args: Array<String>) {
         textsBuilder.addProperty(
             PropertySpec
                 .builder(transformedKey, ClassName("top.fifthlight.combine.data", "Identifier"))
+                .addKdoc("Translation text: %L", value)
                 .initializer("Identifier.Namespaced(%S, %S)", "touchcontroller", strippedKey)
                 .build()
         )

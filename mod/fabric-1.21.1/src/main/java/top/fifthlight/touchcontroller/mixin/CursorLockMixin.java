@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder;
+import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
 
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
 
@@ -19,7 +19,7 @@ public abstract class CursorLockMixin {
 
 	@Inject(at = @At("TAIL"), method = "setCursorParameters")
 	private static void setCursorParameters(long handler, int inputModeValue, double x, double y, CallbackInfo info) {
-		var configHolder = (TouchControllerConfigHolder) KoinJavaComponent.getOrNull(TouchControllerConfigHolder.class);
+        var configHolder = (GlobalConfigHolder) KoinJavaComponent.getOrNull(GlobalConfigHolder.class);
 		if (configHolder == null) {
 			return;
 		}

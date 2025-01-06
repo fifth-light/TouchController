@@ -6,8 +6,8 @@ import org.koin.core.component.inject
 import top.fifthlight.combine.paint.Canvas
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.Offset
-import top.fifthlight.touchcontroller.config.LayoutLayerConditionKey
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
+import top.fifthlight.touchcontroller.config.GlobalConfigHolder
+import top.fifthlight.touchcontroller.config.LayerConditionKey
 import top.fifthlight.touchcontroller.gal.*
 import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DrawQueue
@@ -23,7 +23,7 @@ import top.fifthlight.touchcontroller.proxy.message.VibrateMessage
 object RenderEvents : KoinComponent {
     private val window: WindowHandle by inject()
     private val gameAction: GameAction by inject()
-    private val configHolder: TouchControllerConfigHolder by inject()
+    private val configHolder: GlobalConfigHolder by inject()
     private val controllerHudModel: ControllerHudModel by inject()
     private val touchStateModel: TouchStateModel by inject()
     private val playerHandleFactory: PlayerHandleFactory by inject()
@@ -86,21 +86,21 @@ object RenderEvents : KoinComponent {
         }
         val ridingType = player.ridingEntityType
         val condition = buildMap {
-            put(LayoutLayerConditionKey.FLYING, player.isFlying)
-            put(LayoutLayerConditionKey.SWIMMING, player.isSubmergedInWater)
-            put(LayoutLayerConditionKey.SPRINTING, player.isSprinting)
-            put(LayoutLayerConditionKey.SNEAKING, player.isSneaking)
-            put(LayoutLayerConditionKey.ON_GROUND, player.onGround)
-            put(LayoutLayerConditionKey.NOT_ON_GROUND, !player.onGround)
-            put(LayoutLayerConditionKey.USING_ITEM, player.isUsingItem)
-            put(LayoutLayerConditionKey.RIDING, ridingType != null)
-            put(LayoutLayerConditionKey.ON_MINECART, ridingType == RidingEntityType.MINECART)
-            put(LayoutLayerConditionKey.ON_BOAT, ridingType == RidingEntityType.BOAT)
-            put(LayoutLayerConditionKey.ON_PIG, ridingType == RidingEntityType.PIG)
-            put(LayoutLayerConditionKey.ON_HORSE, ridingType == RidingEntityType.HORSE)
-            put(LayoutLayerConditionKey.ON_DONKEY, ridingType == RidingEntityType.DONKEY)
-            put(LayoutLayerConditionKey.ON_LLAMA, ridingType == RidingEntityType.LLAMA)
-            put(LayoutLayerConditionKey.ON_STRIDER, ridingType == RidingEntityType.STRIDER)
+            put(LayerConditionKey.FLYING, player.isFlying)
+            put(LayerConditionKey.SWIMMING, player.isSubmergedInWater)
+            put(LayerConditionKey.SPRINTING, player.isSprinting)
+            put(LayerConditionKey.SNEAKING, player.isSneaking)
+            put(LayerConditionKey.ON_GROUND, player.onGround)
+            put(LayerConditionKey.NOT_ON_GROUND, !player.onGround)
+            put(LayerConditionKey.USING_ITEM, player.isUsingItem)
+            put(LayerConditionKey.RIDING, ridingType != null)
+            put(LayerConditionKey.ON_MINECART, ridingType == RidingEntityType.MINECART)
+            put(LayerConditionKey.ON_BOAT, ridingType == RidingEntityType.BOAT)
+            put(LayerConditionKey.ON_PIG, ridingType == RidingEntityType.PIG)
+            put(LayerConditionKey.ON_HORSE, ridingType == RidingEntityType.HORSE)
+            put(LayerConditionKey.ON_DONKEY, ridingType == RidingEntityType.DONKEY)
+            put(LayerConditionKey.ON_LLAMA, ridingType == RidingEntityType.LLAMA)
+            put(LayerConditionKey.ON_STRIDER, ridingType == RidingEntityType.STRIDER)
         }.toPersistentMap()
 
         val drawQueue = DrawQueue()
@@ -117,7 +117,7 @@ object RenderEvents : KoinComponent {
             condition = condition,
         ).run {
             Hud(
-                layers = configHolder.layout.value,
+                layers = configHolder.layout.value.layers,
             )
             result
         }

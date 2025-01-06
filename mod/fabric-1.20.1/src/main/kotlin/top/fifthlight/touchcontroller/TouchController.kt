@@ -15,7 +15,7 @@ import org.koin.dsl.module
 import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
 import top.fifthlight.combine.platform.CanvasImpl
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
+import top.fifthlight.touchcontroller.config.GlobalConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
 import top.fifthlight.touchcontroller.event.ConnectionEvents
 import top.fifthlight.touchcontroller.event.RenderEvents
@@ -58,7 +58,7 @@ object TouchController : ClientModInitializer, KoinComponent {
     }
 
     private fun initialize() {
-        val configHolder: TouchControllerConfigHolder = get()
+        val configHolder: GlobalConfigHolder = get()
         configHolder.load()
 
         FabricHudRenderCallback.EVENT.register { drawContext, _ ->

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 
 @Serializable
-data class TouchControllerConfig(
+data class GlobalConfig(
     // Global
     val disableMouseMove: Boolean = true,
     val disableMouseClick: Boolean = true,
@@ -30,7 +30,7 @@ data class TouchControllerConfig(
     val showCrosshairItems: ItemList,
 ) {
     companion object {
-        fun default(itemListProvider: DefaultItemListProvider) = TouchControllerConfig(
+        fun default(itemListProvider: DefaultItemListProvider) = GlobalConfig(
             usableItems = itemListProvider.usableItems,
             showCrosshairItems = itemListProvider.showCrosshairItems,
         )

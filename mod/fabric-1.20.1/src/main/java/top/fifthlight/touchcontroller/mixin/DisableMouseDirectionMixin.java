@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder;
+import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
 
 @Mixin(Mouse.class)
 abstract class DisableMouseDirectionMixin {
@@ -20,7 +20,7 @@ abstract class DisableMouseDirectionMixin {
             cancellable = true
     )
     private void updateMouse(CallbackInfo ci) {
-        var configHolder = (TouchControllerConfigHolder) KoinJavaComponent.getOrNull(TouchControllerConfigHolder.class);
+        var configHolder = (GlobalConfigHolder) KoinJavaComponent.getOrNull(GlobalConfigHolder.class);
         if (configHolder == null) {
             return;
         }

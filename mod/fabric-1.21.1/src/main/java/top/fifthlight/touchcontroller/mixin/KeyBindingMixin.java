@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder;
+import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public abstract class KeyBindingMixin {
 
     @Unique
     private static boolean doCancelKey(InputUtil.Key key) {
-        var configHolder = (TouchControllerConfigHolder) KoinJavaComponent.getOrNull(TouchControllerConfigHolder.class);
+        var configHolder = (GlobalConfigHolder) KoinJavaComponent.getOrNull(GlobalConfigHolder.class);
         if (configHolder == null) {
             return false;
         }

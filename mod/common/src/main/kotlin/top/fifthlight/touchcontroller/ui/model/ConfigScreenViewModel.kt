@@ -1,36 +1,49 @@
 package top.fifthlight.touchcontroller.ui.model
 
+import kotlinx.collections.immutable.plus
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.combine.screen.ViewModel
 import top.fifthlight.combine.util.CloseHandler
-import top.fifthlight.touchcontroller.config.LayoutLayer
-import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.config.TouchControllerConfigHolder
-import top.fifthlight.touchcontroller.config.defaultTouchControllerLayout
+import top.fifthlight.touchcontroller.config.*
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 import top.fifthlight.touchcontroller.ui.state.ConfigScreenState
 import top.fifthlight.touchcontroller.ui.state.LayoutPanelState
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
+import kotlin.time.Duration.Companion.milliseconds
 
 class ConfigScreenViewModel(
     scope: CoroutineScope,
     private val closeHandler: CloseHandler
 ) : ViewModel(scope), KoinComponent {
-    private val configHolder: TouchControllerConfigHolder by inject()
+    private val configHolder: GlobalConfigHolder by inject()
     private val defaultItemListProvider: DefaultItemListProvider by inject()
 
     private val _uiState = MutableStateFlow(
         ConfigScreenState(
             config = configHolder.config.value,
             layout = configHolder.layout.value,
+            presets = configHolder.presets.value,
         )
     )
     val uiState = _uiState.asStateFlow()
+
+    init {
+        @OptIn(FlowPreview::class)
+        scope.launch {
+            _uiState
+                .map { it.presets }
+                .debounce(500.milliseconds)
+                .distinctUntilChanged()
+                .collectLatest {
+                    configHolder.savePreset(it)
+                }
+        }
+    }
 
     fun selectCategory(category: ConfigCategory) {
         _uiState.getAndUpdate {
@@ -40,7 +53,7 @@ class ConfigScreenViewModel(
         }
     }
 
-    fun updateConfig(update: TouchControllerConfig.() -> TouchControllerConfig) {
+    fun updateConfig(update: GlobalConfig.() -> GlobalConfig) {
         _uiState.getAndUpdate {
             it.copy(
                 config = update(it.config)
@@ -50,7 +63,7 @@ class ConfigScreenViewModel(
 
     fun selectLayer(index: Int) {
         _uiState.getAndUpdate {
-            require(index in it.layout.indices)
+            require(index in it.layout.layers.indices)
             it.copy(
                 selectedLayer = index,
                 selectedWidget = -1,
@@ -63,7 +76,7 @@ class ConfigScreenViewModel(
             if (index == -1) {
                 it.copy(selectedWidget = -1)
             } else {
-                val layer = it.layout.getOrNull(it.selectedLayer) ?: return@getAndUpdate it
+                val layer = it.layout.layers.getOrNull(it.selectedLayer) ?: return@getAndUpdate it
                 if (index in layer.widgets.indices) {
                     it.copy(
                         selectedWidget = index,
@@ -78,21 +91,21 @@ class ConfigScreenViewModel(
     fun updateLayer(index: Int, layer: LayoutLayer) {
         _uiState.getAndUpdate {
             it.copy(
-                layout = it.layout.set(index, layer)
+                layout = ControllerLayout(it.layout.layers.set(index, layer))
             )
         }
     }
 
-    fun addLayer() {
+    fun addLayer(layer: LayoutLayer) {
         _uiState.getAndUpdate {
-            if (it.selectedLayer in it.layout.indices) {
+            if (it.selectedLayer in it.layout.layers.indices) {
                 it.copy(
-                    layout = it.layout.add(LayoutLayer())
+                    layout = ControllerLayout(it.layout.layers.add(layer))
                 )
             } else {
-                val newLayout = it.layout.add(LayoutLayer())
+                val newLayout = it.layout.layers.add(layer)
                 it.copy(
-                    layout = newLayout,
+                    layout = ControllerLayout(newLayout),
                     selectedLayer = newLayout.lastIndex,
                 )
             }
@@ -103,15 +116,112 @@ class ConfigScreenViewModel(
         _uiState.getAndUpdate {
             if (index == it.selectedLayer) {
                 it.copy(
-                    layout = it.layout.removeAt(index),
+                    layout = ControllerLayout(it.layout.layers.removeAt(index)),
                     selectedLayer = -1,
                     selectedWidget = -1,
                 )
             } else {
                 it.copy(
-                    layout = it.layout.removeAt(index),
+                    layout = ControllerLayout(it.layout.layers.removeAt(index)),
                 )
             }
+        }
+    }
+
+    fun selectPreset(index: Int) {
+        _uiState.getAndUpdate {
+            require(index in 0..<it.presets.presets.size + defaultPresets.presets.size)
+            it.copy(
+                selectedPreset = index,
+            )
+        }
+    }
+
+    fun addPreset(preset: LayoutPreset) {
+        _uiState.getAndUpdate {
+            it.copy(
+                presets = LayoutPresets(
+                    it.presets.presets + preset,
+                )
+            )
+        }
+    }
+
+    fun savePreset() {
+        _uiState.getAndUpdate {
+            val currentPreset = LayoutPreset(
+                name = "Saved preset",
+                layout = it.layout,
+            )
+            it.copy(
+                presets = LayoutPresets(
+                    it.presets.presets + currentPreset,
+                )
+            )
+        }
+    }
+
+    fun removePreset(index: Int) {
+        val defaultPresetsSize = defaultPresets.presets.size
+        val presetIndex = index - defaultPresetsSize
+        _uiState.getAndUpdate {
+            val preset = it.presets.presets.getOrNull(presetIndex) ?: return@getAndUpdate it
+            if (preset.default) {
+                return@getAndUpdate it
+            }
+            it.copy(
+                presets = LayoutPresets(
+                    it.presets.presets.removeAt(presetIndex),
+                )
+            )
+        }
+    }
+
+    fun updatePreset(index: Int, preset: LayoutPreset) {
+        val defaultPresetsSize = defaultPresets.presets.size
+        val presetIndex = index - defaultPresetsSize
+        _uiState.getAndUpdate {
+            it.copy(
+                presets = LayoutPresets(
+                    it.presets.presets.set(presetIndex, preset)
+                )
+            )
+        }
+    }
+
+    fun readAllLayers(preset: LayoutPreset) {
+        _uiState.getAndUpdate {
+            it.copy(
+                layout = preset.layout,
+            )
+        }
+    }
+
+    fun readLayer(layer: LayoutLayer) {
+        _uiState.getAndUpdate {
+            it.copy(
+                layout = ControllerLayout(
+                    it.layout.layers + layer,
+                )
+            )
+        }
+    }
+
+    fun saveLayerToPreset(layer: LayoutLayer) {
+        val defaultPresetsSize = defaultPresets.presets.size
+        _uiState.getAndUpdate {
+            val presetIndex = it.selectedPreset - defaultPresetsSize
+            val preset = it.presets.presets.getOrNull(presetIndex) ?: return@getAndUpdate it
+            val newPreset = preset.copy(
+                layout = ControllerLayout(
+                    layers = preset.layout.layers + layer
+                )
+            )
+            it.copy(
+                presets = LayoutPresets(
+                    it.presets.presets.set(presetIndex, newPreset)
+                )
+            )
         }
     }
 
@@ -162,8 +272,8 @@ class ConfigScreenViewModel(
     fun reset() {
         _uiState.getAndUpdate {
             it.copy(
-                config = TouchControllerConfig.default(defaultItemListProvider),
-                layout = defaultTouchControllerLayout,
+                config = GlobalConfig.default(defaultItemListProvider),
+                layout = defaultControllerLayout,
             )
         }
     }
@@ -189,12 +299,14 @@ class ConfigScreenViewModel(
     }
 
     fun exit() {
+        configHolder.savePreset(uiState.value.presets)
         closeHandler.close()
     }
 
     fun saveAndExit() {
         configHolder.saveConfig(uiState.value.config)
         configHolder.saveLayout(uiState.value.layout)
+        configHolder.savePreset(uiState.value.presets)
         closeHandler.close()
     }
 }

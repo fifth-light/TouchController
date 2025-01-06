@@ -1,7 +1,10 @@
 package top.fifthlight.touchcontroller.ui.state
 
-import top.fifthlight.touchcontroller.config.TouchControllerConfig
-import top.fifthlight.touchcontroller.config.TouchControllerLayout
+import kotlinx.collections.immutable.plus
+import top.fifthlight.touchcontroller.config.ControllerLayout
+import top.fifthlight.touchcontroller.config.GlobalConfig
+import top.fifthlight.touchcontroller.config.LayoutPresets
+import top.fifthlight.touchcontroller.config.defaultPresets
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
 import top.fifthlight.touchcontroller.ui.view.config.category.GlobalCategory
 
@@ -13,11 +16,15 @@ enum class LayoutPanelState {
 }
 
 data class ConfigScreenState(
-    val config: TouchControllerConfig,
-    val layout: TouchControllerLayout,
+    val config: GlobalConfig,
+    val layout: ControllerLayout,
+    val presets: LayoutPresets,
     val showExitDialog: Boolean = false,
     val selectedLayer: Int = 0,
     val selectedCategory: ConfigCategory = GlobalCategory,
     val layoutPanelState: LayoutPanelState = LayoutPanelState.LAYOUT,
     val selectedWidget: Int = -1,
-)
+    val selectedPreset: Int = 0,
+) {
+    val allPresets = defaultPresets.presets + presets.presets
+}
