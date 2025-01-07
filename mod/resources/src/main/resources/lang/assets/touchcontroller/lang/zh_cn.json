@@ -122,7 +122,8 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_double_click": "双击锁定潜行",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_single_click": "单击锁定潜行",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_hold": "长按触发潜行",
-  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount": "离开载具",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount_double_click": "双击离开载具",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount_single_click": "单击离开载具",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.flying": "飞行",
 
   "touchcontroller.screen.options.widget.sneak_button.name": "潜行按键",
@@ -136,6 +137,7 @@
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_lock": "单击锁定",
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.hold": "长按触发",
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_trigger": "单击触发",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.double_click_trigger": "双击触发",
 
   "touchcontroller.screen.options.widget.jump_button.name": "跳跃按键",
   "touchcontroller.screen.options.widget.jump_button.property.size": "按键大小: %s%%",

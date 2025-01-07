@@ -30,8 +30,11 @@ enum class DPadExtraButton {
     @SerialName("sneak_hold")
     SNEAK_HOLD,
 
-    @SerialName("dismount")
-    DISMOUNT,
+    @SerialName("dismount_double_click")
+    DISMOUNT_DOUBLE_CLICK,
+
+    @SerialName("dismount_single_click")
+    DISMOUNT_SINGLE_CLICK,
 
     @SerialName("jump")
     JUMP,
@@ -66,7 +69,8 @@ data class DPad(
                     DPadExtraButton.SNEAK_DOUBLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_DOUBLE_CLICK),
                     DPadExtraButton.SNEAK_SINGLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_SINGLE_CLICK),
                     DPadExtraButton.SNEAK_HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_HOLD),
-                    DPadExtraButton.DISMOUNT to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT),
+                    DPadExtraButton.DISMOUNT_SINGLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT_DOUBLE_CLICK),
+                    DPadExtraButton.DISMOUNT_DOUBLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT_SINGLE_CLICK),
                     DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP),
                     DPadExtraButton.FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_FLYING),
                 ),

@@ -91,6 +91,12 @@ fun Context.RawSneakButton(
         SneakButtonTrigger.SINGLE_CLICK_TRIGGER -> if (newPointer) {
             status.sneaking = true
         }
+
+        SneakButtonTrigger.DOUBLE_CLICK_TRIGGER -> if (newPointer) {
+            if (status.sneakTrigger.click(timer.tick)) {
+                status.sneaking = true
+            }
+        }
     }
 }
 

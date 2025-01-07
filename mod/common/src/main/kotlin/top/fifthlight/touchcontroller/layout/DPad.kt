@@ -263,7 +263,7 @@ fun Context.DPad(config: DPad) {
                 size = extraButtonDisplaySize
             )
 
-            DPadExtraButton.DISMOUNT -> RawSneakButton(
+            DPadExtraButton.DISMOUNT_SINGLE_CLICK -> RawSneakButton(
                 texture = if (config.classic) {
                     SneakButtonTexture.CLASSIC
                 } else {
@@ -272,6 +272,17 @@ fun Context.DPad(config: DPad) {
                 trigger = SneakButtonTrigger.SINGLE_CLICK_TRIGGER,
                 size = extraButtonDisplaySize
             )
+
+            DPadExtraButton.DISMOUNT_DOUBLE_CLICK -> RawSneakButton(
+                texture = if (config.classic) {
+                    SneakButtonTexture.CLASSIC
+                } else {
+                    SneakButtonTexture.DISMOUNT_DPAD
+                },
+                trigger = SneakButtonTrigger.DOUBLE_CLICK_TRIGGER,
+                size = extraButtonDisplaySize
+            )
+
             DPadExtraButton.JUMP, DPadExtraButton.FLYING -> {
                 val hasForward = pointers.values.any {
                     (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD

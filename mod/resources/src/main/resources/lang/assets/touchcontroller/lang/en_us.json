@@ -122,7 +122,8 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_double_click": "Double-click locking sneak",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_single_click": "Single-click locking sneak",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_hold": "Hold trigger sneak",
-  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount": "Dismount",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount_double_click": "Double-click locking dismount",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount_single_click": "Single-click locking dismount",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.flying": "Flying",
 
   "touchcontroller.screen.options.widget.sneak_button.name": "Sneak button",
@@ -136,6 +137,7 @@
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_lock": "Single click lock",
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.hold": "Hold",
   "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_trigger": "Single click trigger",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.double_click_trigger": "Double click trigger",
 
   "touchcontroller.screen.options.widget.jump_button.name": "Jump button",
   "touchcontroller.screen.options.widget.jump_button.property.size": "Button size: %s%%",

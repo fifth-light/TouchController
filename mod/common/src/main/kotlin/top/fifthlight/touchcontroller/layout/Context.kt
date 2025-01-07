@@ -114,6 +114,7 @@ data class ContextStatus(
     var sneakLocked: Boolean = false,
     val cancelFlying: DoubleClickState = DoubleClickState(),
     val sneakLocking: DoubleClickState = DoubleClickState(),
+    val sneakTrigger: DoubleClickState = DoubleClickState(),
     var jumping: Boolean = false,
     val attack: KeyBindingResult = KeyBindingResult(),
     val itemUse: KeyBindingResult = KeyBindingResult(),

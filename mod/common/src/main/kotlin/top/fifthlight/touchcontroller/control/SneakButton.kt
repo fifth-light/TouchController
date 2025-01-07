@@ -47,6 +47,9 @@ enum class SneakButtonTrigger {
 
     @SerialName("single_click_trigger")
     SINGLE_CLICK_TRIGGER,
+
+    @SerialName("double_click_trigger")
+    DOUBLE_CLICK_TRIGGER,
 }
 
 @Serializable
@@ -94,6 +97,7 @@ data class SneakButton(
                     SneakButtonTrigger.SINGLE_CLICK_LOCK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_LOCK),
                     SneakButtonTrigger.HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_HOLD),
                     SneakButtonTrigger.SINGLE_CLICK_TRIGGER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_TRIGGER),
+                    SneakButtonTrigger.DOUBLE_CLICK_TRIGGER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_DOUBLE_CLICK_TRIGGER),
                 ),
             ),
         ) as PersistentList<Property<ControllerWidget, *>>
