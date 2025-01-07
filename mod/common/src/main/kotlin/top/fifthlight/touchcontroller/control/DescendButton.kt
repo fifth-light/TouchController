@@ -16,9 +16,15 @@ import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DescendButton
 import kotlin.math.round
 
+@Serializable
 enum class DescendButtonTexture {
+    @SerialName("classic")
     CLASSIC,
+
+    @SerialName("swimming")
     SWIMMING,
+
+    @SerialName("flying")
     FLYING,
 }
 

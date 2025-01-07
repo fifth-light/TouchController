@@ -17,10 +17,44 @@ import top.fifthlight.touchcontroller.layout.SneakButton
 import kotlin.math.round
 
 @Serializable
+enum class SneakButtonTexture {
+    @SerialName("classic")
+    CLASSIC,
+
+    @SerialName("new")
+    NEW,
+
+    @SerialName("new_dpad")
+    NEW_DPAD,
+
+    @SerialName("dismount")
+    DISMOUNT,
+
+    @SerialName("dismount_dpad")
+    DISMOUNT_DPAD,
+}
+
+@Serializable
+enum class SneakButtonTrigger {
+    @SerialName("double_click_lock")
+    DOUBLE_CLICK_LOCK,
+
+    @SerialName("single_click_lock")
+    SINGLE_CLICK_LOCK,
+
+    @SerialName("hold")
+    HOLD,
+
+    @SerialName("single_click_trigger")
+    SINGLE_CLICK_TRIGGER,
+}
+
+@Serializable
 @SerialName("sneak_button")
 data class SneakButton(
     val size: Float = 2f,
-    val classic: Boolean = true,
+    val texture: SneakButtonTexture = SneakButtonTexture.CLASSIC,
+    val trigger: SneakButtonTrigger = SneakButtonTrigger.DOUBLE_CLICK_LOCK,
     override val align: Align = Align.RIGHT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f
@@ -41,11 +75,27 @@ data class SneakButton(
                     )
                 },
             ),
-            BooleanProperty(
-                getValue = { it.classic },
-                setValue = { config, value -> config.copy(classic = value) },
-                message = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_CLASSIC),
-            )
+            EnumProperty(
+                getValue = { it.texture },
+                setValue = { config, value -> config.copy(texture = value) },
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_STYLE),
+                items = listOf(
+                    SneakButtonTexture.CLASSIC to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_STYLE_CLASSIC),
+                    SneakButtonTexture.NEW to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_STYLE_NEW),
+                    SneakButtonTexture.DISMOUNT to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_STYLE_DISMOUNT),
+                ),
+            ),
+            EnumProperty(
+                getValue = { it.trigger },
+                setValue = { config, value -> config.copy(trigger = value) },
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER),
+                items = listOf(
+                    SneakButtonTrigger.DOUBLE_CLICK_LOCK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_DOUBLE_CLICK_LOCK),
+                    SneakButtonTrigger.SINGLE_CLICK_LOCK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_LOCK),
+                    SneakButtonTrigger.HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_HOLD),
+                    SneakButtonTrigger.SINGLE_CLICK_TRIGGER to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SNEAK_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_TRIGGER),
+                ),
+            ),
         ) as PersistentList<Property<ControllerWidget, *>>
     }
 
@@ -53,7 +103,7 @@ data class SneakButton(
         get() = _properties
 
     private val textureSize
-        get() = if (classic) 18 else 22
+        get() = if (texture == SneakButtonTexture.CLASSIC) 18 else 22
 
     override fun size(): IntSize = IntSize((size * textureSize).toInt())
 

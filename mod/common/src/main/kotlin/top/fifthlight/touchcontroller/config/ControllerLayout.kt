@@ -4,33 +4,70 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import top.fifthlight.touchcontroller.control.ControllerWidget
 import top.fifthlight.touchcontroller.ext.ControllerLayoutSerializer
 import top.fifthlight.touchcontroller.ext.LayerConditionSerializer
 import top.fifthlight.touchcontroller.ext.LayoutLayerSerializer
 
+@Serializable
 enum class LayerConditionValue {
+    @SerialName("never")
     NEVER,
+
+    @SerialName("want")
     WANT,
+
+    @SerialName("require")
     REQUIRE,
 }
 
+@Serializable
 enum class LayerConditionKey {
+    @SerialName("swimming")
     SWIMMING,
+
+    @SerialName("flying")
     FLYING,
+
+    @SerialName("sneaking")
     SNEAKING,
+
+    @SerialName("sprinting")
     SPRINTING,
+
+    @SerialName("on_ground")
     ON_GROUND,
+
+    @SerialName("no_on_ground")
     NOT_ON_GROUND,
+
+    @SerialName("using_item")
     USING_ITEM,
+
+    @SerialName("on_minecart")
     ON_MINECART,
+
+    @SerialName("on_boat")
     ON_BOAT,
+
+    @SerialName("on_pig")
     ON_PIG,
+
+    @SerialName("on_horse")
     ON_HORSE,
+
+    @SerialName("on_donkey")
     ON_DONKEY,
+
+    @SerialName("on_llama")
     ON_LLAMA,
+
+    @SerialName("on_strider")
     ON_STRIDER,
+
+    @SerialName("riding")
     RIDING,
 }
 

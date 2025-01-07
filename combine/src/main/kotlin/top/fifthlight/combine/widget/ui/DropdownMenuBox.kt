@@ -15,6 +15,7 @@ import top.fifthlight.combine.widget.base.Popup
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Box
 import top.fifthlight.combine.widget.base.layout.Row
+import top.fifthlight.combine.widget.base.layout.RowScope
 import top.fifthlight.data.IntRect
 import top.fifthlight.data.IntSize
 
@@ -32,7 +33,7 @@ fun DropdownMenuBox(
     expanded: Boolean = false,
     onExpandedChanged: (Boolean) -> Unit,
     dropDownContent: @Composable (IntRect) -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable RowScope.() -> Unit,
 ) {
     var anchor by remember { mutableStateOf<IntRect?>(null) }
     Row(

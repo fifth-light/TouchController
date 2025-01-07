@@ -49,9 +49,7 @@
   "touchcontroller.screen.options.category.custom.title": "自定义",
 
   "touchcontroller.screen.options.save.title": "保存",
-  "touchcontroller.screen.options.finish.title": "完成",
   "touchcontroller.screen.options.reset.title": "重置",
-  "touchcontroller.screen.options.undo.title": "撤销",
   "touchcontroller.screen.options.cancel.title": "取消",
   "touchcontroller.screen.options.back.title": "返回",
 
@@ -60,7 +58,6 @@
   "touchcontroller.screen.options.layer.copy.title": "复制图层",
   "touchcontroller.screen.options.layer.remove.title": "删除图层",
   "touchcontroller.screen.options.layer.select_a_layer.title": "选择一个图层以操作",
-  "touchcontroller.screen.options.layer.no_layer_selected.title": "未选中图层",
   "touchcontroller.screen.options.layer.name.title": "名字",
   "touchcontroller.screen.options.layer.condition.title": "显示条件",
   "touchcontroller.screen.options.layer.condition.ignore.title": "忽略",
@@ -122,12 +119,23 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.name": "附加按钮功能",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.none": "无",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump": "跳跃",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_double_click": "双击锁定潜行",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_single_click": "单击锁定潜行",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_hold": "长按触发潜行",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.dismount": "离开载具",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.flying": "飞行",
-  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak": "潜行",
 
   "touchcontroller.screen.options.widget.sneak_button.name": "潜行按键",
   "touchcontroller.screen.options.widget.sneak_button.property.size": "按键大小: %s%%",
-  "touchcontroller.screen.options.widget.sneak_button.property.classic": "经典外观",
+  "touchcontroller.screen.options.widget.sneak_button.property.style": "样式",
+  "touchcontroller.screen.options.widget.sneak_button.property.style.classic": "经典",
+  "touchcontroller.screen.options.widget.sneak_button.property.style.new": "新样式",
+  "touchcontroller.screen.options.widget.sneak_button.property.style.dismount": "离开载具",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger": "触发方式",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.double_click_lock": "双击锁定",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_lock": "单击锁定",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.hold": "长按触发",
+  "touchcontroller.screen.options.widget.sneak_button.property.trigger.single_click_trigger": "单击触发",
 
   "touchcontroller.screen.options.widget.jump_button.name": "跳跃按键",
   "touchcontroller.screen.options.widget.jump_button.property.size": "按键大小: %s%%",
@@ -135,6 +143,7 @@
   "touchcontroller.screen.options.widget.jump_button.property.style.classic": "经典",
   "touchcontroller.screen.options.widget.jump_button.property.style.classic_flying": "经典飞行",
   "touchcontroller.screen.options.widget.jump_button.property.style.new": "新样式",
+  "touchcontroller.screen.options.widget.jump_button.property.style.new_horse": "骑乘新样式",
 
   "touchcontroller.screen.options.widget.joystick.name": "虚拟摇杆",
   "touchcontroller.screen.options.widget.joystick.property.size": "面板大小: %s%%",
@@ -168,7 +177,6 @@
   "touchcontroller.screen.options.presets.title": "预设",
 
   "touchcontroller.screen.options.category.items.title": "物品",
-  "touchcontroller.screen.options.category.items.tooltip": "配置可使用的物品",
 
   "touchcontroller.screen.options.category.items.usable_items.title": "可长按屏幕使用的物品",
   "touchcontroller.screen.options.category.items.usable_items.description": "配置无需选择方块即可通过长按屏幕使用的物品。",

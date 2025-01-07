@@ -110,6 +110,7 @@ data class ContextStatus(
     var dpadLeftBackwardShown: Boolean = false,
     var dpadRightBackwardShown: Boolean = false,
     var dpadForwardJumping: Boolean = false,
+    var sneaking: Boolean = false,
     var sneakLocked: Boolean = false,
     val cancelFlying: DoubleClickState = DoubleClickState(),
     val sneakLocking: DoubleClickState = DoubleClickState(),

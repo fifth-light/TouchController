@@ -16,10 +16,27 @@ import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.DPad
 import kotlin.math.round
 
+@Serializable
 enum class DPadExtraButton {
+    @SerialName("none")
     NONE,
-    SNEAK,
+
+    @SerialName("sneak_double_click")
+    SNEAK_DOUBLE_CLICK,
+
+    @SerialName("sneak_single_click")
+    SNEAK_SINGLE_CLICK,
+
+    @SerialName("sneak_hold")
+    SNEAK_HOLD,
+
+    @SerialName("dismount")
+    DISMOUNT,
+
+    @SerialName("jump")
     JUMP,
+
+    @SerialName("flying")
     FLYING,
 }
 
@@ -29,7 +46,7 @@ data class DPad(
     val classic: Boolean = true,
     val size: Float = 2f,
     val padding: Int = if (classic) 4 else -1,
-    val extraButton: DPadExtraButton = DPadExtraButton.SNEAK,
+    val extraButton: DPadExtraButton = DPadExtraButton.SNEAK_DOUBLE_CLICK,
     val extraButtonSize: Int = 18,
     override val align: Align = Align.LEFT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
@@ -46,7 +63,10 @@ data class DPad(
                 name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_NAME),
                 items = listOf(
                     DPadExtraButton.NONE to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_NONE),
-                    DPadExtraButton.SNEAK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK),
+                    DPadExtraButton.SNEAK_DOUBLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_DOUBLE_CLICK),
+                    DPadExtraButton.SNEAK_SINGLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_SINGLE_CLICK),
+                    DPadExtraButton.SNEAK_HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_SNEAK_HOLD),
+                    DPadExtraButton.DISMOUNT to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT),
                     DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP),
                     DPadExtraButton.FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_FLYING),
                 ),

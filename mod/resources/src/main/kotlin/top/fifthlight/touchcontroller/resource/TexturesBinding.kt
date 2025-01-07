@@ -1,9 +1,6 @@
 package top.fifthlight.touchcontroller.resource
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.PropertySpec
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -70,6 +67,12 @@ fun main(args: Array<String>) {
     val textures = texturesBuilder.build()
     val file = FileSpec
         .builder("top.fifthlight.touchcontroller.assets", "Textures")
+        .addAnnotation(
+            AnnotationSpec
+                .builder(Suppress::class)
+                .addMember("%S", "RedundantVisibilityModifier")
+                .build()
+        )
         .addImport("top.fifthlight.combine.data", "Identifier")
         .addImport("top.fifthlight.data", "IntSize", "IntOffset")
         .addType(textures)

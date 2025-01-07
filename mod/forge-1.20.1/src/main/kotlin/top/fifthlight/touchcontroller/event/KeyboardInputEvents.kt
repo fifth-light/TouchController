@@ -22,12 +22,14 @@ object KeyboardInputEvents : KoinComponent {
         input.leftImpulse += result.left
         input.forwardImpulse = input.forwardImpulse.coerceIn(-1f, 1f)
         input.leftImpulse = input.leftImpulse.coerceIn(-1f, 1f)
-        input.shiftKeyDown = input.shiftKeyDown || status.sneakLocked || result.sneak
+        input.shiftKeyDown = input.shiftKeyDown || status.sneakLocked || result.sneak || status.sneaking
         input.jumping = input.jumping || status.jumping
         input.up = input.up || result.forward > 0.5f
         input.down = input.down || result.forward < -0.5f
         input.left = input.left || result.left > 0.5f
         input.right = input.right || result.left < -0.5f
+
+        status.sneaking = false
         status.jumping = false
 
         TickEvents.inputTick()

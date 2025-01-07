@@ -16,10 +16,19 @@ import top.fifthlight.touchcontroller.layout.Context
 import top.fifthlight.touchcontroller.layout.JumpButton
 import kotlin.math.round
 
+@Serializable
 enum class JumpButtonTexture {
+    @SerialName("classic")
     CLASSIC,
+
+    @SerialName("classic_flying")
     CLASSIC_FLYING,
+
+    @SerialName("new")
     NEW,
+
+    @SerialName("new_horse")
+    NEW_HORSE,
 }
 
 @Serializable
@@ -55,6 +64,7 @@ data class JumpButton(
                     JumpButtonTexture.CLASSIC to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_CLASSIC),
                     JumpButtonTexture.CLASSIC_FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_CLASSIC_FLYING),
                     JumpButtonTexture.NEW to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_NEW),
+                    JumpButtonTexture.NEW_HORSE to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JUMP_BUTTON_PROPERTY_STYLE_NEW_HORSE),
                 )
             )
         ) as PersistentList<Property<ControllerWidget, *>>
@@ -64,7 +74,7 @@ data class JumpButton(
         get() = _properties
 
     private val textureSize
-        get() = if (texture == JumpButtonTexture.NEW) 22 else 18
+        get() = if (texture == JumpButtonTexture.NEW || texture == JumpButtonTexture.NEW_HORSE) 22 else 18
 
     override fun size(): IntSize = IntSize((size * textureSize).toInt())
 

@@ -22,6 +22,9 @@ private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, texture: 
 
             Pair(JumpButtonTexture.NEW, false) -> Texture(texture = Textures.GUI_JUMP_JUMP)
             Pair(JumpButtonTexture.NEW, true) -> Texture(texture = Textures.GUI_JUMP_JUMP_ACTIVE)
+
+            Pair(JumpButtonTexture.NEW_HORSE, false) -> Texture(texture = Textures.GUI_JUMP_JUMP_HORSE)
+            Pair(JumpButtonTexture.NEW_HORSE, true) -> Texture(texture = Textures.GUI_JUMP_JUMP_HORSE_ACTIVE)
         }
     }
 }

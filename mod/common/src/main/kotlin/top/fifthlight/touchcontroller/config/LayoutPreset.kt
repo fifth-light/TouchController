@@ -40,7 +40,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
                 align = Align.LEFT_BOTTOM,
                 offset = IntOffset(8, 8),
                 opacity = 0.6f,
-                extraButton = DPadExtraButton.SNEAK,
+                extraButton = DPadExtraButton.SNEAK_DOUBLE_CLICK,
             ),
             JumpButton(
                 align = Align.RIGHT_BOTTOM,
@@ -91,7 +91,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
                 align = Align.LEFT_BOTTOM,
                 offset = IntOffset(8, 8),
                 opacity = 0.6f,
-                extraButton = DPadExtraButton.SNEAK,
+                extraButton = DPadExtraButton.DISMOUNT,
             ),
         )
     ),
@@ -120,7 +120,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
                 align = Align.LEFT_BOTTOM,
                 offset = IntOffset(8, 8),
                 opacity = 0.6f,
-                extraButton = DPadExtraButton.SNEAK,
+                extraButton = DPadExtraButton.DISMOUNT,
             ),
             JumpButton(
                 align = Align.RIGHT_BOTTOM,
@@ -139,7 +139,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
                 align = Align.LEFT_BOTTOM,
                 offset = IntOffset(8, 8),
                 opacity = 0.6f,
-                extraButton = DPadExtraButton.SNEAK,
+                extraButton = DPadExtraButton.DISMOUNT,
             ),
             JumpButton(
                 align = Align.RIGHT_BOTTOM,
@@ -165,7 +165,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
                 align = Align.LEFT_BOTTOM,
                 offset = IntOffset(8, 8),
                 opacity = 0.6f,
-                extraButton = DPadExtraButton.SNEAK,
+                extraButton = DPadExtraButton.DISMOUNT,
             ),
             JumpButton(
                 align = Align.RIGHT_BOTTOM,

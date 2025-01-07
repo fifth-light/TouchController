@@ -6,7 +6,6 @@ import org.koin.core.component.inject
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.data.TextFactory
 import top.fifthlight.combine.layout.Alignment
-import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.modifier.placement.padding
@@ -62,16 +61,12 @@ class EnumProperty<Config : ControllerWidget, T>(
     override fun controller(modifier: Modifier, config: ControllerWidget, onConfigChanged: (ControllerWidget) -> Unit) {
         @Suppress("UNCHECKED_CAST")
         val widgetConfig = config as Config
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(4),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Column(modifier) {
             Text(name)
 
             var expanded by remember { mutableStateOf(false) }
             DropdownMenuBox(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 expanded = expanded,
                 onExpandedChanged = { expanded = it },
                 dropDownContent = { rect ->

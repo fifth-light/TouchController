@@ -1,9 +1,7 @@
 package top.fifthlight.touchcontroller.layout
 
 import top.fifthlight.touchcontroller.assets.Textures
-import top.fifthlight.touchcontroller.control.DPad
-import top.fifthlight.touchcontroller.control.DPadExtraButton
-import top.fifthlight.touchcontroller.control.JumpButtonTexture
+import top.fifthlight.touchcontroller.control.*
 import top.fifthlight.touchcontroller.state.PointerState
 
 private const val ID_FORWARD = "dpad_forward"
@@ -238,9 +236,42 @@ fun Context.DPad(config: DPad) {
         width = buttonSize.width,
         height = buttonSize.height
     ) {
+        val sneakButtonTexture = if (config.classic) {
+            SneakButtonTexture.CLASSIC
+        } else if (config.padding < 0 && config.extraButtonDisplaySize() == buttonSize) {
+            SneakButtonTexture.NEW_DPAD
+        } else {
+            SneakButtonTexture.NEW
+        }
         when (config.extraButton) {
             DPadExtraButton.NONE -> {}
-            DPadExtraButton.SNEAK -> RawSneakButton(dpad = true, classic = config.classic, size = extraButtonDisplaySize)
+            DPadExtraButton.SNEAK_DOUBLE_CLICK -> RawSneakButton(
+                texture = sneakButtonTexture,
+                trigger = SneakButtonTrigger.DOUBLE_CLICK_LOCK,
+                size = extraButtonDisplaySize
+            )
+
+            DPadExtraButton.SNEAK_SINGLE_CLICK -> RawSneakButton(
+                texture = sneakButtonTexture,
+                trigger = SneakButtonTrigger.SINGLE_CLICK_LOCK,
+                size = extraButtonDisplaySize
+            )
+
+            DPadExtraButton.SNEAK_HOLD -> RawSneakButton(
+                texture = sneakButtonTexture,
+                trigger = SneakButtonTrigger.HOLD,
+                size = extraButtonDisplaySize
+            )
+
+            DPadExtraButton.DISMOUNT -> RawSneakButton(
+                texture = if (config.classic) {
+                    SneakButtonTexture.CLASSIC
+                } else {
+                    SneakButtonTexture.DISMOUNT_DPAD
+                },
+                trigger = SneakButtonTrigger.SINGLE_CLICK_TRIGGER,
+                size = extraButtonDisplaySize
+            )
             DPadExtraButton.JUMP, DPadExtraButton.FLYING -> {
                 val hasForward = pointers.values.any {
                     (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD

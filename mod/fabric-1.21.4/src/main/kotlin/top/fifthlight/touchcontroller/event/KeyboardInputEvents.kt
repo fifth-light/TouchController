@@ -29,9 +29,11 @@ object KeyboardInputEvents : KoinComponent {
             input.playerInput.left() || result.left > 0.5f,
             input.playerInput.right() || result.left < -0.5f,
             input.playerInput.jump() || status.jumping,
-            input.playerInput.sneak() || status.sneakLocked || result.sneak,
+            input.playerInput.sneak() || status.sneakLocked || result.sneak || status.sneaking,
             input.playerInput.sprint() || result.sprint
         )
+
+        status.sneaking = false
         status.jumping = false
 
         TickEvents.inputTick()

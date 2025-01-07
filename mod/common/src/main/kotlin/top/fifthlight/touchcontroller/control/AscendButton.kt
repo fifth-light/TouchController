@@ -16,9 +16,15 @@ import top.fifthlight.touchcontroller.layout.AscendButton
 import top.fifthlight.touchcontroller.layout.Context
 import kotlin.math.round
 
+@Serializable
 enum class AscendButtonTexture {
+    @SerialName("classic")
     CLASSIC,
+
+    @SerialName("swimming")
     SWIMMING,
+
+    @SerialName("flying")
     FLYING,
 }
 
