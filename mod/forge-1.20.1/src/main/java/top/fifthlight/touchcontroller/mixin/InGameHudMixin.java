@@ -21,14 +21,17 @@ import top.fifthlight.touchcontroller.model.ControllerHudModel;
 public abstract class InGameHudMixin {
     @Shadow
     @Final
-    private static ResourceLocation GUI_ICONS_LOCATION;
+    protected static ResourceLocation GUI_ICONS_LOCATION;
+
     @Shadow
     protected int screenWidth;
+
     @Shadow
     protected int screenHeight;
+
     @Shadow
     @Final
-    private Minecraft minecraft;
+    protected Minecraft minecraft;
 
     @Inject(
             method = "renderCrosshair",

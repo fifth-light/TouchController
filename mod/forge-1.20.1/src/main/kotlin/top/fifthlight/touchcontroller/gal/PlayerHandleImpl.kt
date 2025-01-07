@@ -21,7 +21,7 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
     private val client: Minecraft
         get() = Minecraft.getInstance()
 
-    override fun hasItemsOnHand(list: ItemList): Boolean = InteractionHand.values().any { hand ->
+    override fun hasItemsOnHand(list: ItemList): Boolean = InteractionHand.entries.any { hand ->
         inner.getItemInHand(hand).item.toCombine() in list
     }
 

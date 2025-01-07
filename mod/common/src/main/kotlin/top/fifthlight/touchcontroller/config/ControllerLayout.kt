@@ -98,10 +98,7 @@ value class LayoutLayerCondition(
                 }
             }
         }
-        if (haveWant && !haveFulfilledWant) {
-            return false
-        }
-        return true
+        return !(haveWant && !haveFulfilledWant)
     }
 
     operator fun get(key: LayerConditionKey): LayerConditionValue? = conditions[key]
