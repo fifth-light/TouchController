@@ -7,15 +7,20 @@ import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
 import top.fifthlight.combine.layout.Arrangement
 import top.fifthlight.combine.modifier.Modifier
+import top.fifthlight.combine.modifier.placement.fillMaxWidth
 import top.fifthlight.combine.modifier.placement.padding
 import top.fifthlight.combine.modifier.placement.size
+import top.fifthlight.combine.modifier.placement.width
 import top.fifthlight.combine.modifier.pointer.clickable
 import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Column
 import top.fifthlight.combine.widget.base.layout.FlowRow
+import top.fifthlight.combine.widget.base.layout.Row
+import top.fifthlight.combine.widget.ui.Slider
 import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.control.*
+import kotlin.math.round
 
 private data class WidgetItem(
     val name: Identifier,
@@ -64,24 +69,48 @@ private val DEFAULT_CONFIGS = persistentListOf(
 @Composable
 fun WidgetsPanel(
     modifier: Modifier = Modifier,
+    defaultOpacity: Float = .6f,
+    onDefaultOpacityChanged: (Float) -> Unit = {},
     onWidgetAdded: (ControllerWidget) -> Unit = {},
 ) {
-    FlowRow(
-        modifier = modifier
-            .padding(4)
-            .verticalScroll(),
+    Column(
+        modifier = modifier.padding(4),
+        verticalArrangement = Arrangement.spacedBy(4),
     ) {
-        for (config in DEFAULT_CONFIGS) {
-            Column(
-                modifier = Modifier.clickable { onWidgetAdded(config.config) },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4),
-            ) {
-                ScaledControllerWidget(
-                    modifier = Modifier.size(96, 72),
-                    config = config.config,
-                )
-                Text(Text.translatable(config.name))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4),
+        ) {
+            Text(Text.format(Texts.SCREEN_OPTIONS_WIDGET_DEFAULT_OPACITY_TITLE, round(defaultOpacity * 100f).toString()))
+            Slider(
+                modifier = Modifier.width(128),
+                value = defaultOpacity,
+                onValueChanged = onDefaultOpacityChanged,
+                range = 0f..1f,
+            )
+        }
+        FlowRow(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(),
+        ) {
+            for (config in DEFAULT_CONFIGS) {
+                Column(
+                    modifier = Modifier.clickable {
+                        val newWidget = config.config.cloneBase(opacity = defaultOpacity)
+                        onWidgetAdded(newWidget)
+                    },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4),
+                ) {
+                    ScaledControllerWidget(
+                        modifier = Modifier.size(96, 72),
+                        config = config.config,
+                    )
+                    Text(Text.translatable(config.name))
+                }
             }
         }
     }

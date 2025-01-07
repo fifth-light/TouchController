@@ -98,6 +98,7 @@
   "touchcontroller.screen.options.widget.remove.title": "Remove",
   "touchcontroller.screen.options.widget.no_layer_selected.title": "No layer selected",
   "touchcontroller.screen.options.widget.select_layer_to_add.title": "Select a layer to add widget",
+  "touchcontroller.screen.options.widget.default_opacity.title": "Default opacity for new widget: %s%%",
 
   "touchcontroller.screen.options.widget.general.property.anchor.name": "Anchor",
   "touchcontroller.screen.options.widget.general.property.anchor.top_left": "Top left",

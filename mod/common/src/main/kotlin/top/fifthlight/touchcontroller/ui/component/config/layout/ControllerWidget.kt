@@ -6,8 +6,7 @@ import org.koin.compose.koinInject
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.onPlaced
 import top.fifthlight.combine.modifier.placement.size
-import top.fifthlight.combine.paint.withScale
-import top.fifthlight.combine.paint.withTranslate
+import top.fifthlight.combine.paint.*
 import top.fifthlight.combine.widget.base.Canvas
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntSize
@@ -36,6 +35,7 @@ fun ControllerWidget(
             result = ContextResult(),
             config = GlobalConfig.default(itemListProvider),
             condition = persistentMapOf(),
+            opacity = config.opacity,
         )
         config.layout(context)
         queue
@@ -45,7 +45,18 @@ fun ControllerWidget(
             .size(config.size())
             .then(modifier)
     ) {
-        drawQueue.execute(canvas)
+        canvas.withBlend {
+            withBlendFunction(
+                BlendFunction(
+                    srcFactor = BlendFactor.SRC_ALPHA,
+                    dstFactor = BlendFactor.ONE_MINUS_SRC_ALPHA,
+                    srcAlpha = BlendFactor.ONE,
+                    dstAlpha = BlendFactor.ZERO,
+                )
+            ) {
+                drawQueue.execute(canvas)
+            }
+        }
     }
 }
 
@@ -80,6 +91,7 @@ fun ScaledControllerWidget(
             result = ContextResult(),
             config = GlobalConfig.default(itemListProvider),
             condition = persistentMapOf(),
+            opacity = config.opacity,
         )
         config.layout(context)
         Triple(queue, componentScaleFactor, offset)
@@ -91,7 +103,18 @@ fun ScaledControllerWidget(
     ) {
         canvas.withTranslate(offset) {
             canvas.withScale(componentScaleFactor) {
-                drawQueue.execute(canvas)
+                withBlend {
+                    withBlendFunction(
+                        BlendFunction(
+                            srcFactor = BlendFactor.SRC_ALPHA,
+                            dstFactor = BlendFactor.ONE_MINUS_SRC_ALPHA,
+                            srcAlpha = BlendFactor.ONE,
+                            dstAlpha = BlendFactor.ZERO,
+                        )
+                    ) {
+                        drawQueue.execute(canvas)
+                    }
+                }
             }
         }
     }

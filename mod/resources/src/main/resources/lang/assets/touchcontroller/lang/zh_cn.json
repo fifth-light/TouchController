@@ -98,6 +98,7 @@
   "touchcontroller.screen.options.widget.remove.title": "移除",
   "touchcontroller.screen.options.widget.no_layer_selected.title": "没有选中图层",
   "touchcontroller.screen.options.widget.select_layer_to_add.title": "选中一个图层以添加组件",
+  "touchcontroller.screen.options.widget.default_opacity.title": "新组件默认不透明度：%s%%",
 
   "touchcontroller.screen.options.widget.general.property.anchor.name": "锚点",
   "touchcontroller.screen.options.widget.general.property.anchor.top_left": "左上角",

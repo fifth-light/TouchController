@@ -45,6 +45,14 @@ class ConfigScreenViewModel(
         }
     }
 
+    fun changeDefaultOpacity(opacity: Float) {
+        _uiState.getAndUpdate {
+            it.copy(
+                defaultOpacity = opacity
+            )
+        }
+    }
+
     fun selectCategory(category: ConfigCategory) {
         _uiState.getAndUpdate {
             it.copy(

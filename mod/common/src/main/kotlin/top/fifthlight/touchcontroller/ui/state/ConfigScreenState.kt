@@ -25,6 +25,7 @@ data class ConfigScreenState(
     val layoutPanelState: LayoutPanelState = LayoutPanelState.LAYOUT,
     val selectedWidget: Int = -1,
     val selectedPreset: Int = 0,
+    val defaultOpacity: Float = .6f,
 ) {
     val allPresets = defaultPresets.presets + presets.presets
 }

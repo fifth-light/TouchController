@@ -148,6 +148,8 @@ data object LayoutCategory : ConfigCategory(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxWidth(),
+                        defaultOpacity = uiState.defaultOpacity,
+                        onDefaultOpacityChanged = { viewModel.changeDefaultOpacity(it) },
                         onWidgetAdded = {
                             viewModel.updateLayer(
                                 selectedLayer, currentLayer.copy(

@@ -25,7 +25,7 @@ data class BlendFunction(
     val dstAlpha: BlendFactor
 )
 
-inline fun Canvas.withBlend(crossinline block: () -> Unit) {
+inline fun Canvas.withBlend(crossinline block: Canvas.() -> Unit) {
     enableBlend()
     try {
         block()
