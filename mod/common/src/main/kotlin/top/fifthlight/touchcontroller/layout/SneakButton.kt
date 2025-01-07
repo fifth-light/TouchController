@@ -74,9 +74,7 @@ fun Context.RawSneakButton(
         }
 
         SneakButtonTrigger.SINGLE_CLICK_LOCK -> if (newPointer) {
-            if (status.sneakLocking.click(timer.tick)) {
-                status.sneakLocked = !status.sneakLocked
-            }
+            status.sneakLocked = !status.sneakLocked
         }
 
         SneakButtonTrigger.HOLD -> {
