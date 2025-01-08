@@ -8,6 +8,10 @@
     "fifth_light",
     "bukeyu"
   ],
+  "contributors": [
+    "fengzhou0w0",
+    "WhiteElephant"
+  ],
   "contact": {
     "homepage": "${mod_homepage}",
     "sources": "${mod_source}"
