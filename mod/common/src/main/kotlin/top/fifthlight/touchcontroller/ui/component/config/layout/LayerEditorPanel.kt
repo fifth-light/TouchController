@@ -51,6 +51,7 @@ fun LayoutEditorPanel(
     layer: LayoutLayer,
     layerIndex: Int,
     onLayerChanged: (LayoutLayer) -> Unit = {},
+    onWidgetCopied: (ControllerWidget) -> Unit = { _ -> },
 ) {
     val selectedWidget = layer.widgets.getOrNull(selectedWidgetIndex)
     Row(modifier) {
@@ -135,6 +136,18 @@ fun LayoutEditorPanel(
                     .width(128),
                 widget = selectedWidget,
                 onWidgetRemoved = {
+                    onSelectedWidgetChanged(-1, null)
+                    onLayerChanged(
+                        layer.copy(
+                            widgets = layer.widgets.removeAt(selectedWidgetIndex),
+                        )
+                    )
+                },
+                onWidgetCopied = {
+                    onWidgetCopied(selectedWidget)
+                },
+                onWidgetCut = {
+                    onWidgetCopied(selectedWidget)
                     onSelectedWidgetChanged(-1, null)
                     onLayerChanged(
                         layer.copy(

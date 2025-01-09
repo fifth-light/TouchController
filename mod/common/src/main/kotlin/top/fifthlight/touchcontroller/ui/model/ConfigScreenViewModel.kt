@@ -10,6 +10,7 @@ import org.koin.core.component.inject
 import top.fifthlight.combine.screen.ViewModel
 import top.fifthlight.combine.util.CloseHandler
 import top.fifthlight.touchcontroller.config.*
+import top.fifthlight.touchcontroller.control.ControllerWidget
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
 import top.fifthlight.touchcontroller.ui.state.ConfigScreenState
 import top.fifthlight.touchcontroller.ui.state.LayoutPanelState
@@ -100,6 +101,28 @@ class ConfigScreenViewModel(
         _uiState.getAndUpdate {
             it.copy(
                 layout = ControllerLayout(it.layout.layers.set(index, layer))
+            )
+        }
+    }
+
+    fun copyWidget(widget: ControllerWidget) {
+        _uiState.getAndUpdate {
+            it.copy(
+                copiedWidget = widget,
+            )
+        }
+    }
+
+    fun pasteWidget() {
+        _uiState.getAndUpdate {
+            val widget = it.copiedWidget ?: return@getAndUpdate it
+            val selectedLayerIndex = it.selectedLayer
+            val selectedLayer = it.layout.layers.getOrNull(selectedLayerIndex) ?: return@getAndUpdate it
+            val newLayer = selectedLayer.copy(
+                widgets = selectedLayer.widgets + widget
+            )
+            it.copy(
+                layout = ControllerLayout(it.layout.layers.set(selectedLayerIndex, newLayer)),
             )
         }
     }

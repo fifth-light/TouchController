@@ -5,6 +5,7 @@ import top.fifthlight.touchcontroller.config.ControllerLayout
 import top.fifthlight.touchcontroller.config.GlobalConfig
 import top.fifthlight.touchcontroller.config.LayoutPresets
 import top.fifthlight.touchcontroller.config.defaultPresets
+import top.fifthlight.touchcontroller.control.ControllerWidget
 import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
 import top.fifthlight.touchcontroller.ui.view.config.category.GlobalCategory
 
@@ -26,6 +27,7 @@ data class ConfigScreenState(
     val selectedWidget: Int = -1,
     val selectedPreset: Int = 0,
     val defaultOpacity: Float = .6f,
+    val copiedWidget: ControllerWidget? = null,
 ) {
     val allPresets = defaultPresets.presets + presets.presets
 }

@@ -9,6 +9,7 @@ import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.widget.base.Text
 import top.fifthlight.combine.widget.base.layout.Box
 import top.fifthlight.combine.widget.base.layout.Column
+import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.ui.Button
 import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.control.ControllerWidget
@@ -18,6 +19,8 @@ fun WidgetProperties(
     modifier: Modifier = Modifier,
     widget: ControllerWidget,
     onWidgetRemoved: () -> Unit = {},
+    onWidgetCut: () -> Unit = {},
+    onWidgetCopied: () -> Unit = { },
     onPropertyChanged: (ControllerWidget) -> Unit = {}
 ) {
     Box(modifier) {
@@ -27,11 +30,28 @@ fun WidgetProperties(
                 .verticalScroll(),
             verticalArrangement = Arrangement.spacedBy(4),
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4),
+            ) {
+                Button(
+                    onClick = onWidgetCopied,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_COPY_TITLE), shadow = true)
+                }
+                Button(
+                    onClick = onWidgetCut,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_CUT_TITLE), shadow = true)
+                }
+            }
             Button(
                 onClick = onWidgetRemoved,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_REMOVE_TITLE))
+                Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_REMOVE_TITLE), shadow = true)
             }
             for (property in widget.properties) {
                 property.controller(

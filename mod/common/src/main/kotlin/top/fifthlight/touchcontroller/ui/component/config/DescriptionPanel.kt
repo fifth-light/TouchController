@@ -31,7 +31,7 @@ fun DescriptionPanel(
             .then(modifier),
         verticalArrangement = Arrangement.spacedBy(4),
     ) {
-        title?.let { Text(it) }
+        title?.let { Text(it.bold()) }
         description?.let { Text(it) }
 
         Spacer(modifier.weight(1f))

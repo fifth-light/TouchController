@@ -95,6 +95,9 @@
   "touchcontroller.screen.options.preset.delete_warning.no.title": "No",
 
   "touchcontroller.screen.options.widget.add.title": "Add widget",
+  "touchcontroller.screen.options.widget.paste.title": "Paste widget",
+  "touchcontroller.screen.options.widget.cut.title": "Cut",
+  "touchcontroller.screen.options.widget.copy.title": "Copy",
   "touchcontroller.screen.options.widget.remove.title": "Remove",
   "touchcontroller.screen.options.widget.no_layer_selected.title": "No layer selected",
   "touchcontroller.screen.options.widget.select_layer_to_add.title": "Select a layer to add widget",
