@@ -283,7 +283,7 @@ fun Context.DPad(config: DPad) {
                 size = extraButtonDisplaySize
             )
 
-            DPadExtraButton.JUMP, DPadExtraButton.FLYING -> {
+            DPadExtraButton.JUMP, DPadExtraButton.JUMP_WITHOUT_LOCKING, DPadExtraButton.FLYING -> {
                 val hasForward = pointers.values.any {
                     (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD
                 }
@@ -293,7 +293,7 @@ fun Context.DPad(config: DPad) {
                         JumpButtonTexture.NEW
                     } else {
                         when (config.extraButton) {
-                            DPadExtraButton.JUMP -> JumpButtonTexture.CLASSIC
+                            DPadExtraButton.JUMP, DPadExtraButton.JUMP_WITHOUT_LOCKING -> JumpButtonTexture.CLASSIC
                             DPadExtraButton.FLYING -> JumpButtonTexture.CLASSIC_FLYING
                             else -> error("Unreachable")
                         }
@@ -302,7 +302,9 @@ fun Context.DPad(config: DPad) {
                 if (jumpClicked) {
                     if (hasForward) {
                         result.forward = 1f
-                        if (!status.dpadForwardJumping) {
+                        if (config.extraButton == DPadExtraButton.JUMP_WITHOUT_LOCKING) {
+                            status.jumping = true
+                        } else if (!status.dpadForwardJumping) {
                             status.jumping = true
                             status.dpadForwardJumping = true
                         }

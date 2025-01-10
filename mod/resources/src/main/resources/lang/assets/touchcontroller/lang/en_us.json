@@ -123,6 +123,7 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.name": "Extra button function",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.none": "None",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump": "Jump",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump_without_locking": "Jump without locking",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_double_click": "Double-click locking sneak",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_single_click": "Single-click locking sneak",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_hold": "Hold trigger sneak",

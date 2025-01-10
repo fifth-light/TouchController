@@ -134,7 +134,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
     LayoutLayer(
         name = "On llama",
         condition = layoutLayerConditionOf(
-            LayerConditionKey.ON_HORSE to LayerConditionValue.REQUIRE,
+            LayerConditionKey.ON_LLAMA to LayerConditionValue.REQUIRE,
         ),
         widgets = persistentListOf(
             DPad(

@@ -123,6 +123,7 @@
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.name": "附加按钮功能",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.none": "无",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump": "跳跃",
+  "touchcontroller.screen.options.widget.dpad.property.extra_button_function.jump_without_locking": "无锁定跳跃",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_double_click": "双击锁定潜行",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_single_click": "单击锁定潜行",
   "touchcontroller.screen.options.widget.dpad.property.extra_button_function.sneak_hold": "长按触发潜行",
