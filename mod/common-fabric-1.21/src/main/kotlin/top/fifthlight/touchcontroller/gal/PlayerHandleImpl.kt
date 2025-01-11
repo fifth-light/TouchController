@@ -1,6 +1,8 @@
 package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.mob.SkeletonHorseEntity
+import net.minecraft.entity.mob.ZombieHorseEntity
 import net.minecraft.entity.passive.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.vehicle.BoatEntity
@@ -83,8 +85,8 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
             is MinecartEntity -> RidingEntityType.MINECART
             is BoatEntity -> RidingEntityType.BOAT
             is PigEntity -> RidingEntityType.PIG
-            is HorseEntity -> RidingEntityType.HORSE
-            is DonkeyEntity -> RidingEntityType.DONKEY
+            is CamelEntity -> RidingEntityType.CAMEL
+            is HorseEntity, is DonkeyEntity, is MuleEntity, is ZombieHorseEntity, is SkeletonHorseEntity -> RidingEntityType.HORSE
             is LlamaEntity -> RidingEntityType.LLAMA
             is StriderEntity -> RidingEntityType.STRIDER
             else -> RidingEntityType.OTHER

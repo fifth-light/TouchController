@@ -98,7 +98,7 @@ object RenderEvents : KoinComponent {
             put(LayerConditionKey.ON_BOAT, ridingType == RidingEntityType.BOAT)
             put(LayerConditionKey.ON_PIG, ridingType == RidingEntityType.PIG)
             put(LayerConditionKey.ON_HORSE, ridingType == RidingEntityType.HORSE)
-            put(LayerConditionKey.ON_DONKEY, ridingType == RidingEntityType.DONKEY)
+            put(LayerConditionKey.ON_CAMEL, ridingType == RidingEntityType.CAMEL)
             put(LayerConditionKey.ON_LLAMA, ridingType == RidingEntityType.LLAMA)
             put(LayerConditionKey.ON_STRIDER, ridingType == RidingEntityType.STRIDER)
         }.toPersistentMap()

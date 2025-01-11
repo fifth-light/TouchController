@@ -47,7 +47,7 @@ private object ConditionsList : KoinComponent {
             LayerConditionKey.ON_BOAT,
             LayerConditionKey.ON_PIG,
             LayerConditionKey.ON_HORSE,
-            LayerConditionKey.ON_DONKEY,
+            LayerConditionKey.ON_CAMEL.takeIf { gameFeatures.entity.haveCamel },
             LayerConditionKey.ON_LLAMA.takeIf { gameFeatures.entity.haveLlama },
             LayerConditionKey.ON_STRIDER.takeIf { gameFeatures.entity.haveStrider },
             LayerConditionKey.RIDING,

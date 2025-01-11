@@ -112,29 +112,11 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
         )
     ),
     LayoutLayer(
-        name = "On horse or donkey",
+        name = "On horse, camel or llama",
         condition = layoutLayerConditionOf(
             LayerConditionKey.ON_HORSE to LayerConditionValue.WANT,
-            LayerConditionKey.ON_DONKEY to LayerConditionValue.WANT,
-        ),
-        widgets = persistentListOf(
-            DPad(
-                align = Align.LEFT_BOTTOM,
-                offset = IntOffset(8, 8),
-                opacity = 0.6f,
-                extraButton = DPadExtraButton.DISMOUNT_DOUBLE_CLICK,
-            ),
-            JumpButton(
-                align = Align.RIGHT_BOTTOM,
-                offset = IntOffset(42, 68),
-                opacity = 0.6f,
-            ),
-        )
-    ),
-    LayoutLayer(
-        name = "On llama",
-        condition = layoutLayerConditionOf(
-            LayerConditionKey.ON_LLAMA to LayerConditionValue.REQUIRE,
+            LayerConditionKey.ON_CAMEL to LayerConditionValue.WANT,
+            LayerConditionKey.ON_LLAMA to LayerConditionValue.WANT,
         ),
         widgets = persistentListOf(
             DPad(
@@ -157,7 +139,7 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
             LayerConditionKey.ON_BOAT to LayerConditionValue.NEVER,
             LayerConditionKey.ON_PIG to LayerConditionValue.NEVER,
             LayerConditionKey.ON_HORSE to LayerConditionValue.NEVER,
-            LayerConditionKey.ON_DONKEY to LayerConditionValue.NEVER,
+            LayerConditionKey.ON_CAMEL to LayerConditionValue.NEVER,
             LayerConditionKey.ON_LLAMA to LayerConditionValue.NEVER,
             LayerConditionKey.ON_STRIDER to LayerConditionValue.NEVER,
             LayerConditionKey.RIDING to LayerConditionValue.REQUIRE,

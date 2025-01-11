@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.gal
 
 data class EntityFeatures(
+    val haveCamel: Boolean,
     val haveLlama: Boolean,
     val haveStrider: Boolean,
 )
