@@ -13,7 +13,9 @@ import top.fifthlight.touchcontroller.model.ControllerHudModel;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
-    @Shadow @Final protected MinecraftClient client;
+    @Shadow
+    @Final
+    protected MinecraftClient client;
 
     @Redirect(
             method = "tickMovement()V",
@@ -26,8 +28,9 @@ public abstract class ClientPlayerEntityMixin {
         var options = client.options;
         var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
         var result = controllerHudModel.getResult();
+        var status = controllerHudModel.getStatus();
         if (instance == options.sprintKey) {
-            return instance.isPressed() || result.getSprint();
+            return instance.isPressed() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isPressed();
         }
