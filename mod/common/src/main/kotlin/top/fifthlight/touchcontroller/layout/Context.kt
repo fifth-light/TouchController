@@ -124,9 +124,7 @@ data class ContextStatus(
     val quickHandSwap: DoubleClickState = DoubleClickState(7),
     val swapHands: KeyBindingResult = KeyBindingResult(),
     var wasSprinting: Boolean = false,
-    var sprinting: Boolean = false,
     var sprintLocked: Boolean = false,
-    val sprintLocking: Boolean = false,
 )
 
 data class ContextCounter(

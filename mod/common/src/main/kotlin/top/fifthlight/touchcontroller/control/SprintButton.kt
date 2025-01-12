@@ -42,7 +42,7 @@ data class SprintButton(
     val texture: SprintButtonTexture = SprintButtonTexture.CLASSIC,
     val trigger: SprintButtonTrigger = SprintButtonTrigger.SINGLE_CLICK_LOCK,
     override val align: Align = Align.RIGHT_BOTTOM,
-    override val offset: IntOffset = IntOffset(32, 68),
+    override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f,
 ): ControllerWidget(){
     companion object : KoinComponent {
@@ -73,7 +73,7 @@ data class SprintButton(
             EnumProperty(
                 getValue = { it.trigger },
                 setValue = { config, value -> config.copy(trigger = value) },
-                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_JOYSTICK_PROPERTY_TRIGGER_SPRINT),
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SPRINT_BUTTON_PROPERTY_TRIGGER),
                 items = persistentListOf(
                     SprintButtonTrigger.HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SPRINT_BUTTON_PROPERTY_TRIGGER_HOLD),
                     SprintButtonTrigger.SINGLE_CLICK_LOCK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_SPRINT_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_LOCK),

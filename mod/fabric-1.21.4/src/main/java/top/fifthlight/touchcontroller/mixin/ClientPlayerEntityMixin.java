@@ -30,7 +30,7 @@ public abstract class ClientPlayerEntityMixin {
         var result = controllerHudModel.getResult();
         var status = controllerHudModel.getStatus();
         if (instance == options.sprintKey) {
-            return instance.isPressed() || result.getSprint()||status.getSprintLocked();
+            return instance.isPressed() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isPressed();
         }
