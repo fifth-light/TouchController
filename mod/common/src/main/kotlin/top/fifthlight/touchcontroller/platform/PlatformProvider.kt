@@ -31,10 +31,10 @@ object PlatformProvider : KoinComponent {
         try {
             path.exists()
         } catch (ex: SecurityException) {
-            logger.warn("Failed to access $path: ", ex)
+            logger.info("Failed to access $path, may running on Android", ex)
             true
         } catch (ex: IOException) {
-            logger.warn("Failed to access $path: ", ex)
+            logger.info("Failed to access $path, may running on Android", ex)
             true
         }
     }
@@ -100,7 +100,7 @@ object PlatformProvider : KoinComponent {
             NativeLibraryInfo(
                 modContainerName = "top_fifthlight_touchcontroller_proxy-windows",
                 modContainerPath = "$targetArch/proxy_windows.dll",
-                debugPath = Paths.get("..", "..", "target", targetArch, "release", "proxy_windows.dll"),
+                debugPath = Paths.get("..", "..", "..", "target", targetArch, "release", "proxy_windows.dll"),
                 extractPrefix = "proxy_windows",
                 extractSuffix = ".dll",
                 readOnlySetter = ::windowsReadOnlySetter,

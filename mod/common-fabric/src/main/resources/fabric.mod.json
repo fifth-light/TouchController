@@ -8,9 +8,14 @@
     "fifth_light",
     "bukeyu"
   ],
+  "contributors": [
+    "fengzhou0w0",
+    "white_elephant"
+  ],
   "contact": {
     "homepage": "${mod_homepage}",
-    "sources": "${mod_source}"
+    "sources": "${mod_source}",
+    "issues": "${mod_issue_tracker}"
   },
   "license": "${mod_license}",
   "icon": "assets/touchcontroller/icon.png",

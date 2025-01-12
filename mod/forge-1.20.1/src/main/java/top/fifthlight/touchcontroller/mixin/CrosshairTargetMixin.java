@@ -23,7 +23,7 @@ import top.fifthlight.touchcontroller.model.ControllerHudModel;
 public abstract class CrosshairTargetMixin {
     @Shadow
     @Final
-    private Minecraft minecraft;
+    Minecraft minecraft;
 
     @Shadow
     @Final

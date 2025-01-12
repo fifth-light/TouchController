@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.compileClasspath
-import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.processResources
-import gradle.kotlin.dsl.accessors._9eb302e4127a01a278ff8c70e9947fe8.runtimeClasspath
 import org.gradle.kotlin.dsl.*
 import kotlin.collections.set
 

@@ -3,9 +3,8 @@ package top.fifthlight.touchcontroller.gal
 import net.minecraft.client.Minecraft
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.animal.Pig
-import net.minecraft.world.entity.animal.horse.Donkey
-import net.minecraft.world.entity.animal.horse.Horse
-import net.minecraft.world.entity.animal.horse.Llama
+import net.minecraft.world.entity.animal.camel.Camel
+import net.minecraft.world.entity.animal.horse.*
 import net.minecraft.world.entity.monster.Strider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.vehicle.Boat
@@ -21,7 +20,7 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
     private val client: Minecraft
         get() = Minecraft.getInstance()
 
-    override fun hasItemsOnHand(list: ItemList): Boolean = InteractionHand.values().any { hand ->
+    override fun hasItemsOnHand(list: ItemList): Boolean = InteractionHand.entries.any { hand ->
         inner.getItemInHand(hand).item.toCombine() in list
     }
 
@@ -87,8 +86,8 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
             is Minecart -> RidingEntityType.MINECART
             is Boat -> RidingEntityType.BOAT
             is Pig -> RidingEntityType.PIG
-            is Horse -> RidingEntityType.HORSE
-            is Donkey -> RidingEntityType.DONKEY
+            is Camel -> RidingEntityType.CAMEL
+            is Horse, is Donkey, is Mule, is ZombieHorse, is SkeletonHorse -> RidingEntityType.HORSE
             is Llama -> RidingEntityType.LLAMA
             is Strider -> RidingEntityType.STRIDER
             else -> RidingEntityType.OTHER

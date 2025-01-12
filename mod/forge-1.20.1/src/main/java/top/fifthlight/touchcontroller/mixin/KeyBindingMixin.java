@@ -22,7 +22,7 @@ public abstract class KeyBindingMixin {
     private static Map<InputConstants.Key, KeyMapping> ALL;
 
     @Unique
-    private static boolean doCancelKey(InputConstants.Key key) {
+    private static boolean touchController$doCancelKey(InputConstants.Key key) {
         var configHolder = (GlobalConfigHolder) KoinJavaComponent.getOrNull(GlobalConfigHolder.class);
         if (configHolder == null) {
             return false;
@@ -47,14 +47,14 @@ public abstract class KeyBindingMixin {
 
     @Inject(method = "click", at = @At("HEAD"), cancellable = true)
     private static void click(InputConstants.Key key, CallbackInfo info) {
-        if (doCancelKey(key)) {
+        if (touchController$doCancelKey(key)) {
             info.cancel();
         }
     }
 
     @Inject(method = "set", at = @At("HEAD"), cancellable = true)
     private static void set(InputConstants.Key key, boolean pHeld, CallbackInfo info) {
-        if (doCancelKey(key)) {
+        if (touchController$doCancelKey(key)) {
             info.cancel();
         }
     }

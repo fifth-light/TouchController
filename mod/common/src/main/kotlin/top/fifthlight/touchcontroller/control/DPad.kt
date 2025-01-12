@@ -39,6 +39,9 @@ enum class DPadExtraButton {
     @SerialName("jump")
     JUMP,
 
+    @SerialName("jump_without_locking")
+    JUMP_WITHOUT_LOCKING,
+
     @SerialName("flying")
     FLYING,
 }
@@ -72,6 +75,7 @@ data class DPad(
                     DPadExtraButton.DISMOUNT_SINGLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT_DOUBLE_CLICK),
                     DPadExtraButton.DISMOUNT_DOUBLE_CLICK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_DISMOUNT_SINGLE_CLICK),
                     DPadExtraButton.JUMP to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP),
+                    DPadExtraButton.JUMP_WITHOUT_LOCKING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_JUMP_WITHOUT_LOCKING),
                     DPadExtraButton.FLYING to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_DPAD_PROPERTY_EXTRA_BUTTON_FUNCTION_FLYING),
                 ),
             ),
