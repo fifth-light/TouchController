@@ -58,8 +58,8 @@ enum class LayerConditionKey {
     @SerialName("on_horse")
     ON_HORSE,
 
-    @SerialName("on_donkey")
-    ON_DONKEY,
+    @SerialName("on_camel")
+    ON_CAMEL,
 
     @SerialName("on_llama")
     ON_LLAMA,
@@ -98,10 +98,7 @@ value class LayoutLayerCondition(
                 }
             }
         }
-        if (haveWant && !haveFulfilledWant) {
-            return false
-        }
-        return true
+        return !(haveWant && !haveFulfilledWant)
     }
 
     operator fun get(key: LayerConditionKey): LayerConditionValue? = conditions[key]

@@ -57,7 +57,7 @@ body:
         id: bug_log
         attributes:
             label: 日志
-            description: 上传您的游戏日志（一般存在于 `.minecraft/versions/<版本文件夹>/logs` 中）为文件。请不要直接以文本形式粘贴游戏日志！
+            description: 上传您的游戏日志（一般存在于游戏目录中的 `logs` 目录）为文件。请不要直接以文本形式粘贴游戏日志！
         validations:
             required: true
     -   type: markdown

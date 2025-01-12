@@ -40,6 +40,7 @@ private data class VerticalScrollNode(
             PointerEventType.Press -> {
                 scrollState.initialPointerPosition = event.position
                 scrollState.startPointerPosition = null
+                scrollState.scrolling = false
                 false
             }
 

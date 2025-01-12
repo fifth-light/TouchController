@@ -21,6 +21,7 @@ val modDescription: String by extra.properties
 val modLicense: String by extra.properties
 val modHomepage: String by extra.properties
 val modSource: String by extra.properties
+val modIssueTracker: String by extra.properties
 val javaVersion: String by extra.properties
 val gameVersion: String by extra.properties
 val yarnVersion: String by extra.properties
@@ -70,6 +71,7 @@ tasks.processResources {
         "mod_license" to modLicense,
         "mod_homepage" to modHomepage,
         "mod_source" to modSource,
+        "mod_issue_tracker" to modIssueTracker,
         "fabric_loader_version" to libs.versions.fabric.loader.get(),
         "game_version" to gameVersion,
         "java_version" to javaVersion,

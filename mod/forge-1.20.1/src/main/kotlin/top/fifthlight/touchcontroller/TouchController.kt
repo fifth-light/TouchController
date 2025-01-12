@@ -42,7 +42,7 @@ class TouchController : KoinComponent {
         FMLJavaModLoadingContext.get().modEventBus.addListener(::onClientSetup)
     }
 
-    @Suppress("unused", "UNUSED_PARAMETER")
+    @Suppress("UNUSED_PARAMETER")
     private fun onClientSetup(event: FMLClientSetupEvent) {
         logger.info("Loading TouchController…")
 

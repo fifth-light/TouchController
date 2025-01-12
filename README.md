@@ -69,92 +69,92 @@ bin 目录加入 PATH 环境变量即可。
 
 1. 添加 TouchController 的 proxy-client 库到启动器内
 
-- Groovy
-```groovy
-implementation 'top.fifthlight.touchcontroller:proxy-client-android:0.0.2'
-```
-
-- Kotlin
-```kotlin
-implementation("top.fifthlight.touchcontroller:proxy-client-android:0.0.2")
-```
-
-- Gradle version catalogs
-```toml
-touchcontroller-proxy-client-android = { group = "top.fifthlight.touchcontroller", name = "proxy-client-android", version = "0.0.2" }
-```
+    - Groovy
+    ```groovy
+    implementation 'top.fifthlight.touchcontroller:proxy-client-android:0.0.2'
+    ```
+    
+    - Kotlin
+    ```kotlin
+    implementation("top.fifthlight.touchcontroller:proxy-client-android:0.0.2")
+    ```
+    
+    - Gradle version catalogs
+    ```toml
+    touchcontroller-proxy-client-android = { group = "top.fifthlight.touchcontroller", name = "proxy-client-android", version = "0.0.2" }
+    ```
 
 2. 创建 MessageTransport
 
-目前版本的 TouchController 使用 Unix 套接字进行游戏和启动器之间的 IPC，因此需要先创建一个 UnixSocketTransport：
-
-```java
-private static final String socketName = "YourLauncher";
-
-/* ... */
-
-MessageTransport transport = UnixSocketTransportKt.UnixSocketTransport(socketName);
-```
+    目前版本的 TouchController 使用 Unix 套接字进行游戏和启动器之间的 IPC，因此需要先创建一个 UnixSocketTransport：
+    
+    ```java
+    private static final String socketName = "YourLauncher";
+    
+    /* ... */
+    
+    MessageTransport transport = UnixSocketTransportKt.UnixSocketTransport(socketName);
+    ```
 
 3. 创建一个 LauncherProxyClient
 
-有了 MessageTransport 后你就可以创建一个 LauncherProxyClient 了，这是实现启动器和游戏之间交互协议的类：
-
-```java
-LauncherProxyClient client = new LauncherProxyClient(transport);
-```
+    有了 MessageTransport 后你就可以创建一个 LauncherProxyClient 了，这是实现启动器和游戏之间交互协议的类：
+    
+    ```java
+    LauncherProxyClient client = new LauncherProxyClient(transport);
+    ```
 
 4. 创建一个 VibrationHandler（可选）
 
-TouchController 从 v0.0.12 版本开始支持震动反馈。首先你需要实现 VibrationHandler：
-
-```kotlin
-interface VibrationHandler {
-    fun viberate(kind: VibrateMessage.Kind)
-}
-```
-
-在 proxy-client-android 库中的 SimpleVibrationHandler 类实现了一个基本的 VibrationHandler，可以作为参考，但是不建议直接使用这个类，因为这个类缺失震动强度、震动效果的调节：
-
-```kotlin
-private val TAG = "SimpleVibrationHandler"
-
-class SimpleVibrationHandler(private val service: Vibrator) : LauncherProxyClient.VibrationHandler {
-    override fun viberate(kind: VibrateMessage.Kind) {
-        try {
-            @Suppress("DEPRECATION")
-            service.vibrate(100)
-        } catch (ex: Exception) {
-            Log.w(TAG, "Failed to trigger vibration", ex)
+    TouchController 从 v0.0.12 版本开始支持震动反馈。首先你需要实现 VibrationHandler：
+    
+    ```kotlin
+    interface VibrationHandler {
+        fun viberate(kind: VibrateMessage.Kind)
+    }
+    ```
+    
+    在 proxy-client-android 库中的 SimpleVibrationHandler 类实现了一个基本的 VibrationHandler，可以作为参考，但是不建议直接使用这个类，因为这个类缺失震动强度、震动效果的调节：
+    
+    ```kotlin
+    private val TAG = "SimpleVibrationHandler"
+    
+    class SimpleVibrationHandler(private val service: Vibrator) : LauncherProxyClient.VibrationHandler {
+        override fun viberate(kind: VibrateMessage.Kind) {
+            try {
+                @Suppress("DEPRECATION")
+                service.vibrate(100)
+            } catch (ex: Exception) {
+                Log.w(TAG, "Failed to trigger vibration", ex)
+            }
         }
     }
-}
-```
-
-然后设置 VibrationHandler 到 LauncherProxyClient 中：
-
-```java
-SimpleVibrationHandler handler = new SimpleVibrationHandler(vibrator);
-client.setVibrationHandler(handler);
-```
+    ```
+    
+    然后设置 VibrationHandler 到 LauncherProxyClient 中：
+    
+    ```java
+    SimpleVibrationHandler handler = new SimpleVibrationHandler(vibrator);
+    client.setVibrationHandler(handler);
+    ```
 
 5. 启动 LauncherProxyClient，并发送消息：
 
-调用 LauncherProxyClient 的 run() 方法，否则 LauncherProxyClient 不会发送任何消息到游戏：
-
-```java
-client.run();
-```
-
-然后调用 LauncherProxyClient 的以下方法更新触点：
-
-- addPointer：添加或者更新一个触点
-- removePointer：清除所有的触点
-- clearPointer：删除一个触点
-
-如果不想手动做消息处理，库内也提供了一个基于 FrameLayout 的 TouchControllerLayout 类，只要将游戏相关的 View 包含在内，然后将 LauncherProxyClient 设置到 TouchControllerLayout 中即可发送处理触摸消息并发送。
-
-要注意的是消息中的 index 必须是单调递增的（与 Android 中可以复用 ID 的行为相反），并且所有坐标的范围是相对于游戏显示区域的 [0.0, 1.0]，而不是屏幕坐标。
+    调用 LauncherProxyClient 的 run() 方法，否则 LauncherProxyClient 不会发送任何消息到游戏：
+    
+    ```java
+    client.run();
+    ```
+    
+    然后调用 LauncherProxyClient 的以下方法更新触点：
+    
+    - addPointer：添加或者更新一个触点
+    - removePointer：清除所有的触点
+    - clearPointer：删除一个触点
+    
+    如果不想手动做消息处理，库内也提供了一个基于 FrameLayout 的 TouchControllerLayout 类，只要将游戏相关的 View 包含在内，然后将 LauncherProxyClient 设置到 TouchControllerLayout 中即可发送处理触摸消息并发送。
+    
+    要注意的是消息中的 index 必须是单调递增的（与 Android 中可以复用 ID 的行为相反），并且所有坐标的范围是相对于游戏显示区域的 [0.0, 1.0]，而不是屏幕坐标。
 
 ## Star 历史
 

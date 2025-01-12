@@ -45,6 +45,15 @@ data object LayoutCategory : ConfigCategory(
                         Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_ADD_TITLE), shadow = true)
                     }
 
+                    val copiedWidget = uiState.copiedWidget
+                    if (copiedWidget != null) {
+                        Button(onClick = {
+                            viewModel.pasteWidget()
+                        }) {
+                            Text(Text.translatable(Texts.SCREEN_OPTIONS_WIDGET_PASTE_TITLE), shadow = true)
+                        }
+                    }
+
                     val currentLayer = layers.getOrNull(uiState.selectedLayer)
                     LayerDropdown(
                         currentLayer = currentLayer,
@@ -103,6 +112,9 @@ data object LayoutCategory : ConfigCategory(
                         selectedWidgetIndex = uiState.selectedWidget,
                         onSelectedWidgetChanged = { index, _ ->
                             viewModel.selectWidget(index)
+                        },
+                        onWidgetCopied = {
+                            viewModel.copyWidget(it)
                         },
                     )
                 } else {

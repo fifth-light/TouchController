@@ -8,8 +8,8 @@ enum class RidingEntityType {
     BOAT,
     PIG,
     HORSE,
-    DONKEY,
     LLAMA,
+    CAMEL,
     STRIDER,
     OTHER,
 }
