@@ -84,6 +84,9 @@ object RenderEvents : KoinComponent {
         if (player.isFlying || player.isSubmergedInWater) {
             controllerHudModel.status.sneakLocked = false
         }
+
+
+
         val ridingType = player.ridingEntityType
         val condition = buildMap {
             put(LayerConditionKey.FLYING, player.isFlying)
@@ -125,7 +128,7 @@ object RenderEvents : KoinComponent {
         controllerHudModel.pendingDrawQueue = drawQueue
 
         val status = controllerHudModel.status
-        if (result.sprint) {
+        if (result.sprint || status.sprintLocked) {
             status.wasSprinting = true
         } else {
             if (status.wasSprinting) {

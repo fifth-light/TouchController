@@ -3,6 +3,9 @@ package top.fifthlight.touchcontroller.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import org.koin.java.KoinJavaComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +20,10 @@ public abstract class ClientPlayerEntityMixin {
     @Final
     protected MinecraftClient client;
 
+    @Shadow public abstract StatusEffectInstance removeStatusEffectInternal(StatusEffect par1);
+
+    @Shadow public abstract boolean startRiding(Entity entity, boolean force);
+
     @Redirect(
             method = "tickMovement()V",
             at = @At(
@@ -28,8 +35,9 @@ public abstract class ClientPlayerEntityMixin {
         var options = client.options;
         var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
         var result = controllerHudModel.getResult();
+        var status = controllerHudModel.getStatus();
         if (instance == options.sprintKey) {
-            return instance.isPressed() || result.getSprint();
+            return instance.isPressed() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isPressed();
         }

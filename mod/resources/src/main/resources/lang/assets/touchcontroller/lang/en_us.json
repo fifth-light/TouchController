@@ -176,6 +176,15 @@
   "touchcontroller.screen.options.widget.descend_button.property.style.swimming": "Swimming",
   "touchcontroller.screen.options.widget.descend_button.property.style.flying": "Flying",
 
+  "touchcontroller.screen.options.widget.sprint_button.name": "Sprint button",
+  "touchcontroller.screen.options.widget.sprint_button.property.size": "Button size: %s%%",
+  "touchcontroller.screen.options.widget.sprint_button.property.style": "Style",
+  "touchcontroller.screen.options.widget.sprint_button.property.style.classic": "Classic",
+  "touchcontroller.screen.options.widget.sprint_button.property.style.new": "New",
+  "touchcontroller.screen.options.widget.sprint_button.property.trigger": "Trigger",
+  "touchcontroller.screen.options.widget.sprint_button.property.trigger.single_click_lock": "Single click lock",
+  "touchcontroller.screen.options.widget.sprint_button.property.trigger.hold": "Hold",
+
   "touchcontroller.screen.options.widget.inventory_button.name": "Inventory button",
   "touchcontroller.screen.options.presets.title": "Presets",
 

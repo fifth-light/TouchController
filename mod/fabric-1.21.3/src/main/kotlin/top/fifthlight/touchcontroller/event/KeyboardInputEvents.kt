@@ -30,7 +30,7 @@ object KeyboardInputEvents : KoinComponent {
             input.playerInput.right() || result.left < -0.5f,
             input.playerInput.jump() || status.jumping,
             input.playerInput.sneak() || status.sneakLocked || result.sneak || status.sneaking,
-            input.playerInput.sprint() || result.sprint
+            input.playerInput.sprint() || result.sprint || status.sprintLocked,
         )
         status.jumping = false
         status.sneaking = false

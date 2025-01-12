@@ -64,6 +64,10 @@ private val DEFAULT_CONFIGS = persistentListOf(
         name = Texts.SCREEN_OPTIONS_WIDGET_INVENTORY_BUTTON_NAME,
         config = InventoryButton(),
     ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_SPRINT_BUTTON_NAME,
+        config = SprintButton()
+    )
 )
 
 @Composable

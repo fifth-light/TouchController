@@ -28,8 +28,9 @@ public abstract class ClientPlayerEntityMixin {
         var options = minecraft.options;
         var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
         var result = controllerHudModel.getResult();
+        var status = controllerHudModel.getStatus();
         if (instance == options.keySprint) {
-            return instance.isDown() || result.getSprint();
+            return instance.isDown() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isDown();
         }
