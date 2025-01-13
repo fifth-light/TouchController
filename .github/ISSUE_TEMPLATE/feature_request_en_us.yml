@@ -14,7 +14,7 @@ body:
             options:
                 -   label: This feature has not been requested before (you can search [here](https://github.com/fifth-light/TouchController/issues?q=is%3Aissue)).
                     required: true
-                -   label: If you only have some ideas instead of particular new features, please submit them in [Discussions](https://github.com/fifth-light/TouchController/discussions/new?category=%E6%83%B3%E6%B3%95)
+                -   label: "I am aware that: If I only have some ideas rather than new features, they need to be submitted in the [Discussions](https://github.com/fifth-light/TouchController/discussions/new?category=%E6%83%B3%E6%B3%95)."
                     required: true
                 -   label: This feature is not in [Pull Requests](https://github.com/fifth-light/TouchController/pulls)
                     required: true
