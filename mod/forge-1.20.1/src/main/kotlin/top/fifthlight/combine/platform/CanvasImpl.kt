@@ -102,12 +102,7 @@ class CanvasImpl(
         drawContext.drawString(textRenderer, text.toMinecraft(), offset.x, offset.y, color.value, true)
     }
 
-    override fun drawTextWithShadow(
-        offset: IntOffset,
-        width: Int,
-        text: top.fifthlight.combine.data.Text,
-        color: Color
-    ) {
+    override fun drawTextWithShadow(offset: IntOffset, width: Int, text: CombineText, color: Color) {
         // TODO wrap text
         drawContext.drawString(textRenderer, text.toMinecraft(), offset.x, offset.y, color.value, true)
     }

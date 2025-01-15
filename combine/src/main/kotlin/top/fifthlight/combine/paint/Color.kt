@@ -1,7 +1,16 @@
 package top.fifthlight.combine.paint
 
 @JvmInline
-value class Color(val value: Int)
+value class Color(val value: Int) {
+    val a: Int
+        get() = (value shr 24) and 0xFF
+    val r: Int
+        get() = (value shr 16) and 0xFF
+    val g: Int
+        get() = (value shr 8) and 0xFF
+    val b: Int
+        get() = value and 0xFF
+}
 
 fun Color(value: UInt) = Color(value.toInt())
 

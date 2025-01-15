@@ -1,4 +1,5 @@
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 plugins {
     idea
@@ -20,6 +21,8 @@ val modVersion: String by extra.properties
 val modDescription: String by extra.properties
 val modLicense: String by extra.properties
 val modHomepage: String by extra.properties
+val modAuthors: String by extra.properties
+val modContributors: String by extra.properties
 val modSource: String by extra.properties
 val modIssueTracker: String by extra.properties
 val javaVersion: String by extra.properties
@@ -63,6 +66,12 @@ dependencies {
 }
 
 tasks.processResources {
+    val modAuthorsList = modAuthors.split(",").map(String::trim).filter(String::isNotEmpty)
+    val modContributorsList = modContributors.split(",").map(String::trim).filter(String::isNotEmpty)
+    fun String.quote(quoteStartChar: Char = '"', quoteEndChar: Char = '"') = quoteStartChar + this + quoteEndChar
+    val modAuthorsArray = modAuthorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
+    val modContributorsArray = modContributorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
+
     val properties = mapOf(
         "mod_id" to modId,
         "mod_version_full" to version,
@@ -70,6 +79,10 @@ tasks.processResources {
         "mod_description" to modDescription,
         "mod_license" to modLicense,
         "mod_homepage" to modHomepage,
+        "mod_authors_string" to modAuthors,
+        "mod_contributors_string" to modContributors,
+        "mod_authors_array" to modAuthorsArray,
+        "mod_contributors_array" to modContributorsArray,
         "mod_source" to modSource,
         "mod_issue_tracker" to modIssueTracker,
         "fabric_loader_version" to libs.versions.fabric.loader.get(),

@@ -4,22 +4,18 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Screen
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent
-import net.minecraftforge.client.event.RenderGuiEvent
-import net.minecraftforge.client.event.RenderHighlightEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.TickEvent
-import net.minecraftforge.event.level.BlockEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import org.koin.logger.slf4jLogger
 import org.slf4j.LoggerFactory
 import top.fifthlight.combine.platform.CanvasImpl
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder
@@ -32,18 +28,23 @@ import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
-import top.fifthlight.touchcontroller.ui.screen.config.getConfigScreen
 
-@Mod(BuildInfo.MOD_ID)
+@Mod(
+    modid = BuildInfo.MOD_ID,
+    name = BuildInfo.MOD_NAME,
+    version = BuildInfo.MOD_VERSION,
+    clientSideOnly = true,
+    acceptedMinecraftVersions = "1.12.2",
+    acceptableRemoteVersions = "*",
+    canBeDeactivated = false,
+    guiFactory = "top.fifthlight.touchcontroller.ForgeGuiFactoryImpl"
+)
 class TouchController : KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 
-    init {
-        FMLJavaModLoadingContext.get().modEventBus.addListener(::onClientSetup)
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    private fun onClientSetup(event: FMLClientSetupEvent) {
+    @Suppress("unused")
+    @Mod.EventHandler
+    fun onClientSetup(event: FMLInitializationEvent) {
         logger.info("Loading TouchController…")
 
         val platformHolder = PlatformHolder(null)
@@ -52,7 +53,6 @@ class TouchController : KoinComponent {
         }
 
         startKoin {
-            slf4jLogger()
             modules(
                 platformHolderModule,
                 platformModule,
@@ -70,14 +70,14 @@ class TouchController : KoinComponent {
 
         initialize()
 
-        val client = Minecraft.getInstance()
+        val client = Minecraft.getMinecraft()
         // MUST RUN ON RENDER THREAD
         // Because Forge load mods in parallel, mods don't load on main render thread,
         // which is ok for most cases, but RegisterTouchWindow() and other Win32 API
         // requires caller on the thread created window. We post an event to render
         // thread here, to solve this problem.
-        client.tell {
-            WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl(client.window))
+        client.addScheduledTask {
+            WindowCreateEvents.onPlatformWindowCreated(PlatformWindowImpl)
         }
     }
 
@@ -85,25 +85,19 @@ class TouchController : KoinComponent {
         val configHolder: GlobalConfigHolder = get()
         configHolder.load()
 
-        MinecraftForge.registerConfigScreen { parent ->
-            getConfigScreen(parent) as Screen
-        }
+        // TODO register config screen
+
 
         val controllerHudModel: ControllerHudModel = get()
         MinecraftForge.EVENT_BUS.register(object {
             @SubscribeEvent
-            fun hudRender(event: RenderGuiEvent.Post) {
-                val client = Minecraft.getInstance()
-                val canvas = CanvasImpl(event.guiGraphics, client.font)
+            fun hudRender(event: RenderGameOverlayEvent.Post) {
+                val client = Minecraft.getMinecraft()
+                val canvas = CanvasImpl(client.fontRenderer)
                 RenderEvents.onHudRender(canvas)
             }
 
-            @SubscribeEvent
-            fun blockOutlineEvent(event: RenderHighlightEvent.Block) {
-                if (controllerHudModel.result.crosshairStatus == null) {
-                    event.isCanceled = true
-                }
-            }
+            // TODO block outline handling
 
             @SubscribeEvent
             fun blockBroken(event: BlockEvent.BreakEvent) {
@@ -116,7 +110,7 @@ class TouchController : KoinComponent {
             }
 
             @SubscribeEvent
-            fun joinWorld(event: ClientPlayerNetworkEvent.LoggingIn) {
+            fun joinWorld(event: PlayerEvent.PlayerLoggedInEvent) {
                 ConnectionEvents.onJoinedWorld()
             }
         })

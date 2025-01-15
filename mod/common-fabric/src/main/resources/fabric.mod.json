@@ -5,12 +5,10 @@
   "name": "${mod_name}",
   "description": "${mod_description}",
   "authors": [
-    "fifth_light",
-    "bukeyu"
+    "${mod_authors_array}"
   ],
   "contributors": [
-    "fengzhou0w0",
-    "white_elephant"
+    "${mod_contributors_array}"
   ],
   "contact": {
     "homepage": "${mod_homepage}",

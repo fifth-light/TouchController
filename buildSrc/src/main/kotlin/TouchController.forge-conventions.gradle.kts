@@ -1,5 +1,4 @@
-import org.gradle.kotlin.dsl.*
-import kotlin.collections.set
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 plugins {
     idea
@@ -19,15 +18,34 @@ val modLicense: String by extra.properties
 val modLicenseLink: String by extra.properties
 val modIssueTracker: String by extra.properties
 val modHomepage: String by extra.properties
+val modAuthors: String by extra.properties
+val modContributors: String by extra.properties
 val gameVersion: String by extra.properties
 val forgeVersion: String by extra.properties
-val parchmentVersion: String by extra.properties
+val mappingType: String by extra.properties
+val useMixin: String by extra.properties
+val useMixinBool = useMixin.toBoolean()
+val bridgeSlf4j: String by extra.properties
+val bridgeSlf4jBool = bridgeSlf4j.toBoolean()
+val legacyLanguageFormat: String by extra.properties
+val legacyLanguageFormatBool = legacyLanguageFormat.toBoolean()
+val excludeR8: String by extra.properties
 
 version = "$modVersion+forge-$gameVersion"
 group = "top.fifthlight.touchcontroller"
 
 minecraft {
-    mappings("parchment", parchmentVersion)
+    when (mappingType) {
+        "official" -> {
+            val parchmentVersion: String by extra.properties
+            mappings("parchment", parchmentVersion)
+        }
+
+        "mcp-snapshot" -> {
+            val mcpVersion: String by extra.properties
+            mappings("snapshot", mcpVersion)
+        }
+    }
 
     runs {
         copyIdeResources = true
@@ -58,11 +76,25 @@ mixin {
 configurations.create("shadow")
 
 tasks.jar {
-    archiveBaseName = "$modName-$version-slim"
+    archiveBaseName = "$modName-slim"
 }
 
 fun DependencyHandlerScope.shade(dependency: Any) {
     add("shadow", dependency)
+}
+
+fun DependencyHandlerScope.shade(
+    dependency: String,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit,
+) {
+    add("shadow", dependency, dependencyConfiguration)
+}
+
+fun <T : ModuleDependency> DependencyHandlerScope.shade(
+    dependency: T,
+    dependencyConfiguration: T.() -> Unit,
+) {
+    add("shadow", dependency, dependencyConfiguration)
 }
 
 fun DependencyHandlerScope.shadeAndImplementation(dependency: Any) {
@@ -71,14 +103,16 @@ fun DependencyHandlerScope.shadeAndImplementation(dependency: Any) {
     minecraftLibrary(dependency)
 }
 
-fun<T : ModuleDependency> DependencyHandlerScope.shade(
-    dependency: T,
-    dependencyConfiguration: T.() -> Unit,
+fun DependencyHandlerScope.shadeAndImplementation(
+    dependency: String,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit
 ) {
-    add("shadow", dependency, dependencyConfiguration)
+    shade(dependency, dependencyConfiguration)
+    implementation(dependency, dependencyConfiguration)
+    minecraftLibrary(dependency, dependencyConfiguration)
 }
 
-fun<T : ModuleDependency> DependencyHandlerScope.shadeAndImplementation(
+fun <T : ModuleDependency> DependencyHandlerScope.shadeAndImplementation(
     dependency: T,
     dependencyConfiguration: T.() -> Unit,
 ) {
@@ -94,20 +128,38 @@ dependencies {
         exclude("org.slf4j")
     }
     shadeAndImplementation(project(":combine"))
+    if (bridgeSlf4jBool) {
+        shadeAndImplementation("org.slf4j:slf4j-jcl:1.7.36") {
+            exclude("commons-logging")
+        }
+    }
 
     shade(project(":proxy-windows"))
     shade(project(":proxy-server-android"))
 
-    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    if (useMixinBool) {
+        annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    }
 }
 
 sourceSets.main {
-    resources.srcDir("../resources/src/main/resources/lang")
+    if (!legacyLanguageFormatBool) {
+        resources.srcDir("../resources/src/main/resources/lang")
+    }
     resources.srcDir("../resources/src/main/resources/textures")
 }
 
 tasks.processResources {
     from("../resources/src/main/resources/icon/assets/touchcontroller/icon.png")
+    if (legacyLanguageFormatBool) {
+        from(project(":mod:resources").layout.buildDirectory.dir("generated/resources/legacy-lang"))
+    }
+
+    val modAuthorsList = modAuthors.split(",").map(String::trim).filter(String::isNotEmpty)
+    val modContributorsList = modContributors.split(",").map(String::trim).filter(String::isNotEmpty)
+    fun String.quote(quoteStartChar: Char = '"', quoteEndChar: Char = '"') = quoteStartChar + this + quoteEndChar
+    val modAuthorsArray = modAuthorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
+    val modContributorsArray = modContributorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
 
     val loaderVersion = forgeVersion.substringBefore('.')
     val properties = mapOf(
@@ -118,6 +170,10 @@ tasks.processResources {
         "mod_license_link" to modLicenseLink,
         "mod_issue_tracker" to modIssueTracker,
         "mod_homepage" to modHomepage,
+        "mod_authors_string" to modAuthors,
+        "mod_contributors_string" to modContributors,
+        "mod_authors_array" to modAuthorsArray,
+        "mod_contributors_array" to modContributorsArray,
         "forge_version" to forgeVersion,
         "mod_description" to modDescription,
         "game_version" to gameVersion,
@@ -126,7 +182,7 @@ tasks.processResources {
 
     inputs.properties(properties)
 
-    filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta")) {
+    filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta", "mcmod.info")) {
         expand(properties)
     }
 }
@@ -142,13 +198,24 @@ tasks.compileJava {
     dependsOn("extractSrg")
 }
 
+val minecraftShadow = configurations.create("minecraftShadow") {
+    excludeR8.split(",").filter(String::isNotEmpty).forEach {
+        if (it.contains(":")) {
+            val (group, module) = it.split(":")
+            exclude(group, module)
+        } else {
+            exclude(it)
+        }
+    }
+    extendsFrom(configurations.minecraft.get())
+}
+
 gr8 {
     val shadowedJar = create("gr8") {
         addProgramJarsFrom(configurations.getByName("shadow"))
-        addProgramJarsFrom(tasks.getByName("jar"))
+        addProgramJarsFrom(tasks.jar)
 
-        addClassPathJarsFrom(configurations.compileClasspath)
-        addClassPathJarsFrom(configurations.runtimeClasspath)
+        addClassPathJarsFrom(minecraftShadow)
 
         r8Version("8.8.20")
         proguardFile(rootProject.file("mod/common-forge/rules.pro"))
@@ -163,7 +230,7 @@ tasks.register<Jar>("gr8Jar") {
     dependsOn("reobfJar")
 
     inputs.files(tasks.getByName("gr8Gr8ShadowedJar").outputs.files)
-    archiveBaseName = "$modName-$version-noreobf"
+    archiveBaseName = "$modName-noreobf"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     val jarFile =
@@ -182,8 +249,10 @@ tasks.getByName("gr8Gr8ShadowedJar") {
 
 reobf {
     create("gr8Jar") {
-        // Use mapping from compileJava, to avoid problems of @Shadow
-        extraMappings.from("build/tmp/compileJava/compileJava-mappings.tsrg")
+        if (useMixinBool) {
+            // Use mapping from compileJava, to avoid problems of @Shadow
+            extraMappings.from("build/tmp/compileJava/compileJava-mappings.tsrg")
+        }
     }
 }
 

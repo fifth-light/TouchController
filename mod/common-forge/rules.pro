@@ -7,9 +7,12 @@
 -keep class kotlin.Unit { *; }
 
 -keep class top.fifthlight.touchcontroller.mixin.* { *; }
+-keep class top.fifthlight.touchcontroller.ForgeGuiFactoryImpl
 -keep @net.minecraftforge.fml.common.Mod class *
 -keepclassmembers class * {
+    @net.minecraftforge.fml.common.Mod$EventHandler *;
     @net.minecraftforge.eventbus.api.SubscribeEvent *;
+    @net.minecraftforge.fml.common.eventhandler.SubscribeEvent *;
 }
 -keep class top.fifthlight.touchcontroller.platform.win32.Interface { *; }
 -keep class top.fifthlight.touchcontroller.platform.android.Transport { *; }

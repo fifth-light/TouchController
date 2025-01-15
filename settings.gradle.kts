@@ -25,6 +25,7 @@ rootProject.name = "TouchController"
 
 include("mod:resources")
 include("mod:common")
+include("mod:forge-1.12.2")
 include("mod:forge-1.20.1")
 include("mod:fabric-1.20.1")
 include("mod:fabric-1.21.1")

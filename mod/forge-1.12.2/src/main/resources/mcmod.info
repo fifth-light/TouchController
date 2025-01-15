@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
+    "version": "${mod_version_full}",
+    "mcversion": "${game_version}",
+    "description": "${mod_description}",
+    "authorList": [
+      "${mod_authors_array}"
+    ],
+    "credits": "${mod_contributors_string}",
+    "url": "${mod_homepage}",
+    "logoFile": "icon.png"
+  }
+]
