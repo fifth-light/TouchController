@@ -4,6 +4,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraftforge.registries.ForgeRegistries
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.Item
+import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.data.ItemStack as CombineItemStack
 
 @JvmInline
@@ -21,6 +22,9 @@ value class ItemStackImpl(
 
     override val isEmpty: Boolean
         get() = inner.isEmpty
+
+    override val name: Text
+        get() = TextImpl(inner.displayName)
 
     override fun withAmount(amount: Int) = ItemStackImpl(inner.copyWithCount(amount))
 }

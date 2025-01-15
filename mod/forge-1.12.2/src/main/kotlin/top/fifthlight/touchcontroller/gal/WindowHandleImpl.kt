@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
+import org.lwjgl.input.Mouse
 import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
 
@@ -24,12 +25,11 @@ object WindowHandleImpl : WindowHandle {
         }
 
     override val mouseLeftPressed: Boolean
-        get() = false // TODO client.mouseHandler.isLeftPressed
+        get() = Mouse.isButtonDown(0)
 
     override val mousePosition: Offset
-        get() = Offset.ZERO/* TODO
-        Offset(
-            x = client.mouseHandler.xpos().toFloat(),
-            y = client.mouseHandler.ypos().toFloat(),
-        )*/
+        get() = Offset(
+            x = Mouse.getX().toFloat(),
+            y = Mouse.getY().toFloat(),
+        )
 }

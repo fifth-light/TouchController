@@ -1,5 +1,6 @@
 package top.fifthlight.touchcontroller.gal
 
+import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.PlayerControllerMP
 import net.minecraft.entity.item.EntityBoat
@@ -75,7 +76,7 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
         }
 
     override val isSubmergedInWater: Boolean
-        get() = inner.isOverWater
+        get() = inner.isInsideOfMaterial(Material.WATER)
 
     override var isSprinting: Boolean
         get() = inner.isSprinting

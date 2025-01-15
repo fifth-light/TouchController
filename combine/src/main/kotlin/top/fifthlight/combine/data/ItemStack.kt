@@ -9,6 +9,7 @@ interface ItemStack {
     val id: Identifier
     val item: Item
     val isEmpty: Boolean
+    val name: Text
 
     fun withAmount(amount: Int): ItemStack
 

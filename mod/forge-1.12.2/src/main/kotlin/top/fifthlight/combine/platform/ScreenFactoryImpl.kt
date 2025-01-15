@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiScreen
 import net.minecraft.util.ChatAllowedCharacters
 import org.koin.compose.KoinContext
 import org.lwjgl.input.Keyboard
+import org.lwjgl.input.Mouse
 import top.fifthlight.combine.data.DataComponentTypeFactory
 import top.fifthlight.combine.data.LocalDataComponentTypeFactory
 import top.fifthlight.combine.data.LocalItemFactory
@@ -30,6 +31,7 @@ import top.fifthlight.combine.util.LocalCloseHandler
 import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.sign
 import top.fifthlight.combine.data.Text as CombineText
 
 val LocalScreen = staticCompositionLocalOf<GuiScreen> { error("No screen in context") }
@@ -119,31 +121,28 @@ private class CombineScreen(
         )
     }
 
-    /* TODO
-    override fun mouseScrolled(
-        mouseX: Double,
-        mouseY: Double,
-        amount: Double,
-    ): Boolean {
-        owner.onPointerEvent(
-            PointerEvent(
-                id = 0,
-                position = Offset(
-                    x = mouseX.toFloat(),
-                    y = mouseY.toFloat(),
-                ),
-                pointerType = PointerType.Mouse,
-                button = null,
-                scrollDelta = Offset(
-                    x = 0f,
-                    y = amount.toFloat(),
-                ),
-                type = PointerEventType.Scroll
+    override fun handleMouseInput() {
+        super.handleMouseInput()
+        val scroll = Mouse.getEventDWheel()
+        if (scroll != 0) {
+            owner.onPointerEvent(
+                PointerEvent(
+                    id = 0,
+                    position = Offset(
+                        x = Mouse.getX().toFloat() / client.displayWidth * width,
+                        y = Mouse.getY().toFloat() / client.displayHeight * height,
+                    ),
+                    pointerType = PointerType.Mouse,
+                    button = null,
+                    scrollDelta = Offset(
+                        x = 0f,
+                        y = scroll.sign.toFloat(),
+                    ),
+                    type = PointerEventType.Scroll
+                )
             )
-        )
-        return true
+        }
     }
-    */
 
     var onDismissRequest: () -> Boolean = { false }
 
@@ -209,11 +208,15 @@ private class CombineScreen(
     }
 
     override fun onGuiClosed() {
-        owner.close()
+        if (!ScreenFactoryImpl.screenSwitching) {
+            owner.close()
+        }
     }
 }
 
 object ScreenFactoryImpl : ScreenFactory {
+    var screenSwitching = false
+
     override fun <M : ViewModel> openScreen(
         title: CombineText,
         viewModelFactory: (CoroutineScope, CloseHandler) -> M,
@@ -222,7 +225,9 @@ object ScreenFactoryImpl : ScreenFactory {
     ) {
         val client = Minecraft.getMinecraft()
         val screen = getScreen(client.currentScreen, title, viewModelFactory, onDismissRequest, content)
+        screenSwitching = true
         client.displayGuiScreen(screen as GuiScreen)
+        screenSwitching = false
     }
 
     override fun <M : ViewModel> getScreen(

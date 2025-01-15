@@ -3,7 +3,9 @@ package top.fifthlight.combine.platform
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.Gui
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.ResourceLocation
@@ -21,6 +23,8 @@ class CanvasImpl(
     val fontRenderer: FontRenderer,
 ) : Canvas, Gui() {
     private val client = Minecraft.getMinecraft()
+    private val scaledResolution by lazy { ScaledResolution(client) }
+    private val itemRenderer = client.renderItem
     override val textMeasurer: TextMeasurer = TextMeasurerImpl(fontRenderer)
 
     override fun pushState() {
@@ -40,7 +44,7 @@ class CanvasImpl(
     }
 
     override fun rotate(degrees: Float) {
-        GlStateManager.rotate(Math.toRadians(degrees.toDouble()).toFloat(), 0f, 0f, 1f)
+        GlStateManager.rotate(degrees, 0f, 0f, 1f)
     }
 
     override fun scale(x: Float, y: Float) {
@@ -109,11 +113,15 @@ class CanvasImpl(
     }
 
     override fun drawText(offset: IntOffset, text: String, color: Color) {
-        fontRenderer.drawString(text, offset.x, offset.y, color.value)
+        withBlend {
+            fontRenderer.drawString(text, offset.x, offset.y, color.value)
+        }
     }
 
     override fun drawText(offset: IntOffset, width: Int, text: String, color: Color) {
-        fontRenderer.drawSplitString(text, offset.x, offset.y, width, color.value)
+        withBlend {
+            fontRenderer.drawSplitString(text, offset.x, offset.y, width, color.value)
+        }
     }
 
     override fun drawText(offset: IntOffset, text: CombineText, color: Color) =
@@ -123,12 +131,16 @@ class CanvasImpl(
         drawText(offset, width, text.toMinecraft().formattedText, color)
 
     override fun drawTextWithShadow(offset: IntOffset, text: String, color: Color) {
-        fontRenderer.drawStringWithShadow(text, offset.x.toFloat(), offset.y.toFloat(), color.value)
+        withBlend {
+            fontRenderer.drawStringWithShadow(text, offset.x.toFloat(), offset.y.toFloat(), color.value)
+        }
     }
 
     override fun drawTextWithShadow(offset: IntOffset, width: Int, text: String, color: Color) {
         // TODO wrap text
-        fontRenderer.drawStringWithShadow(text, offset.x.toFloat(), offset.y.toFloat(), color.value)
+        withBlend {
+            fontRenderer.drawStringWithShadow(text, offset.x.toFloat(), offset.y.toFloat(), color.value)
+        }
     }
 
     override fun drawTextWithShadow(offset: IntOffset, text: CombineText, color: Color) =
@@ -200,16 +212,21 @@ class CanvasImpl(
         val minecraftStack = ((stack as? ItemStackImpl) ?: return).inner
         scale(size.width.toFloat() / 16f, size.height.toFloat() / 16f)
         pushState()
-        // TODO
-        // drawContext.renderItem(minecraftStack, offset.x, offset.y)
+        GlStateManager.enableDepth()
+        RenderHelper.enableGUIStandardItemLighting()
+        itemRenderer.renderItemAndEffectIntoGUI(minecraftStack, offset.x, offset.y)
+        RenderHelper.disableStandardItemLighting()
+        GlStateManager.disableDepth()
         popState()
     }
 
     override fun enableBlend() {
         GlStateManager.enableBlend()
+        GlStateManager.enableAlpha()
     }
 
     override fun disableBlend() {
+        GlStateManager.disableAlpha()
         GlStateManager.disableBlend()
     }
 
@@ -259,13 +276,30 @@ class CanvasImpl(
         )
     }
 
+    private val clipStack = arrayListOf<IntRect>()
+
     override fun pushClip(absoluteArea: IntRect, relativeArea: IntRect) {
-        // TODO
-        // drawContext.enableScissor(absoluteArea.left, absoluteArea.top, absoluteArea.right, absoluteArea.bottom)
+        val scaleFactor = scaledResolution.scaleFactor
+        val rect = IntRect(
+            offset = absoluteArea.offset * scaleFactor,
+            size = absoluteArea.size * scaleFactor,
+        )
+        GL11.glScissor(rect.left, client.displayHeight - rect.bottom, rect.size.width, rect.size.height)
+        if (clipStack.isEmpty()) {
+            GL11.glEnable(GL11.GL_SCISSOR_TEST)
+        }
+        clipStack.add(rect)
     }
 
     override fun popClip() {
-        // TODO
-        // drawContext.disableScissor()
+        if (clipStack.isEmpty()) {
+            return
+        } else if (clipStack.size == 1) {
+            clipStack.clear()
+            GL11.glDisable(GL11.GL_SCISSOR_TEST)
+        } else {
+            val item = clipStack.removeLast<IntRect>()
+            GL11.glScissor(item.left, client.displayHeight - item.bottom, item.size.width, item.size.height)
+        }
     }
 }

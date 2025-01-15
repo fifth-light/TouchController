@@ -4,6 +4,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.BlockEvent
@@ -95,6 +96,8 @@ class TouchController : KoinComponent {
                 val client = Minecraft.getMinecraft()
                 val canvas = CanvasImpl(client.fontRenderer)
                 RenderEvents.onHudRender(canvas)
+                GlStateManager.enableAlpha()
+                GlStateManager.enableBlend()
             }
 
             // TODO block outline handling
