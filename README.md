@@ -96,6 +96,12 @@ bin 目录加入 PATH 环境变量即可。
     MessageTransport transport = UnixSocketTransportKt.UnixSocketTransport(socketName);
     ```
 
+   你还需要在游戏启动时将 Unix Socket 的名称通过 `TOUCH_CONTROLLER_PROXY_SOCKET` 环境变量传递给 mod。
+
+    ```java
+    Os.setenv("TOUCH_CONTROLLER_PROXY_SOCKET", socketName, true);
+    ```
+
 3. 创建一个 LauncherProxyClient
 
     有了 MessageTransport 后你就可以创建一个 LauncherProxyClient 了，这是实现启动器和游戏之间交互协议的类：
