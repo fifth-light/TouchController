@@ -3,6 +3,7 @@ package top.fifthlight.touchcontroller.mixin;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.settings.KeyMappingLookup;
 import org.koin.java.KoinJavaComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
 
-import java.util.Map;
+import java.util.List;
 
 @Mixin(KeyMapping.class)
 public abstract class KeyBindingMixin {
     @Shadow
     @Final
-    private static Map<InputConstants.Key, KeyMapping> ALL;
+    private static KeyMappingLookup MAP;
 
     @Unique
     private static boolean touchController$doCancelKey(InputConstants.Key key) {
@@ -30,14 +31,14 @@ public abstract class KeyBindingMixin {
         var config = configHolder.getConfig().getValue();
 
         var client = Minecraft.getInstance();
-        KeyMapping keyBinding = ALL.get(key);
+        List<KeyMapping> keyBindings = MAP.getAll(key);
 
-        if (keyBinding == client.options.keyAttack || keyBinding == client.options.keyUse) {
+        if (keyBindings.contains(client.options.keyAttack) || keyBindings.contains(client.options.keyUse)) {
             return config.getDisableMouseClick() || config.getEnableTouchEmulation();
         }
 
         for (int i = 0; i < 9; i++) {
-            if (client.options.keyHotbarSlots[i] == keyBinding) {
+            if (keyBindings.contains(client.options.keyHotbarSlots[i])) {
                 return config.getDisableHotBarKey();
             }
         }
