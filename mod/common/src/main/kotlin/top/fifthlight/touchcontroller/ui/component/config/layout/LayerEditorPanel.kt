@@ -82,15 +82,14 @@ fun LayoutEditorPanel(
                 }
             }
         ) {
-            var dragTotalOffset by remember { mutableStateOf(Offset.ZERO) }
-            var widgetInitialOffset by remember { mutableStateOf(IntOffset.ZERO) }
-            LaunchedEffect(selectedWidgetIndex, layerIndex, selectedWidget?.align) {
-                widgetInitialOffset = layer.widgets.getOrNull(selectedWidgetIndex)?.offset ?: IntOffset.ZERO
-                dragTotalOffset = Offset.ZERO
-            }
-
             for ((index, widget) in layer.widgets.withIndex()) {
                 if (selectedWidgetIndex == index) {
+                    var dragTotalOffset by remember { mutableStateOf(Offset.ZERO) }
+                    var widgetInitialOffset by remember { mutableStateOf(IntOffset.ZERO) }
+                    LaunchedEffect(selectedWidgetIndex, layerIndex, selectedWidget?.align) {
+                        widgetInitialOffset = layer.widgets.getOrNull(selectedWidgetIndex)?.offset ?: IntOffset.ZERO
+                        dragTotalOffset = Offset.ZERO
+                    }
                     ControllerWidget(
                         modifier = Modifier
                             .then(ControllerWidgetModifierNode(widget))
