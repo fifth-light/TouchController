@@ -2,6 +2,17 @@
 
 一个为 Minecraft Java 版添加触控支持的 Mod。目前处于早期开发中，如果遇到 Bug 或者其他问题，欢迎积极报告！
 
+## 下载与安装
+
+你可以在 [Modrinth](https://modrinth.com/mod/touchcontroller#download)、[Github Releases](https://github.com/fifth-light/TouchController/releases) 、[Gitee 发行版](https://gitee.com/fifth_light/TouchController/releases)
+和 [MC 百科](https://www.mcmod.cn/download/17432.html) 上下载 TouchController 的最新发布版。
+
+根据不同的 mod 加载器，TouchController 需要如下的前置 mod：
+
+-
+Fabric：[Fabric API](https://github.com/FabricMC/fabric)、[Fabric Language Kotlin](https://github.com/FabricMC/fabric-language-kotlin)
+- Forge：无前置
+
 ## 支持的游戏版本和平台
 
 目前 TouchController 支持的 Minecraft 版本和 mod 加载器有：
