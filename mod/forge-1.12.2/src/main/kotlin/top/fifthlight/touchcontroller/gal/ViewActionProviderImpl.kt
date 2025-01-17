@@ -16,13 +16,5 @@ object ViewActionProviderImpl : ViewActionProvider {
         }
     }
 
-    override fun getCurrentBreakingProgress(): Float {
-        val manager = client.playerController
-        return manager.javaClass.declaredFields.first {
-            it.name in listOf("curBlockDamageMP", "field_78770_f")
-        }.run {
-            isAccessible = true
-            getFloat(manager)
-        }
-    }
+    override fun getCurrentBreakingProgress(): Float = client.playerController.curBlockDamageMP
 }

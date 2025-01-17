@@ -3,6 +3,7 @@ package top.fifthlight.combine.platform
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.TextComponentTranslation
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import top.fifthlight.combine.data.DataComponentType
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.ItemSubclass
@@ -14,7 +15,7 @@ value class ItemImpl(
     val inner: Item
 ) : CombineItem {
     override val id: Identifier
-        get() = Item.REGISTRY.getNameForObject(inner)?.toCombine()!!
+        get() = ForgeRegistries.ITEMS.getKey(inner)?.toCombine()!!
 
     override val name: Text
         get() {

@@ -2,7 +2,6 @@ package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
-import net.minecraft.client.multiplayer.PlayerControllerMP
 import net.minecraft.entity.item.EntityBoat
 import net.minecraft.entity.item.EntityMinecart
 import net.minecraft.entity.passive.*
@@ -41,15 +40,6 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
 
         val originalSlot = currentSelectedSlot
         val interactionManager = client.playerController
-
-        fun PlayerControllerMP.syncCurrentPlayItem() {
-            interactionManager.javaClass.declaredMethods.first {
-                it.name in listOf("syncCurrentPlayItem", "func_78750_j")
-            }.run {
-                isAccessible = true
-                invoke(this@syncCurrentPlayItem)
-            }
-        }
 
         // Can it trigger anti-cheat?
         currentSelectedSlot = index

@@ -36,7 +36,7 @@ object ItemFactoryImpl : ItemFactory {
     }
 
     override val allItems: PersistentList<CombineItem> by lazy {
-        Item.REGISTRY.map(Item::toCombine).toPersistentList()
+        ForgeRegistries.ITEMS.map(Item::toCombine).toPersistentList()
     }
 
     val armorSubclass = ItemSubclassImpl(

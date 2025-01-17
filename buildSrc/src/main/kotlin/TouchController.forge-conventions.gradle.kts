@@ -25,6 +25,8 @@ val forgeVersion: String by extra.properties
 val mappingType: String by extra.properties
 val useMixin: String by extra.properties
 val useMixinBool = useMixin.toBoolean()
+val useAccessTransformer: String by extra.properties
+val useAccessTransformerBool = useAccessTransformer.toBoolean()
 val bridgeSlf4j: String by extra.properties
 val bridgeSlf4jBool = bridgeSlf4j.toBoolean()
 val legacyLanguageFormat: String by extra.properties
@@ -45,6 +47,10 @@ minecraft {
             val mcpVersion: String by extra.properties
             mappings("snapshot", mcpVersion)
         }
+    }
+
+    if (useAccessTransformerBool) {
+        accessTransformer(file("src/main/resources/META-INF/touchcontroller_at.cfg"))
     }
 
     runs {
@@ -191,6 +197,17 @@ tasks.withType<Jar> {
     from(File(rootDir, "LICENSE")) {
         rename { "${it}_${modName}" }
     }
+
+    manifest {
+        val attributes = mutableMapOf(
+            "FMLCorePlugin" to "top.fifthlight.touchcontroller.TouchControllerCorePlugin",
+            "FMLCorePluginContainsFMLMod" to "true",
+        )
+        if (useAccessTransformerBool) {
+            attributes += ("FMLAT" to "touchcontroller_at.cfg")
+        }
+        attributes(attributes)
+    }
 }
 
 tasks.compileJava {
@@ -236,9 +253,14 @@ tasks.register<Jar>("gr8Jar") {
     val jarFile =
         tasks.getByName("gr8Gr8ShadowedJar").outputs.files.first { it.extension.equals("jar", ignoreCase = true) }
 
+    val excludeWhitelist = listOf(
+        "touchcontroller_at.cfg",
+        "mods.toml",
+    )
     from(zipTree(jarFile)) {
-        exclude {
-            it.path.startsWith("META-INF") && !it.path.endsWith("mods.toml")
+        exclude { file ->
+            val path = file.path
+            path.startsWith("META-INF") && !excludeWhitelist.any { path.endsWith(it) }
         }
     }
 }

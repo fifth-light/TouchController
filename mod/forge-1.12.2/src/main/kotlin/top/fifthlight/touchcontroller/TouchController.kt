@@ -86,9 +86,6 @@ class TouchController : KoinComponent {
         val configHolder: GlobalConfigHolder = get()
         configHolder.load()
 
-        // TODO register config screen
-
-
         val controllerHudModel: ControllerHudModel = get()
         MinecraftForge.EVENT_BUS.register(object {
             @SubscribeEvent

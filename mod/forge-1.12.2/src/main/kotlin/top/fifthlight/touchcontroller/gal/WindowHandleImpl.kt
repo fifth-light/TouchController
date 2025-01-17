@@ -30,6 +30,6 @@ object WindowHandleImpl : WindowHandle {
     override val mousePosition: Offset
         get() = Offset(
             x = Mouse.getX().toFloat(),
-            y = Mouse.getY().toFloat(),
+            y = (client.displayHeight - Mouse.getY()).toFloat(),
         )
 }
