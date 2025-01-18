@@ -108,7 +108,7 @@ task("generate") {
         "generateTextureAtlas",
         "generateTextureBindings",
         "generateBuildInfo",
-        "generateLegacyText"
+        "generateLegacyText",
     )
 
     group = "build"

@@ -158,6 +158,7 @@ sourceSets.main {
 tasks.processResources {
     from("../resources/src/main/resources/icon/assets/touchcontroller/icon.png")
     if (legacyLanguageFormatBool) {
+        dependsOn(":mod:resources:generateLegacyText")
         from(project(":mod:resources").layout.buildDirectory.dir("generated/resources/legacy-lang"))
     }
 
