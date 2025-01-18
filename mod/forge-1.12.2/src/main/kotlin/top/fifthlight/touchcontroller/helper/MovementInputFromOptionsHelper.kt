@@ -1,14 +1,18 @@
-package top.fifthlight.touchcontroller.event
+@file:Suppress("unused")
+
+package top.fifthlight.touchcontroller.helper
 
 import net.minecraft.client.Minecraft
 import net.minecraft.util.MovementInput
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import top.fifthlight.touchcontroller.event.TickEvents
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 
-object KeyboardInputEvents : KoinComponent {
+object MovementInputFromOptionsHelper : KoinComponent {
     private val controllerHudModel: ControllerHudModel by inject()
 
+    @JvmStatic
     fun onEndTick(input: MovementInput) {
         val client = Minecraft.getMinecraft()
         if (client.currentScreen != null) {

@@ -4,10 +4,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import top.fifthlight.touchcontroller.transformer.EntityPlayerSPTransformer;
-import top.fifthlight.touchcontroller.transformer.EntityRendererTransformer;
-import top.fifthlight.touchcontroller.transformer.KeyBindingTransformer;
-import top.fifthlight.touchcontroller.transformer.MouseHelperTransformer;
+import top.fifthlight.touchcontroller.transformer.*;
 
 import java.util.function.Function;
 
@@ -27,6 +24,9 @@ public class TouchControllerTransformer implements IClassTransformer {
                 break;
             case "net.minecraft.client.renderer.EntityRenderer":
                 visitorFactory = EntityRendererTransformer::new;
+                break;
+            case "net.minecraft.util.MovementInputFromOptions":
+                visitorFactory = MovementInputFromOptionsTransformer::new;
                 break;
             default:
                 return basicClass;
