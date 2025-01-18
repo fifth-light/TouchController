@@ -28,6 +28,9 @@ public class TouchControllerTransformer implements IClassTransformer {
             case "net.minecraft.util.MovementInputFromOptions":
                 visitorFactory = MovementInputFromOptionsTransformer::new;
                 break;
+            case "net.minecraft.client.gui.GuiIngame":
+                visitorFactory = GuiIngameTransformer::new;
+                break;
             default:
                 return basicClass;
         }

@@ -222,11 +222,9 @@ class CanvasImpl(
 
     override fun enableBlend() {
         GlStateManager.enableBlend()
-        GlStateManager.enableAlpha()
     }
 
     override fun disableBlend() {
-        GlStateManager.disableAlpha()
         GlStateManager.disableBlend()
     }
 
@@ -259,11 +257,15 @@ class CanvasImpl(
                 BlendFactor.ONE_MINUS_DST_COLOR -> GlStateManager.DestFactor.ONE_MINUS_DST_COLOR
             }
 
+        GlStateManager.blendFunc(
+            func.srcFactor.toSrcFactor(),
+            func.dstFactor.toDstFactor(),
+        )
         GlStateManager.tryBlendFuncSeparate(
             func.srcFactor.toSrcFactor(),
             func.dstFactor.toDstFactor(),
             func.srcAlpha.toSrcFactor(),
-            func.dstAlpha.toDstFactor()
+            func.dstAlpha.toDstFactor(),
         )
     }
 

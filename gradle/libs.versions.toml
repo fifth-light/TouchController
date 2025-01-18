@@ -11,6 +11,7 @@ parchmentmc-librarian-forgegradle = "1.+"
 mixin = "0.7.+"
 gr8 = "0.11.2"
 koin = "4.0.1"
+joml = "1.10.8"
 
 # Android
 agp = "8.7.3"
@@ -36,6 +37,7 @@ kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotli
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
 koin-logger-slf4j = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
+joml = { group = "org.joml", name = "joml", version.ref = "joml" }
 gr8 = { group = "com.gradleup.gr8", name = "com.gradleup.gr8.gradle.plugin", version.ref = "gr8" }
 
 # Fabric

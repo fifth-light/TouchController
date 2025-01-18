@@ -1,3 +1,4 @@
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 plugins {
@@ -9,6 +10,8 @@ plugins {
     id("org.parchmentmc.librarian.forgegradle")
     id("org.spongepowered.mixin")
 }
+
+val libs = the<LibrariesForLibs>()
 
 val modId: String by extra.properties
 val modName: String by extra.properties
@@ -31,6 +34,8 @@ val bridgeSlf4j: String by extra.properties
 val bridgeSlf4jBool = bridgeSlf4j.toBoolean()
 val legacyLanguageFormat: String by extra.properties
 val legacyLanguageFormatBool = legacyLanguageFormat.toBoolean()
+val shadeJoml: String by extra.properties
+val shadeJomlBool = shadeJoml.toBoolean()
 val excludeR8: String by extra.properties
 
 version = "$modVersion+forge-$gameVersion"
@@ -139,6 +144,9 @@ dependencies {
             exclude("commons-logging")
         }
     }
+    if (shadeJomlBool) {
+        shadeAndImplementation(libs.joml)
+    }
 
     shade(project(":proxy-windows"))
     shade(project(":proxy-server-android"))
@@ -242,8 +250,8 @@ gr8 {
     replaceOutgoingJar(shadowedJar)
 }
 
-// Create a Jar task to exclude some META-INF files from R8 output, and make ForgeGradle
-// reobf task happy (FG requires JarTask for it's reobf input)
+// Create a Jar task to exclude some META-INF files and module-info.class from R8 output,
+// and make ForgeGradle reobf task happy (FG requires JarTask for it's reobf input)
 tasks.register<Jar>("gr8Jar") {
     dependsOn("reobfJar")
 
@@ -261,7 +269,11 @@ tasks.register<Jar>("gr8Jar") {
     from(zipTree(jarFile)) {
         exclude { file ->
             val path = file.path
-            path.startsWith("META-INF") && !excludeWhitelist.any { path.endsWith(it) }
+            if (path.startsWith("META-INF")) {
+                !excludeWhitelist.any { path.endsWith(it) }
+            } else {
+                path == "module-info.class"
+            }
         }
     }
 }
