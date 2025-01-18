@@ -26,7 +26,6 @@ import top.fifthlight.touchcontroller.event.ConnectionEvents
 import top.fifthlight.touchcontroller.event.RenderEvents
 import top.fifthlight.touchcontroller.event.WindowCreateEvents
 import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
-import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 
@@ -43,7 +42,6 @@ import top.fifthlight.touchcontroller.platform.PlatformProvider
 class TouchController : KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 
-    @Suppress("unused")
     @Mod.EventHandler
     fun onClientSetup(event: FMLInitializationEvent) {
         logger.info("Loading TouchController…")
@@ -86,7 +84,6 @@ class TouchController : KoinComponent {
         val configHolder: GlobalConfigHolder = get()
         configHolder.load()
 
-        val controllerHudModel: ControllerHudModel = get()
         MinecraftForge.EVENT_BUS.register(object {
             @SubscribeEvent
             fun hudRender(event: RenderGameOverlayEvent.Post) {
@@ -96,8 +93,6 @@ class TouchController : KoinComponent {
                 GlStateManager.enableAlpha()
                 GlStateManager.enableBlend()
             }
-
-            // TODO block outline handling
 
             @SubscribeEvent
             fun blockBroken(event: BlockEvent.BreakEvent) {

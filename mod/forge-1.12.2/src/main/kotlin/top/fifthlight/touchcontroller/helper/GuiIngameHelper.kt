@@ -19,8 +19,8 @@ object GuiIngameHelper : KoinComponent {
     fun renderHotbar(scaledResolution: ScaledResolution) {
         val player = client.player ?: return
         var inventory = controllerHudModel.result.inventory
-        var x = (scaledResolution.scaledWidth - 182) / 2 + 1;
-        var y = scaledResolution.scaledHeight - 22 + 1;
+        var x = (scaledResolution.scaledWidth - 182) / 2 + 1
+        var y = scaledResolution.scaledHeight - 22 + 1
         for (i in 0 until 9) {
             var stack = player.inventory.getStackInSlot(i)
             if (stack.isEmpty) {

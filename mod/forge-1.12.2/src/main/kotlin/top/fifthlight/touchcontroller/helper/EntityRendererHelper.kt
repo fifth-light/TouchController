@@ -66,8 +66,8 @@ object EntityRendererHelper : KoinComponent {
     fun rayTrace(entity: Entity, blockReachDistance: Double, partialTicks: Float, entityRenderer: EntityRenderer): RayTraceResult? {
         val position = entity.getPositionEyes(partialTicks)
         val fov = entityRenderer.getFOVModifier(partialTicks, true)
-        val direction = getViewVector(fov, entityRenderer.farPlaneDistance, entity, partialTicks);
-        val endPosition = position.add(direction.x * blockReachDistance, direction.y * blockReachDistance, direction.z * blockReachDistance);
+        val direction = getViewVector(fov, entityRenderer.farPlaneDistance, entity, partialTicks)
+        val endPosition = position.add(direction.x * blockReachDistance, direction.y * blockReachDistance, direction.z * blockReachDistance)
         return entity.world.rayTraceBlocks(position, endPosition, false, false, true)
     }
 

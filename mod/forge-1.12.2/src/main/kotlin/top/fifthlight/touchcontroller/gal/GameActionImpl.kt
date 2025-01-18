@@ -9,7 +9,7 @@ object GameActionImpl : GameAction {
     private val client = Minecraft.getMinecraft()
 
     override fun openChatScreen() {
-        client.displayGuiScreen(GuiChat());
+        client.displayGuiScreen(GuiChat())
     }
 
     override fun openGameMenu() {
