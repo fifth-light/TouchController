@@ -10,6 +10,7 @@ import top.fifthlight.touchcontroller.config.ItemList
 object DefaultItemListProviderImpl : DefaultItemListProvider {
     override val usableItems = ItemList(
         whitelist = persistentListOf(
+            ItemImpl(Items.BOW),
             ItemImpl(Items.FISHING_ROD),
             ItemImpl(Items.MAP),
             ItemImpl(Items.SHIELD),
