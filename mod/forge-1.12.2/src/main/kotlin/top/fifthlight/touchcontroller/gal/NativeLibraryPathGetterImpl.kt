@@ -9,7 +9,7 @@ object NativeLibraryPathGetterImpl : NativeLibraryPathGetter {
 
     override fun getNativeLibraryPath(containerName: String, containerPath: String, debugPath: Path?): Path? {
         // TODO is debug or release?
-        return javaClass.classLoader.getResource(containerPath)?.toURI()?.toPath() ?: run {
+        return javaClass.classLoader.getResource("/$containerPath")?.toURI()?.toPath() ?: run {
             logger.warn("Failed to get resource $containerPath")
             null
         }
