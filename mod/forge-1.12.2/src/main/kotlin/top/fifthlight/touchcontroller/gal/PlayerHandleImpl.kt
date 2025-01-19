@@ -92,5 +92,7 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
 object PlayerHandleFactoryImpl : PlayerHandleFactory {
     private val client = Minecraft.getMinecraft()
 
-    override fun getPlayerHandle(): PlayerHandle = client.player.let(::PlayerHandleImpl)
+    // client.player is NULLABLE
+    @Suppress("UNNECESSARY_SAFE_CALL")
+    override fun getPlayerHandle(): PlayerHandle? = client.player?.let(::PlayerHandleImpl)
 }
