@@ -155,7 +155,7 @@ class CanvasImpl(
 
     override fun drawTexture(texture: Texture, dstRect: Rect, uvRect: Rect, tint: Color) {
         client.textureManager.bindTexture(texture.identifier.toMinecraft())
-        GlStateManager.color(1f, 1f, 1f, 1f)
+        GlStateManager.color(tint.r / 256f, tint.g / 256f, tint.b / 256f, tint.a / 256f)
         val tessellator = Tessellator.getInstance()
         val bufferBuilder = tessellator.buffer
         bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX)

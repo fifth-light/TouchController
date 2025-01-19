@@ -26,7 +26,7 @@ object CrosshairRendererImpl : CrosshairRenderer {
         GlStateManager.color(1f, 1f, 1f, 1f)
         val tessellator = Tessellator.getInstance()
         val bufferBuilder = tessellator.buffer
-        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR)
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
         val innerRadius = config.radius.toFloat()
         val outerRadius = (config.radius + config.outerRadius).toFloat()
         var angle = -PI.toFloat() / 2f
@@ -38,22 +38,10 @@ object CrosshairRendererImpl : CrosshairRenderer {
             val point3 = point(endAngle, innerRadius)
             angle = endAngle
 
-            bufferBuilder
-                .pos(point0.x.toDouble(), point0.y.toDouble(), 0.0)
-                .color(Colors.WHITE)
-                .endVertex()
-            bufferBuilder
-                .pos(point2.x.toDouble(), point2.y.toDouble(), 0.0)
-                .color(Colors.WHITE)
-                .endVertex()
-            bufferBuilder
-                .pos(point3.x.toDouble(), point3.y.toDouble(), 0.0)
-                .color(Colors.WHITE)
-                .endVertex()
-            bufferBuilder
-                .pos(point1.x.toDouble(), point1.y.toDouble(), 0.0)
-                .color(Colors.WHITE)
-                .endVertex()
+            bufferBuilder.pos(point0.x.toDouble(), point0.y.toDouble(), 0.0).endVertex()
+            bufferBuilder.pos(point2.x.toDouble(), point2.y.toDouble(), 0.0).endVertex()
+            bufferBuilder.pos(point3.x.toDouble(), point3.y.toDouble(), 0.0).endVertex()
+            bufferBuilder.pos(point1.x.toDouble(), point1.y.toDouble(), 0.0).endVertex()
         }
         tessellator.draw()
     }
@@ -62,11 +50,8 @@ object CrosshairRendererImpl : CrosshairRenderer {
         GlStateManager.color(1f, 1f, 1f, 1f)
         val tessellator = Tessellator.getInstance()
         val bufferBuilder = tessellator.buffer
-        bufferBuilder.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR)
-        bufferBuilder
-            .pos(0.0, 0.0, 0.0)
-            .color(Colors.WHITE)
-            .endVertex()
+        bufferBuilder.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION)
+        bufferBuilder.pos(0.0, 0.0, 0.0).endVertex()
 
         var angle = 0f
         for (i in 0..CROSSHAIR_CIRCLE_PARTS) {
