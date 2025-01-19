@@ -10,6 +10,7 @@
 -keep class top.fifthlight.touchcontroller.ForgeGuiFactoryImpl
 -keep class top.fifthlight.touchcontroller.TouchControllerCorePlugin
 -keep class top.fifthlight.touchcontroller.TouchControllerTransformer { *; }
+-keep class top.fifthlight.touchcontroller.combine.platform.CombineScreen { *; }
 -keep class top.fifthlight.touchcontroller.helper.* { *; }
 -keep @net.minecraftforge.fml.common.Mod class *
 -keepclassmembers class * {
