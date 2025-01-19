@@ -1,5 +1,4 @@
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 plugins {
     idea
@@ -243,7 +242,7 @@ gr8 {
 
         addClassPathJarsFrom(minecraftShadow)
 
-        r8Version("8.8.20")
+        r8Version("8.9.21")
         proguardFile(rootProject.file("mod/common-forge/rules.pro"))
     }
 
