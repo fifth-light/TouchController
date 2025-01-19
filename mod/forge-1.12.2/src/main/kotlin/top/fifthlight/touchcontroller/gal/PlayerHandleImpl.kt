@@ -23,7 +23,7 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
 
     override fun changeLookDirection(deltaYaw: Double, deltaPitch: Double) {
         // Magic value 0.15 from net.minecraft.entity.Entity#turn
-        inner.turn((deltaYaw / 0.15).toFloat(), (deltaPitch / 0.15).toFloat())
+        inner.turn((deltaYaw / 0.15).toFloat(), -(deltaPitch / 0.15).toFloat())
     }
 
     override var currentSelectedSlot: Int
@@ -92,5 +92,5 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
 object PlayerHandleFactoryImpl : PlayerHandleFactory {
     private val client = Minecraft.getMinecraft()
 
-    override fun getPlayerHandle(): PlayerHandle? = client.player?.let(::PlayerHandleImpl)
+    override fun getPlayerHandle(): PlayerHandle = client.player.let(::PlayerHandleImpl)
 }
