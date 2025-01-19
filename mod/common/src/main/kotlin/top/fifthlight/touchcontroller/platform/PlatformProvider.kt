@@ -9,16 +9,17 @@ import top.fifthlight.touchcontroller.platform.proxy.ProxyPlatform
 import top.fifthlight.touchcontroller.platform.win32.Win32Platform
 import top.fifthlight.touchcontroller.proxy.server.localhostLauncherSocketProxyServer
 import java.io.IOException
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.attribute.DosFileAttributeView
 import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermission
-import kotlin.io.path.copyTo
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.exists
 import kotlin.io.path.fileAttributesView
+import kotlin.io.path.outputStream
 
 object PlatformProvider : KoinComponent {
     private val nativeLibraryPathGetter: NativeLibraryPathGetter by inject()
@@ -39,10 +40,14 @@ object PlatformProvider : KoinComponent {
         }
     }
 
-    private fun extractNativeLibrary(prefix: String, suffix: String, path: Path): Path =
-        Files.createTempFile(prefix, suffix).also {
-            logger.info("Extracting native library to $it")
-            path.copyTo(it, true)
+    private fun extractNativeLibrary(prefix: String, suffix: String, stream: InputStream): Path =
+        stream.use { input ->
+            Files.createTempFile(prefix, suffix).also { outputFile ->
+                logger.info("Extracting native library to $outputFile")
+                outputFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
         }
 
     private data class NativeLibraryInfo(
@@ -160,7 +165,6 @@ object PlatformProvider : KoinComponent {
             logger.warn("Failed to get native library path")
             return null
         }
-        logger.info("Native library path: $nativeLibrary")
 
         val destinationFile = try {
             extractNativeLibrary(info.extractPrefix, info.extractSuffix, nativeLibrary)

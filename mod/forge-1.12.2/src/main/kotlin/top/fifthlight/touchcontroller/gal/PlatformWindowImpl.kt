@@ -3,7 +3,7 @@ package top.fifthlight.touchcontroller.gal
 import org.lwjgl.opengl.Display
 
 object PlatformWindowImpl : PlatformWindow {
-    val displayImpl: Any = Display::class.java.declaredMethods.first {
+    private val displayImpl: Any = Display::class.java.declaredMethods.first {
         it.name == "getImplementation"
     }.run {
         isAccessible = true
