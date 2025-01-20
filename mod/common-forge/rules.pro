@@ -3,9 +3,6 @@
 
 -dontwarn android.annotation.*
 
--keep class kotlin.Metadata { *; }
--keep class kotlin.Unit { *; }
-
 -keep class top.fifthlight.touchcontroller.mixin.* { *; }
 -keep class top.fifthlight.touchcontroller.ForgeGuiFactoryImpl
 -keep class top.fifthlight.touchcontroller.TouchControllerCorePlugin
