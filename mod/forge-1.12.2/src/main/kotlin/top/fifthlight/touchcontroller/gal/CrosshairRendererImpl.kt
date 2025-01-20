@@ -58,10 +58,7 @@ object CrosshairRendererImpl : CrosshairRenderer {
             val point = point(angle, config.radius * progress)
             angle -= CROSSHAIR_CIRCLE_ANGLE
 
-            bufferBuilder
-                .pos(point.x.toDouble(), point.y.toDouble(), 0.0)
-                .color(Colors.WHITE)
-                .endVertex()
+            bufferBuilder.pos(point.x.toDouble(), point.y.toDouble(), 0.0).endVertex()
         }
 
         tessellator.draw()
