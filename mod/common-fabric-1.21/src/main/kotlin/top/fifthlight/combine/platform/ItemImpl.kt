@@ -20,7 +20,9 @@ value class ItemImpl(
     override fun isSubclassOf(subclass: ItemSubclass): Boolean {
         val targetClazz = (subclass as ItemSubclassImpl<*>).clazz
         val itemClazz = inner.javaClass
-        return itemClazz.superclass == targetClazz || itemClazz.interfaces.contains(targetClazz)
+        return itemClazz == targetClazz || itemClazz.superclass == targetClazz || itemClazz.interfaces.contains(
+            targetClazz
+        )
     }
 
     override fun containComponents(component: DataComponentType) =

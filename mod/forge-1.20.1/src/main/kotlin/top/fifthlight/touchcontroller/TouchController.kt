@@ -34,7 +34,7 @@ import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 import top.fifthlight.touchcontroller.ui.screen.config.getConfigScreen
 
-@Mod("touchcontroller")
+@Mod(BuildInfo.MOD_ID)
 class TouchController : KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 

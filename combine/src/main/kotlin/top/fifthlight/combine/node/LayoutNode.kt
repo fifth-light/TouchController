@@ -263,7 +263,6 @@ internal sealed class WrapperLayoutNode(
                 children.onPointerEvent(it)
             }
             return if (accepted) {
-                node.initialWrapper.pressEventTarget = null
                 true
             } else {
                 children.onPointerEvent(event)
@@ -411,4 +410,6 @@ class LayoutNode : Measurable, Placeable, Renderable, PointerEventReceiver,
             }
         }
     }
+
+    override fun toString(): String = "LayoutNode@${hashCode()} {children: ${children.size}, modifier: $modifier}"
 }

@@ -54,6 +54,7 @@ fun LayoutEditorPanel(
     onWidgetCopied: (ControllerWidget) -> Unit = { _ -> },
 ) {
     val selectedWidget = layer.widgets.getOrNull(selectedWidgetIndex)
+    var panelSize by remember { mutableStateOf(IntSize.ZERO) }
     Row(modifier) {
         Layout(
             modifier = Modifier
@@ -68,6 +69,7 @@ fun LayoutEditorPanel(
 
                 val width = constraints.maxWidth
                 val height = constraints.maxHeight
+                panelSize = IntSize(width, height)
                 layout(width, height) {
                     placeables.forEachIndexed { index, placeable ->
                         val parentData = measurables[index].parentData as ControllerWidgetParentData
@@ -82,15 +84,14 @@ fun LayoutEditorPanel(
                 }
             }
         ) {
-            var dragTotalOffset by remember { mutableStateOf(Offset.ZERO) }
-            var widgetInitialOffset by remember { mutableStateOf(IntOffset.ZERO) }
-            LaunchedEffect(selectedWidgetIndex, layerIndex, selectedWidget?.align) {
-                widgetInitialOffset = layer.widgets.getOrNull(selectedWidgetIndex)?.offset ?: IntOffset.ZERO
-                dragTotalOffset = Offset.ZERO
-            }
-
             for ((index, widget) in layer.widgets.withIndex()) {
                 if (selectedWidgetIndex == index) {
+                    var dragTotalOffset by remember { mutableStateOf(Offset.ZERO) }
+                    var widgetInitialOffset by remember { mutableStateOf(IntOffset.ZERO) }
+                    LaunchedEffect(selectedWidgetIndex, layerIndex, selectedWidget?.align) {
+                        widgetInitialOffset = layer.widgets.getOrNull(selectedWidgetIndex)?.offset ?: IntOffset.ZERO
+                        dragTotalOffset = Offset.ZERO
+                    }
                     ControllerWidget(
                         modifier = Modifier
                             .then(ControllerWidgetModifierNode(widget))
@@ -104,8 +105,38 @@ fun LayoutEditorPanel(
                                     Align.LEFT_BOTTOM, Align.CENTER_BOTTOM -> IntOffset(intOffset.x, -intOffset.y)
                                     Align.RIGHT_BOTTOM -> -intOffset
                                 }
+                                val widgetOffset = widgetInitialOffset + appliedOffset
+                                val widgetSize = widget.size()
+                                val clampedOffset = IntOffset(
+                                    x = when (widget.align) {
+                                        Align.LEFT_TOP, Align.LEFT_CENTER, Align.LEFT_BOTTOM ->
+                                            widgetOffset.x.coerceIn(0, panelSize.width - widgetSize.width)
+
+                                        Align.CENTER_CENTER, Align.CENTER_BOTTOM, Align.CENTER_TOP ->
+                                            widgetOffset.x.coerceIn(
+                                                -panelSize.width / 2 + widgetSize.width / 2,
+                                                panelSize.width / 2 - widgetSize.width / 2
+                                            )
+
+                                        Align.RIGHT_TOP, Align.RIGHT_CENTER, Align.RIGHT_BOTTOM ->
+                                            widgetOffset.x.coerceIn(0, panelSize.width - widgetSize.width)
+                                    },
+                                    y = when (widget.align) {
+                                        Align.LEFT_TOP, Align.CENTER_TOP, Align.RIGHT_TOP ->
+                                            widgetOffset.y.coerceIn(0, panelSize.height - widgetSize.height)
+
+                                        Align.LEFT_CENTER, Align.CENTER_CENTER, Align.RIGHT_CENTER ->
+                                            widgetOffset.y.coerceIn(
+                                                -panelSize.height / 2 + widgetSize.height / 2,
+                                                panelSize.height / 2 - widgetSize.height / 2
+                                            )
+
+                                        Align.LEFT_BOTTOM, Align.CENTER_BOTTOM, Align.RIGHT_BOTTOM ->
+                                            widgetOffset.y.coerceIn(0, panelSize.height - widgetSize.height)
+                                    }
+                                )
                                 val newWidget = widget.cloneBase(
-                                    offset = widgetInitialOffset + appliedOffset,
+                                    offset = clampedOffset,
                                 )
                                 onLayerChanged(
                                     layer.copy(
