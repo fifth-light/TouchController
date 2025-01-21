@@ -102,6 +102,8 @@ data class ContextResult(
     var cancelFlying: Boolean = false,
     val inventory: InventoryResult = InventoryResult(),
     var sprint: Boolean = false,
+    var boatLeft: Boolean = false,
+    var boatRight: Boolean = false,
 )
 
 data class ContextStatus(

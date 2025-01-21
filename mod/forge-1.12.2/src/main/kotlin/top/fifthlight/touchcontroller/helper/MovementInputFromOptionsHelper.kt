@@ -26,12 +26,14 @@ object MovementInputFromOptionsHelper : KoinComponent {
         input.moveStrafe += result.left
         input.moveForward = input.moveForward.coerceIn(-1f, 1f)
         input.moveStrafe = input.moveStrafe.coerceIn(-1f, 1f)
-        input.sneak = input.sneak || status.sneakLocked || result.sneak
+        input.sneak = input.sneak || status.sneakLocked || result.sneak || status.sneaking
         input.jump = input.jump || status.jumping
-        input.forwardKeyDown = input.forwardKeyDown || result.forward > 0.5f
+        input.forwardKeyDown = input.forwardKeyDown || result.forward > 0.5f || (result.boatLeft && result.boatRight)
         input.backKeyDown = input.backKeyDown || result.forward < -0.5f
-        input.leftKeyDown = input.leftKeyDown || result.left > 0.5f
-        input.rightKeyDown = input.rightKeyDown || result.left < -0.5f
+        input.leftKeyDown = input.leftKeyDown || result.left > 0.5f || (!result.boatLeft && result.boatRight)
+        input.rightKeyDown = input.rightKeyDown || result.left < -0.5f || (result.boatLeft && !result.boatRight)
+
+        status.sneaking = false
         status.jumping = false
 
         TickEvents.inputTick()

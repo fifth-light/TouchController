@@ -190,6 +190,12 @@
   "touchcontroller.screen.options.widget.sprint_button.property.trigger": "触发方式",
   "touchcontroller.screen.options.widget.sprint_button.property.trigger.single_click_lock": "单击锁定",
   "touchcontroller.screen.options.widget.sprint_button.property.trigger.hold": "长按触发",
+  "touchcontroller.screen.options.widget.boat_button.name": "划船按钮",
+  "touchcontroller.screen.options.widget.boat_button.property.size": "按键大小: %s%%",
+  "touchcontroller.screen.options.widget.boat_button.property.classic": "经典外观",
+  "touchcontroller.screen.options.widget.boat_button.property.side": "左右侧",
+  "touchcontroller.screen.options.widget.boat_button.property.side.left": "左侧",
+  "touchcontroller.screen.options.widget.boat_button.property.side.right": "右侧",
 
   "touchcontroller.screen.options.widget.inventory_button.name": "物品栏按钮",
   "touchcontroller.screen.options.presets.title": "预设",

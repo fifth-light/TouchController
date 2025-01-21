@@ -67,6 +67,10 @@ private val DEFAULT_CONFIGS = persistentListOf(
     WidgetItem(
         name = Texts.SCREEN_OPTIONS_WIDGET_SPRINT_BUTTON_NAME,
         config = SprintButton()
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_BOAT_BUTTON_NAME,
+        config = BoatButton()
     )
 )
 

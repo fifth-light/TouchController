@@ -24,10 +24,10 @@ object KeyboardInputEvents : KoinComponent {
         input.movementForward = input.movementForward.coerceIn(-1f, 1f)
         input.movementSideways = input.movementSideways.coerceIn(-1f, 1f)
         input.playerInput = PlayerInput(
-            input.playerInput.forward() || result.forward > 0.5f,
+            input.playerInput.forward() || result.forward > 0.5f || (result.boatLeft && result.boatRight),
             input.playerInput.backward() || result.forward < -0.5f,
-            input.playerInput.left() || result.left > 0.5f,
-            input.playerInput.right() || result.left < -0.5f,
+            input.playerInput.left() || result.left > 0.5f || (!result.boatLeft && result.boatRight),
+            input.playerInput.right() || result.left < -0.5f || (result.boatLeft && !result.boatRight),
             input.playerInput.jump() || status.jumping,
             input.playerInput.sneak() || status.sneakLocked || result.sneak || status.sneaking,
             input.playerInput.sprint() || result.sprint || status.sprintLocked,

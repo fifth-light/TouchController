@@ -96,6 +96,33 @@ val defaultControllerLayout: ControllerLayout = controllerLayoutOf(
         )
     ),
     LayoutLayer(
+        name = "On boat",
+        condition = layoutLayerConditionOf(
+            LayerConditionKey.ON_BOAT to LayerConditionValue.REQUIRE,
+        ),
+        widgets = persistentListOf(
+            BoatButton(
+                align = Align.LEFT_BOTTOM,
+                offset = IntOffset(16, 16),
+                side = BoatButtonSide.LEFT,
+                opacity = 0.6f,
+            ),
+            BoatButton(
+                align = Align.RIGHT_BOTTOM,
+                offset = IntOffset(16, 16),
+                side = BoatButtonSide.RIGHT,
+                opacity = 0.6f,
+            ),
+            SneakButton(
+                align = Align.CENTER_BOTTOM,
+                offset = IntOffset(0, 48),
+                texture = SneakButtonTexture.CLASSIC,
+                trigger = SneakButtonTrigger.SINGLE_CLICK_TRIGGER,
+                opacity = 0.6f,
+            ),
+        )
+    ),
+    LayoutLayer(
         name = "On pig or strider",
         condition = layoutLayerConditionOf(
             LayerConditionKey.ON_STRIDER to LayerConditionValue.WANT,
