@@ -5,7 +5,6 @@ import net.minecraftforge.registries.ForgeRegistries
 import top.fifthlight.combine.data.DataComponentType
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.ItemSubclass
-import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.data.Item as CombineItem
 
 @JvmInline
@@ -14,9 +13,6 @@ value class ItemImpl(
 ) : CombineItem {
     override val id: Identifier
         get() = ForgeRegistries.ITEMS.getKey(inner)?.toCombine()!!
-
-    override val name: Text
-        get() = TextImpl(inner.description)
 
     override fun isSubclassOf(subclass: ItemSubclass): Boolean {
         val targetClazz = (subclass as ItemSubclassImpl<*>).clazz

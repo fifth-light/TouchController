@@ -21,7 +21,7 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
         get() = Minecraft.getInstance()
 
     override fun hasItemsOnHand(list: ItemList): Boolean = InteractionHand.entries.any { hand ->
-        inner.getItemInHand(hand).item.toCombine() in list
+        inner.getItemInHand(hand).toCombine().item in list
     }
 
     override fun changeLookDirection(deltaYaw: Double, deltaPitch: Double) {

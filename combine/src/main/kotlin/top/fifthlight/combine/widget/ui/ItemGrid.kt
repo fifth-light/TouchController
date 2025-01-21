@@ -2,7 +2,6 @@ package top.fifthlight.combine.widget.ui
 
 import androidx.compose.runtime.*
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 import top.fifthlight.combine.data.Item
 import top.fifthlight.combine.data.ItemStack
 import top.fifthlight.combine.modifier.Modifier
@@ -16,25 +15,12 @@ import top.fifthlight.combine.widget.base.Canvas
 import top.fifthlight.data.IntOffset
 import top.fifthlight.data.IntSize
 
-@Composable
-fun ItemGrid(
-    modifier: Modifier = Modifier,
-    items: PersistentList<Item>,
-    onItemClicked: (Item) -> Unit = {},
-) {
-    ItemGrid(
-        modifier = modifier,
-        stacks = items.map { it.toStack() }.toPersistentList(),
-        onStackClicked = { stack -> onItemClicked(stack.item) }
-    )
-}
-
 @JvmName("ItemStackGrid")
 @Composable
 fun ItemGrid(
     modifier: Modifier = Modifier,
-    stacks: PersistentList<ItemStack>,
-    onStackClicked: (ItemStack) -> Unit = {},
+    stacks: PersistentList<Pair<Item, ItemStack>>,
+    onStackClicked: (Item, ItemStack) -> Unit = { _, _ -> },
 ) {
     val scrollState = rememberScrollState()
 
@@ -60,8 +46,8 @@ fun ItemGrid(
                 val size = calculateSize(stacks.size, width)
                 val gridPosition = position.toIntOffset() / 16
                 val index = gridPosition.y * size.width + gridPosition.x
-                val stack = stacks.getOrNull(index) ?: return@clickableWithOffset
-                onStackClicked(stack)
+                val (item, stack) = stacks.getOrNull(index) ?: return@clickableWithOffset
+                onStackClicked(item, stack)
             }
             .hoverableWithOffset { hovered, position ->
                 hoverPosition = when (hovered) {
@@ -90,7 +76,7 @@ fun ItemGrid(
         for (y in rowRange) {
             for (x in 0 until size.width) {
                 val index = size.width * y + x
-                val stack = stacks.getOrNull(index) ?: break
+                val (_, stack) = stacks.getOrNull(index) ?: break
                 with(canvas) {
                     val offset = IntOffset(x, y) * 16
                     hoverPosition?.let { position ->

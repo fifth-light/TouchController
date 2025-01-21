@@ -1,8 +1,16 @@
 package top.fifthlight.combine.data
 
 import androidx.compose.runtime.Immutable
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Immutable
+@Serializable(with = IdentifierSerializer::class)
 sealed class Identifier {
     data class Namespaced(val namespace: String, val id: String): Identifier() {
         override fun toString() = "$namespace:$id"
@@ -26,5 +34,27 @@ fun Identifier(string: String): Identifier {
         val namespace = string.substring(0, colonIndex)
         val id = string.substring(colonIndex + 1)
         Identifier.of(namespace, id)
+    }
+}
+
+private class IdentifierSerializer : KSerializer<Identifier> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("top.fifthlight.combine.data.Identifier", PrimitiveKind.STRING)
+
+    override fun serialize(
+        encoder: Encoder,
+        value: Identifier
+    ) {
+        encoder.encodeString(value.toString())
+    }
+
+    override fun deserialize(decoder: Decoder): Identifier {
+        val string = decoder.decodeString()
+        val split = string.split(":")
+        return when (split.size) {
+            1 -> Identifier.ofVanilla(string)
+            2 -> Identifier.of(split[0], split[1])
+            else -> error("Bad identifier: $split")
+        }
     }
 }

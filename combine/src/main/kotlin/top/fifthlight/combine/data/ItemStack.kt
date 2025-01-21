@@ -18,3 +18,8 @@ interface ItemStack {
         fun of(id: Identifier, amount: Int = 1) = LocalItemFactory.current.createItemStack(id, amount)
     }
 }
+
+interface MetadataItemStack : ItemStack {
+    val metadata: Int
+    override val item: MetadataItem
+}
