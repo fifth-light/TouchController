@@ -270,6 +270,10 @@ class CanvasImpl(
     }
 
     override fun defaultBlendFunction() {
+        GlStateManager.blendFunc(
+            GlStateManager.SourceFactor.SRC_ALPHA,
+            GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+        )
         GlStateManager.tryBlendFuncSeparate(
             GlStateManager.SourceFactor.SRC_ALPHA,
             GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,

@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraftforge.fml.common.Mod
@@ -87,11 +88,16 @@ class TouchController : KoinComponent {
         MinecraftForge.EVENT_BUS.register(object {
             @SubscribeEvent
             fun hudRender(event: RenderGameOverlayEvent.Post) {
-                val client = Minecraft.getMinecraft()
-                val canvas = CanvasImpl(client.fontRenderer)
-                RenderEvents.onHudRender(canvas)
-                GlStateManager.enableAlpha()
-                GlStateManager.enableBlend()
+                if (event.type == ElementType.ALL) {
+                    val client = Minecraft.getMinecraft()
+                    val canvas = CanvasImpl(client.fontRenderer)
+                    GlStateManager.disableAlpha()
+                    GlStateManager.disableBlend()
+                    GlStateManager.disableLighting()
+                    RenderEvents.onHudRender(canvas)
+                    GlStateManager.enableAlpha()
+                    GlStateManager.enableBlend()
+                }
             }
 
             @SubscribeEvent

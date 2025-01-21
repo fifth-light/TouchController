@@ -5,10 +5,8 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import org.lwjgl.opengl.GL11
 import top.fifthlight.combine.paint.Canvas
-import top.fifthlight.combine.paint.Colors
 import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.CrosshairConfig
-import top.fifthlight.touchcontroller.ext.color
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -23,6 +21,7 @@ private fun point(angle: Float, radius: Float) = Offset(
 
 object CrosshairRendererImpl : CrosshairRenderer {
     override fun renderOuter(canvas: Canvas, config: CrosshairConfig) {
+        GlStateManager.disableTexture2D()
         GlStateManager.color(1f, 1f, 1f, 1f)
         val tessellator = Tessellator.getInstance()
         val bufferBuilder = tessellator.buffer
@@ -44,9 +43,11 @@ object CrosshairRendererImpl : CrosshairRenderer {
             bufferBuilder.pos(point1.x.toDouble(), point1.y.toDouble(), 0.0).endVertex()
         }
         tessellator.draw()
+        GlStateManager.enableTexture2D()
     }
 
     override fun renderInner(canvas: Canvas, config: CrosshairConfig, progress: Float) {
+        GlStateManager.disableTexture2D()
         GlStateManager.color(1f, 1f, 1f, 1f)
         val tessellator = Tessellator.getInstance()
         val bufferBuilder = tessellator.buffer
@@ -60,7 +61,7 @@ object CrosshairRendererImpl : CrosshairRenderer {
 
             bufferBuilder.pos(point.x.toDouble(), point.y.toDouble(), 0.0).endVertex()
         }
-
         tessellator.draw()
+        GlStateManager.enableTexture2D()
     }
 }
