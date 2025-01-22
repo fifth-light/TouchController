@@ -1,5 +1,6 @@
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.spongepowered.asm.gradle.plugins.MixinExtension.AddMixinsToJarTask
 
 plugins {
     idea
@@ -82,6 +83,12 @@ minecraft {
 mixin {
     add(sourceSets.getByName("main"), "mixins.${modId}.refmap.json")
     config("${modId}.mixins.json")
+}
+
+if (!useMixinBool) {
+    tasks.withType<AddMixinsToJarTask> {
+        enabled = false
+    }
 }
 
 configurations.create("shadow")
