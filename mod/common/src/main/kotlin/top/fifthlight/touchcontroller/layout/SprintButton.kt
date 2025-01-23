@@ -1,26 +1,19 @@
 package top.fifthlight.touchcontroller.layout
 
-import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.SprintButton
-import top.fifthlight.touchcontroller.control.SprintButtonTexture
 import top.fifthlight.touchcontroller.control.SprintButtonTexture.CLASSIC
 import top.fifthlight.touchcontroller.control.SprintButtonTexture.NEW
-import top.fifthlight.touchcontroller.control.SprintButtonTrigger
 import top.fifthlight.touchcontroller.control.SprintButtonTrigger.HOLD
 import top.fifthlight.touchcontroller.control.SprintButtonTrigger.SINGLE_CLICK_LOCK
 
-fun Context.RawSprintButton(
-    size: IntSize = this.size,
-    trigger: SprintButtonTrigger = SINGLE_CLICK_LOCK,
-    texture: SprintButtonTexture = CLASSIC,
-) {
+fun Context.SprintButton(config: SprintButton) {
     val (newPointer, clicked) = Button(id = "sprint") { clicked ->
         val isLockTrigger =
-            trigger == SINGLE_CLICK_LOCK
+            config.trigger == SINGLE_CLICK_LOCK
         val showActive = (!isLockTrigger && clicked) || (isLockTrigger && status.sprintLocked)
         withAlign(align = Align.CENTER_CENTER, size = size) {
-            when (texture) {
+            when (config.texture) {
                 CLASSIC -> if (isLockTrigger) {
                     if (status.sprintLocked) {
                         if (clicked) {
@@ -52,7 +45,7 @@ fun Context.RawSprintButton(
             }
         }
     }
-    when (trigger) {
+    when (config.trigger) {
         SINGLE_CLICK_LOCK -> if (newPointer) {
             status.sprintLocked = !status.sprintLocked
         }
@@ -63,11 +56,4 @@ fun Context.RawSprintButton(
             }
         }
     }
-}
-
-fun Context.SprintButton(config: SprintButton) {
-    RawSprintButton(
-        trigger = config.trigger,
-        texture = config.texture,
-    )
 }
