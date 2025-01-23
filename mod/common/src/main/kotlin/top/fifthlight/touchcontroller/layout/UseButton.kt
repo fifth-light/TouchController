@@ -5,7 +5,7 @@ import top.fifthlight.touchcontroller.control.UseButton
 import top.fifthlight.touchcontroller.control.UseButtonTexture
 
 fun Context.UseButton(config: UseButton) {
-    val (_, clicked) = Button(id = "use") { clicked ->
+    val (newClick, _, release) = Button(id = "use") { clicked ->
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (config.texture) {
                 UseButtonTexture.CLASSIC -> {
@@ -24,8 +24,8 @@ fun Context.UseButton(config: UseButton) {
             }
         }
     }
-    if (clicked)
+    if (newClick)
         status.itemUse.press()
-    else
+    if (release)
         status.itemUse.release()
 }
