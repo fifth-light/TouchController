@@ -20,7 +20,7 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
         get() = MinecraftClient.getInstance()
 
     override fun hasItemsOnHand(list: ItemList): Boolean = Hand.entries.any { hand ->
-        inner.getStackInHand(hand).item.toCombine() in list
+        inner.getStackInHand(hand).toCombine().item in list
     }
 
     override fun changeLookDirection(deltaYaw: Double, deltaPitch: Double) {

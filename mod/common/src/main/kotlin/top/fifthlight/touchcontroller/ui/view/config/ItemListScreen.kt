@@ -48,7 +48,7 @@ private fun ItemList(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Item(item = item)
-                Text(text = item.name)
+                Text(text = item.toStack().name)
                 Spacer(modifier = Modifier.weight(1f))
                 Button(onClick = {
                     onValueChanged(value.removeAt(index))
@@ -100,20 +100,25 @@ fun ItemListScreen(viewModel: ItemListScreenViewModel) {
                 )
 
                 val itemFactory = LocalItemFactory.current
+                val allItems = remember(itemFactory) {
+                    itemFactory.allItems.map {
+                        Pair(it, itemFactory.createItemStack(it, 1))
+                    }.toPersistentList()
+                }
                 ItemGrid(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    items = if (searchText.isEmpty()) {
-                        itemFactory.allItems
+                    stacks = if (searchText.isEmpty()) {
+                        allItems
                     } else {
-                        itemFactory.allItems.filter {
-                            it.name.string.contains(searchText, ignoreCase = true)
+                        allItems.filter { (_, stack) ->
+                            stack.name.string.contains(searchText, ignoreCase = true)
                         }.toPersistentList()
                     },
-                    onItemClicked = {
-                        if (it !in uiState.list) {
-                            viewModel.update(uiState.list + it)
+                    onStackClicked = { item, stack ->
+                        if (item !in uiState.list) {
+                            viewModel.update(uiState.list + item)
                         }
                     },
                 )

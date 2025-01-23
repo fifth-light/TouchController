@@ -14,9 +14,6 @@ value class ItemImpl(
     override val id: Identifier
         get() = Registries.ITEM.getKey(inner).get().value.toCombine()
 
-    override val name: TextImpl
-        get() = TextImpl(inner.name)
-
     override fun isSubclassOf(subclass: ItemSubclass): Boolean {
         val targetClazz = (subclass as ItemSubclassImpl<*>).clazz
         val itemClazz = inner.javaClass

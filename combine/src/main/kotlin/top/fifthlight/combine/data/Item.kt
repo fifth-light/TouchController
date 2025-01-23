@@ -15,6 +15,14 @@ interface ItemFactory {
     val subclasses: PersistentList<ItemSubclass>
 }
 
+interface MetadataItemFactory : ItemFactory {
+    override fun createItem(id: Identifier): MetadataItem?
+    fun createItem(id: Identifier, metadata: Int? = null): MetadataItem?
+    override fun createItemStack(item: Item, amount: Int): MetadataItemStack
+    override fun createItemStack(id: Identifier, amount: Int): MetadataItemStack?
+    override val allItems: PersistentList<MetadataItem>
+}
+
 interface ItemSubclass {
     val id: String
     val configId: String
@@ -25,9 +33,9 @@ interface ItemSubclass {
 @Immutable
 interface Item {
     val id: Identifier
-    val name: Text
     fun isSubclassOf(subclass: ItemSubclass): Boolean
     fun containComponents(component: DataComponentType): Boolean
+    fun matches(other: Item): Boolean = equals(other)
 
     @Composable
     fun toStack() = toStack(1)
@@ -39,4 +47,8 @@ interface Item {
         @Composable
         fun of(id: Identifier) = LocalItemFactory.current.createItem(id)
     }
+}
+
+interface MetadataItem : Item {
+    val metadata: Int?
 }

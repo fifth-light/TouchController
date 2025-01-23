@@ -18,7 +18,7 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
         get() = Minecraft.getMinecraft()
 
     override fun hasItemsOnHand(list: ItemList): Boolean = EnumHand.entries.any { hand ->
-        inner.getHeldItem(hand).item.toCombine() in list
+        inner.getHeldItem(hand).toCombine().item in list
     }
 
     override fun changeLookDirection(deltaYaw: Double, deltaPitch: Double) {

@@ -44,5 +44,8 @@ interface Text {
 
         @Composable
         fun literal(string: String) = LocalTextFactory.current.literal(string)
+
+        @Composable
+        fun build(block: TextBuilder.() -> Unit) = LocalTextFactory.current.build(block)
     }
 }

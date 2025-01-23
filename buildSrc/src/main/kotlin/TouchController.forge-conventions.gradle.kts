@@ -1,4 +1,6 @@
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.spongepowered.asm.gradle.plugins.MixinExtension.AddMixinsToJarTask
 
 plugins {
     idea
@@ -83,6 +85,12 @@ mixin {
     config("${modId}.mixins.json")
 }
 
+if (!useMixinBool) {
+    tasks.withType<AddMixinsToJarTask> {
+        enabled = false
+    }
+}
+
 configurations.create("shadow")
 
 tasks.jar {
@@ -139,8 +147,8 @@ dependencies {
     }
     shadeAndImplementation(project(":combine"))
     if (bridgeSlf4jBool) {
-        shadeAndImplementation("org.slf4j:slf4j-jcl:1.7.36") {
-            exclude("commons-logging")
+        shadeAndImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0") {
+            exclude("org.apache.logging.log4j")
         }
     }
     if (shadeJomlBool) {
@@ -264,6 +272,7 @@ tasks.register<Jar>("gr8Jar") {
     val excludeWhitelist = listOf(
         "touchcontroller_at.cfg",
         "mods.toml",
+        "org.slf4j.spi.SLF4JServiceProvider",
     )
     from(zipTree(jarFile)) {
         exclude { file ->

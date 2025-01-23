@@ -1,3 +1,4 @@
+import com.modrinth.minotaur.TaskModrinthUpload
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
@@ -7,21 +8,35 @@ plugins {
 val libs = the<LibrariesForLibs>()
 
 val modId: String by extra.properties
+val modName: String by extra.properties
 val modVersion: String by extra.properties
 val modState: String by extra.properties
 val gameVersion: String by extra.properties
 val fabricApiVersion: String? by extra.properties
 val modmenuVersion: String? by extra.properties
+val modType: String by extra.properties
+
+tasks.withType<TaskModrinthUpload> {
+    when (modType) {
+        "forge" -> {
+            dependsOn(tasks.getByName("renameOutputJar"))
+        }
+
+        "fabric" -> {
+            // Nothing
+        }
+
+        else -> error("Bad modType: $modType")
+    }
+}
 
 modrinth {
-    val modType: String by extra.properties
-
     token.set(System.getenv("MODRINTH_TOKEN"))
     projectId.set(modId)
     versionType.set(modState)
     when (modType) {
         "forge" -> {
-            uploadFile.set(tasks.getByName("renameOutputJar"))
+            uploadFile.set(layout.buildDirectory.file("libs/$modName-$version.jar"))
         }
         "fabric" -> {
             uploadFile.set(tasks.getByName("remapJar"))

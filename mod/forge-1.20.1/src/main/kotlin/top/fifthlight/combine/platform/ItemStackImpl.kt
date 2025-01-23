@@ -24,7 +24,7 @@ value class ItemStackImpl(
         get() = inner.isEmpty
 
     override val name: Text
-        get() = TextImpl(inner.displayName)
+        get() = TextImpl(inner.getHoverName())
 
     override fun withAmount(amount: Int) = ItemStackImpl(inner.copyWithCount(amount))
 }

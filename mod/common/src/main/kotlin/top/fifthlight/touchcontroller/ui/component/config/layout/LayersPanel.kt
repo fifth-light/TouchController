@@ -180,7 +180,20 @@ fun LayersPanel(
 
                 Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TITLE))
 
-                Text(Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP))
+                val texts = listOf(
+                    Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP_IGNORE),
+                    Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP_NEVER),
+                    Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP_WANT),
+                    Text.translatable(Texts.SCREEN_OPTIONS_LAYER_CONDITION_TIP_REQUIRE),
+                )
+                Text(Text.build {
+                    texts.forEachIndexed { index, text ->
+                        appendWithoutStyle(text)
+                        if (index != texts.size - 1) {
+                            append("\n")
+                        }
+                    }
+                })
 
                 for (condition in ConditionsList.conditionsList) {
                     Column(
