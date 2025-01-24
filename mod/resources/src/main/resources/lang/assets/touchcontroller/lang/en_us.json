@@ -207,6 +207,14 @@
   "touchcontroller.screen.options.widget.use_button.property.trigger": "Trigger",
   "touchcontroller.screen.options.widget.use_button.property.trigger.hold": "Hold",
 
+  "touchcontroller.screen.options.widget.attack_button.name": "Attack button",
+  "touchcontroller.screen.options.widget.attack_button.property.size": "Button size: %s%%",
+  "touchcontroller.screen.options.widget.attack_button.property.style": "Style",
+  "touchcontroller.screen.options.widget.attack_button.property.style.classic": "Classic",
+  "touchcontroller.screen.options.widget.attack_button.property.style.new": "New",
+  "touchcontroller.screen.options.widget.attack_button.property.trigger": "Trigger",
+  "touchcontroller.screen.options.widget.attack_button.property.trigger.hold": "Hold",
+
   "touchcontroller.screen.options.widget.inventory_button.name": "Inventory button",
   "touchcontroller.screen.options.presets.title": "Presets",
 
