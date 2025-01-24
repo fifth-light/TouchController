@@ -12,7 +12,7 @@ jni.workspace = true
 bytemuck.workspace = true
 
 [dependencies.windows]
-version = "0.58"
+version = "0.59"
 features = [
     "Win32_UI_Input_Touch",
     "Win32_UI_WindowsAndMessaging",

@@ -3,13 +3,12 @@ use std::{
     error::Error,
     fmt::{self, Display, Formatter},
     os::raw::c_void,
-    ptr::null_mut,
     sync::Mutex,
 };
 
 use proxy_protocol::ProxyMessage;
 use windows::Win32::{
-    Foundation::{BOOL, HINSTANCE, HWND, LPARAM, LRESULT, POINT, RECT, WPARAM},
+    Foundation::{BOOL, HWND, LPARAM, LRESULT, POINT, RECT, WPARAM},
     Graphics::Gdi::ClientToScreen,
     System::Threading::GetCurrentThreadId,
     UI::{
@@ -24,8 +23,7 @@ use windows::Win32::{
             TOUCHEVENTF_MOVE, TOUCHEVENTF_UP, TOUCHINPUT, TWF_WANTPALM,
         },
         WindowsAndMessaging::{
-            CallNextHookEx, GetClientRect, SetWindowsHookExW, CWPSTRUCT, HHOOK, WH_CALLWNDPROC,
-            WM_TOUCH,
+            CallNextHookEx, GetClientRect, SetWindowsHookExW, CWPSTRUCT, WH_CALLWNDPROC, WM_TOUCH,
         },
     },
 };
@@ -94,15 +92,8 @@ pub fn init(handle: HWND) -> Result<(), InitializeError> {
     }
 
     let thread_id = unsafe { GetCurrentThreadId() };
-    unsafe {
-        SetWindowsHookExW(
-            WH_CALLWNDPROC,
-            Some(event_hook),
-            HINSTANCE(null_mut()),
-            thread_id,
-        )
-    }
-    .map_err(InitializeError::SetWindowsHookExW)?;
+    unsafe { SetWindowsHookExW(WH_CALLWNDPROC, Some(event_hook), None, thread_id) }
+        .map_err(InitializeError::SetWindowsHookExW)?;
 
     Ok(())
 }
@@ -243,5 +234,5 @@ unsafe extern "system" fn event_hook(ncode: i32, wparam: WPARAM, lparam: LPARAM)
         }
     }
 
-    CallNextHookEx(HHOOK(null_mut()), ncode, wparam, lparam)
+    CallNextHookEx(None, ncode, wparam, lparam)
 }
