@@ -3,11 +3,7 @@ package top.fifthlight.touchcontroller.mixin;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.joml.Matrix4f;
@@ -16,16 +12,12 @@ import org.joml.Vector3d;
 import org.joml.Vector4d;
 import org.koin.java.KoinJavaComponent;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import top.fifthlight.touchcontroller.model.ControllerHudModel;
 
 @Mixin(GameRenderer.class)
 public abstract class CrosshairTargetMixin {
-    @Invoker("ensureTargetInRange")
-    private static HitResult ensureTargetInRange(HitResult hitResult, Vec3d cameraPos, double interactionRange) {
-        throw new AssertionError();
-    }
-
     @Shadow
     protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
 
@@ -35,29 +27,6 @@ public abstract class CrosshairTargetMixin {
 
     @Shadow
     public abstract Matrix4f getBasicProjectionMatrix(double fov);
-
-    @Unique
-    private static HitResult findTargetWithDirection(Entity camera, Vec3d direction, double blockInteractionRange, double entityInteractionRange, float tickDelta) {
-        double interactionRange = Math.max(blockInteractionRange, entityInteractionRange);
-        double squaredInteractionRange = MathHelper.square(interactionRange);
-        Vec3d position = camera.getCameraPosVec(tickDelta);
-        Vec3d interactionTarget = position.add(direction.x * interactionRange, direction.y * interactionRange, direction.z * interactionRange);
-        HitResult hitResult = camera.getWorld().raycast(new RaycastContext(position, interactionTarget, RaycastContext.ShapeType.OUTLINE, RaycastContext.FluidHandling.NONE, camera));
-
-        double squaredHitResultDistance = hitResult.getPos().squaredDistanceTo(position);
-        double targetDistance = interactionRange;
-        if (hitResult.getType() != HitResult.Type.MISS) {
-            squaredInteractionRange = squaredHitResultDistance;
-            targetDistance = Math.sqrt(squaredInteractionRange);
-        }
-        Vec3d vec3d3 = position.add(direction.x * targetDistance, direction.y * targetDistance, direction.z * targetDistance);
-        Box box = camera.getBoundingBox().stretch(direction.multiply(targetDistance)).expand(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(camera, position, vec3d3, box, entity -> !entity.isSpectator() && entity.canHit(), squaredInteractionRange);
-        if (entityHitResult != null && entityHitResult.getPos().squaredDistanceTo(position) < squaredHitResultDistance) {
-            return ensureTargetInRange(entityHitResult, position, entityInteractionRange);
-        }
-        return ensureTargetInRange(hitResult, position, blockInteractionRange);
-    }
 
     @Unique
     private Vec3d getCrosshairDirection(double fov, double cameraPitchRadians, double cameraYawRadians) {
@@ -81,17 +50,39 @@ public abstract class CrosshairTargetMixin {
         return new Vec3d(normalizedDirection.x, normalizedDirection.y, normalizedDirection.z);
     }
 
-    /**
-     * @author fifth_light
-     * @reason Overwrite the findCrosshairTarget to change the crosshair target to touch crosshair
-     */
-    @Overwrite
-    private HitResult findCrosshairTarget(Entity camera, double blockInteractionRange, double entityInteractionRange, float tickDelta) {
-        var fov = getFov(this.camera, tickDelta, true);
-        var cameraPitch = Math.toRadians(camera.getPitch(tickDelta));
-        var cameraYaw = Math.toRadians(camera.getYaw(tickDelta));
-        var direction = getCrosshairDirection(fov, cameraPitch, cameraYaw);
+    @Unique
+    private static Vec3d currentDirection;
 
-        return findTargetWithDirection(camera, direction, blockInteractionRange, entityInteractionRange, tickDelta);
+    @Redirect(
+            method = "findCrosshairTarget",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;",
+                    ordinal = 0
+            )
+    )
+    private HitResult cameraRaycast(Entity instance, double maxDistance, float tickDelta, boolean includeFluids) {
+        var fov = getFov(camera, tickDelta, true);
+        var cameraPitch = Math.toRadians(instance.getPitch(tickDelta));
+        var cameraYaw = Math.toRadians(instance.getYaw(tickDelta));
+
+        var position = instance.getCameraPosVec(tickDelta);
+        var direction = getCrosshairDirection(fov, cameraPitch, cameraYaw);
+        currentDirection = direction;
+        var interactionTarget = position.add(direction.x * maxDistance, direction.y * maxDistance, direction.z * maxDistance);
+        var fluidHandling = includeFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE;
+        return instance.getWorld().raycast(new RaycastContext(position, interactionTarget, RaycastContext.ShapeType.OUTLINE, fluidHandling, instance));
+    }
+
+    @Redirect(
+            method = "findCrosshairTarget",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;getRotationVec(F)Lnet/minecraft/util/math/Vec3d;",
+                    ordinal = 0
+            )
+    )
+    private Vec3d getRotationVec(Entity instance, float tickDelta) {
+        return currentDirection;
     }
 }

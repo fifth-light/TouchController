@@ -17,23 +17,21 @@ import org.joml.Vector3d;
 import org.joml.Vector4d;
 import org.koin.java.KoinJavaComponent;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import top.fifthlight.touchcontroller.model.ControllerHudModel;
 
 @Mixin(GameRenderer.class)
 public abstract class CrosshairTargetMixin {
     @Shadow
     @Final
-    Minecraft minecraft;
-
-    @Shadow
-    @Final
     private Camera mainCamera;
 
     @Shadow
-    public abstract Matrix4f getProjectionMatrix(double par1);
+    public abstract Matrix4f getProjectionMatrix(double pFov);
 
     @Shadow
-    protected abstract double getFov(Camera par1, float par2, boolean par3);
+    protected abstract double getFov(Camera pActiveRenderInfo, float pPartialTicks, boolean pUseFOVSetting);
 
     @Unique
     private Vec3 touchController$getCrosshairDirection(double fov, double cameraPitchRadians, double cameraYawRadians) {
@@ -58,90 +56,38 @@ public abstract class CrosshairTargetMixin {
     }
 
     @Unique
-    public HitResult touchController$entityRaycast(Entity entity, Vec3 rotation, double maxDistance, float tickDelta, boolean pHitFluids) {
-        Vec3 position = entity.getEyePosition(tickDelta);
-        Vec3 maxReachablePosition = position.add(rotation.x * maxDistance, rotation.y * maxDistance, rotation.z * maxDistance);
-        return entity.level().clip(new ClipContext(position, maxReachablePosition, ClipContext.Block.OUTLINE, pHitFluids ? ClipContext.Fluid.ANY : ClipContext.Fluid.NONE, entity));
+    private static Vec3 currentDirection;
+
+    @Redirect(
+            method = "pick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/Entity;pick(DFZ)Lnet/minecraft/world/phys/HitResult;",
+                    ordinal = 0
+            )
+    )
+    private HitResult cameraRaycast(Entity instance, double pHitDistance, float pPartialTicks, boolean pHitFluids) {
+        var fov = getFov(mainCamera, pPartialTicks, true);
+        var cameraPitch = Math.toRadians(instance.getViewXRot(pPartialTicks));
+        var cameraYaw = Math.toRadians(instance.getViewYRot(pPartialTicks));
+
+        var position = instance.getEyePosition(pPartialTicks);
+        var direction = touchController$getCrosshairDirection(fov, cameraPitch, cameraYaw);
+        currentDirection = direction;
+        var interactionTarget = position.add(direction.x * pHitDistance, direction.y * pHitDistance, direction.z * pHitDistance);
+        var clipContextFluid = pHitFluids ? ClipContext.Fluid.ANY : ClipContext.Fluid.NONE;
+        return instance.level().clip(new ClipContext(position, interactionTarget, ClipContext.Block.OUTLINE, clipContextFluid, instance));
     }
 
-    /**
-     * @author fifth_light
-     * @reason Overwrite the findCrosshairTarget to change the crosshair target to touch crosshair
-     */
-    @Overwrite
-    public void pick(float pPartialTicks) {
-        Entity entity = this.minecraft.getCameraEntity();
-        if (entity == null) {
-            return;
-        }
-        if (this.minecraft.level == null) {
-            return;
-        }
-        this.minecraft.getProfiler().push("pick");
-        this.minecraft.crosshairPickEntity = null;
-        double d0 = (double) this.minecraft.gameMode.getPickRange();
-        double entityReach = this.minecraft.player.getEntityReach(); // Note - MC-76493 - We must validate players cannot click-through objects.
-
-        // CHANGES BEGIN
-        // Original: this.minecraft.hitResult = entity.pick(Math.max(d0, entityReach), pPartialTicks, false); // Run pick() with the max of the two, so we can prevent click-through.
-        var fov = getFov(mainCamera, pPartialTicks, true);
-        var cameraPitch = Math.toRadians(entity.getViewXRot(pPartialTicks));
-        var cameraYaw = Math.toRadians(entity.getViewYRot(pPartialTicks));
-        var cameraRotationVec = touchController$getCrosshairDirection(fov, cameraPitch, cameraYaw);
-        this.minecraft.hitResult = touchController$entityRaycast(entity, cameraRotationVec, Math.max(d0, entityReach), pPartialTicks, false);
-        // CHANGES END
-
-        Vec3 vec3 = entity.getEyePosition(pPartialTicks);
-        boolean flag = false;
-        int i = 3;
-        double d1 = d0;
-        if (false && this.minecraft.gameMode.hasFarPickRange()) {
-            d1 = 6.0D;
-            d0 = d1;
-        } else {
-            if (d0 > 3.0D) {
-                flag = true;
-            }
-
-            d0 = d0;
-        }
-        d0 = d1 = Math.max(d0, entityReach); // Pick entities with the max of both for the same reason.
-
-        d1 *= d1;
-
-        // If we picked a block, we need to ignore entities past that block. Added != MISS check to not truncate on failed picks.
-        // Also fixes MC-250858
-        if (this.minecraft.hitResult != null && this.minecraft.hitResult.getType() != HitResult.Type.MISS) {
-            d1 = this.minecraft.hitResult.getLocation().distanceToSqr(vec3);
-            double blockReach = this.minecraft.player.getBlockReach();
-            // Discard the result as a miss if it is outside the block reach.
-            if (d1 > blockReach * blockReach) {
-                Vec3 pos = this.minecraft.hitResult.getLocation();
-                this.minecraft.hitResult = BlockHitResult.miss(pos, Direction.getNearest(vec3.x, vec3.y, vec3.z), BlockPos.containing(pos));
-            }
-        }
-
-        // Removed: Vec3 vec31 = entity.getViewVector(1.0F);
-        Vec3 vec32 = vec3.add(cameraRotationVec.x * d0, cameraRotationVec.y * d0, cameraRotationVec.z * d0);
-        float f = 1.0F;
-        AABB aabb = entity.getBoundingBox().expandTowards(cameraRotationVec.scale(d0)).inflate(1.0D, 1.0D, 1.0D);
-        EntityHitResult entityhitresult = ProjectileUtil.getEntityHitResult(entity, vec3, vec32, aabb, (p_234237_) -> {
-            return !p_234237_.isSpectator() && p_234237_.isPickable();
-        }, d1);
-        if (entityhitresult != null) {
-            Entity entity1 = entityhitresult.getEntity();
-            Vec3 vec33 = entityhitresult.getLocation();
-            double d2 = vec3.distanceToSqr(vec33);
-            if (d2 > d1 || d2 > entityReach * entityReach) { // Discard if the result is behind a block, or past the entity reach max. The var "flag" no longer has a use.
-                this.minecraft.hitResult = BlockHitResult.miss(vec33, Direction.getNearest(cameraRotationVec.x, cameraRotationVec.y, cameraRotationVec.z), BlockPos.containing(vec33));
-            } else if (d2 < d1 || this.minecraft.hitResult == null) {
-                this.minecraft.hitResult = entityhitresult;
-                if (entity1 instanceof LivingEntity || entity1 instanceof ItemFrame) {
-                    this.minecraft.crosshairPickEntity = entity1;
-                }
-            }
-        }
-
-        this.minecraft.getProfiler().pop();
+    @Redirect(
+            method = "pick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/Entity;getViewVector(F)Lnet/minecraft/world/phys/Vec3;",
+                    ordinal = 0
+            )
+    )
+    private Vec3 getRotationVec(Entity instance, float tickDelta) {
+        return currentDirection;
     }
 }
