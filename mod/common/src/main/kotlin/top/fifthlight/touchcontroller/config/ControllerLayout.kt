@@ -28,6 +28,9 @@ enum class LayerConditionKey {
     @SerialName("swimming")
     SWIMMING,
 
+    @SerialName("underwater")
+    UNDERWATER,
+
     @SerialName("flying")
     FLYING,
 

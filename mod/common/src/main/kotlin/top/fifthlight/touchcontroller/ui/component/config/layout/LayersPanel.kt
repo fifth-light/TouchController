@@ -37,6 +37,7 @@ private object ConditionsList : KoinComponent {
     val conditionsList by lazy {
         listOfNotNull(
             LayerConditionKey.SWIMMING,
+            LayerConditionKey.UNDERWATER,
             LayerConditionKey.FLYING,
             LayerConditionKey.SNEAKING,
             LayerConditionKey.SPRINTING,

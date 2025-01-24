@@ -20,6 +20,7 @@ import top.fifthlight.touchcontroller.config.LayerConditionValue
 
 private fun keyToText(key: LayerConditionKey) = when (key) {
     LayerConditionKey.SWIMMING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SWIMMING_TITLE
+    LayerConditionKey.UNDERWATER -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_UNDERWATER_TITLE
     LayerConditionKey.FLYING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_FLYING_TITLE
     LayerConditionKey.SNEAKING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SNEAKING_TITLE
     LayerConditionKey.SPRINTING -> Texts.SCREEN_OPTIONS_LAYER_CONDITION_SPRINTING_TITLE

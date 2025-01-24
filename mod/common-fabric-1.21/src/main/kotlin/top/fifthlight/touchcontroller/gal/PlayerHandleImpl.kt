@@ -70,6 +70,9 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
     override val isSubmergedInWater: Boolean
         get() = inner.isSubmergedInWater
 
+    override val isTouchingWater: Boolean
+        get() = inner.isTouchingWater
+
     override var isSprinting: Boolean
         get() = inner.isSprinting
         set(value) {

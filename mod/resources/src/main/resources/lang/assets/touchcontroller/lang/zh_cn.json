@@ -69,6 +69,7 @@
   "touchcontroller.screen.options.layer.condition.tip.want": "要求：当一个或者多个“要求”条件满足时显示该图层",
   "touchcontroller.screen.options.layer.condition.tip.require": "必须：当所有“必须”条件满足时才显示该图层",
   "touchcontroller.screen.options.layer.condition.swimming.title": "游泳中",
+  "touchcontroller.screen.options.layer.condition.underwater.title": "潜水中",
   "touchcontroller.screen.options.layer.condition.flying.title": "飞行中",
   "touchcontroller.screen.options.layer.condition.sneaking.title": "潜行中",
   "touchcontroller.screen.options.layer.condition.sprinting.title": "疾跑中",

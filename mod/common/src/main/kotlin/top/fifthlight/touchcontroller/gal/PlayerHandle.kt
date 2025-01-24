@@ -24,6 +24,7 @@ interface PlayerHandle {
     val onGround: Boolean
     var isFlying: Boolean
     val isSubmergedInWater: Boolean
+    val isTouchingWater: Boolean
     var isSprinting: Boolean
     val isSneaking: Boolean
     val ridingEntityType: RidingEntityType?
