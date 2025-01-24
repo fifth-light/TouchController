@@ -75,6 +75,10 @@ private val DEFAULT_CONFIGS = persistentListOf(
     WidgetItem(
         name = Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_NAME,
         config = UseButton(),
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_ATTACK_BUTTON_NAME,
+        config = AttackButton()
     )
 )
 

@@ -203,8 +203,12 @@
   "touchcontroller.screen.options.widget.use_button.property.style": "样式",
   "touchcontroller.screen.options.widget.use_button.property.style.classic": "经典",
   "touchcontroller.screen.options.widget.use_button.property.style.new": "新样式",
-  "touchcontroller.screen.options.widget.use_button.property.trigger": "触发方式",
-  "touchcontroller.screen.options.widget.use_button.property.trigger.hold": "长按触发",
+
+  "touchcontroller.screen.options.widget.attack_button.name": "攻击按钮",
+  "touchcontroller.screen.options.widget.attack_button.property.size": "按键大小: %s%%",
+  "touchcontroller.screen.options.widget.attack_button.property.style": "样式",
+  "touchcontroller.screen.options.widget.attack_button.property.style.classic": "经典",
+  "touchcontroller.screen.options.widget.attack_button.property.style.new": "新样式",
 
   "touchcontroller.screen.options.widget.inventory_button.name": "物品栏按钮",
   "touchcontroller.screen.options.presets.title": "预设",
