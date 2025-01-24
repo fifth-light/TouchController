@@ -71,6 +71,7 @@
   "touchcontroller.screen.options.layer.condition.swimming.title": "Swimming",
   "touchcontroller.screen.options.layer.condition.underwater.title": "Underwater",
   "touchcontroller.screen.options.layer.condition.flying.title": "Flying",
+  "touchcontroller.screen.options.layer.condition.can_fly.title": "Allow flying",
   "touchcontroller.screen.options.layer.condition.sneaking.title": "Sneaking",
   "touchcontroller.screen.options.layer.condition.sprinting.title": "Sprinting",
   "touchcontroller.screen.options.layer.condition.on_ground.title": "On ground",

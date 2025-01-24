@@ -28,6 +28,7 @@ interface PlayerHandle {
     var isSprinting: Boolean
     val isSneaking: Boolean
     val ridingEntityType: RidingEntityType?
+    val canFly: Boolean
 }
 
 interface PlayerHandleFactory {

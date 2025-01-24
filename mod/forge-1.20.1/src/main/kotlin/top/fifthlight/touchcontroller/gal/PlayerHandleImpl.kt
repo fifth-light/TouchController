@@ -95,6 +95,9 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
             is Strider -> RidingEntityType.STRIDER
             else -> RidingEntityType.OTHER
         }
+
+    override val canFly: Boolean
+        get() = inner.abilities.mayfly
 }
 
 object PlayerHandleFactoryImpl : PlayerHandleFactory {

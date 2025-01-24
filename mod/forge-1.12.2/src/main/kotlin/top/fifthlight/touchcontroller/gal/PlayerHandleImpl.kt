@@ -90,6 +90,9 @@ value class PlayerHandleImpl(val inner: EntityPlayer) : PlayerHandle {
             is EntityLlama -> RidingEntityType.LLAMA
             else -> RidingEntityType.OTHER
         }
+
+    override val canFly: Boolean
+        get() = inner.capabilities.allowFlying
 }
 
 object PlayerHandleFactoryImpl : PlayerHandleFactory {

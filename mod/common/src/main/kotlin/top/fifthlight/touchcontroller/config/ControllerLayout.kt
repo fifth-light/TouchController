@@ -34,6 +34,9 @@ enum class LayerConditionKey {
     @SerialName("flying")
     FLYING,
 
+    @SerialName("can_fly")
+    CAN_FLY,
+
     @SerialName("sneaking")
     SNEAKING,
 

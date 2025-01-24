@@ -90,6 +90,7 @@ object RenderEvents : KoinComponent {
         val ridingType = player.ridingEntityType
         val condition = buildMap {
             put(LayerConditionKey.FLYING, player.isFlying)
+            put(LayerConditionKey.CAN_FLY, player.canFly)
             put(LayerConditionKey.SWIMMING, player.isTouchingWater)
             put(LayerConditionKey.UNDERWATER, player.isSubmergedInWater)
             put(LayerConditionKey.SPRINTING, player.isSprinting)

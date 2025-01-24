@@ -39,6 +39,7 @@ private object ConditionsList : KoinComponent {
             LayerConditionKey.SWIMMING,
             LayerConditionKey.UNDERWATER,
             LayerConditionKey.FLYING,
+            LayerConditionKey.CAN_FLY,
             LayerConditionKey.SNEAKING,
             LayerConditionKey.SPRINTING,
             LayerConditionKey.ON_GROUND,
