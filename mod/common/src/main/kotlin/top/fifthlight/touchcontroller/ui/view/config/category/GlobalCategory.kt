@@ -132,6 +132,34 @@ data object GlobalCategory : ConfigCategory(
                             }
                         },
                     )
+                    SwitchConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_SPLIT_CONTROLS_TITLE),
+                        value = config.splitControls,
+                        onValueChanged = { viewModel.updateConfig { copy(splitControls = it) } },
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_SPLIT_CONTROLS_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_SPLIT_CONTROLS_DESCRIPTION,
+                                )
+                            }
+                        },
+                    )
+                    SwitchConfigItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        name = Text.translatable(Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_TOUCH_GESTURE_TITLE),
+                        value = config.disableTouchGesture,
+                        onValueChanged = { viewModel.updateConfig { copy(disableTouchGesture = it) } },
+                        onHovered = {
+                            if (it) {
+                                hoverData = HoverData(
+                                    name = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_TOUCH_GESTURE_TITLE,
+                                    description = Texts.SCREEN_OPTIONS_CATEGORY_GLOBAL_REGULAR_DISABLE_TOUCH_GESTURE_DESCRIPTION,
+                                )
+                            }
+                        },
+                    )
                 }
 
                 var controlGroupExpanded by remember { mutableStateOf(true) }

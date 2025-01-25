@@ -72,5 +72,5 @@ object EntityRendererHelper : KoinComponent {
     }
 
     @JvmStatic
-    fun doDisableBlockOutline() = controllerHudModel.result.crosshairStatus == null
+    fun doDisableBlockOutline() = !controllerHudModel.result.showBlockOutline
 }

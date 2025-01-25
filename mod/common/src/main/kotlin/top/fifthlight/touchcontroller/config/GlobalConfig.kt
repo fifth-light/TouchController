@@ -13,6 +13,8 @@ data class GlobalConfig(
     val disableHotBarKey: Boolean = false,
     val vibration: Boolean = true,
     val quickHandSwap: Boolean = false,
+    val splitControls: Boolean = false,
+    val disableTouchGesture: Boolean = false,
 
     // Control
     val viewMovementSensitivity: Float = 495f,

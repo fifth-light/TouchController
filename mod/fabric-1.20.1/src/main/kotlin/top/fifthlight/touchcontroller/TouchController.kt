@@ -71,7 +71,7 @@ object TouchController : ClientModInitializer, KoinComponent {
 
         val controllerHudModel: ControllerHudModel = get()
         WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register { _, _ ->
-            controllerHudModel.result.crosshairStatus != null
+            controllerHudModel.result.showBlockOutline
         }
         WorldRenderEvents.START.register {
             RenderEvents.onRenderStart()

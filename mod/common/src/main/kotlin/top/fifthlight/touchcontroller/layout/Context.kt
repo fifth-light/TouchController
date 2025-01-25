@@ -104,6 +104,7 @@ data class ContextResult(
     var sprint: Boolean = false,
     var boatLeft: Boolean = false,
     var boatRight: Boolean = false,
+    var showBlockOutline: Boolean = false,
 )
 
 data class ContextStatus(

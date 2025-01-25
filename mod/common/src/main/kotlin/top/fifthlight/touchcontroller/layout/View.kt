@@ -92,8 +92,8 @@ fun Context.View() {
 
         val playerHandleFactory: PlayerHandleFactory = get()
         val player = playerHandleFactory.getPlayerHandle()
-        // Consume the pointer if player is null
-        if (player == null) {
+        // Consume the pointer if player is null or touch gesture is disabled
+        if (player == null || config.disableTouchGesture) {
             pointer.state = state.copy(
                 lastPosition = pointer.position,
                 moving = moving,
@@ -166,17 +166,23 @@ fun Context.View() {
     }
 
     currentViewPointer?.let { pointer ->
+        result.showBlockOutline = true
         // Update current view pointer
-
-        result.crosshairStatus = CrosshairStatus(
-            position = pointer.position,
-            breakPercent = viewActionProvider.getCurrentBreakingProgress(),
-        )
+        if (!config.splitControls) {
+            result.crosshairStatus = CrosshairStatus(
+                position = pointer.position,
+                breakPercent = viewActionProvider.getCurrentBreakingProgress(),
+            )
+        }
     } ?: run {
         if (status.attack.timesPressed > 0 || status.itemUse.timesPressed > 0) {
             // Keep last crosshair status for key handling
             result.crosshairStatus = status.lastCrosshairStatus
         }
+    }
+
+    if (config.disableTouchGesture) {
+        result.showBlockOutline = true
     }
 
     status.lastCrosshairStatus = result.crosshairStatus

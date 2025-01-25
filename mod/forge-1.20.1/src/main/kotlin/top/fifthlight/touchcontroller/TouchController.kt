@@ -100,7 +100,7 @@ class TouchController : KoinComponent {
 
             @SubscribeEvent
             fun blockOutlineEvent(event: RenderHighlightEvent.Block) {
-                if (controllerHudModel.result.crosshairStatus == null) {
+                if (!controllerHudModel.result.showBlockOutline) {
                     event.isCanceled = true
                 }
             }
