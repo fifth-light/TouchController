@@ -72,6 +72,14 @@ tasks.processResources {
     val modAuthorsArray = modAuthorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
     val modContributorsArray = modContributorsList.joinToString(", ", transform = String::quote).drop(1).dropLast(1)
 
+    val (major, minor, patch) = gameVersion.split(".")
+    // Fabric API changed its mod ID to "fabric-api" in version 1.19.2
+    val fabricApiName = when {
+        minor.toInt() > 19 -> "fabric-api"
+        minor.toInt() == 19 && patch.toInt() >= 2 -> "fabric-api"
+        else -> "fabric"
+    }
+
     val properties = mapOf(
         "mod_id" to modId,
         "mod_version_full" to version,
@@ -88,6 +96,7 @@ tasks.processResources {
         "fabric_loader_version" to libs.versions.fabric.loader.get(),
         "game_version" to gameVersion,
         "java_version" to javaVersion,
+        "fabric_api_name" to fabricApiName,
         "fabric_api_version" to fabricApiVersion,
         "fabric_language_kotlin_version" to libs.versions.fabric.language.kotlin.get(),
     )

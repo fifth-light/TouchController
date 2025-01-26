@@ -17,6 +17,7 @@
 目前 TouchController 支持的 Minecraft 版本和 mod 加载器有：
 
 - 1.12.2 (Forge)
+- 1.16.5 (Fabric)
 - 1.20.1 (Forge、Fabric)
 - 1.21.1 (Fabric)
 - 1.21.3 (Fabric)
