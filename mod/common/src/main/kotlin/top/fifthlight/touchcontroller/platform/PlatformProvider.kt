@@ -51,7 +51,6 @@ object PlatformProvider : KoinComponent {
         }
 
     private data class NativeLibraryInfo(
-        val modContainerName: String,
         val modContainerPath: String,
         val debugPath: Path?,
         val extractPrefix: String,
@@ -103,7 +102,6 @@ object PlatformProvider : KoinComponent {
             logger.info("Target arch: $targetArch")
 
             NativeLibraryInfo(
-                modContainerName = "top_fifthlight_touchcontroller_proxy-windows",
                 modContainerPath = "$targetArch/proxy_windows.dll",
                 debugPath = Paths.get("..", "..", "..", "target", targetArch, "release", "proxy_windows.dll"),
                 extractPrefix = "proxy_windows",
@@ -134,7 +132,6 @@ object PlatformProvider : KoinComponent {
                 }
 
                 NativeLibraryInfo(
-                    modContainerName = "top_fifthlight_touchcontroller_proxy-server-android",
                     modContainerPath = "$targetArch/libproxy_server_android.so",
                     debugPath = null,
                     extractPrefix = "libproxy_server_android",
@@ -155,11 +152,10 @@ object PlatformProvider : KoinComponent {
         }
 
         logger.info("Native library info:")
-        logger.info("containerName: ${info.modContainerName}")
-        logger.info("containerPath: ${info.modContainerPath}")
+        logger.info("path: ${info.modContainerPath}")
+        logger.info("debugPath: ${info.debugPath}")
         val nativeLibrary = nativeLibraryPathGetter.getNativeLibraryPath(
-            containerName = info.modContainerName,
-            containerPath = info.modContainerPath,
+            path = info.modContainerPath,
             debugPath = info.debugPath
         ) ?: run {
             logger.warn("Failed to get native library path")
@@ -183,7 +179,7 @@ object PlatformProvider : KoinComponent {
         try {
             @Suppress("UnsafeDynamicallyLoadedCode")
             System.load(destinationFile.toAbsolutePath().toString())
-        } catch (ex: Exception) {
+        } catch (_: Exception) {
             return null
         }
         logger.info("Loaded native library")

@@ -20,10 +20,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      {
-        "value": "top.fifthlight.touchcontroller.TouchController",
-        "adapter": "kotlin"
-      }
+      "top.fifthlight.touchcontroller.TouchController"
     ],
     "modmenu": [
       "top.fifthlight.touchcontroller.TouchControllerModMenuApiImpl"
@@ -39,7 +36,6 @@
     "fabricloader": ">=${fabric_loader_version}",
     "minecraft": "${game_version}",
     "java": ">=${java_version}",
-    "${fabric_api_name}": ">=${fabric_api_version}",
-    "fabric-language-kotlin": ">=${fabric_language_kotlin_version}"
+    "${fabric_api_name}": ">=${fabric_api_version}"
   }
 }

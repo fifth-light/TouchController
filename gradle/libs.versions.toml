@@ -12,6 +12,9 @@ mixin = "0.7.+"
 gr8 = "0.11.2"
 koin = "4.0.1"
 joml = "1.10.8"
+slf4j = "2.0.16"
+# DONT UPDATE IT BECAUSE MINECRAFT DEPENDS ON LOG4J 2.8.1
+log4j = "2.8.1"
 
 # Android
 agp = "8.7.3"
@@ -23,10 +26,6 @@ maven-publish = "0.30.0"
 
 # Compose
 compose = "1.7.1"
-androidx-collection = "1.4.5"
-
-# Minecraft Mods
-fabric-language-kotlin = "1.12.3+kotlin.2.0.21"
 
 [libraries]
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
@@ -39,6 +38,9 @@ koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 
 koin-logger-slf4j = { group = "io.insert-koin", name = "koin-logger-slf4j", version.ref = "koin" }
 joml = { group = "org.joml", name = "joml", version.ref = "joml" }
 gr8 = { group = "com.gradleup.gr8", name = "com.gradleup.gr8.gradle.plugin", version.ref = "gr8" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
+log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 
 # Fabric
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
@@ -54,10 +56,6 @@ modrinth-minotaur = { group = "com.modrinth.minotaur", name = "Minotaur", versio
 
 # Compose
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
-androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidx-collection" }
-
-# Minecraft Mods
-fabric-language-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

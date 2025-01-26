@@ -7,10 +7,10 @@ import java.nio.file.Path
 object NativeLibraryPathGetterImpl : NativeLibraryPathGetter {
     private val logger = LoggerFactory.getLogger(NativeLibraryPathGetterImpl::class.java)
 
-    override fun getNativeLibraryPath(containerName: String, containerPath: String, debugPath: Path?): InputStream? {
+    override fun getNativeLibraryPath(path: String, debugPath: Path?): InputStream? {
         // TODO is debug or release?
-        return javaClass.classLoader.getResourceAsStream(containerPath) ?: run {
-            logger.warn("Failed to get resource $containerPath")
+        return javaClass.classLoader.getResourceAsStream(path) ?: run {
+            logger.warn("Failed to get resource $path")
             null
         }
     }

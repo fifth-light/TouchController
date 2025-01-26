@@ -12,15 +12,11 @@ subprojects {
     group = "top.fifthlight.touchcontroller"
 
     repositories {
+        mavenCentral()
+        google()
         maven {
             name = "Terraformers"
             url = uri("https://maven.terraformersmc.com/")
         }
-        maven {
-            name = "Xander Maven"
-            url = uri("https://maven.isxander.dev/releases")
-        }
-        mavenCentral()
-        google()
     }
 }

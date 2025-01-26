@@ -1,3 +1,4 @@
+import com.gradleup.gr8.Gr8Task
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.spongepowered.asm.gradle.plugins.MixinExtension.AddMixinsToJarTask
@@ -147,7 +148,7 @@ dependencies {
     }
     shadeAndImplementation(project(":combine"))
     if (bridgeSlf4jBool) {
-        shadeAndImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0") {
+        shadeAndImplementation(project(":log4j-slf4j2-impl")) {
             exclude("org.apache.logging.log4j")
         }
     }
@@ -257,6 +258,10 @@ gr8 {
     replaceOutgoingJar(shadowedJar)
 }
 
+tasks.withType<Gr8Task> {
+    jvmArgs("-Xmx512M")
+}
+
 // Create a Jar task to exclude some META-INF files and module-info.class from R8 output,
 // and make ForgeGradle reobf task happy (FG requires JarTask for it's reobf input)
 tasks.register<Jar>("gr8Jar") {
@@ -265,6 +270,8 @@ tasks.register<Jar>("gr8Jar") {
     inputs.files(tasks.getByName("gr8Gr8ShadowedJar").outputs.files)
     archiveBaseName = "$modName-noreobf"
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
 
     val jarFile =
         tasks.getByName("gr8Gr8ShadowedJar").outputs.files.first { it.extension.equals("jar", ignoreCase = true) }

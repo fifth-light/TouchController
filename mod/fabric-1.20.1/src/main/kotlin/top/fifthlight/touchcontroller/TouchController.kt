@@ -26,7 +26,7 @@ import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback as FabricHudRenderCallback
 
-object TouchController : ClientModInitializer, KoinComponent {
+class TouchController : ClientModInitializer, KoinComponent {
     private val logger = LoggerFactory.getLogger(TouchController::class.java)
 
     override fun onInitializeClient() {

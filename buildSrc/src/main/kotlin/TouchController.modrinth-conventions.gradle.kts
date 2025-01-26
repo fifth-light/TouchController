@@ -54,7 +54,6 @@ modrinth {
             }
             "fabric" -> {
                 required.version("fabric-api", fabricApiVersion!!)
-                required.version("fabric-language-kotlin", libs.versions.fabric.language.kotlin.get())
                 optional.version("modmenu", modmenuVersion!!)
             }
             else -> error("Bad modType: $modType")

@@ -10,10 +10,10 @@ import kotlin.io.path.inputStream
 object NativeLibraryPathGetterImpl : NativeLibraryPathGetter {
     private val logger = LoggerFactory.getLogger(NativeLibraryPathGetterImpl::class.java)
 
-    override fun getNativeLibraryPath(containerName: String, containerPath: String, debugPath: Path?): InputStream? {
+    override fun getNativeLibraryPath(path: String, debugPath: Path?): InputStream? {
         return if (FMLEnvironment.production) {
-            javaClass.classLoader.getResourceAsStream(containerPath) ?: run {
-                logger.warn("Failed to get resource $containerPath")
+            javaClass.classLoader.getResourceAsStream(path) ?: run {
+                logger.warn("Failed to get resource $path")
                 null
             }
         } else {

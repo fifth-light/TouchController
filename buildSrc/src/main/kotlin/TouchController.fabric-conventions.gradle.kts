@@ -1,3 +1,4 @@
+import com.gradleup.gr8.Gr8Task
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 
@@ -6,14 +7,10 @@ plugins {
     eclipse
     java
     id("fabric-loom")
+    id("com.gradleup.gr8")
 }
 
 val libs = the<LibrariesForLibs>()
-
-fun DependencyHandlerScope.includeAndImplementation(dependencyNotation: Any) {
-    include(dependencyNotation)
-    implementation(dependencyNotation)
-}
 
 val modId: String by extra.properties
 val modName: String by extra.properties
@@ -30,12 +27,56 @@ val gameVersion: String by extra.properties
 val yarnVersion: String by extra.properties
 val fabricApiVersion: String by extra.properties
 val modmenuVersion: String by extra.properties
+val bridgeSlf4j: String by extra.properties
+val bridgeSlf4jBool = bridgeSlf4j.toBoolean()
+val excludeR8: String by extra.properties
 
 version = "$modVersion+fabric-$gameVersion"
 group = "top.fifthlight.touchcontroller"
 
-base {
-    archivesName = modName
+configurations.create("shadow")
+
+tasks.jar {
+    archiveBaseName = "$modName-slim"
+}
+
+fun DependencyHandlerScope.shade(dependency: Any) {
+    add("shadow", dependency)
+}
+
+fun DependencyHandlerScope.shade(
+    dependency: String,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit,
+) {
+    add("shadow", dependency, dependencyConfiguration)
+}
+
+fun <T : ModuleDependency> DependencyHandlerScope.shade(
+    dependency: T,
+    dependencyConfiguration: T.() -> Unit,
+) {
+    add("shadow", dependency, dependencyConfiguration)
+}
+
+fun DependencyHandlerScope.shadeAndImplementation(dependency: Any) {
+    shade(dependency)
+    implementation(dependency)
+}
+
+fun DependencyHandlerScope.shadeAndImplementation(
+    dependency: String,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit
+) {
+    shade(dependency, dependencyConfiguration)
+    implementation(dependency, dependencyConfiguration)
+}
+
+fun <T : ModuleDependency> DependencyHandlerScope.shadeAndImplementation(
+    dependency: T,
+    dependencyConfiguration: T.() -> Unit,
+) {
+    shade(dependency, dependencyConfiguration)
+    implementation(dependency, dependencyConfiguration)
 }
 
 dependencies {
@@ -44,25 +85,20 @@ dependencies {
     modImplementation(libs.fabric.loader)
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    modImplementation(libs.fabric.language.kotlin)
     modImplementation("com.terraformersmc:modmenu:$modmenuVersion")
 
-    includeAndImplementation(project(":mod:common"))
+    shadeAndImplementation(project(":mod:common")) {
+        exclude("org.slf4j")
+    }
+    shadeAndImplementation(project(":combine"))
+    if (bridgeSlf4jBool) {
+        shadeAndImplementation(project(":log4j-slf4j2-impl")) {
+            exclude("org.apache.logging.log4j")
+        }
+    }
 
-    include(project(":common-data"))
-    include(project(":proxy-windows"))
-    include(project(":proxy-server-android"))
-    include(project(":proxy-client"))
-    include(project(":proxy-server"))
-
-    include(project(":combine"))
-    include(libs.androidx.collection)
-    include(libs.compose.runtime)
-
-    include(libs.koin.core)
-    include(libs.koin.compose)
-    include(libs.koin.logger.slf4j)
-    include(libs.kotlinx.collections.immutable)
+    shade(project(":proxy-windows"))
+    shade(project(":proxy-server-android"))
 }
 
 tasks.processResources {
@@ -75,6 +111,7 @@ tasks.processResources {
     val (major, minor, patch) = gameVersion.split(".")
     // Fabric API changed its mod ID to "fabric-api" in version 1.19.2
     val fabricApiName = when {
+        major.toInt() != 1 -> error("Whoa? Minecraft 2?")
         minor.toInt() > 19 -> "fabric-api"
         minor.toInt() == 19 && patch.toInt() >= 2 -> "fabric-api"
         else -> "fabric"
@@ -98,7 +135,6 @@ tasks.processResources {
         "java_version" to javaVersion,
         "fabric_api_name" to fabricApiName,
         "fabric_api_version" to fabricApiVersion,
-        "fabric_language_kotlin_version" to libs.versions.fabric.language.kotlin.get(),
     )
 
     inputs.properties(properties)
@@ -119,4 +155,67 @@ tasks.withType<Jar> {
     from(File(rootDir, "LICENSE")) {
         rename { "${it}_${modName}" }
     }
+}
+
+val minecraftShadow = configurations.create("minecraftShadow") {
+    excludeR8.split(",").filter(String::isNotEmpty).forEach {
+        if (it.contains(":")) {
+            val (group, module) = it.split(":")
+            exclude(group, module)
+        } else {
+            exclude(it)
+        }
+    }
+    extendsFrom(configurations.compileClasspath.get())
+}
+
+gr8 {
+    create("gr8") {
+        addProgramJarsFrom(configurations.getByName("shadow"))
+        addProgramJarsFrom(tasks.jar)
+
+        addClassPathJarsFrom(minecraftShadow)
+
+        r8Version("8.9.21")
+        proguardFile(rootProject.file("mod/common-fabric/rules.pro"))
+    }
+}
+
+tasks.withType<Gr8Task> {
+    jvmArgs("-Xmx512M")
+}
+
+tasks.remapJar {
+    dependsOn("gr8Gr8ShadowedJar")
+
+    val jarFile = tasks.getByName("gr8Gr8ShadowedJar").outputs.files
+        .first { it.extension.equals("jar", ignoreCase = true) }
+
+    inputFile = jarFile
+    archiveBaseName = "$modName-fat"
+    addNestedDependencies = false
+}
+
+val copyJarTask = tasks.register<Jar>("copyJar") {
+    dependsOn(tasks.remapJar)
+    archiveBaseName = modName
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+
+    val excludeWhitelist = listOf("org.slf4j.spi.SLF4JServiceProvider")
+    from(zipTree(tasks.remapJar.get().archiveFile)) {
+        exclude { file ->
+            val path = file.path
+            if (path.startsWith("META-INF")) {
+                !excludeWhitelist.any { path.endsWith(it) }
+            } else {
+                path == "module-info.class"
+            }
+        }
+    }
+}
+
+tasks.assemble {
+    dependsOn(copyJarTask)
 }

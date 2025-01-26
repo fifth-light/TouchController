@@ -54,3 +54,4 @@ jobs:
                         mod/${{ matrix.module }}/build/libs/
                         !mod/${{ matrix.module }}/build/libs/*-noreobf-*.jar
                         !mod/${{ matrix.module }}/build/libs/*-slim-*.jar
+                        !mod/${{ matrix.module }}/build/libs/*-fat-*.jar
