@@ -203,8 +203,16 @@ val copyJarTask = tasks.register<Jar>("copyJar") {
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
 
+    val jarFile = tasks.remapJar.get().outputs.files.files.first()
+
+    manifest {
+        from({
+            zipTree(jarFile).first { it.name == "MANIFEST.MF" }
+        })
+    }
+
     val excludeWhitelist = listOf("org.slf4j.spi.SLF4JServiceProvider")
-    from(zipTree(tasks.remapJar.get().archiveFile)) {
+    from(zipTree(jarFile)) {
         exclude { file ->
             val path = file.path
             if (path.startsWith("META-INF")) {
