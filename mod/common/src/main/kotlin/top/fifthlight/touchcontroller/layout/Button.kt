@@ -12,20 +12,23 @@ fun Context.SwipeButton(
     id: String,
     content: Context.(clicked: Boolean) -> Unit,
 ): ButtonResult {
-    val pointers = getPointersInRect(size)
     var newPointer = false
     var clicked = false
     var release = false
-    for (pointer in pointers) {
+    for (pointer in pointers.values) {
         when (val state = pointer.state) {
             PointerState.New -> {
-                pointer.state = PointerState.SwipeButton(id)
-                newPointer = true
-                clicked = true
+                if (pointer.inRect(size)) {
+                    pointer.state = PointerState.SwipeButton(id)
+                    newPointer = true
+                    clicked = true
+                }
             }
 
             is PointerState.SwipeButton -> {
-                clicked = true
+                if (pointer.inRect(size)) {
+                    clicked = true
+                }
             }
 
             is PointerState.Released -> {
@@ -50,20 +53,21 @@ fun Context.Button(
     id: String,
     content: Context.(clicked: Boolean) -> Unit,
 ): ButtonResult {
-    val pointers = getPointersInRect(size)
     var newPointer = false
     var clicked = false
     var release = false
-    for (pointer in pointers) {
+    for (pointer in pointers.values) {
         when (val state = pointer.state) {
             PointerState.New -> {
-                pointer.state = PointerState.Button(id)
-                newPointer = true
-                clicked = true
+                if (pointer.inRect(size)) {
+                    pointer.state = PointerState.Button(id)
+                    newPointer = true
+                    clicked = true
+                }
             }
 
             is PointerState.Button -> {
-                if (state.id == id) {
+                if (pointer.inRect(size) && state.id == id) {
                     clicked = true
                 }
             }
