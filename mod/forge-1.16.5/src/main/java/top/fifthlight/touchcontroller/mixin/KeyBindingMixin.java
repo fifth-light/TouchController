@@ -5,6 +5,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraftforge.client.settings.KeyBindingMap;
 import org.koin.java.KoinJavaComponent;
+import org.koin.mp.KoinPlatform;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,6 +26,9 @@ public abstract class KeyBindingMixin {
 
     @Unique
     private static boolean touchController$doCancelKey(InputMappings.Input key) {
+        if (KoinPlatform.INSTANCE.getKoinOrNull() == null) {
+            return false;
+        }
         GlobalConfigHolder configHolder = KoinJavaComponent.getOrNull(GlobalConfigHolder.class);
         if (configHolder == null) {
             return false;
