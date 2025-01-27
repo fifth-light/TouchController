@@ -9,7 +9,7 @@
 
 根据不同的 mod 加载器，TouchController 需要如下的前置 mod：
 
-- Fabric：[Fabric API](https://github.com/FabricMC/fabric)、[Fabric Language Kotlin](https://github.com/FabricMC/fabric-language-kotlin)
+- Fabric：[Fabric API](https://github.com/FabricMC/fabric)
 - Forge：无前置
 
 ## 支持的游戏版本和平台
