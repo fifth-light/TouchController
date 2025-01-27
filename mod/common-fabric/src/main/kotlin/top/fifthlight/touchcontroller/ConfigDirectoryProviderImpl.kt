@@ -7,6 +7,6 @@ import java.nio.file.Path
 object ConfigDirectoryProviderImpl : ConfigDirectoryProvider {
     override fun getConfigDirectory(): Path {
         val fabricLoader = FabricLoader.getInstance()
-        return fabricLoader.configDir.resolve("touchcontroller")
+        return fabricLoader.configDir.resolve(BuildInfo.MOD_ID)
     }
 }

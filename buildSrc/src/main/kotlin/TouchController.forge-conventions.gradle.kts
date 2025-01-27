@@ -39,6 +39,7 @@ val legacyLanguageFormatBool = legacyLanguageFormat.toBoolean()
 val shadeJoml: String by extra.properties
 val shadeJomlBool = shadeJoml.toBoolean()
 val excludeR8: String by extra.properties
+val excludeR8Jar: String by extra.properties
 
 version = "$modVersion+forge-$gameVersion"
 group = "top.fifthlight.touchcontroller"
@@ -249,7 +250,16 @@ gr8 {
         addProgramJarsFrom(configurations.getByName("shadow"))
         addProgramJarsFrom(tasks.jar)
 
-        addClassPathJarsFrom(minecraftShadow)
+        if (!excludeR8Jar.isBlank()) {
+            val excludeR8JarRegex = excludeR8Jar.toRegex()
+            val collections = project.objects.fileCollection()
+            collections.from(minecraftShadow)
+            addClassPathJarsFrom(collections.filter {
+                !it.name.matches(excludeR8JarRegex)
+            })
+        } else {
+            addClassPathJarsFrom(minecraftShadow)
+        }
 
         r8Version("8.9.21")
         proguardFile(rootProject.file("mod/common-forge/rules.pro"))

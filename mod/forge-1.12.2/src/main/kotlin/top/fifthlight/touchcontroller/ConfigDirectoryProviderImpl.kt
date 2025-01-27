@@ -7,6 +7,6 @@ import java.nio.file.Path
 object ConfigDirectoryProviderImpl : ConfigDirectoryProvider {
     override fun getConfigDirectory(): Path {
         val fmlConfigPath = Loader.instance().configDir.toPath()
-        return fmlConfigPath.resolve("touchcontroller")
+        return fmlConfigPath.resolve(BuildInfo.MOD_ID)
     }
 }
