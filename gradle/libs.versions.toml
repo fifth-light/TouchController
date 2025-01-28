@@ -1,5 +1,5 @@
 [versions]
-fabric-loader = "0.16.10"
+fabric-loader = "0.16.9"
 kotlin = "2.1.0"
 loom = "1.9-SNAPSHOT"
 forge-gradle = "6.0.29"
