@@ -115,14 +115,15 @@ data object AboutCategory : ConfigCategory(
                             }
                             Row(horizontalArrangement = Arrangement.spacedBy(4, Alignment.Right)) {
                                 for (license in library.licenses) {
-                                    license.licenseContent?.let { content ->
+                                    val license = aboutInfo.libraries.licenses[license]
+                                    license?.content?.let { content ->
                                         Text(
                                             modifier = Modifier.clickable { showLicense(content) },
                                             text = license.name,
                                             color = Colors.BLUE,
                                         )
-                                    } ?: run {
-                                        Text(license.name)
+                                    } ?: license?.name?.let { name ->
+                                        Text(name)
                                     }
                                 }
                             }
