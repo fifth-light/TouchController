@@ -1,14 +1,13 @@
 package top.fifthlight.touchcontroller.ui.model
 
 import kotlinx.collections.immutable.plus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import top.fifthlight.combine.screen.ViewModel
 import top.fifthlight.combine.util.CloseHandler
+import top.fifthlight.touchcontroller.about.AboutInfoProvider
 import top.fifthlight.touchcontroller.config.*
 import top.fifthlight.touchcontroller.control.ControllerWidget
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
@@ -23,6 +22,7 @@ class ConfigScreenViewModel(
 ) : ViewModel(scope), KoinComponent {
     private val configHolder: GlobalConfigHolder by inject()
     private val defaultItemListProvider: DefaultItemListProvider by inject()
+    private val aboutInfoProvider: AboutInfoProvider by inject()
 
     private val _uiState = MutableStateFlow(
         ConfigScreenState(
@@ -35,14 +35,24 @@ class ConfigScreenViewModel(
 
     init {
         @OptIn(FlowPreview::class)
-        scope.launch {
-            _uiState
-                .map { it.presets }
-                .debounce(500.milliseconds)
-                .distinctUntilChanged()
-                .collectLatest {
-                    configHolder.savePreset(it)
+        with(scope) {
+            launch {
+                _uiState
+                    .map { it.presets }
+                    .debounce(500.milliseconds)
+                    .distinctUntilChanged()
+                    .collectLatest {
+                        configHolder.savePreset(it)
+                    }
+            }
+            launch {
+                val aboutInfo = withContext(Dispatchers.IO) {
+                    aboutInfoProvider.aboutInfo
                 }
+                _uiState.getAndUpdate {
+                    it.copy(aboutInfo = aboutInfo)
+                }
+            }
         }
     }
 

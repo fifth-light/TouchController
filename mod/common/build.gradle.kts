@@ -32,6 +32,8 @@ dependencies {
     api(libs.kotlinx.collections.immutable)
     api(libs.kotlinx.serialization.json)
     api(libs.kotlinx.coroutines.core)
+
+    implementation(libs.aboutlibraries.core)
 }
 
 kotlin {
