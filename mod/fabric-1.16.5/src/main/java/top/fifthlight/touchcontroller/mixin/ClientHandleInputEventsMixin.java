@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import top.fifthlight.touchcontroller.layout.ContextResult;
 import top.fifthlight.touchcontroller.layout.ContextStatus;
 import top.fifthlight.touchcontroller.model.ControllerHudModel;
 
@@ -50,6 +51,7 @@ public abstract class ClientHandleInputEventsMixin {
     )
     private boolean isPressed(KeyBinding instance) {
         ControllerHudModel controllerHudModel = KoinJavaComponent.get(ControllerHudModel.class);
+        ContextResult result = controllerHudModel.getResult();
         ContextStatus status = controllerHudModel.getStatus();
         if (instance == options.keyAttack) {
             return instance.isPressed() || status.getAttack().isPressed();
@@ -59,6 +61,8 @@ public abstract class ClientHandleInputEventsMixin {
             return instance.isPressed() || status.getOpenInventory().isPressed();
         } else if (instance == options.keySwapHands) {
             return instance.isPressed() || status.getSwapHands().isPressed();
+        } else if (instance == options.keySprint) {
+            return instance.isPressed() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isPressed();
         }

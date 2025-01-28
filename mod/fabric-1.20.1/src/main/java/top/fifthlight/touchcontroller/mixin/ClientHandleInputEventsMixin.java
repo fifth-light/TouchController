@@ -49,6 +49,7 @@ public abstract class ClientHandleInputEventsMixin {
     )
     private boolean isPressed(KeyBinding instance) {
         var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
+        var result = controllerHudModel.getResult();
         var status = controllerHudModel.getStatus();
         if (instance == options.attackKey) {
             return instance.isPressed() || status.getAttack().isPressed();
@@ -58,6 +59,8 @@ public abstract class ClientHandleInputEventsMixin {
             return instance.isPressed() || status.getOpenInventory().isPressed();
         } else if (instance == options.swapHandsKey) {
             return instance.isPressed() || status.getSwapHands().isPressed();
+        } else if (instance == options.sprintKey) {
+            return instance.isPressed() || result.getSprint() || status.getSprintLocked();
         } else {
             return instance.isPressed();
         }

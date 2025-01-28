@@ -1,6 +1,5 @@
 package top.fifthlight.touchcontroller.mixin;
 
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import org.koin.java.KoinJavaComponent;
@@ -16,25 +15,6 @@ public abstract class ClientPlayerEntityMixin {
     @Shadow
     @Final
     protected Minecraft minecraft;
-
-    @Redirect(
-            method = "aiStep()V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/KeyMapping;isDown()Z"
-            )
-    )
-    private boolean isPressed(KeyMapping instance) {
-        var options = minecraft.options;
-        var controllerHudModel = (ControllerHudModel) KoinJavaComponent.get(ControllerHudModel.class);
-        var result = controllerHudModel.getResult();
-        var status = controllerHudModel.getStatus();
-        if (instance == options.keySprint) {
-            return instance.isDown() || result.getSprint() || status.getSprintLocked();
-        } else {
-            return instance.isDown();
-        }
-    }
 
     /// Because Minecraft Java version requires you to stand on ground to trigger sprint on double-clicking forward key,
     /// this method change the on ground logic to relax this requirement when using touch input.
