@@ -1,11 +1,8 @@
 import com.modrinth.minotaur.TaskModrinthUpload
-import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     id("com.modrinth.minotaur")
 }
-
-val libs = the<LibrariesForLibs>()
 
 val modId: String by extra.properties
 val modName: String by extra.properties
@@ -23,7 +20,7 @@ tasks.withType<TaskModrinthUpload> {
         }
 
         "fabric" -> {
-            // Nothing
+            dependsOn(tasks.getByName("copyJar"))
         }
 
         else -> error("Bad modType: $modType")
@@ -39,7 +36,7 @@ modrinth {
             uploadFile.set(layout.buildDirectory.file("libs/$modName-$version.jar"))
         }
         "fabric" -> {
-            uploadFile.set(tasks.getByName("remapJar"))
+            uploadFile.set(tasks.getByName("copyJar"))
         }
         else -> error("Bad modType: $modType")
     }
