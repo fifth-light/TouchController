@@ -5,7 +5,6 @@ plugins {
     id("TouchController.toolchain-conventions")
     id("TouchController.forge-conventions")
     id("TouchController.modrinth-conventions")
-    id("TouchController.about-libraries-conventions")
 }
 
 sourceSets.main {

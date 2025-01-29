@@ -8,7 +8,6 @@ import top.fifthlight.combine.modifier.drawing.background
 import top.fifthlight.combine.modifier.drawing.border
 import top.fifthlight.combine.modifier.placement.padding
 import top.fifthlight.combine.modifier.pointer.consumePress
-import top.fifthlight.combine.modifier.scroll.verticalScroll
 import top.fifthlight.combine.paint.Colors
 import top.fifthlight.combine.widget.base.Dialog
 import top.fifthlight.combine.widget.base.layout.BoxScope
@@ -29,7 +28,6 @@ fun AlertDialog(
                 .padding(8)
                 .background(Colors.BLACK)
                 .border(1, Colors.WHITE)
-                .verticalScroll()
                 .consumePress(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8)

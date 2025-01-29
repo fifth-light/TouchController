@@ -15,7 +15,6 @@ joml = "1.10.8"
 slf4j = "2.0.16"
 # DONT UPDATE IT BECAUSE MINECRAFT DEPENDS ON LOG4J 2.8.1
 log4j = "2.8.1"
-aboutlibraries = "11.5.0"
 
 # Android
 agp = "8.7.3"
@@ -42,10 +41,6 @@ gr8 = { group = "com.gradleup.gr8", name = "com.gradleup.gr8.gradle.plugin", ver
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
-aboutlibraries-core = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutlibraries" }
-
-# BELOW ARE GRADLE PLUGINS
-aboutlibraries-plugin = { group = "com.mikepenz.aboutlibraries.plugin", name = "com.mikepenz.aboutlibraries.plugin.gradle.plugin", version.ref = "aboutlibraries" }
 
 # Fabric
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }

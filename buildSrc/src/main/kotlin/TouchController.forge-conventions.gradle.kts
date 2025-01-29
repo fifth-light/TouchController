@@ -209,13 +209,13 @@ tasks.processResources {
     filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta", "mcmod.info")) {
         expand(properties)
     }
-
-    from(File(rootDir, "LICENSE")) {
-        rename { "${it}_${modName}" }
-    }
 }
 
 tasks.withType<Jar> {
+    from(File(rootDir, "LICENSE")) {
+        rename { "${it}_${modName}" }
+    }
+
     manifest {
         val attributes = mutableMapOf(
             "FMLCorePlugin" to "top.fifthlight.touchcontroller.TouchControllerCorePlugin",

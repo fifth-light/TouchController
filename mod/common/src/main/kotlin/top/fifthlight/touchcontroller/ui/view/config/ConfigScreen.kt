@@ -16,7 +16,10 @@ import top.fifthlight.combine.widget.ui.Tab
 import top.fifthlight.combine.widget.ui.TabItem
 import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.ui.model.ConfigScreenViewModel
-import top.fifthlight.touchcontroller.ui.view.config.category.*
+import top.fifthlight.touchcontroller.ui.view.config.category.ConfigCategory
+import top.fifthlight.touchcontroller.ui.view.config.category.GlobalCategory
+import top.fifthlight.touchcontroller.ui.view.config.category.ItemsCategory
+import top.fifthlight.touchcontroller.ui.view.config.category.LayoutCategory
 
 @Composable
 private fun TabNavigationBar(
@@ -76,7 +79,6 @@ fun ConfigScreen(viewModel: ConfigScreenViewModel) {
                 GlobalCategory,
                 ItemsCategory,
                 LayoutCategory,
-                AboutCategory,
             ),
             selectedCategory = uiState.selectedCategory,
             onCategorySelected = { category ->

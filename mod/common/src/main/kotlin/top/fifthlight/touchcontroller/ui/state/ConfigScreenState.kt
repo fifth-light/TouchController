@@ -1,7 +1,6 @@
 package top.fifthlight.touchcontroller.ui.state
 
 import kotlinx.collections.immutable.plus
-import top.fifthlight.touchcontroller.about.AboutInfo
 import top.fifthlight.touchcontroller.config.ControllerLayout
 import top.fifthlight.touchcontroller.config.GlobalConfig
 import top.fifthlight.touchcontroller.config.LayoutPresets
@@ -29,7 +28,6 @@ data class ConfigScreenState(
     val selectedPreset: Int = 0,
     val defaultOpacity: Float = .6f,
     val copiedWidget: ControllerWidget? = null,
-    val aboutInfo: AboutInfo? = null,
 ) {
     val allPresets = defaultPresets.presets + presets.presets
 }

@@ -84,18 +84,10 @@ task<JavaExec>("generateBuildInfo") {
     val modId: String by properties
     val modName: String by properties
     val modVersion: String by properties
-    val modDescription: String by properties
-    val modLicense: String by properties
-    val modAuthors: String by properties
-    val modContributors: String by properties
     val properties = mapOf(
         "modId" to modId,
         "modName" to modName,
-        "modVersion" to modVersion,
-        "modDescription" to modDescription,
-        "modLicense" to modLicense,
-        "modAuthors" to modAuthors,
-        "modContributors" to modContributors,
+        "modVersion" to modVersion
     )
     inputs.properties(properties)
     outputs.dir(outputKotlinBuildInfoDir)
