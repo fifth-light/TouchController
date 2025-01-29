@@ -42,6 +42,7 @@ gr8 = { group = "com.gradleup.gr8", name = "com.gradleup.gr8.gradle.plugin", ver
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
+aboutlibraries-core = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutlibraries" }
 
 # BELOW ARE GRADLE PLUGINS
 aboutlibraries-plugin = { group = "com.mikepenz.aboutlibraries.plugin", name = "com.mikepenz.aboutlibraries.plugin.gradle.plugin", version.ref = "aboutlibraries" }
