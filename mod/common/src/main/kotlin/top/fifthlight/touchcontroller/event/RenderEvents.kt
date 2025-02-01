@@ -10,6 +10,7 @@ import top.fifthlight.touchcontroller.config.GlobalConfigHolder
 import top.fifthlight.touchcontroller.config.LayerConditionKey
 import top.fifthlight.touchcontroller.gal.*
 import top.fifthlight.touchcontroller.layout.Context
+import top.fifthlight.touchcontroller.layout.ContextInput
 import top.fifthlight.touchcontroller.layout.DrawQueue
 import top.fifthlight.touchcontroller.layout.Hud
 import top.fifthlight.touchcontroller.model.ControllerHudModel
@@ -117,11 +118,15 @@ object RenderEvents : KoinComponent {
             size = window.scaledSize,
             screenOffset = IntOffset.ZERO,
             pointers = touchStateModel.pointers,
+            input = ContextInput(
+                inGui = gameState.inGui,
+                condition = condition,
+                perspective = gameState.perspective,
+            ),
             status = controllerHudModel.status,
             timer = controllerHudModel.timer,
             keyBindingHandler = keyBindingHandler,
             config = configHolder.config.value,
-            condition = condition,
         ).run {
             Hud(
                 layers = configHolder.layout.value.layers,
@@ -149,6 +154,9 @@ object RenderEvents : KoinComponent {
         }
         if (result.pause) {
             gameAction.openGameMenu()
+        }
+        if (result.nextPerspective) {
+            gameAction.nextPerspective()
         }
         result.lookDirection?.let { (x, y) ->
             player.changeLookDirection(x.toDouble(), y.toDouble())

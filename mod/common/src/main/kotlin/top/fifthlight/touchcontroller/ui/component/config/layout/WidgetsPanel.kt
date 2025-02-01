@@ -79,7 +79,11 @@ private val DEFAULT_CONFIGS = persistentListOf(
     WidgetItem(
         name = Texts.SCREEN_OPTIONS_WIDGET_ATTACK_BUTTON_NAME,
         config = AttackButton()
-    )
+    ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_PERSPECTIVE_SWITCH_BUTTON_NAME,
+        config = PerspectiveSwitchButton()
+    ),
 )
 
 @Composable
@@ -89,12 +93,11 @@ fun WidgetsPanel(
     onDefaultOpacityChanged: (Float) -> Unit = {},
     onWidgetAdded: (ControllerWidget) -> Unit = {},
 ) {
-    Column(
-        modifier = modifier.padding(4),
-        verticalArrangement = Arrangement.spacedBy(4),
-    ) {
+    Column(modifier) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(4)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4),
         ) {
@@ -108,6 +111,7 @@ fun WidgetsPanel(
         }
         FlowRow(
             modifier = Modifier
+                .padding(4)
                 .weight(1f)
                 .fillMaxWidth()
                 .verticalScroll(),

@@ -24,7 +24,7 @@ fun Context.Hud(layers: List<LayoutLayer>) {
         }
     ) {
         for (layer in layers) {
-            if (!layer.condition.check(condition)) {
+            if (!layer.condition.check(input.condition)) {
                 continue
             }
             for (widget in layer.widgets) {
@@ -40,12 +40,12 @@ fun Context.Hud(layers: List<LayoutLayer>) {
             }
         }
 
-        if (!inGui) {
+        if (!input.inGui) {
             Inventory()
         }
     }
 
-    if (!inGui) {
+    if (!input.inGui) {
         View()
         Crosshair()
         if (config.showPointers) {

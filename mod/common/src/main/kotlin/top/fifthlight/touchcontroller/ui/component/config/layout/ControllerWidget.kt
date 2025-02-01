@@ -1,7 +1,6 @@
 package top.fifthlight.touchcontroller.ui.component.config.layout
 
 import androidx.compose.runtime.*
-import kotlinx.collections.immutable.persistentMapOf
 import org.koin.compose.koinInject
 import top.fifthlight.combine.modifier.Modifier
 import top.fifthlight.combine.modifier.placement.onPlaced
@@ -34,7 +33,6 @@ fun ControllerWidget(
             pointers = mutableMapOf(),
             result = ContextResult(),
             config = GlobalConfig.default(itemListProvider),
-            condition = persistentMapOf(),
             opacity = config.opacity,
         )
         config.layout(context)
@@ -90,7 +88,6 @@ fun ScaledControllerWidget(
             pointers = mutableMapOf(),
             result = ContextResult(),
             config = GlobalConfig.default(itemListProvider),
-            condition = persistentMapOf(),
             opacity = config.opacity,
         )
         config.layout(context)

@@ -6,4 +6,5 @@ interface GameAction {
     fun openChatScreen()
     fun openGameMenu()
     fun sendMessage(text: Text)
+    fun nextPerspective()
 }

@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.layout
 
 import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.persistentMapOf
 import org.koin.core.component.KoinComponent
 import top.fifthlight.combine.paint.Canvas
 import top.fifthlight.combine.paint.withTranslate
@@ -10,6 +11,7 @@ import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.GlobalConfig
 import top.fifthlight.touchcontroller.config.LayerConditionKey
+import top.fifthlight.touchcontroller.gal.CameraPerspective
 import top.fifthlight.touchcontroller.gal.KeyBindingHandler
 import top.fifthlight.touchcontroller.state.Pointer
 
@@ -60,6 +62,12 @@ data class InventoryResult(
     }
 }
 
+data class ContextInput(
+    val inGui: Boolean = false,
+    val condition: PersistentMap<LayerConditionKey, Boolean> = persistentMapOf(),
+    val perspective: CameraPerspective = CameraPerspective.FIRST_PERSON,
+)
+
 data class ContextResult(
     var forward: Float = 0f,
     var left: Float = 0f,
@@ -72,6 +80,7 @@ data class ContextResult(
     var boatLeft: Boolean = false,
     var boatRight: Boolean = false,
     var showBlockOutline: Boolean = false,
+    var nextPerspective: Boolean = false,
 )
 
 enum class DPadDirection {
@@ -108,13 +117,12 @@ data class ContextCounter(
 data class Context(
     val windowSize: IntSize,
     val windowScaledSize: IntSize,
-    val inGui: Boolean = false,
     val drawQueue: DrawQueue = DrawQueue(),
     val size: IntSize,
     val screenOffset: IntOffset,
     val opacity: Float = 1f,
     val pointers: MutableMap<Int, Pointer> = mutableMapOf(),
-    val condition: PersistentMap<LayerConditionKey, Boolean>,
+    val input: ContextInput = ContextInput(),
     val result: ContextResult = ContextResult(),
     val status: ContextStatus = ContextStatus(),
     val keyBindingHandler: KeyBindingHandler = KeyBindingHandler.Empty,

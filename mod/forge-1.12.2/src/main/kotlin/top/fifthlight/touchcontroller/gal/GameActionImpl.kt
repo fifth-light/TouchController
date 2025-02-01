@@ -19,4 +19,19 @@ object GameActionImpl : GameAction {
     override fun sendMessage(text: Text) {
         client.ingameGUI.chatGUI.printChatMessage(text.toMinecraft())
     }
+
+    override fun nextPerspective() {
+        client.gameSettings.thirdPersonView++
+        if (client.gameSettings.thirdPersonView > 2) {
+            client.gameSettings.thirdPersonView = 0
+        }
+
+        if (client.gameSettings.thirdPersonView == 0) {
+            client.entityRenderer.loadEntityShader(client.renderViewEntity)
+        } else if (client.gameSettings.thirdPersonView == 1) {
+            client.entityRenderer.loadEntityShader(null)
+        }
+
+        client.renderGlobal.setDisplayListEntitiesDirty()
+    }
 }
