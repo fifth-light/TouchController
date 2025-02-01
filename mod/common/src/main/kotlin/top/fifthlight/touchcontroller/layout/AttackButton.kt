@@ -10,17 +10,19 @@ fun Context.AttackButton(config: AttackButton) {
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (config.texture) {
                 AttackButtonTexture.CLASSIC -> {
-                    if (clicked)
-                        Texture(texture = Textures.GUI_ATTACK_ATTACK_CLASSIC_ACTIVE)
-                    else
+                    if (clicked) {
+                        Texture(texture = Textures.GUI_ATTACK_ATTACK_CLASSIC, color = 0xFFAAAAAAu)
+                    } else {
                         Texture(texture = Textures.GUI_ATTACK_ATTACK_CLASSIC)
+                    }
                 }
 
                 AttackButtonTexture.NEW -> {
-                    if (clicked)
+                    if (clicked) {
                         Texture(texture = Textures.GUI_ATTACK_ATTACK_ACTIVE)
-                    else
+                    } else {
                         Texture(texture = Textures.GUI_ATTACK_ATTACK)
+                    }
                 }
             }
         }

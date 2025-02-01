@@ -26,10 +26,20 @@ enum class UseButtonTexture {
 }
 
 @Serializable
+enum class UseButtonTrigger {
+    @SerialName("single_click_lock")
+    SINGLE_CLICK_LOCK,
+
+    @SerialName("hold")
+    HOLD,
+}
+
+@Serializable
 @SerialName("use_button")
 data class UseButton(
     val size: Float = 2f,
     val texture: UseButtonTexture = UseButtonTexture.CLASSIC,
+    val trigger: UseButtonTrigger = UseButtonTrigger.HOLD,
     override val align: Align = Align.RIGHT_BOTTOM,
     override val offset: IntOffset = IntOffset.ZERO,
     override val opacity: Float = 1f
@@ -58,7 +68,16 @@ data class UseButton(
                     UseButtonTexture.NEW to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_PROPERTY_STYLE_NEW),
                     UseButtonTexture.CLASSIC to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_PROPERTY_STYLE_CLASSIC)
                 )
-            )
+            ),
+            EnumProperty(
+                getValue = { it.trigger },
+                setValue = { config, value -> config.copy(trigger = value) },
+                name = textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_PROPERTY_TRIGGER),
+                items = persistentListOf(
+                    UseButtonTrigger.HOLD to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_PROPERTY_TRIGGER_HOLD),
+                    UseButtonTrigger.SINGLE_CLICK_LOCK to textFactory.of(Texts.SCREEN_OPTIONS_WIDGET_USE_BUTTON_PROPERTY_TRIGGER_SINGLE_CLICK_LOCK)
+                )
+            ),
         ) as PersistentList<Property<ControllerWidget, *>>
     }
 
