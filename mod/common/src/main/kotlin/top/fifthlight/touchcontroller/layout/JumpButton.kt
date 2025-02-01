@@ -4,6 +4,7 @@ import top.fifthlight.data.IntSize
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.JumpButton
 import top.fifthlight.touchcontroller.control.JumpButtonTexture
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 
 private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, texture: JumpButtonTexture) {
     withAlign(align = Align.CENTER_CENTER, size = size) {
@@ -32,18 +33,12 @@ private fun Context.JumpButtonTexture(size: IntSize, clicked: Boolean, texture: 
 fun Context.DPadJumpButton(
     size: IntSize = this.size,
     texture: JumpButtonTexture = JumpButtonTexture.CLASSIC,
-): Boolean {
-    val (_, clicked) = SwipeButton(id = "jump") { clicked ->
-        JumpButtonTexture(size, clicked, texture)
-    }
-    return clicked
+): ButtonResult = SwipeButton(id = "jump") { clicked ->
+    JumpButtonTexture(size, clicked, texture)
 }
 
-fun Context.JumpButton(
-    config: JumpButton
-) {
-    val (_, clicked) = Button(id = "jump") { clicked ->
+fun Context.JumpButton(config: JumpButton) {
+    KeyMappingButton(id = "jump", keyType = KeyBindingType.JUMP) { clicked ->
         JumpButtonTexture(config.size(), clicked, config.texture)
     }
-    status.jumping = status.jumping || clicked
 }

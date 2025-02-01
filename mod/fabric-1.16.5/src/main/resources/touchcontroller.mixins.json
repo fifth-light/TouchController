@@ -6,7 +6,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "ClientHandleInputEventsMixin",
     "ClientOpenChatScreenInvoker",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerInvoker",
@@ -18,7 +17,7 @@
     "InGameHudMixin",
     "KeyBindingMixin",
     "KeyboardInputMixin",
-    "Matrix4fMixin",
-    "Matrix4fAccessor"
+    "Matrix4fAccessor",
+    "Matrix4fMixin"
   ]
 }

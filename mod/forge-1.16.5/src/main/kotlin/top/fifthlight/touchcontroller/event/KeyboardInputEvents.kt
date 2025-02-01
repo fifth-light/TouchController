@@ -16,22 +16,14 @@ object KeyboardInputEvents : KoinComponent {
         }
 
         val result = controllerHudModel.result
-        val status = controllerHudModel.status
 
         input.forwardImpulse += result.forward
         input.leftImpulse += result.left
         input.forwardImpulse = input.forwardImpulse.coerceIn(-1f, 1f)
         input.leftImpulse = input.leftImpulse.coerceIn(-1f, 1f)
-        input.shiftKeyDown = input.shiftKeyDown || status.sneakLocked || result.sneak || status.sneaking
-        input.jumping = input.jumping || status.jumping
         input.up = input.up || result.forward > 0.5f || (result.boatLeft && result.boatRight)
         input.down = input.down || result.forward < -0.5f
         input.left = input.left || result.left > 0.5f || (!result.boatLeft && result.boatRight)
         input.right = input.right || result.left < -0.5f || (result.boatLeft && !result.boatRight)
-
-        status.sneaking = false
-        status.jumping = false
-
-        TickEvents.inputTick()
     }
 }

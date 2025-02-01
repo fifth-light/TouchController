@@ -13,16 +13,22 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.fifthlight.touchcontroller.config.GlobalConfig;
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
+import top.fifthlight.touchcontroller.gal.KeyBindingHandlerImpl;
+import top.fifthlight.touchcontroller.helper.ClickableKeyBinding;
 
 import java.util.List;
 
 @Mixin(KeyBinding.class)
-public abstract class KeyBindingMixin {
+public abstract class KeyBindingMixin implements ClickableKeyBinding {
     @Shadow
     @Final
     private static KeyBindingMap MAP;
+
+    @Shadow
+    private int clickCount;
 
     @Unique
     private static boolean touchController$doCancelKey(InputMappings.Input key) {
@@ -52,16 +58,37 @@ public abstract class KeyBindingMixin {
     }
 
     @Inject(method = "click", at = @At("HEAD"), cancellable = true)
-    private static void click(InputMappings.Input key, CallbackInfo info) {
+    private static void onKeyPressed(InputMappings.Input key, CallbackInfo info) {
         if (touchController$doCancelKey(key)) {
             info.cancel();
         }
     }
 
     @Inject(method = "set", at = @At("HEAD"), cancellable = true)
-    private static void set(InputMappings.Input key, boolean pHeld, CallbackInfo info) {
+    private static void setKeyPressed(InputMappings.Input key, boolean pHeld, CallbackInfo info) {
         if (touchController$doCancelKey(key)) {
             info.cancel();
+        }
+    }
+
+    @Override
+    public void touchController$click() {
+        clickCount++;
+    }
+
+    @Override
+    public int touchController$getClickCount() {
+        return clickCount;
+    }
+
+    @Inject(
+            method = "isDown()Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void overrideIsDown(CallbackInfoReturnable<Boolean> info) {
+        if (KeyBindingHandlerImpl.INSTANCE.isDown((KeyBinding) (Object) this)) {
+            info.setReturnValue(true);
         }
     }
 }

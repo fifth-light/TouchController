@@ -11,13 +11,21 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder;
+import top.fifthlight.touchcontroller.gal.KeyBindingHandlerImpl;
+import top.fifthlight.touchcontroller.helper.ClickableKeyBinding;
 
 import java.util.Map;
 
 @Mixin(KeyBinding.class)
-public abstract class KeyBindingMixin {
-    @Shadow @Final private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
+public abstract class KeyBindingMixin implements ClickableKeyBinding {
+    @Shadow
+    @Final
+    private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
+
+    @Shadow
+    private int timesPressed;
 
     @Unique
     private static boolean doCancelKey(InputUtil.Key key) {
@@ -54,6 +62,27 @@ public abstract class KeyBindingMixin {
     private static void setKeyPressed(InputUtil.Key key, boolean pressed, CallbackInfo info) {
         if (doCancelKey(key)) {
             info.cancel();
+        }
+    }
+
+    @Override
+    public void touchController$click() {
+        timesPressed++;
+    }
+
+    @Override
+    public int touchController$getClickCount() {
+        return timesPressed;
+    }
+
+    @Inject(
+            method = "isPressed()Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void overrideIsDown(CallbackInfoReturnable<Boolean> info) {
+        if (KeyBindingHandlerImpl.INSTANCE.isDown((KeyBinding) (Object) this)) {
+            info.setReturnValue(true);
         }
     }
 }

@@ -29,8 +29,11 @@ object RenderEvents : KoinComponent {
     private val playerHandleFactory: PlayerHandleFactory by inject()
     private val platformHolder: PlatformHolder by inject()
     private val gameStateProvider: GameStateProvider by inject()
+    private val keyBindingHandler: KeyBindingHandler by inject()
 
     fun onRenderStart() {
+        keyBindingHandler.renderTick()
+
         if (controllerHudModel.status.vibrate) {
             platformHolder.platform?.sendEvent(VibrateMessage(VibrateMessage.Kind.BLOCK_BROKEN))
             controllerHudModel.status.vibrate = false
@@ -82,10 +85,8 @@ object RenderEvents : KoinComponent {
 
         val player = playerHandleFactory.getPlayerHandle() ?: return
         if (player.isFlying || player.isSubmergedInWater) {
-            controllerHudModel.status.sneakLocked = false
+            keyBindingHandler.getState(KeyBindingType.SNEAK).locked = false
         }
-
-
 
         val ridingType = player.ridingEntityType
         val condition = buildMap {
@@ -118,6 +119,7 @@ object RenderEvents : KoinComponent {
             pointers = touchStateModel.pointers,
             status = controllerHudModel.status,
             timer = controllerHudModel.timer,
+            keyBindingHandler = keyBindingHandler,
             config = configHolder.config.value,
             condition = condition,
         ).run {
@@ -130,7 +132,8 @@ object RenderEvents : KoinComponent {
         controllerHudModel.pendingDrawQueue = drawQueue
 
         val status = controllerHudModel.status
-        if (result.sprint || status.sprintLocked) {
+        val sprintState = keyBindingHandler.getState(KeyBindingType.SPRINT)
+        if (sprintState.locked || sprintState.clicked) {
             status.wasSprinting = true
         } else {
             if (status.wasSprinting) {

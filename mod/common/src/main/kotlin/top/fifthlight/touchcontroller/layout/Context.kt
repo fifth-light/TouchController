@@ -10,39 +10,8 @@ import top.fifthlight.data.IntSize
 import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.config.GlobalConfig
 import top.fifthlight.touchcontroller.config.LayerConditionKey
+import top.fifthlight.touchcontroller.gal.KeyBindingHandler
 import top.fifthlight.touchcontroller.state.Pointer
-
-data class KeyBindingResult(
-    var timesPressed: Int = 0,
-    var isPressed: Boolean = false
-) {
-    // Click for once, don't hold this key
-    fun click() {
-        timesPressed++
-    }
-
-    // Hold this key
-    fun press() {
-        if (!isPressed) {
-            timesPressed++
-        }
-        isPressed = true
-    }
-
-    // Release this key
-    fun release() {
-        isPressed = false
-    }
-
-    fun wasPressed(): Boolean {
-        if (timesPressed > 0) {
-            timesPressed--
-            return true
-        } else {
-            return false
-        }
-    }
-}
 
 data class DoubleClickState(private val clickTime: Int = 15) {
     private var lastClick: Int = -1
@@ -98,36 +67,34 @@ data class ContextResult(
     var chat: Boolean = false,
     var lookDirection: Offset? = null,
     var crosshairStatus: CrosshairStatus? = null,
-    var sneak: Boolean = false,
     var cancelFlying: Boolean = false,
     val inventory: InventoryResult = InventoryResult(),
-    var sprint: Boolean = false,
     var boatLeft: Boolean = false,
     var boatRight: Boolean = false,
     var showBlockOutline: Boolean = false,
 )
+
+enum class DPadDirection {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+}
 
 data class ContextStatus(
     var dpadLeftForwardShown: Boolean = false,
     var dpadRightForwardShown: Boolean = false,
     var dpadLeftBackwardShown: Boolean = false,
     var dpadRightBackwardShown: Boolean = false,
-    var dpadForwardJumping: Boolean = false,
-    var sneaking: Boolean = false,
-    var sneakLocked: Boolean = false,
+    var dpadJumping: Boolean = false,
     val cancelFlying: DoubleClickState = DoubleClickState(),
     val sneakLocking: DoubleClickState = DoubleClickState(),
     val sneakTrigger: DoubleClickState = DoubleClickState(),
-    var jumping: Boolean = false,
-    val attack: KeyBindingResult = KeyBindingResult(),
-    val itemUse: KeyBindingResult = KeyBindingResult(),
     var lastCrosshairStatus: CrosshairStatus? = null,
-    val openInventory: KeyBindingResult = KeyBindingResult(),
     var vibrate: Boolean = false,
     val quickHandSwap: DoubleClickState = DoubleClickState(7),
-    val swapHands: KeyBindingResult = KeyBindingResult(),
+    var lastDpadDirection: DPadDirection? = null,
     var wasSprinting: Boolean = false,
-    var sprintLocked: Boolean = false,
 )
 
 data class ContextCounter(
@@ -150,6 +117,7 @@ data class Context(
     val condition: PersistentMap<LayerConditionKey, Boolean>,
     val result: ContextResult = ContextResult(),
     val status: ContextStatus = ContextStatus(),
+    val keyBindingHandler: KeyBindingHandler = KeyBindingHandler.Empty,
     val timer: ContextCounter = ContextCounter(),
     val config: GlobalConfig,
 ) : KoinComponent {

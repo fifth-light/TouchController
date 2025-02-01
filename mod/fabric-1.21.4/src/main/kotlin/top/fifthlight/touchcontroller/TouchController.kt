@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents
@@ -18,10 +19,7 @@ import org.slf4j.LoggerFactory
 import top.fifthlight.combine.platform.CanvasImpl
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
-import top.fifthlight.touchcontroller.event.BlockBreakEvents
-import top.fifthlight.touchcontroller.event.ConnectionEvents
-import top.fifthlight.touchcontroller.event.RenderEvents
-import top.fifthlight.touchcontroller.event.WindowCreateEvents
+import top.fifthlight.touchcontroller.event.*
 import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
@@ -77,6 +75,9 @@ class TouchController : ClientModInitializer, KoinComponent {
         }
         WorldRenderEvents.START.register {
             RenderEvents.onRenderStart()
+        }
+        ClientTickEvents.END_CLIENT_TICK.register {
+            TickEvents.clientTick()
         }
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
             ConnectionEvents.onJoinedWorld()

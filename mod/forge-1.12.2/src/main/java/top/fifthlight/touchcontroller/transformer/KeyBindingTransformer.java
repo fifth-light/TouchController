@@ -17,30 +17,7 @@ public class KeyBindingTransformer extends TouchControllerClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        if ("isPressed".equals(name) || "func_151468_f".equals(mapSelfMethodName(name, desc))) {
-            return new MethodVisitor(Opcodes.ASM5, super.visitMethod(access, name, desc, signature, exceptions)) {
-                private boolean isFirst = true;
-
-                // Insert code into the first return:
-                // if (KeyBindingHelper.isPressed(this)) {
-                //     return true;
-                // }
-                @Override
-                public void visitInsn(int opcode) {
-                    if (opcode == Opcodes.IRETURN && isFirst) {
-                        isFirst = false;
-                        visitVarInsn(Opcodes.ALOAD, 0);
-                        visitMethodInsn(Opcodes.INVOKESTATIC, "top/fifthlight/touchcontroller/helper/KeyBindingHelper", "isPressed", "(Lnet/minecraft/client/settings/KeyBinding;)Z", false);
-                        Label skip = new Label();
-                        visitJumpInsn(Opcodes.IFEQ, skip);
-                        visitInsn(Opcodes.ICONST_1);
-                        visitInsn(Opcodes.IRETURN);
-                        visitLabel(skip);
-                    }
-                    super.visitInsn(opcode);
-                }
-            };
-        } else if ("isKeyDown".equals(name) || "func_151470_d".equals(mapSelfMethodName(name, desc))) {
+        if ("isKeyDown".equals(name) || "func_151470_d".equals(mapSelfMethodName(name, desc))) {
             return new MethodVisitor(Opcodes.ASM5, super.visitMethod(access, name, desc, signature, exceptions)) {
                 private boolean isFirst = true;
 

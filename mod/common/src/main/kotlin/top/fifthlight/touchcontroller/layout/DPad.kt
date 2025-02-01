@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.layout
 
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.*
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 import top.fifthlight.touchcontroller.state.PointerState
 
 private const val ID_FORWARD = "dpad_forward"
@@ -230,6 +231,14 @@ fun Context.DPad(config: DPad) {
         Pair(false, true) -> result.left = -1f
     }
 
+    when {
+        forward -> DPadDirection.UP
+        backward -> DPadDirection.DOWN
+        left -> DPadDirection.LEFT
+        right -> DPadDirection.RIGHT
+        else -> null
+    }?.let { status.lastDpadDirection = it }
+
     withRect(
         x = buttonSize.width,
         y = buttonSize.height,
@@ -284,10 +293,14 @@ fun Context.DPad(config: DPad) {
             )
 
             DPadExtraButton.JUMP, DPadExtraButton.JUMP_WITHOUT_LOCKING, DPadExtraButton.FLYING -> {
-                val hasForward = pointers.values.any {
-                    (it.state as? PointerState.SwipeButton)?.id == ID_FORWARD
+                var hasPointer = false
+                for (pointer in getPointersInRect(size)) {
+                    val state = (pointer.state as? PointerState.SwipeButton) ?: continue
+                    if (state.id == ID_FORWARD || state.id == ID_BACKWARD || state.id == ID_LEFT || state.id == ID_RIGHT) {
+                        hasPointer = true
+                    }
                 }
-                val jumpClicked = DPadJumpButton(
+                val (_, clicked, _) = DPadJumpButton(
                     size = extraButtonDisplaySize,
                     texture = if (!config.classic) {
                         JumpButtonTexture.NEW
@@ -299,20 +312,27 @@ fun Context.DPad(config: DPad) {
                         }
                     }
                 )
-                if (jumpClicked) {
-                    if (hasForward) {
-                        result.forward = 1f
-                        if (config.extraButton == DPadExtraButton.JUMP_WITHOUT_LOCKING) {
-                            status.jumping = true
-                        } else if (!status.dpadForwardJumping) {
-                            status.jumping = true
-                            status.dpadForwardJumping = true
-                        }
+                val jumpKeyBinding = keyBindingHandler.getState(KeyBindingType.JUMP)
+                if (clicked) {
+                    if (config.extraButton == DPadExtraButton.JUMP_WITHOUT_LOCKING || !hasPointer) {
+                        jumpKeyBinding.clicked = true
                     } else {
-                        status.jumping = true
+                        if (!status.dpadJumping) {
+                            jumpKeyBinding.clicked = true
+                            status.dpadJumping = true
+                        }
+                    }
+                    if (hasPointer) {
+                        when (status.lastDpadDirection) {
+                            DPadDirection.UP -> result.forward = 1f
+                            DPadDirection.DOWN -> result.forward = -1f
+                            DPadDirection.LEFT -> result.left = 1f
+                            DPadDirection.RIGHT -> result.left = -1f
+                            null -> {}
+                        }
                     }
                 } else {
-                    status.dpadForwardJumping = false
+                    status.dpadJumping = false
                 }
             }
         }

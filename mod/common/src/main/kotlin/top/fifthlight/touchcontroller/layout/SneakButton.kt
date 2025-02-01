@@ -5,20 +5,22 @@ import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.SneakButton
 import top.fifthlight.touchcontroller.control.SneakButtonTexture
 import top.fifthlight.touchcontroller.control.SneakButtonTrigger
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 
 fun Context.RawSneakButton(
     size: IntSize = this.size,
     trigger: SneakButtonTrigger = SneakButtonTrigger.DOUBLE_CLICK_LOCK,
     texture: SneakButtonTexture = SneakButtonTexture.CLASSIC,
 ) {
+    val sneakButtonState = keyBindingHandler.getState(KeyBindingType.SNEAK)
     val (newPointer, clicked) = Button(id = "sneak") { clicked ->
         val isLockTrigger =
             trigger == SneakButtonTrigger.SINGLE_CLICK_LOCK || trigger == SneakButtonTrigger.DOUBLE_CLICK_LOCK
-        val showActive = (!isLockTrigger && clicked) || (isLockTrigger && status.sneakLocked)
+        val showActive = (!isLockTrigger && clicked) || (isLockTrigger && sneakButtonState.locked)
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (texture) {
                 SneakButtonTexture.CLASSIC -> if (isLockTrigger) {
-                    if (status.sneakLocked) {
+                    if (sneakButtonState.locked) {
                         if (clicked) {
                             Texture(texture = Textures.GUI_SNEAK_SNEAK_CLASSIC_ACTIVE, color = 0xFFAAAAAAu)
                         } else {
@@ -69,30 +71,27 @@ fun Context.RawSneakButton(
     when (trigger) {
         SneakButtonTrigger.DOUBLE_CLICK_LOCK -> if (newPointer) {
             if (status.sneakLocking.click(timer.tick)) {
-                status.sneakLocked = !status.sneakLocked
+                sneakButtonState.locked = !sneakButtonState.locked
             }
         }
 
         SneakButtonTrigger.SINGLE_CLICK_LOCK -> if (newPointer) {
-            status.sneakLocked = !status.sneakLocked
+            sneakButtonState.locked = !sneakButtonState.locked
         }
 
         SneakButtonTrigger.HOLD -> {
-            if (newPointer) {
-                status.sneaking = true
-            }
             if (clicked) {
-                result.sneak = true
+                sneakButtonState.clicked = true
             }
         }
 
         SneakButtonTrigger.SINGLE_CLICK_TRIGGER -> if (newPointer) {
-            status.sneaking = true
+            sneakButtonState.clicked = true
         }
 
         SneakButtonTrigger.DOUBLE_CLICK_TRIGGER -> if (newPointer) {
             if (status.sneakTrigger.click(timer.tick)) {
-                status.sneaking = true
+                sneakButtonState.clicked = true
             }
         }
     }

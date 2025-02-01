@@ -3,9 +3,10 @@ package top.fifthlight.touchcontroller.layout
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.UseButton
 import top.fifthlight.touchcontroller.control.UseButtonTexture
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 
 fun Context.UseButton(config: UseButton) {
-    val (newClick, _, release) = Button(id = "use") { clicked ->
+    KeyMappingButton(id = "use", keyType = KeyBindingType.USE) { clicked ->
         withAlign(align = Align.CENTER_CENTER, size = size) {
             when (config.texture) {
                 UseButtonTexture.CLASSIC -> {
@@ -24,8 +25,4 @@ fun Context.UseButton(config: UseButton) {
             }
         }
     }
-    if (newClick)
-        status.itemUse.press()
-    if (release)
-        status.itemUse.release()
 }

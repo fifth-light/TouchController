@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.layout
 
 import top.fifthlight.touchcontroller.assets.Textures
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 
 fun Context.InventoryButton() {
     val (_, _, release) = Button(id = "inventory") { clicked ->
@@ -11,6 +12,6 @@ fun Context.InventoryButton() {
         }
     }
     if (release) {
-        status.openInventory.click()
+        keyBindingHandler.getState(KeyBindingType.INVENTORY).clicked = true
     }
 }

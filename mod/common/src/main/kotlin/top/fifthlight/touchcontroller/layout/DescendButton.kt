@@ -3,9 +3,10 @@ package top.fifthlight.touchcontroller.layout
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.DescendButton
 import top.fifthlight.touchcontroller.control.DescendButtonTexture
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 
 fun Context.DescendButton(config: DescendButton) {
-    val (_, clicked) = SwipeButton(id = "descend") { clicked ->
+    KeyMappingSwipeButton(id = "descend", keyType = KeyBindingType.SNEAK) { clicked ->
         when (Pair(config.texture, clicked)) {
             Pair(DescendButtonTexture.CLASSIC, false) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_CLASSIC)
             Pair(DescendButtonTexture.CLASSIC, true) -> Texture(
@@ -19,5 +20,4 @@ fun Context.DescendButton(config: DescendButton) {
             Pair(DescendButtonTexture.FLYING, true) -> Texture(texture = Textures.GUI_DESCEND_DESCEND_FLYING_ACTIVE)
         }
     }
-    result.sneak = result.sneak || clicked
 }

@@ -17,7 +17,6 @@ object KeyboardInputEvents : KoinComponent {
         }
 
         val result = controllerHudModel.result
-        val status = controllerHudModel.status
 
         input.movementForward += result.forward
         input.movementSideways += result.left
@@ -28,13 +27,9 @@ object KeyboardInputEvents : KoinComponent {
             input.playerInput.backward() || result.forward < -0.5f,
             input.playerInput.left() || result.left > 0.5f || (!result.boatLeft && result.boatRight),
             input.playerInput.right() || result.left < -0.5f || (result.boatLeft && !result.boatRight),
-            input.playerInput.jump() || status.jumping,
-            input.playerInput.sneak() || status.sneakLocked || result.sneak || status.sneaking,
-            input.playerInput.sprint() || result.sprint || status.sprintLocked,
+            input.playerInput.jump(),
+            input.playerInput.sneak(),
+            input.playerInput.sprint(),
         )
-        status.jumping = false
-        status.sneaking = false
-
-        TickEvents.inputTick()
     }
 }

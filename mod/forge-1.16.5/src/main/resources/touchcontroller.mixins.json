@@ -7,7 +7,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "ClientHandleInputEventsMixin",
     "ClientOpenChatScreenInvoker",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerInvoker",
@@ -19,6 +18,7 @@
     "KeyBindingMixin",
     "KeyboardInputMixin",
     "Matrix4fAccessor",
-    "Matrix4fMixin"
+    "Matrix4fMixin",
+    "ToggleKeyMappingMixin"
   ]
 }

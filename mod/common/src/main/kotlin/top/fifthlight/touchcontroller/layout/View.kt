@@ -3,6 +3,7 @@ package top.fifthlight.touchcontroller.layout
 import org.koin.core.component.get
 import top.fifthlight.data.Offset
 import top.fifthlight.touchcontroller.gal.CrosshairTarget
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 import top.fifthlight.touchcontroller.gal.PlayerHandleFactory
 import top.fifthlight.touchcontroller.gal.ViewActionProvider
 import top.fifthlight.touchcontroller.state.PointerState
@@ -16,6 +17,9 @@ fun Context.View() {
         y = y * windowSize.height / windowSize.width
     )
 
+    val attackKeyState = keyBindingHandler.getState(KeyBindingType.ATTACK)
+    val useKeyState = keyBindingHandler.getState(KeyBindingType.USE)
+
     var releasedView = false
     for (key in pointers.keys.toList()) {
         val state = pointers[key]!!.state
@@ -25,11 +29,11 @@ fun Context.View() {
                 when (previousState.viewState) {
                     CONSUMED -> {}
                     BREAKING -> {
-                        status.attack.release()
+                        attackKeyState.locked = false
                     }
 
                     USING -> {
-                        status.itemUse.release()
+                        useKeyState.locked = false
                     }
 
                     INITIAL -> {
@@ -41,12 +45,12 @@ fun Context.View() {
                                 when (crosshairTarget) {
                                     CrosshairTarget.BLOCK -> {
                                         // Short click on block: use item
-                                        status.itemUse.click()
+                                        useKeyState.click()
                                     }
 
                                     CrosshairTarget.ENTITY -> {
                                         // Short click on entity: attack the entity
-                                        status.attack.click()
+                                        attackKeyState.click()
                                     }
 
                                     CrosshairTarget.MISS -> {}
@@ -117,19 +121,19 @@ fun Context.View() {
         if (pressTime == 5 && !moving) {
             if (itemUsable) {
                 // Trigger item long click
-                status.itemUse.press()
+                useKeyState.locked = true
                 viewState = USING
             } else {
                 when (crosshairTarget) {
                     CrosshairTarget.BLOCK -> {
                         // Trigger block breaking
-                        status.attack.press()
+                        attackKeyState.locked = true
                         viewState = BREAKING
                     }
 
                     CrosshairTarget.ENTITY -> {
                         // Trigger item use once and consume
-                        status.itemUse.click()
+                        useKeyState.click()
                         viewState = CONSUMED
                     }
 
@@ -175,7 +179,7 @@ fun Context.View() {
             )
         }
     } ?: run {
-        if (status.attack.timesPressed > 0 || status.itemUse.timesPressed > 0) {
+        if (attackKeyState.haveClickCount() || useKeyState.haveClickCount()) {
             // Keep last crosshair status for key handling
             result.crosshairStatus = status.lastCrosshairStatus
         }

@@ -7,7 +7,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "ClientHandleInputEventsMixin",
     "ClientOpenChatScreenInvoker",
     "ClientPlayerEntityMixin",
     "ControlsOptionsScreenMixin",
@@ -17,6 +16,7 @@
     "InGameHudMixin",
     "KeyBindingMixin",
     "KeyboardInputMixin",
-    "MultiPlayerGameModeInvoker"
+    "MultiPlayerGameModeInvoker",
+    "ToggleKeyMappingMixin"
   ]
 }

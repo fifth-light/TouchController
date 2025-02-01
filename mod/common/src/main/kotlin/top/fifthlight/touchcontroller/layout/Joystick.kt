@@ -5,6 +5,7 @@ import top.fifthlight.data.Offset
 import top.fifthlight.data.Rect
 import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.Joystick
+import top.fifthlight.touchcontroller.gal.KeyBindingType
 import top.fifthlight.touchcontroller.state.PointerState
 import kotlin.math.sqrt
 
@@ -85,8 +86,9 @@ fun Context.Joystick(layout: Joystick) {
     }
 
     normalizedOffset?.let { (right, backward) ->
+        val sprintButtonState = keyBindingHandler.getState(KeyBindingType.SPRINT)
         if (layout.triggerSprint && rawOffset.y < -1.1f) {
-            result.sprint = true
+            sprintButtonState.clicked = true
         }
         result.left = -right
         result.forward = -backward

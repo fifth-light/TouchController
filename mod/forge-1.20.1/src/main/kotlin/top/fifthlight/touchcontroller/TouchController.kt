@@ -24,10 +24,7 @@ import org.slf4j.LoggerFactory
 import top.fifthlight.combine.platform.CanvasImpl
 import top.fifthlight.touchcontroller.config.GlobalConfigHolder
 import top.fifthlight.touchcontroller.di.appModule
-import top.fifthlight.touchcontroller.event.BlockBreakEvents
-import top.fifthlight.touchcontroller.event.ConnectionEvents
-import top.fifthlight.touchcontroller.event.RenderEvents
-import top.fifthlight.touchcontroller.event.WindowCreateEvents
+import top.fifthlight.touchcontroller.event.*
 import top.fifthlight.touchcontroller.gal.PlatformWindowImpl
 import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
@@ -111,8 +108,17 @@ class TouchController : KoinComponent {
             }
 
             @SubscribeEvent
-            fun worldRender(event: TickEvent.RenderTickEvent) {
-                RenderEvents.onRenderStart()
+            fun renderTick(event: TickEvent.RenderTickEvent) {
+                if (event.phase == TickEvent.Phase.START) {
+                    RenderEvents.onRenderStart()
+                }
+            }
+
+            @SubscribeEvent
+            fun clientTick(event: TickEvent.ClientTickEvent) {
+                if (event.phase == TickEvent.Phase.END) {
+                    TickEvents.clientTick()
+                }
             }
 
             @SubscribeEvent
