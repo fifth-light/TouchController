@@ -4,7 +4,7 @@ import top.fifthlight.touchcontroller.assets.Textures
 import top.fifthlight.touchcontroller.control.ScreenshotButton
 
 fun Context.ScreenshotButton(config: ScreenshotButton) {
-    val (newClick) = Button(id = "pause") {
+    val (newClick) = Button(id = "screenshot") {
         if (config.classic) {
             Texture(texture = Textures.GUI_SCREENSHOT_SCREENSHOT)
         } else {

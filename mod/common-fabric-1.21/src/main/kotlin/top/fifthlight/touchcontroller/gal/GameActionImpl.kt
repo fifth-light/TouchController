@@ -41,4 +41,16 @@ object GameActionImpl : GameAction {
             }
         }
     }
+
+    override fun takePanorama() {
+        client.takePanorama(
+            client.runDirectory,
+            client.window.width,
+            client.window.width,
+        ).let { message ->
+            this.client.execute {
+                this.client.inGameHud.chatHud.addMessage(message)
+            }
+        }
+    }
 }

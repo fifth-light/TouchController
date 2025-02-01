@@ -228,9 +228,14 @@
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.classic_simple": "Classic simple",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new": "New",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new_simple": "New simple",
+
   "touchcontroller.screen.options.widget.screenshot_button.name": "Screenshot button",
   "touchcontroller.screen.options.widget.screenshot_button.property.size": "Button size: %s%%",
   "touchcontroller.screen.options.widget.screenshot_button.property.classic": "Classic look",
+
+  "touchcontroller.screen.options.widget.panorama_button.name": "Panorama button",
+  "touchcontroller.screen.options.widget.panorama_button.property.size": "Button size: %s%%",
+  "touchcontroller.screen.options.widget.panorama_button.property.classic": "Classic look",
 
   "touchcontroller.screen.options.presets.title": "Presets",
 

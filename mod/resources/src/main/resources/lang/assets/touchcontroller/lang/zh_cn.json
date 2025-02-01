@@ -228,9 +228,14 @@
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.classic_simple": "经典简约",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new": "新样式",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new_simple": "新样式简约",
+
   "touchcontroller.screen.options.widget.screenshot_button.name": "截屏按钮",
   "touchcontroller.screen.options.widget.screenshot_button.property.size": "按键大小: %s%%",
   "touchcontroller.screen.options.widget.screenshot_button.property.classic": "经典外观",
+
+  "touchcontroller.screen.options.widget.panorama_button.name": "全景图按钮",
+  "touchcontroller.screen.options.widget.panorama_button.property.size": "按键大小: %s%%",
+  "touchcontroller.screen.options.widget.panorama_button.property.classic": "经典外观",
 
   "touchcontroller.screen.options.presets.title": "预设",
 

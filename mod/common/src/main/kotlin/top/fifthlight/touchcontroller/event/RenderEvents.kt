@@ -158,6 +158,9 @@ object RenderEvents : KoinComponent {
         if (result.takeScreenshot) {
             gameAction.takeScreenshot()
         }
+        if (result.takePanorama) {
+            gameAction.takePanorama()
+        }
         if (result.nextPerspective) {
             gameAction.nextPerspective()
         }

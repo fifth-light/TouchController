@@ -1,7 +1,9 @@
 package top.fifthlight.touchcontroller.ui.component.config.layout
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import kotlinx.collections.immutable.persistentListOf
+import org.koin.compose.koinInject
 import top.fifthlight.combine.data.Identifier
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.layout.Alignment
@@ -20,11 +22,13 @@ import top.fifthlight.combine.widget.base.layout.Row
 import top.fifthlight.combine.widget.ui.Slider
 import top.fifthlight.touchcontroller.assets.Texts
 import top.fifthlight.touchcontroller.control.*
+import top.fifthlight.touchcontroller.gal.GameFeatures
 import kotlin.math.round
 
 private data class WidgetItem(
     val name: Identifier,
     val config: ControllerWidget,
+    val condition: (GameFeatures) -> Boolean = { true },
 )
 
 private val DEFAULT_CONFIGS = persistentListOf(
@@ -69,7 +73,7 @@ private val DEFAULT_CONFIGS = persistentListOf(
         config = SprintButton()
     ),
     WidgetItem(
-        name= Texts.SCREEN_OPTIONS_WIDGET_BOAT_BUTTON_NAME,
+        name = Texts.SCREEN_OPTIONS_WIDGET_BOAT_BUTTON_NAME,
         config = BoatButton(),
     ),
     WidgetItem(
@@ -88,6 +92,11 @@ private val DEFAULT_CONFIGS = persistentListOf(
         name = Texts.SCREEN_OPTIONS_WIDGET_SCREENSHOT_BUTTON_NAME,
         config = ScreenshotButton()
     ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_PANORAMA_BUTTON_NAME,
+        config = PanoramaButton(),
+        condition = { it.takePanorama }
+    ),
 )
 
 @Composable
@@ -105,7 +114,12 @@ fun WidgetsPanel(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4),
         ) {
-            Text(Text.format(Texts.SCREEN_OPTIONS_WIDGET_DEFAULT_OPACITY_TITLE, round(defaultOpacity * 100f).toString()))
+            Text(
+                Text.format(
+                    Texts.SCREEN_OPTIONS_WIDGET_DEFAULT_OPACITY_TITLE,
+                    round(defaultOpacity * 100f).toString()
+                )
+            )
             Slider(
                 modifier = Modifier.width(128),
                 value = defaultOpacity,
@@ -120,7 +134,9 @@ fun WidgetsPanel(
                 .fillMaxWidth()
                 .verticalScroll(),
         ) {
-            for (config in DEFAULT_CONFIGS) {
+            val gameFeatures: GameFeatures = koinInject()
+            val configs = remember(gameFeatures) { DEFAULT_CONFIGS.filter { it.condition(gameFeatures) } }
+            for (config in configs) {
                 Column(
                     modifier = Modifier.clickable {
                         val newWidget = config.config.cloneBase(opacity = defaultOpacity)

@@ -8,4 +8,5 @@ interface GameAction {
     fun sendMessage(text: Text)
     fun nextPerspective()
     fun takeScreenshot()
+    fun takePanorama() {}
 }

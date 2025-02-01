@@ -74,6 +74,7 @@ data class ContextResult(
     var pause: Boolean = false,
     var chat: Boolean = false,
     var takeScreenshot: Boolean = false,
+    var takePanorama: Boolean = false,
     var lookDirection: Offset? = null,
     var crosshairStatus: CrosshairStatus? = null,
     var cancelFlying: Boolean = false,

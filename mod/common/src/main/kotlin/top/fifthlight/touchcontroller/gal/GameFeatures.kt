@@ -8,5 +8,6 @@ data class EntityFeatures(
 
 data class GameFeatures(
     val dualWield: Boolean,
+    val takePanorama: Boolean,
     val entity: EntityFeatures
 )

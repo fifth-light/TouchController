@@ -40,4 +40,16 @@ object GameActionImpl : GameAction {
             }
         }
     }
+
+    override fun takePanorama() {
+        client.grabPanoramixScreenshot(
+            client.gameDirectory,
+            client.window.width,
+            client.window.width,
+        ).let { message ->
+            this.client.execute {
+                this.client.gui.chat.addMessage(message)
+            }
+        }
+    }
 }
