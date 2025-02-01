@@ -2,6 +2,7 @@ package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiChat
+import net.minecraft.util.ScreenShotHelper
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.platform.toMinecraft
 
@@ -33,5 +34,16 @@ object GameActionImpl : GameAction {
         }
 
         client.renderGlobal.setDisplayListEntitiesDirty()
+    }
+
+    override fun takeScreenshot() {
+        ScreenShotHelper.saveScreenshot(
+            client.gameDir,
+            client.displayWidth,
+            client.displayHeight,
+            client.framebuffer
+        ).let { message ->
+            client.ingameGUI.chatGUI.printChatMessage(message)
+        }
     }
 }

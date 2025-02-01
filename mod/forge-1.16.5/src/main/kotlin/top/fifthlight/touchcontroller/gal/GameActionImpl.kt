@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.Minecraft
+import net.minecraft.util.ScreenShotHelper
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.platform.toMinecraft
 import top.fifthlight.touchcontroller.mixin.ClientOpenChatScreenInvoker
@@ -26,6 +27,19 @@ object GameActionImpl : GameAction {
         if (perspective.isFirstPerson != client.options.cameraType.isFirstPerson) {
             val newCameraEntity = client.getCameraEntity().takeIf { client.options.cameraType.isFirstPerson }
             client.gameRenderer.checkEntityPostEffect(newCameraEntity)
+        }
+    }
+
+    override fun takeScreenshot() {
+        ScreenShotHelper.grab(
+            client.gameDirectory,
+            client.window.width,
+            client.window.height,
+            client.mainRenderTarget,
+        ) { message ->
+            this.client.execute {
+                this.client.gui.chat.addMessage(message)
+            }
         }
     }
 }

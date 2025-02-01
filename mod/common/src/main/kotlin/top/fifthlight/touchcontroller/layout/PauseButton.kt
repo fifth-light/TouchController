@@ -12,5 +12,7 @@ fun Context.PauseButton(config: PauseButton) {
         }
     }
 
-    result.pause = newClick
+    if (newClick) {
+        result.pause = true
+    }
 }

@@ -84,6 +84,10 @@ private val DEFAULT_CONFIGS = persistentListOf(
         name = Texts.SCREEN_OPTIONS_WIDGET_PERSPECTIVE_SWITCH_BUTTON_NAME,
         config = PerspectiveSwitchButton()
     ),
+    WidgetItem(
+        name = Texts.SCREEN_OPTIONS_WIDGET_SCREENSHOT_BUTTON_NAME,
+        config = ScreenshotButton()
+    ),
 )
 
 @Composable

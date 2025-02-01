@@ -220,6 +220,7 @@
   "touchcontroller.screen.options.widget.attack_button.property.style.new": "New",
 
   "touchcontroller.screen.options.widget.inventory_button.name": "Inventory button",
+
   "touchcontroller.screen.options.widget.perspective_switch_button.name": "Perspective switch button",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.size": "Button size: %s%%",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style": "Style",
@@ -227,6 +228,9 @@
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.classic_simple": "Classic simple",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new": "New",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new_simple": "New simple",
+  "touchcontroller.screen.options.widget.screenshot_button.name": "Screenshot button",
+  "touchcontroller.screen.options.widget.screenshot_button.property.size": "Button size: %s%%",
+  "touchcontroller.screen.options.widget.screenshot_button.property.classic": "Classic look",
 
   "touchcontroller.screen.options.presets.title": "Presets",
 

@@ -102,6 +102,7 @@
   "touchcontroller.screen.options.preset.delete_warning.message": "你确定要删除这个预设吗？“%s”将会永久消失！（真的很久！）",
   "touchcontroller.screen.options.preset.delete_warning.yes.title": "是",
   "touchcontroller.screen.options.preset.delete_warning.no.title": "否",
+
   "touchcontroller.screen.options.widget.add.title": "添加控件",
   "touchcontroller.screen.options.widget.paste.title": "粘贴控件",
   "touchcontroller.screen.options.widget.cut.title": "剪切",
@@ -219,6 +220,7 @@
   "touchcontroller.screen.options.widget.attack_button.property.style.new": "新样式",
 
   "touchcontroller.screen.options.widget.inventory_button.name": "物品栏按钮",
+
   "touchcontroller.screen.options.widget.perspective_switch_button.name": "视角切换按钮",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.size": "按键大小: %s%%",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style": "样式",
@@ -226,6 +228,9 @@
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.classic_simple": "经典简约",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new": "新样式",
   "touchcontroller.screen.options.widget.perspective_switch_button.property.style.new_simple": "新样式简约",
+  "touchcontroller.screen.options.widget.screenshot_button.name": "截屏按钮",
+  "touchcontroller.screen.options.widget.screenshot_button.property.size": "按键大小: %s%%",
+  "touchcontroller.screen.options.widget.screenshot_button.property.classic": "经典外观",
 
   "touchcontroller.screen.options.presets.title": "预设",
 

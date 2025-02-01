@@ -1,6 +1,7 @@
 package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.util.ScreenshotRecorder
 import top.fifthlight.combine.data.Text
 import top.fifthlight.combine.platform.toMinecraft
 import top.fifthlight.touchcontroller.mixin.ClientOpenChatScreenInvoker
@@ -28,5 +29,16 @@ object GameActionImpl : GameAction {
             client.gameRenderer.onCameraEntitySet(newCameraEntity)
         }
         client.worldRenderer.scheduleTerrainUpdate()
+    }
+
+    override fun takeScreenshot() {
+        ScreenshotRecorder.saveScreenshot(
+            client.runDirectory,
+            client.framebuffer,
+        ) { message ->
+            this.client.execute {
+                this.client.inGameHud.chatHud.addMessage(message)
+            }
+        }
     }
 }

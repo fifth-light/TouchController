@@ -12,5 +12,7 @@ fun Context.ChatButton(config: ChatButton) {
         }
     }
 
-    result.chat = newClick
+    if (newClick) {
+        result.chat = true
+    }
 }

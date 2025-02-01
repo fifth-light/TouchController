@@ -7,4 +7,5 @@ interface GameAction {
     fun openGameMenu()
     fun sendMessage(text: Text)
     fun nextPerspective()
+    fun takeScreenshot()
 }
