@@ -28,6 +28,7 @@ object DefaultItemListProviderImpl : DefaultItemListProvider {
         ),
         subclasses = persistentSetOf(
             ItemFactoryImpl.armorSubclass,
+            ItemFactoryImpl.foodSubclass,
         ),
     )
 

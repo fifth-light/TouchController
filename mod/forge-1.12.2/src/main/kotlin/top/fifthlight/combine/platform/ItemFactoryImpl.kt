@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import net.minecraft.item.Item
 import net.minecraft.item.ItemArmor
+import net.minecraft.item.ItemFood
 import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 import net.minecraft.util.text.TextComponentString
@@ -79,8 +80,15 @@ object ItemFactoryImpl : MetadataItemFactory {
         clazz = ItemArmor::class.java
     )
 
+    val foodSubclass = ItemSubclassImpl(
+        name = TextImpl(TextComponentString("Food")),
+        configId = "ItemFood",
+        clazz = ItemFood::class.java
+    )
+
     override val subclasses: PersistentList<ItemSubclass> = persistentListOf(
         armorSubclass,
+        foodSubclass,
     )
 }
 
