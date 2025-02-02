@@ -142,6 +142,10 @@ tasks.processResources {
     filesMatching("fabric.mod.json") {
         expand(properties)
     }
+
+    from(File(rootDir, "LICENSE")) {
+        rename { "${it}_${modName}" }
+    }
 }
 
 sourceSets.main {
@@ -149,12 +153,6 @@ sourceSets.main {
     resources.srcDir("../resources/src/main/resources/lang")
     resources.srcDir("../resources/src/main/resources/icon")
     resources.srcDir("../resources/src/main/resources/textures")
-}
-
-tasks.withType<Jar> {
-    from(File(rootDir, "LICENSE")) {
-        rename { "${it}_${modName}" }
-    }
 }
 
 val minecraftShadow = configurations.create("minecraftShadow") {

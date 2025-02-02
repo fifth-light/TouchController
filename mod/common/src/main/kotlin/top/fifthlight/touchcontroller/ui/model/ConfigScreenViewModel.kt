@@ -1,14 +1,14 @@
 package top.fifthlight.touchcontroller.ui.model
 
 import kotlinx.collections.immutable.plus
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.slf4j.LoggerFactory
 import top.fifthlight.combine.screen.ViewModel
 import top.fifthlight.combine.util.CloseHandler
+import top.fifthlight.touchcontroller.about.AboutInfoProvider
 import top.fifthlight.touchcontroller.config.*
 import top.fifthlight.touchcontroller.control.ControllerWidget
 import top.fifthlight.touchcontroller.gal.DefaultItemListProvider
@@ -21,8 +21,10 @@ class ConfigScreenViewModel(
     scope: CoroutineScope,
     private val closeHandler: CloseHandler
 ) : ViewModel(scope), KoinComponent {
+    private val logger = LoggerFactory.getLogger(ConfigScreenViewModel::class.java)
     private val configHolder: GlobalConfigHolder by inject()
     private val defaultItemListProvider: DefaultItemListProvider by inject()
+    private val aboutInfoProvider: AboutInfoProvider by inject()
 
     private val _uiState = MutableStateFlow(
         ConfigScreenState(
@@ -35,14 +37,30 @@ class ConfigScreenViewModel(
 
     init {
         @OptIn(FlowPreview::class)
-        scope.launch {
-            _uiState
-                .map { it.presets }
-                .debounce(500.milliseconds)
-                .distinctUntilChanged()
-                .collectLatest {
-                    configHolder.savePreset(it)
+        with(scope) {
+            launch {
+                _uiState
+                    .map { it.presets }
+                    .debounce(500.milliseconds)
+                    .distinctUntilChanged()
+                    .collectLatest {
+                        configHolder.savePreset(it)
+                    }
+            }
+            launch {
+                withContext(Dispatchers.IO) {
+                    try {
+                        aboutInfoProvider.aboutInfo
+                    } catch (ex: Exception) {
+                        logger.warn("Failed to read about information", ex)
+                        null
+                    }
+                }?.let { aboutInfo ->
+                    _uiState.getAndUpdate {
+                        it.copy(aboutInfo = aboutInfo)
+                    }
                 }
+            }
         }
     }
 

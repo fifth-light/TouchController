@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.gr8)
     implementation(libs.forge.gradle)
     implementation(libs.parchmentmc.librarian.forgegradle)
+    implementation(libs.aboutlibraries.plugin)
     implementation(libs.mixin)
+
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
