@@ -1,6 +1,7 @@
 {
   "touchcontroller.warning.proxy_not_connected": "Warning: No proxy connected. TouchController will be disabled.",
   "touchcontroller.warning.legacy_udp_proxy_used": "Warning: Legacy UDP proxy protocol used. You can still use TouchController for now, but it is suggested to upgrade your launcher for more features.",
+  "touchcontroller.warning.take_panorama_unsupported": "Current game version don't support taking panorama.",
 
   "touchcontroller.screen.options": "Touch Settings...",
   "touchcontroller.screen.options.title": "Touch Settings",

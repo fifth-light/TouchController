@@ -1,6 +1,7 @@
 {
   "touchcontroller.warning.proxy_not_connected": "警告：代理未连接。TouchController 将被禁用。",
   "touchcontroller.warning.legacy_udp_proxy_used": "警告：检测到正在使用过时的 UDP 代理协议。你目前仍然可以使用 TouchController，但是建议更新你的启动器以支持新功能。",
+  "touchcontroller.warning.take_panorama_unsupported": "当前游戏版本不支持截取全景图。",
 
   "touchcontroller.screen.options": "触摸设置…",
   "touchcontroller.screen.options.title": "触摸设置",

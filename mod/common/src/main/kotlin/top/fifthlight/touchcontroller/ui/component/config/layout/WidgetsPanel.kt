@@ -92,11 +92,6 @@ private val DEFAULT_CONFIGS = persistentListOf(
         name = Texts.SCREEN_OPTIONS_WIDGET_SCREENSHOT_BUTTON_NAME,
         config = ScreenshotButton()
     ),
-    WidgetItem(
-        name = Texts.SCREEN_OPTIONS_WIDGET_PANORAMA_BUTTON_NAME,
-        config = PanoramaButton(),
-        condition = { it.takePanorama }
-    ),
 )
 
 @Composable
