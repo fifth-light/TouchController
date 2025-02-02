@@ -128,7 +128,7 @@ bin 目录加入 PATH 环境变量即可。
     
     ```kotlin
     interface VibrationHandler {
-        fun viberate(kind: VibrateMessage.Kind)
+        fun vibrate(kind: VibrateMessage.Kind)
     }
     ```
     

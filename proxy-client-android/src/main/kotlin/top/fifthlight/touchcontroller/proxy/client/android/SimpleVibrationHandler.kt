@@ -13,7 +13,7 @@ private val TAG = "SimpleVibrationHandler"
  * @param service Vibrator 系统服务。
  */
 class SimpleVibrationHandler(private val service: Vibrator) : LauncherProxyClient.VibrationHandler {
-    override fun viberate(kind: VibrateMessage.Kind) {
+    override fun vibrate(kind: VibrateMessage.Kind) {
         try {
             @Suppress("DEPRECATION")
             service.vibrate(100)

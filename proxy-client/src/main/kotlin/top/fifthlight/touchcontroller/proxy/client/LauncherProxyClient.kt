@@ -28,7 +28,7 @@ class LauncherProxyClient(
          *
          * @param kind 震动事件的种类。
          */
-        fun viberate(kind: VibrateMessage.Kind)
+        fun vibrate(kind: VibrateMessage.Kind)
     }
 
     /**
@@ -46,7 +46,7 @@ class LauncherProxyClient(
                 while (true) {
                     val message = messageClient.receive() ?: break
                     when (message) {
-                        is VibrateMessage -> vibrationHandler?.viberate(message.kind)
+                        is VibrateMessage -> vibrationHandler?.vibrate(message.kind)
                         else -> {
                             // Ignore
                         }
