@@ -27,7 +27,7 @@
 
 目前支持的平台有：
 
-- Windows（v0.0.8 开始支持 x86 和 x86_64 架构，v0.0.11 添加了 ARM64 架构的支持）
+- Windows（版本最低为 Windows 10，支持 x86、x86_64 和 ARM64 架构）
 - [官方版 Fold Craft Launcher](https://github.com/FCL-Team/FoldCraftLauncher)
 - [官方版 Zalith Launcher](https://github.com/ZalithLauncher/ZalithLauncher)
 - [官方版 Pojav Glow·Worm](https://github.com/Vera-Firefly/Pojav-Glow-Worm)
