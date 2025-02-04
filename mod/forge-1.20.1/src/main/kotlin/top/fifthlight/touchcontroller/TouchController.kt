@@ -5,6 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
+import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent
 import net.minecraftforge.client.event.RenderGuiEvent
 import net.minecraftforge.client.event.RenderHighlightEvent
@@ -12,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
@@ -30,6 +32,7 @@ import top.fifthlight.touchcontroller.model.ControllerHudModel
 import top.fifthlight.touchcontroller.platform.PlatformHolder
 import top.fifthlight.touchcontroller.platform.PlatformProvider
 import top.fifthlight.touchcontroller.ui.screen.config.getConfigScreen
+import java.util.function.BiFunction
 
 @Mod(BuildInfo.MOD_ID)
 class TouchController : KoinComponent {
@@ -82,8 +85,12 @@ class TouchController : KoinComponent {
         val configHolder: GlobalConfigHolder = get()
         configHolder.load()
 
-        MinecraftForge.registerConfigScreen { parent ->
-            getConfigScreen(parent) as Screen
+        ModLoadingContext.get().activeContainer.registerExtensionPoint(ConfigScreenFactory::class.java) {
+            ConfigScreenFactory(
+                BiFunction<Minecraft, Screen, Screen> { client, parent ->
+                    getConfigScreen(parent) as Screen
+                }
+            )
         }
 
         val controllerHudModel: ControllerHudModel = get()
