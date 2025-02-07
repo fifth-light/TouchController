@@ -1,10 +1,10 @@
 package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.mob.SkeletonHorseEntity
 import net.minecraft.entity.mob.ZombieHorseEntity
 import net.minecraft.entity.passive.*
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.entity.vehicle.MinecartEntity
 import net.minecraft.util.Hand
@@ -15,7 +15,7 @@ import top.fifthlight.touchcontroller.config.ItemList
 import top.fifthlight.touchcontroller.mixin.ClientPlayerInteractionManagerInvoker
 
 @JvmInline
-value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
+value class PlayerHandleImpl(val inner: ClientPlayerEntity) : PlayerHandle {
     private val client: MinecraftClient
         get() = MinecraftClient.getInstance()
 
@@ -36,7 +36,7 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
 
     override fun dropSlot(index: Int) {
         if (index == currentSelectedSlot) {
-            inner.inventory.dropSelectedItem(true)
+            inner.dropSelectedItem(true)
             return
         }
 
@@ -47,7 +47,7 @@ value class PlayerHandleImpl(val inner: PlayerEntity) : PlayerHandle {
         currentSelectedSlot = index
         interactionManagerAccessor.callSyncSelectedSlot()
 
-        inner.inventory.dropSelectedItem(true)
+        inner.dropSelectedItem(true)
 
         currentSelectedSlot = originalSlot
         interactionManagerAccessor.callSyncSelectedSlot()

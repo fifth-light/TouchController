@@ -1,12 +1,12 @@
 package top.fifthlight.touchcontroller.gal
 
 import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.animal.Pig
 import net.minecraft.world.entity.animal.camel.Camel
 import net.minecraft.world.entity.animal.horse.*
 import net.minecraft.world.entity.monster.Strider
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.vehicle.Boat
 import net.minecraft.world.entity.vehicle.Minecart
 import top.fifthlight.combine.data.ItemStack
@@ -16,7 +16,7 @@ import top.fifthlight.touchcontroller.config.ItemList
 import top.fifthlight.touchcontroller.mixin.MultiPlayerGameModeInvoker
 
 @JvmInline
-value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
+value class PlayerHandleImpl(val inner: LocalPlayer) : PlayerHandle {
     private val client: Minecraft
         get() = Minecraft.getInstance()
 
@@ -37,7 +37,7 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
 
     override fun dropSlot(index: Int) {
         if (index == currentSelectedSlot) {
-            inner.inventory.removeFromSelected(true)
+            inner.drop(true)
             return
         }
 
@@ -48,7 +48,7 @@ value class PlayerHandleImpl(val inner: Player) : PlayerHandle {
         currentSelectedSlot = index
         interactionManagerAccessor.callEnsureHasSentCarriedItem()
 
-        inner.inventory.removeFromSelected(true)
+        inner.drop(true)
 
         currentSelectedSlot = originalSlot
         interactionManagerAccessor.callEnsureHasSentCarriedItem()
