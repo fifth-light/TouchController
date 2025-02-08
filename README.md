@@ -167,8 +167,8 @@ bin 目录加入 PATH 环境变量即可。
     然后调用 LauncherProxyClient 的以下方法更新触点：
     
     - addPointer：添加或者更新一个触点
-    - removePointer：清除所有的触点
-    - clearPointer：删除一个触点
+    - removePointer：删除一个触点
+    - clearPointer：清除所有的触点
     
     如果不想手动做消息处理，库内也提供了一个基于 FrameLayout 的 TouchControllerLayout 类，只要将游戏相关的 View 包含在内，然后将 LauncherProxyClient 设置到 TouchControllerLayout 中即可发送处理触摸消息并发送。
     
